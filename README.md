@@ -1,5 +1,9 @@
 # bounswe2016group5
-Welcome to group 5. This is CmpE 352/451 project repository. We don't have any project yet. For now, you can take a look at our [wiki](https://github.com/bounswe/bounswe2016group5/wiki).
+Welcome to group 5. This is CmpE 352/451 project repository. You can take a look at our [wiki](https://github.com/bounswe/bounswe2016group5/wiki).
+
+We are working on a project named "An exploratory learning platform".
+
+[Here](https://github.com/bounswe/bounswe2016group5/wiki/Project-Description) is the project description.
 
 # Group Members
 
