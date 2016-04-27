@@ -8,9 +8,6 @@
 <title>My Title</title>
 </head>
 <body>
-<% java.util.Date d = new java.util.Date(); %>
-<h1>
-Today's date is <%= d.toString() %> and this jsp page worked!
-</h1>
+<a href="Main">Click</a> here to access our main page.
 </body>
 </html>
