@@ -39,7 +39,7 @@ public class HelloServlet extends HttpServlet {
 									"<td><a href=\"kerim-gokarslan\">Kerim Gokarslan</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group5/wiki/Kerim-G%C3%B6karslan\"> git page</a></td> </tr>  <tr>" +
 									"<td><a href=\"umut-dabager\">Umut M.Dabager</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group5/wiki/Umut-M.-Dabager\"> git page</a></td> </tr>  <tr>" +
 									"<td><a href=\"ozer-biber\">Ozer Biber</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group5/wiki/%C3%96zer-Biber\"> git page</a></td> </tr>  <tr>" +
-									"<td><a href=\"bugra-cil\">Bugra Cil</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group5/wiki/Bu%C4%9Fra-%C3%87il\"> git page</a></td> </tr>  <tr>" +								    
+									"<td><a href=\"mbugc\">Bugra Cil</a></td><td><a href=\"https://github.com/bounswe/bounswe2016group5/wiki/Bu%C4%9Fra-%C3%87il\"> git page</a></td> </tr>  <tr>" +								    
 									"</table>");
 	}
 
