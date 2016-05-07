@@ -28,15 +28,23 @@ public class KerimServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		if (req.getParameter("query") == null) {
-			save();
+			//save();
 			resp.sendRedirect("/TestWebProject/kerim-gokarslan.jsp");
 		} else {
 			String userQuery = req.getParameter("query");
 			resp.getWriter().append(userQuery);
 			String query = "https://query.wikidata.org/sparql?query=";
-			query += "SELECT%20?h%20WHERE{?h%20wdt:P31%20wd:Q3624078}";
+			query += 
+"SELECT ?item \n"+
+"WHERE  \n"+
+"{ \n"+
+"	?item wdt:P31 wd:Q1420 .  \n"+
+"  	?model wdt:P1552 wd:Q3231690 . FILTER regex(str(?model), \"/yaris/i\") . \n"+
+"	SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" } \n"+
+"}";
+
+
 			URL url = new URL(query);
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					url.openStream()));
@@ -48,29 +56,34 @@ public class KerimServlet extends HttpServlet {
 			resp.getWriter().append(xmlResult);
 		}
 		resp.getWriter().append("Hello world, my name is Kerim!");
-		// super.doPost(req, resp);
+		
 
 	}
-	public void save(){
+	public Connection mysqlConnection(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
-			
+			return null;
 		}
-		String url = "jdbc:mysql://group5db.cpp0ryqf88fx.us-west-2.rds.amazonaws.com:3306/";
-		//String url = "jdbc:mysql://asasdasdd.com:3306/";
+		String url = "jdbc:mysql://bounswegroup5.cpp0ryqf88fx.us-west-2.rds.amazonaws.com:3306/group5db";
 		String userName = "group5";
 		String password = "Cmpe352*";
-		String dbName = "group5";
+	
 		String driver = "com.mysql.jdbc.Driver";
+		Connection connection;
 		try {
-			Connection connection = DriverManager.getConnection(url + dbName, userName, password);
+			connection = DriverManager.getConnection(url, userName, password);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return;
+			return null;
 		}
+		return connection;
+		
+	}
+	public void save(){
+		Connection connection = mysqlConnection();
 		System.out.println("Succeed");
 	}
 	/**
