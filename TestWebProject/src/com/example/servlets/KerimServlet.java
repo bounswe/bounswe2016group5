@@ -3,10 +3,16 @@ package com.example.servlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +25,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+
 @WebServlet("/kerim-gokarslan")
 public class KerimServlet extends HttpServlet {
 
@@ -33,18 +40,110 @@ public class KerimServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		resp.getWriter().append("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"+
-"<html>"+
-"<head>"+
-"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">"+
-"<title>CmpE Group5 - Assignment6 - Kerim Gokarslan</title>"+
-"</head><body>");
-		if (req.getParameter("query") == null) {
+		Cookie[] cookies = req.getCookies();
+		Cookie cookie = null;
+		for (int i = 0; i < cookies.length; ++i) {
+			if (cookies[i].getName().equals("kerim-client"))
+				cookie = cookies[i];
+		}
+		String clientID = "";
+		if (cookie == null) {
+			clientID = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar
+					.getInstance().getTime());
+			cookie = new Cookie("kerim-client", clientID);
+			cookie.setMaxAge(30 * 24 * 60 * 60);
+			resp.addCookie(cookie);
+			// resp.sendRedirect("/TestWebProject/kerim-gokarslan");
+		} else {
+			clientID = cookie.getValue();
+		}
+		resp.getWriter()
+				.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
+						+ "<html>"
+						+ "<head>"
+						+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">"
+						+ "<title>CmpE Group5 - Assignment6 - Kerim Gokarslan</title>"
+						+ "</head><body>");
+		if (req.getParameter("csave") != null) {
+			String[] items = req.getParameterValues("csave");
+
+			String[][] results = new String[items.length][7];
+			for (int i = 0; i < items.length; ++i) {
+				String[] arr = items[i].split(",");
+				for (int j = 0; j < arr.length; ++j) {
+					results[i][j] = arr[j];// resp.getWriter().append(arr[j] +
+											// " ");
+				}
+				results[i][0] = results[i][0].substring(results[i][0]
+						.indexOf('Q') + 1);
+
+			}
+			Connection connection = mysqlConnection();
+			Statement statement;
+			try {
+				statement = connection.createStatement();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				resp.getWriter().append("SQL error");
+				return;
+			}
+
+			for (int i = 0; i < items.length; ++i) {
+				String query = "SELECT * FROM kerim_automobile WHERE item='"
+						+ results[i][0] + "';";
+				ResultSet rs;
+				try {
+					rs = statement.executeQuery(query);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					resp.getWriter().append("SQL error");
+					return;
+				}
+				try {
+					if (!rs.next()) {
+						query = "INSERT INTO kerim_automobile(item, itemlabel, commons, manufacturer, manufacturerlabel, type_, typelabel)";
+						query += "VALUES('" + results[i][0] + "','"
+								+ results[i][1] + "','" + results[i][2] + "','"
+								+ results[i][3] + "','" + results[i][4] + "','"
+								+ results[i][5] + "','" + results[i][6] + "');";
+						statement.executeUpdate(query);
+					}
+
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					resp.getWriter().append("SQL error");
+					return;
+				}
+
+				query = "INSERT INTO kerim_save(cid, item) VALUES('"
+						+ clientID + "','" + results[i][0] + "');";
+				try {
+					statement.executeUpdate(query);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					resp.getWriter().append("SQL error");
+					return;
+				}
+			}
+			resp.getWriter()
+					.append("Your choices has been saved successfully.<br>Please <a href=\"/TestWebProject/kerim-gokarslan\"> click here</a> to redirect.");
+
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		} else if (req.getParameter("query") == null) {
 			// save();
 			resp.sendRedirect("/TestWebProject/kerim-gokarslan.jsp");
 		} else {
 			String userQuery = req.getParameter("query");
-			resp.getWriter().append(userQuery);
 			String query = "https://query.wikidata.org/sparql?query=";
 			query += "SELECT%20?item%20?itemLabel%20?commons%20?manufacturer%20?manufacturerLabel%20?type%20?typeLabel%20"
 					+
@@ -81,15 +180,14 @@ public class KerimServlet extends HttpServlet {
 
 					"}";
 
-			/*URL url = new URL(query);
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					url.openStream()));
-			String xmlResult = "";
-			String line;
-			while ((line = in.readLine()) != null)
-				xmlResult += line;
-			in.close();*/
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			/*
+			 * URL url = new URL(query); BufferedReader in = new
+			 * BufferedReader(new InputStreamReader( url.openStream())); String
+			 * xmlResult = ""; String line; while ((line = in.readLine()) !=
+			 * null) xmlResult += line; in.close();
+			 */
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
 			DocumentBuilder dBuilder;
 			try {
 				dBuilder = dbFactory.newDocumentBuilder();
@@ -109,7 +207,7 @@ public class KerimServlet extends HttpServlet {
 				return;
 			}
 			NodeList nList = doc.getElementsByTagName("result");
-			//resp.getWriter().append("len:" + nList.getLength());
+			// resp.getWriter().append("len:" + nList.getLength());
 			String[] item = new String[nList.getLength()];
 			String[] itemLabel = new String[nList.getLength()];
 			String[] commons = new String[nList.getLength()];
@@ -117,78 +215,122 @@ public class KerimServlet extends HttpServlet {
 			String[] manufacturerLabel = new String[nList.getLength()];
 			String[] type = new String[nList.getLength()];
 			String[] typeLabel = new String[nList.getLength()];
-			
-			for(int i=0;i<nList.getLength();++i){
-				Node node = (Node)nList.item(i);
+
+			for (int i = 0; i < nList.getLength(); ++i) {
+				Node node = (Node) nList.item(i);
 				Element element = (Element) node;
 				NodeList nl = element.getElementsByTagName("binding");
-				for(int j=0;j<nl.getLength();++j){
+				for (int j = 0; j < nl.getLength(); ++j) {
 					Element e = (Element) nl.item(j);
-					if(e.getAttribute("name").equalsIgnoreCase("item")){
+					if (e.getAttribute("name").equalsIgnoreCase("item")) {
 						item[i] = e.getTextContent();
-					}else if(e.getAttribute("name").equalsIgnoreCase("itemLabel")){
+					} else if (e.getAttribute("name").equalsIgnoreCase(
+							"itemLabel")) {
 						itemLabel[i] = e.getTextContent();
-					}else if(e.getAttribute("name").equalsIgnoreCase("itemLabel")){
+					} else if (e.getAttribute("name").equalsIgnoreCase(
+							"itemLabel")) {
 						itemLabel[i] = e.getTextContent();
-					}else if(e.getAttribute("name").equalsIgnoreCase("commons")){
+					} else if (e.getAttribute("name").equalsIgnoreCase(
+							"commons")) {
 						commons[i] = e.getTextContent();
-					}else if(e.getAttribute("name").equalsIgnoreCase("manufacturer")){
+					} else if (e.getAttribute("name").equalsIgnoreCase(
+							"manufacturer")) {
 						manufacturer[i] = e.getTextContent();
-					}else if(e.getAttribute("name").equalsIgnoreCase("manufacturerLabel")){
+					} else if (e.getAttribute("name").equalsIgnoreCase(
+							"manufacturerLabel")) {
 						manufacturerLabel[i] = e.getTextContent();
-					}else if(e.getAttribute("name").equalsIgnoreCase("type")){
+					} else if (e.getAttribute("name").equalsIgnoreCase("type")) {
 						type[i] = e.getTextContent();
-					}
-					else if(e.getAttribute("name").equalsIgnoreCase("typeLabel")){
+					} else if (e.getAttribute("name").equalsIgnoreCase(
+							"typeLabel")) {
 						typeLabel[i] = e.getTextContent();
 					}
 				}
-				
+
 			}
-			String table = "<table border=\"1\" style=\"width:100%\">\n"+ "<tr>\n"+
-			"<th>Item</th>\n"+
-			"<th>Commons</th>\n"+
-			"<th>Manufacturer</th>\n"+
-			"<th>Type</th>\n"+"</tr>\n";
-			for(int i=0;i<nList.getLength();++i){
+			userQuery = userQuery.toLowerCase();
+			String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/kerim-gokarslan\">";
+			table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n"
+					+ "<th>Save</th>" + "<th>Item</th>\n"
+					+ "<th>Commons</th>\n" + "<th>Manufacturer</th>\n"
+					+ "<th>Type</th>\n" + "</tr>\n";
+			for (int i = 0; i < nList.getLength(); ++i) {
+				boolean flag = !itemLabel[i].toLowerCase().contains(userQuery);
+				boolean temp;
+				if (commons[i] != null) {
+					temp = !commons[i].toLowerCase().contains(userQuery);
+				} else {
+					temp = true;
+				}
+				flag = flag && temp;
+				if (manufacturerLabel[i] != null) {
+					temp = !manufacturerLabel[i].toLowerCase().contains(
+							userQuery);
+				} else {
+					temp = true;
+				}
+				flag = flag && temp;
+				if (typeLabel[i] != null) {
+					temp = !typeLabel[i].toLowerCase().contains(userQuery);
+				} else {
+					temp = true;
+				}
+				flag = flag && temp;
+				if (flag) {// skipping the item if it does not contain the given
+							// input.
+					continue;
+				}
 				String row = "<tr>\n";
-				row+="<td>";
-				row+="<a href=\""+item[i]+"\">" + itemLabel[i];
-				row+="</td>\n";
-				if(commons[i]!=null){
-				row+="<td>";
-				row+=commons[i];
-				row+="</td>\n";
-				row+="<td>";}else{
-					row+="<td>";
-					row+="-";
-					row+="</td>\n";
+				row += "<td>";
+				row += "<input type=\"checkbox\" name=\"csave\" value=\"";
+				row += item[i] + "," + itemLabel[i] + "," + commons[i] + ","
+						+ manufacturer[i] + "," + manufacturerLabel[i] + ","
+						+ type[i] + "," + typeLabel[i];
+				row += "\">";
+				row += "</td>\n";
+				row += "<td>";
+				row += "<a href=\"" + item[i] + "\">" + itemLabel[i];
+				row += "</td>\n";
+				if (commons[i] != null) {
+					row += "<td>";
+					row += commons[i];
+					row += "</td>\n";
+				} else {
+					row += "<td>";
+					row += "-";
+					row += "</td>\n";
 				}
-				if(manufacturer[i]!=null){
-				row+="<a href=\""+manufacturer[i]+"\">" + manufacturerLabel[i];
-				row+="</td>\n";
-				row+="<td>";}else{
-					row+="<td>";
-					row+="-";
-					row+="</td>\n";
-				}if(type[i]!=null){
-				row+="<a href=\""+type[i]+"\">" + typeLabel[i];
-				row+="</td>\n";
-				row+="<td>";
-				row+="</td>\n";
-				}else{
-					row+="<td>";
-					row+="-";
-					row+="</td>\n";
+				if (manufacturer[i] != null) {
+					row += "<td>";
+					row += "<a href=\"" + manufacturer[i] + "\">"
+							+ manufacturerLabel[i];
+					row += "</td>\n";
+
+				} else {
+					row += "<td>";
+					row += "-";
+					row += "</td>\n";
 				}
-	
-				row+="</tr>\n";
-				table+=row;
+				if (type[i] != null) {
+					row += "<td>";
+					row += "<a href=\"" + type[i] + "\">" + typeLabel[i];
+					row += "</td>\n";
+
+				} else {
+					row += "<td>";
+					row += "-";
+					row += "</td>\n";
+				}
+
+				row += "</tr>\n";
+				table += row;
 			}
-			table+="</table>";
+			table += "</table>";
+			table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"save\"/></td></tr></table>";
+			table += "</form>";
 			resp.getWriter().append(table);
 			resp.getWriter().append("</body></html>");
-		
+
 		}
 
 	}
