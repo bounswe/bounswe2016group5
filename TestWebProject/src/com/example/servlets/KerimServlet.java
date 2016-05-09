@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.servlet.ServletException;
@@ -26,20 +25,32 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+//! This class is written for the personal assignment 6.
+/*!
+ * 
+ * @author kerimgokarslan 
+ * 		   Kerim Gokarslan<kerim.gokarslan@boun.edu.tr>
+ *         2012400030 This code is written for the assignment 6 of the course
+ *         CmpE 352 Spring '16. version 1.0
+ *	
+ */
+
 @WebServlet("/kerim-gokarslan")
 public class KerimServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// super.doGet(req, resp);
 		doPost(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		/*
+		 * Check if this client is identified before, if not then give an id to
+		 * it
+		 */
 		Cookie[] cookies = req.getCookies();
 		Cookie cookie = null;
 		for (int i = 0; i < cookies.length; ++i) {
@@ -49,33 +60,119 @@ public class KerimServlet extends HttpServlet {
 		String clientID = "";
 		if (cookie == null) {
 			clientID = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar
-					.getInstance().getTime());
+					.getInstance().getTime());/*
+											 * unique id assuming there is only
+											 * one NEW front-end user in a
+											 * second
+											 */
 			cookie = new Cookie("kerim-client", clientID);
-			cookie.setMaxAge(30 * 24 * 60 * 60);
+			cookie.setMaxAge(30 * 24 * 60 * 60);// 1 month
 			resp.addCookie(cookie);
-			// resp.sendRedirect("/TestWebProject/kerim-gokarslan");
+
 		} else {
 			clientID = cookie.getValue();
 		}
+		/* Write html header */
 		resp.getWriter()
 				.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
 						+ "<html>"
 						+ "<head>"
 						+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">"
-						+ "<title>CmpE Group5 - Assignment6 - Kerim Gokarslan</title>"
+						+ "<title>CmpE Group5 - Assignment6 - Kerim Gokarslan - Automobiles</title>"
 						+ "</head><body>");
-		if (req.getParameter("csave") != null) {
-			String[] items = req.getParameterValues("csave");
+		/* Handling requests */
+		if (req.getParameter("retrieve") != null) {// If users request to
+													// retrieve their previously
+													// saved items.
+			Connection connection = mysqlConnection();
+			Statement statement;
+			try {
+				statement = connection.createStatement();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				resp.getWriter().append("SQL error");
+				return;
+			}
+			/* Get results from the db and print them */
+			String query = "SELECT * FROM kerim_save WHERE cid='" + clientID
+					+ "';";
+			ResultSet rs;
+			try {
+				rs = statement.executeQuery(query);
+				if (!rs.next()) {
+					resp.getWriter().append("You have no saved items");
+				} else {
+					String table = "<table border=\"1\" style=\"width:100%\">\n"
+							+ "<tr>\n"
+							+ "<th>Item</th>\n"
+							+ "<th>Commons</th>\n"
+							+ "<th>Manufacturer</th>\n"
+							+ "<th>Type</th>\n" + "</tr>\n";
+					do {
+						int item = rs.getInt("item");
+						String queryItem = "SELECT * FROM kerim_automobile WHERE item='"
+								+ item + "';";
+						Statement stmt = connection.createStatement();
+						ResultSet rsItem = stmt.executeQuery(queryItem);
 
+						String row = "";
+						if (rsItem.next()) {
+							row = "<tr>";
+							row += "<td>";
+							row += "<a href=\"https://www.wikidata.org/wiki/"
+									+ item + "\">"
+									+ rsItem.getString("itemlabel");
+							row += "</td>\n";
+							row += "<td>";
+							row += rsItem.getString("commons");
+							row += "</td>\n";
+							if (!rsItem.getString("manufacturer")
+									.equals("null")) {
+								row += "<td>";
+								row += "<a href=\""
+										+ rsItem.getString("manufacturer")
+										+ "\">"
+										+ rsItem.getString("manufacturerlabel");
+								row += "</td>\n";
+							} else {
+								row += "<td>-</td>";
+							}
+							if (!rsItem.getString("type_").equals("null")) {
+								row += "<td>";
+								row += "<a href=\"" + rsItem.getString("type_")
+										+ "\">" + rsItem.getString("typeLabel");
+								row += "</td>\n";
+							} else {
+								row += "<td>-</td>";
+							}
+							row += "</tr>";
+						}
+						table += row;
+						stmt.close();
+					} while (rs.next());
+					table += "</table>";
+					resp.getWriter()
+							.append("<br><br>Please <a href=\"/TestWebProject/kerim-gokarslan\"> click here</a> to redirect to main page.");
+					resp.getWriter().append(table + "</body></html>");
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				resp.getWriter().append("SQL error");
+				return;
+			}
+
+		} else if (req.getParameter("csave") != null) {// if user wants to save
+														// her selections
+			String[] items = req.getParameterValues("csave");
 			String[][] results = new String[items.length][7];
 			for (int i = 0; i < items.length; ++i) {
 				String[] arr = items[i].split(",");
 				for (int j = 0; j < arr.length; ++j) {
-					results[i][j] = arr[j];// resp.getWriter().append(arr[j] +
-											// " ");
+					results[i][j] = arr[j];
 				}
 				results[i][0] = results[i][0].substring(results[i][0]
-						.indexOf('Q') + 1);
+						.indexOf('Q') + 1);// unique item id.
 
 			}
 			Connection connection = mysqlConnection();
@@ -83,7 +180,7 @@ public class KerimServlet extends HttpServlet {
 			try {
 				statement = connection.createStatement();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 				resp.getWriter().append("SQL error");
 				return;
@@ -111,20 +208,18 @@ public class KerimServlet extends HttpServlet {
 						statement.executeUpdate(query);
 					}
 
-					
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 					resp.getWriter().append("SQL error");
 					return;
 				}
-
-				query = "INSERT INTO kerim_save(cid, item) VALUES('"
-						+ clientID + "','" + results[i][0] + "');";
+				query = "INSERT INTO kerim_save(cid, item) VALUES('" + clientID
+						+ "','" + results[i][0] + "');";
 				try {
 					statement.executeUpdate(query);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 					resp.getWriter().append("SQL error");
 					return;
@@ -140,10 +235,11 @@ public class KerimServlet extends HttpServlet {
 			}
 
 		} else if (req.getParameter("query") == null) {
-			// save();
+			// redirect to index page of this assignment
 			resp.sendRedirect("/TestWebProject/kerim-gokarslan.jsp");
-		} else {
+		} else {// if a query is given.
 			String userQuery = req.getParameter("query");
+			/* Run query at wikidata, get xml results and parse them */
 			String query = "https://query.wikidata.org/sparql?query=";
 			query += "SELECT%20?item%20?itemLabel%20?commons%20?manufacturer%20?manufacturerLabel%20?type%20?typeLabel%20"
 					+
@@ -180,12 +276,6 @@ public class KerimServlet extends HttpServlet {
 
 					"}";
 
-			/*
-			 * URL url = new URL(query); BufferedReader in = new
-			 * BufferedReader(new InputStreamReader( url.openStream())); String
-			 * xmlResult = ""; String line; while ((line = in.readLine()) !=
-			 * null) xmlResult += line; in.close();
-			 */
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder;
@@ -207,7 +297,6 @@ public class KerimServlet extends HttpServlet {
 				return;
 			}
 			NodeList nList = doc.getElementsByTagName("result");
-			// resp.getWriter().append("len:" + nList.getLength());
 			String[] item = new String[nList.getLength()];
 			String[] itemLabel = new String[nList.getLength()];
 			String[] commons = new String[nList.getLength()];
@@ -215,7 +304,7 @@ public class KerimServlet extends HttpServlet {
 			String[] manufacturerLabel = new String[nList.getLength()];
 			String[] type = new String[nList.getLength()];
 			String[] typeLabel = new String[nList.getLength()];
-
+			/* Parse and print the data */
 			for (int i = 0; i < nList.getLength(); ++i) {
 				Node node = (Node) nList.item(i);
 				Element element = (Element) node;
@@ -335,6 +424,11 @@ public class KerimServlet extends HttpServlet {
 
 	}
 
+	/**
+	 * \brief Connects to database and returns the connection handle
+	 * 
+	 * @return
+	 */
 	public Connection mysqlConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -345,8 +439,6 @@ public class KerimServlet extends HttpServlet {
 		String url = "jdbc:mysql://bounswegroup5.cpp0ryqf88fx.us-west-2.rds.amazonaws.com:3306/group5db";
 		String userName = "group5";
 		String password = "Cmpe352*";
-
-		String driver = "com.mysql.jdbc.Driver";
 		Connection connection;
 		try {
 			connection = DriverManager.getConnection(url, userName, password);
@@ -359,16 +451,14 @@ public class KerimServlet extends HttpServlet {
 
 	}
 
-	public void save() {
-		Connection connection = mysqlConnection();
-		System.out.println("Succeed");
-	}
-
-	/**
-	 * 
+	/*
+	 * ! unique serial number
 	 */
 	private static final long serialVersionUID = 3818282702335774732L;
 
+	/**
+	 * \brief The constructor calls the superclass constructor.
+	 */
 	public KerimServlet() {
 		super();
 	}
