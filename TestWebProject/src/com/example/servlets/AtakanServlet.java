@@ -3,6 +3,11 @@ package com.example.servlets;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,7 +30,13 @@ import org.apache.jena.query.ResultSetFormatter;
 @WebServlet("/atakan-guney")
 public class AtakanServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static String jsonData = null;
+	// JDBC driver name and database URL
+	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+	static final String DB_URL = "jdbc:mysql://bounswegroup5.cpp0ryqf88fx.us-west-2.rds.amazonaws.com:3306/group5db";
+
+	// Database credentials
+	static final String USER = "group5";
+	static final String PASS = "Cmpe352*";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -41,7 +52,8 @@ public class AtakanServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		PrintWriter out = response.getWriter();
+		response.setContentType("text/html");
 		if (request.getParameter("query") != null) {
 			String s1 = "PREFIX wd: <http://www.wikidata.org/entity/>\n"
 					+ "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n"
@@ -61,24 +73,149 @@ public class AtakanServlet extends HttpServlet {
 			QueryExecution qExe = QueryExecutionFactory.sparqlService("https://query.wikidata.org/sparql", query);
 			ResultSet results = qExe.execSelect();
 
-			PrintWriter out = response.getWriter();
-			// out.println(results.getResultVars().toString());
-			/*
-			 * while(results.hasNext()){
-			 * out.println(results.nextSolution().getResource("?eponym").
-			 * toString()) ; }
-			 */
-			response.setContentType("text/html");
-
 			String query1 = request.getParameter("query");
 			createResultTable(results, out, query1);
+		} else if (request.getParameter("selected") != null) {
+			String[] selectedItems = request.getParameterValues("selected");
+			out.println(Arrays.toString(selectedItems));
+
+			Connection conn = null;
+			Statement stmt = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				conn = DriverManager.getConnection(DB_URL, USER, PASS);
+				stmt = conn.createStatement();
+				/*
+				 * String sql = "DROP TABLE ATAKAN_SAVED_ITEMS";
+				 * stmt.executeUpdate(sql); createTable();
+				 */
+				String sql = "";
+				for (int i = 0; i < selectedItems.length; i++) {
+					String[] elts = selectedItems[i].split(",");
+					sql = "SELECT nameURI, name, sampleURI, sample, count FROM ATAKAN_SAVED_ITEMS WHERE nameURI='"
+							+ elts[0] + "';";
+					java.sql.ResultSet rs = stmt.executeQuery(sql);
+					if (!rs.next()) {
+						sql = "INSERT INTO ATAKAN_SAVED_ITEMS " + "VALUES ( \"" + elts[0] + "\", \"" + elts[1]
+								+ "\", \"" + elts[2] + "\", \"" + elts[3] + "\", \"" + elts[4] + "\")";
+						stmt.executeUpdate(sql);
+
+					}
+				}
+				out.print("DONE!!!<br>Please <a href=\"/TestWebProject/atakan-guney\"> click here</a> to redirect.");
+
+			} catch (SQLException se) {
+				se.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (stmt != null)
+						conn.close();
+				} catch (SQLException se) {
+				}
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
+		} else if (request.getParameter("show") != null) {
+			Connection conn = null;
+			Statement stmt = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				conn = DriverManager.getConnection(DB_URL, USER, PASS);
+				stmt = conn.createStatement();
+				String sql = "SELECT nameURI, name, sampleURI, sample, count FROM ATAKAN_SAVED_ITEMS";
+				java.sql.ResultSet rs = stmt.executeQuery(sql);
+				String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/atakan-guney\">";
+				table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Mathematician</th>\n"
+						+ "<th>Sample</th>\n" + "<th>Count</th>\n" + "</tr>\n";
+
+				while (rs.next()) {
+					// Retrieve by column name
+					String name = rs.getString("name");
+					String nameURI = rs.getString("nameURI");
+					String sample = rs.getString("sample");
+					String sampleURI = rs.getString("sampleURI");
+					String count = rs.getString("count");
+
+					table += "<tr>\n"+"<td>\n";
+					if (name.contains("@"))
+						table += "<a href=\"" + nameURI + "\">" + name.substring(0, name.indexOf('@'));
+					else {
+						table += "<a href=\"" + nameURI + "\">" + name;
+					}
+					table += "</td>\n" + "<td>\n";
+					if (sample.contains("@"))
+						table += "<a href=\"" + sampleURI + "\">" + sample.substring(0, sample.indexOf('@'));
+					else {
+						table += "<a href=\"" + sampleURI + "\">" + sample;
+					}
+					table += "<td>\n" + count.substring(0, count.indexOf('^')) + "</td>\n" + "</tr>\n";
+				}
+				table += "</table>";
+				table += "</form>";
+				out.println(table);
+
+				rs.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (stmt != null)
+						conn.close();
+				} catch (SQLException se) {
+				}
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
 		} else {
 			response.sendRedirect("/TestWebProject/atakan-guney.jsp");
 		}
 	}
 
+	public void createTable() {
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			String sql = "CREATE TABLE ATAKAN_SAVED_ITEMS" + "(" + " nameURI VARCHAR(255), " + "name VARCHAR(255), "
+					+ " sampleURI VARCHAR(255), " + "sample VARCHAR(255), " + " count VARCHAR(255)" + ")";
+
+			stmt.executeUpdate(sql);
+
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					conn.close();
+			} catch (SQLException se) {
+			}
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+	}
+
 	public void createResultTable(ResultSet results, PrintWriter out, String searchQuery) {
-		String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/kerim-gokarslan\">";
+		String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/atakan-guney\">";
 		table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>"
 				+ "<th>Mathematician</th>\n" + "<th>Sample</th>\n" + "<th>Count</th>\n" + "</tr>\n";
 
@@ -91,8 +228,8 @@ public class AtakanServlet extends HttpServlet {
 			String count = currentSolution.getLiteral("?count").toString();
 			if (!name.toLowerCase().contains(searchQuery.toLowerCase()))
 				continue;
-			table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"selected\" value=\"\" />" + "</td>\n"
-					+ "<td>\n";
+			table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"selected\" value=\"" + nameURI + "," + name
+					+ "," + sampleURI + "," + sample + "," + count + "\"/>" + "</td>\n" + "<td>\n";
 			if (name.contains("@"))
 				table += "<a href=\"" + nameURI + "\">" + name.substring(0, name.indexOf('@'));
 			else {
@@ -107,6 +244,8 @@ public class AtakanServlet extends HttpServlet {
 			table += "<td>\n" + count.substring(0, count.indexOf('^')) + "</td>\n" + "</tr>\n";
 		}
 		table += "</table>";
+		table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"save\"/></td></tr></table>";
+		table += "</form>";
 		out.println(table);
 
 	}

@@ -10,10 +10,15 @@
 
 	<form id="queryform" method="post" name="queryform"
 		action="/TestWebProject/atakan-guney">
-			Name/Count: <input type="text" name="query" size="32">
+			Name/Count: <input type="text" name="query" size="32" value="search for name">
 		<br> <input type="submit" name="submit"
 			value="Search">
 	</form>
-	
+
+	<form id="savedfilesform" method="post" name="savedfilesform"
+		action="/TestWebProject/atakan-guney">
+		<br> <input type="submit" name="show"
+			value="Saved items">
+	</form>
 </body>
 </html>
