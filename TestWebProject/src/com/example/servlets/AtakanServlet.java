@@ -1,6 +1,5 @@
 package com.example.servlets;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -8,16 +7,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -25,7 +22,6 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
 
 /**
  * Servlet implementation class AtakanServlet
@@ -56,11 +52,11 @@ public class AtakanServlet extends HttpServlet {
 			throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
-		//if the input given 
+		// if the input given
 		if (request.getParameter("query") != null) {
 			String query1 = request.getParameter("query");
 			search(query1, out);
-		//if user wants to show saved datas	
+			// if user wants to show saved datas
 		} else if (request.getParameter("show") != null) {
 			Connection conn = null;
 			Statement stmt = null;
@@ -121,7 +117,7 @@ public class AtakanServlet extends HttpServlet {
 					se.printStackTrace();
 				}
 			}
-		// if user wants to save datas	
+			// if user wants to save datas
 		} else if (request.getParameter("selected") != null) {
 			String[] selectedItems = request.getParameterValues("selected");
 
@@ -159,12 +155,12 @@ public class AtakanServlet extends HttpServlet {
 					se.printStackTrace();
 				}
 			}
-		//if user wants to delete saved files from database	
+			// if user wants to delete saved files from database
 		} else if (request.getParameter("delete") != null) {
 			dropSaveTable();
 			createSaveTable();
 			out.println("DONE!!!<a href=\"/TestWebProject/atakan-guney\"> click here</a> to redirect.");
-		//otherwise main page
+			// otherwise main page
 		} else {
 			response.sendRedirect("/TestWebProject/atakan-guney.jsp");
 		}
@@ -231,6 +227,7 @@ public class AtakanServlet extends HttpServlet {
 			}
 		}
 	}
+
 	/**
 	 * Creates table to put datas in my database
 	 */
@@ -325,6 +322,7 @@ public class AtakanServlet extends HttpServlet {
 			}
 		}
 	}
+
 	/**
 	 * 
 	 * Deletes the table
@@ -356,11 +354,14 @@ public class AtakanServlet extends HttpServlet {
 			}
 		}
 	}
+
 	/**
-	 * Searches in table for given query
+	 * Searches in table for given query and makes semantic ranking
 	 * 
-	 * @param searchQuery given input from user
-	 * @param out page PrintWriter
+	 * @param searchQuery
+	 *            given input from user
+	 * @param out
+	 *            page PrintWriter
 	 */
 	public void search(String searchQuery, PrintWriter out) {
 		Connection conn = null;
@@ -371,12 +372,15 @@ public class AtakanServlet extends HttpServlet {
 			stmt = conn.createStatement();
 			String sql = "SELECT * FROM ATAKAN_MATHEMATICIANS";
 			java.sql.ResultSet rs = stmt.executeQuery(sql);
+
 			String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/atakan-guney\">";
 			table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>\n"
 					+ "<th>Mathematician</th>\n" + "<th>Sample</th>\n" + "<th>Count</th>\n"
 					+ "<th>Place of Birth</th>\n" + "<th>Area in Math</th>\n" + "</tr>\n";
-
+			// List to rank
+			ArrayList<Mathematician> listToRank = new ArrayList<Mathematician>();
 			while (rs.next()) {
+
 				String name = rs.getString("name");
 				String nameURI = rs.getString("nameURI");
 				String sample = rs.getString("sample");
@@ -387,21 +391,29 @@ public class AtakanServlet extends HttpServlet {
 				String area = rs.getString("area");
 				String areaURI = rs.getString("areaURI");
 
-				table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"selected\" value=\"" + nameURI + ","
-						+ name + "," + sampleURI + "," + sample + "," + count + "," + birthPlaceURI + "," + birthPlace
-						+ "," + areaURI + "," + area + "\"/>" + "</td>\n";
-				table += "<td>\n" + "<a href=\"" + nameURI + "\">" + name + "</td>\n";
+				Mathematician mat = new Mathematician(name, nameURI, sample, sampleURI, count, birthPlace,
+						birthPlaceURI, area, areaURI);
 
-				table += "<td>\n" + "<a href=\"" + sampleURI + "\">" + sample + "</td>\n";
+				listToRank.add(mat);
+			}
+			// RankedList
+			ArrayList<Mathematician> rankedList = rank(listToRank, searchQuery);
+			for (Mathematician each : rankedList) {
+				table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"selected\" value=\"" + each.nameURI
+						+ "," + each.name + "," + each.sampleURI + "," + each.sample + "," + each.count + ","
+						+ each.birthPlaceURI + "," + each.birthPlace + "," + each.areaURI + "," + each.area + "\"/>"
+						+ "</td>\n";
+				table += "<td>\n" + "<a href=\"" + each.nameURI + "\">" + each.name + "</td>\n";
 
-				table += "<td>\n" + count + "</td>\n";
+				table += "<td>\n" + "<a href=\"" + each.sampleURI + "\">" + each.sample + "</td>\n";
 
-				table += "<td>\n" + "<a href=\"" + birthPlaceURI + "\">" + birthPlace + "</td>\n";
+				table += "<td>\n" + each.count + "</td>\n";
 
-				table += "<td>\n" + "<a href=\"" + areaURI + "\">" + area + "</td>\n";
+				table += "<td>\n" + "<a href=\"" + each.birthPlaceURI + "\">" + each.birthPlace + "</td>\n";
+
+				table += "<td>\n" + "<a href=\"" + each.areaURI + "\">" + each.area + "</td>\n";
 
 				table += "</tr>\n";
-
 			}
 			table += "</table>";
 			table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"save\"/></td></tr></table>";
@@ -426,6 +438,124 @@ public class AtakanServlet extends HttpServlet {
 			}
 		}
 	}
+
+	/**
+	 * Class for mathematicians
+	 * 
+	 * @author atakan1
+	 *
+	 */
+	public class Mathematician {
+
+		public String name;
+		public String sampleURI;
+		public String nameURI;
+		public String sample;
+		public String count;
+		public String birthPlace;
+		public String birthPlaceURI;
+		public String area;
+		public String areaURI;
+		/**
+		 * Constructor for Mathematician Class
+		 * 
+		 * @param name
+		 * @param nameURI
+		 * @param sample
+		 * @param sampleURI
+		 * @param count
+		 * @param birthPlace
+		 * @param birthPlaceURI
+		 * @param area
+		 * @param areaURI
+		 */
+		public Mathematician(String name, String nameURI, String sample, String sampleURI, String count,
+				String birthPlace, String birthPlaceURI, String area, String areaURI) {
+			this.name = name;
+			this.nameURI = nameURI;
+			this.sample = sample;
+			this.sampleURI = sampleURI;
+			this.count = count;
+			this.birthPlace = birthPlace;
+			this.birthPlaceURI = birthPlaceURI;
+			this.area = area;
+			this.areaURI = areaURI;
+		}
+		
+		/**
+		 * Checks two mathematicians were born in same place
+		 * 
+		 * @param oth
+		 * @return
+		 */
+		public boolean samePlace(Mathematician oth) {
+			return this.birthPlace.equalsIgnoreCase(oth.birthPlace);
+		}
+		
+		/**
+		 * Checks two mathematicians were working in the same area
+		 * 
+		 * @param oth
+		 * @return
+		 */
+		public boolean sameArea(Mathematician oth) {
+			return this.area.equalsIgnoreCase(oth.area);
+		}
+		/**
+		 * Checks whether mathematician's name includes the give input query or not
+		 * 
+		 * @param query
+		 * @return
+		 */
+		public boolean includeQuery(String query) {
+			return this.name.toLowerCase().contains(query.toLowerCase());
+		}
+	}
+
+	/**
+	 * Takes list of mathematicians and search query to rank according to
+	 * names,birth places and working areas
+	 * 
+	 * @param listToRank
+	 * @param searchQuery
+	 * @return
+	 */
+	public ArrayList<Mathematician> rank(ArrayList<Mathematician> listToRank, String searchQuery) {
+		ArrayList<Mathematician> rankedList = new ArrayList<Mathematician>();
+		for (int i = 0; i < listToRank.size(); i++) {
+			if (listToRank.get(i).includeQuery(searchQuery)) {
+				rankedList.add(listToRank.get(i));
+				listToRank.remove(i);
+				i--;
+			}
+		}
+		if (rankedList.isEmpty())
+			return listToRank;
+		for (int i = 0; i < listToRank.size(); i++) {
+			if (listToRank.get(i).samePlace(rankedList.get(0))) {
+				rankedList.add(listToRank.get(i));
+				listToRank.remove(i);
+				i--;
+			}
+		}
+		for (int i = 0; i < listToRank.size(); i++) {
+			if (listToRank.get(i).sameArea(rankedList.get(0))) {
+				rankedList.add(listToRank.get(i));
+				listToRank.remove(i);
+				i--;
+			}
+		}
+
+		for (int i = 0; i < listToRank.size(); i++) {
+			rankedList.add(listToRank.get(i));
+			listToRank.remove(i);
+			i--;
+		}
+
+		return rankedList;
+
+	}
+
 	/**
 	 * To create my database
 	 * 

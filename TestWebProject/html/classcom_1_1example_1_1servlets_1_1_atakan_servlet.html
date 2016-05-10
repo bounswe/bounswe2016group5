@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
@@ -106,6 +107,11 @@ Inheritance diagram for com.example.servlets.AtakanServlet:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet_1_1_mathematician.html">Mathematician</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a87e2532962ccd888df5a6e642ab6c047"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet.html#a87e2532962ccd888df5a6e642ab6c047">AtakanServlet</a> ()</td></tr>
@@ -120,6 +126,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8d4a40b18eb4548d16c072701c7eae16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12f494a4d42fef16831bba384424cba5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet.html#a12f494a4d42fef16831bba384424cba5">search</a> (String searchQuery, PrintWriter out)</td></tr>
 <tr class="separator:a12f494a4d42fef16831bba384424cba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6669d1bb4530b4a39409c614752f237e"><td class="memItemLeft" align="right" valign="top">ArrayList&lt; <a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet_1_1_mathematician.html">Mathematician</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet.html#a6669d1bb4530b4a39409c614752f237e">rank</a> (ArrayList&lt; <a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet_1_1_mathematician.html">Mathematician</a> &gt; listToRank, String searchQuery)</td></tr>
+<tr class="separator:a6669d1bb4530b4a39409c614752f237e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac43c5246ad7474fb542684e70b884f14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet.html#ac43c5246ad7474fb542684e70b884f14">createDatabase</a> ()</td></tr>
 <tr class="separator:ac43c5246ad7474fb542684e70b884f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -167,6 +175,7 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>To create my database </p>
 
 </div>
 </div>
@@ -182,6 +191,7 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates save table in my database </p>
 
 </div>
 </div>
@@ -197,6 +207,7 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Creates table to put datas in my database </p>
 
 </div>
 </div>
@@ -282,6 +293,7 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Deletes save table from database </p>
 
 </div>
 </div>
@@ -297,6 +309,42 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Deletes the table </p>
+
+</div>
+</div>
+<a class="anchor" id="a6669d1bb4530b4a39409c614752f237e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ArrayList&lt;<a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet_1_1_mathematician.html">Mathematician</a>&gt; com.example.servlets.AtakanServlet.rank </td>
+          <td>(</td>
+          <td class="paramtype">ArrayList&lt; <a class="el" href="classcom_1_1example_1_1servlets_1_1_atakan_servlet_1_1_mathematician.html">Mathematician</a> &gt;&#160;</td>
+          <td class="paramname"><em>listToRank</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String&#160;</td>
+          <td class="paramname"><em>searchQuery</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Takes list of mathematicians and search query to rank according to names,birth places and working areas</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">listToRank</td><td></td></tr>
+    <tr><td class="paramname">searchQuery</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>
@@ -323,6 +371,14 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Searches in table for given query and makes semantic ranking</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">searchQuery</td><td>given input from user </td></tr>
+    <tr><td class="paramname">out</td><td>page PrintWriter </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

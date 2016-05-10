@@ -6,6 +6,11 @@ Inheritance diagram for com.\+example.\+servlets.\+Atakan\+Servlet\+:\begin{figu
 \includegraphics[height=2.000000cm]{classcom_1_1example_1_1servlets_1_1_atakan_servlet}
 \end{center}
 \end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_1_1_mathematician}{Mathematician}
+\end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -20,6 +25,8 @@ void \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a58d74748199c
 void \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a8d4a40b18eb4548d16c072701c7eae16}{drop\+Table} ()
 \item 
 void \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a12f494a4d42fef16831bba384424cba5}{search} (String search\+Query, Print\+Writer out)
+\item 
+Array\+List$<$ \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_1_1_mathematician}{Mathematician} $>$ \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a6669d1bb4530b4a39409c614752f237e}{rank} (Array\+List$<$ \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_1_1_mathematician}{Mathematician} $>$ list\+To\+Rank, String search\+Query)
 \item 
 void \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac43c5246ad7474fb542684e70b884f14}{create\+Database} ()
 \end{DoxyCompactItemize}
@@ -61,21 +68,21 @@ Http\+Servlet\+::\+Http\+Servlet()
 {}
 \end{DoxyParamCaption}
 )}\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac43c5246ad7474fb542684e70b884f14}{}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac43c5246ad7474fb542684e70b884f14}
-\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!create\+Save\+Table@{create\+Save\+Table}}
+To create my database \index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!create\+Save\+Table@{create\+Save\+Table}}
 \index{create\+Save\+Table@{create\+Save\+Table}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
 \subsubsection[{\texorpdfstring{create\+Save\+Table()}{createSaveTable()}}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+create\+Save\+Table (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
 )}\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a35d1a337e700fae93e6c1bc1e8caa3be}{}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a35d1a337e700fae93e6c1bc1e8caa3be}
-\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!create\+Table@{create\+Table}}
+Creates save table in my database \index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!create\+Table@{create\+Table}}
 \index{create\+Table@{create\+Table}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
 \subsubsection[{\texorpdfstring{create\+Table()}{createTable()}}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+create\+Table (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
 )}\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a58d74748199c3d7e4c4fc4a4dc4a4a9e}{}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a58d74748199c3d7e4c4fc4a4dc4a4a9e}
-\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!do\+Get@{do\+Get}}
+Creates table to put datas in my database \index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!do\+Get@{do\+Get}}
 \index{do\+Get@{do\+Get}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
 \subsubsection[{\texorpdfstring{do\+Get(\+Http\+Servlet\+Request request, Http\+Servlet\+Response response)}{doGet(HttpServletRequest request, HttpServletResponse response)}}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+do\+Get (
 \begin{DoxyParamCaption}
@@ -104,13 +111,33 @@ Http\+Servlet\+::do\+Post(Http\+Servlet\+Request request, Http\+Servlet\+Respons
 {}
 \end{DoxyParamCaption}
 )}\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a6e8d25b648ac5982a2841efc984554f0}{}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a6e8d25b648ac5982a2841efc984554f0}
-\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!drop\+Table@{drop\+Table}}
+Deletes save table from database \index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!drop\+Table@{drop\+Table}}
 \index{drop\+Table@{drop\+Table}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
 \subsubsection[{\texorpdfstring{drop\+Table()}{dropTable()}}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+drop\+Table (
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
 )}\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a8d4a40b18eb4548d16c072701c7eae16}{}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a8d4a40b18eb4548d16c072701c7eae16}
+Deletes the table \index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!rank@{rank}}
+\index{rank@{rank}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
+\subsubsection[{\texorpdfstring{rank(\+Array\+List$<$ Mathematician $>$ list\+To\+Rank, String search\+Query)}{rank(ArrayList< Mathematician > listToRank, String searchQuery)}}]{\setlength{\rightskip}{0pt plus 5cm}Array\+List$<${\bf Mathematician}$>$ com.\+example.\+servlets.\+Atakan\+Servlet.\+rank (
+\begin{DoxyParamCaption}
+\item[{Array\+List$<$ {\bf Mathematician} $>$}]{list\+To\+Rank, }
+\item[{String}]{search\+Query}
+\end{DoxyParamCaption}
+)}\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a6669d1bb4530b4a39409c614752f237e}{}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a6669d1bb4530b4a39409c614752f237e}
+Takes list of mathematicians and search query to rank according to names,birth places and working areas
+
+
+\begin{DoxyParams}{Parameters}
+{\em list\+To\+Rank} & \\
+\hline
+{\em search\+Query} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
 \index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!search@{search}}
 \index{search@{search}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
 \subsubsection[{\texorpdfstring{search(\+String search\+Query, Print\+Writer out)}{search(String searchQuery, PrintWriter out)}}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+search (
@@ -119,6 +146,15 @@ Http\+Servlet\+::do\+Post(Http\+Servlet\+Request request, Http\+Servlet\+Respons
 \item[{Print\+Writer}]{out}
 \end{DoxyParamCaption}
 )}\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a12f494a4d42fef16831bba384424cba5}{}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a12f494a4d42fef16831bba384424cba5}
+Searches in table for given query and makes semantic ranking
+
+
+\begin{DoxyParams}{Parameters}
+{\em search\+Query} & given input from user \\
+\hline
+{\em out} & page Print\+Writer \\
+\hline
+\end{DoxyParams}
 
 
 \subsection{Member Data Documentation}
