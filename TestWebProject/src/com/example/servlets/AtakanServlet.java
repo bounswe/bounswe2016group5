@@ -46,7 +46,6 @@ public class AtakanServlet extends HttpServlet {
 	 */
 	public AtakanServlet() {
 		super();
-		// createTable();
 	}
 
 	/**
@@ -67,29 +66,36 @@ public class AtakanServlet extends HttpServlet {
 				Class.forName("com.mysql.jdbc.Driver");
 				conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				stmt = conn.createStatement();
-				String sql = "SELECT nameURI, name, sampleURI, sample, count FROM ATAKAN_SAVE";
+				String sql = "SELECT * FROM ATAKAN_SAVE";
 				java.sql.ResultSet rs = stmt.executeQuery(sql);
 				String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/atakan-guney\">";
 				table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Mathematician</th>\n"
-						+ "<th>Sample</th>\n" + "<th>Count</th>\n" + "</tr>\n";
+						+ "<th>Sample</th>\n" + "<th>Count</th>\n" + "<th>Place of Birth</th>\n"
+						+ "<th>Area in Math</th>\n" + "</tr>\n";
 
 				while (rs.next()) {
-					// Retrieve by column name
 					String name = rs.getString("name");
 					String nameURI = rs.getString("nameURI");
 					String sample = rs.getString("sample");
 					String sampleURI = rs.getString("sampleURI");
 					String count = rs.getString("count");
+					String birthPlace = rs.getString("birthplace");
+					String birthPlaceURI = rs.getString("birthplaceURI");
+					String area = rs.getString("area");
+					String areaURI = rs.getString("areaURI");
+					table += "<tr>\n";
 
-					table += "<tr>\n" + "<td>\n";
+					table += "<td>\n" + "<a href=\"" + nameURI + "\">" + name + "</td>\n";
 
-					table += "<a href=\"" + nameURI + "\">" + name;
+					table += "<td>\n" + "<a href=\"" + sampleURI + "\">" + sample + "</td>\n";
 
-					table += "</td>\n" + "<td>\n";
+					table += "<td>\n" + count + "</td>\n";
 
-					table += "<a href=\"" + sampleURI + "\">" + sample;
+					table += "<td>\n" + "<a href=\"" + birthPlaceURI + "\">" + birthPlace + "</td>\n";
 
-					table += "<td>\n" + count + "</td>\n" + "</tr>\n";
+					table += "<td>\n" + "<a href=\"" + areaURI + "\">" + area + "</td>\n";
+
+					table += "</tr>\n";
 				}
 				table += "</table>";
 				table += "</form>";
@@ -122,17 +128,13 @@ public class AtakanServlet extends HttpServlet {
 				Class.forName("com.mysql.jdbc.Driver");
 				conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				stmt = conn.createStatement();
-				/*
-				 * String sql = "DROP TABLE ATAKAN_SAVED_ITEMS";
-				 * stmt.executeUpdate(sql); createTable();
-				 */
 				String sql = "";
 				for (int i = 0; i < selectedItems.length; i++) {
 					String uniqueID = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
 					String[] elts = selectedItems[i].split(",");
-
 					sql = "INSERT INTO ATAKAN_SAVE " + "VALUES ( \"" + uniqueID + i + "\", \"" + elts[0] + "\", \""
-							+ elts[1] + "\", \"" + elts[2] + "\", \"" + elts[3] + "\", \"" + elts[4] + "\")";
+							+ elts[1] + "\", \"" + elts[2] + "\", \"" + elts[3] + "\", \"" + elts[4] + "\", \""
+							+ elts[5] + "\", \"" + elts[6] + "\", \"" + elts[7] + "\", \"" + elts[8] + "\")";
 					stmt.executeUpdate(sql);
 
 				}
@@ -155,12 +157,11 @@ public class AtakanServlet extends HttpServlet {
 				}
 			}
 
-		}else if (request.getParameter("delete") != null){
+		} else if (request.getParameter("delete") != null) {
 			dropSaveTable();
 			createSaveTable();
 			out.println("DONE!!!<a href=\"/TestWebProject/atakan-guney\"> click here</a> to redirect.");
-		} 
-		else {
+		} else {
 			response.sendRedirect("/TestWebProject/atakan-guney.jsp");
 		}
 	}
@@ -200,7 +201,7 @@ public class AtakanServlet extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			String sql = "CREATE TABLE ATAKAN_SAVE (ID VARCHAR(255) not NULL, nameURI VARCHAR(255),name VARCHAR(255),sampleURI VARCHAR(255),sample VARCHAR(255),count VARCHAR(255), PRIMARY KEY (ID))";
+			String sql = "CREATE TABLE ATAKAN_SAVE (ID VARCHAR(255) not NULL, nameURI VARCHAR(255),name VARCHAR(255),sampleURI VARCHAR(255),sample VARCHAR(255),count VARCHAR(255), birthplaceURI VARCHAR(255), birthplace VARCHAR(255), areaURI VARCHAR(255), area VARCHAR(255), PRIMARY KEY (ID))";
 			stmt.executeUpdate(sql);
 		} catch (SQLException se) {
 			se.printStackTrace();
@@ -229,7 +230,7 @@ public class AtakanServlet extends HttpServlet {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
 			String sql = "CREATE TABLE ATAKAN_MATHEMATICIANS" + "("
-					+ "nameURI VARCHAR(255), name VARCHAR(255), sampleURI VARCHAR(255), sample VARCHAR(255), count VARCHAR(255) )";
+					+ "nameURI VARCHAR(255), name VARCHAR(255), sampleURI VARCHAR(255), sample VARCHAR(255), count VARCHAR(255) , birthplaceURI VARCHAR(255), birthplace VARCHAR(255), areaURI VARCHAR(255), area VARCHAR(255))";
 			stmt.executeUpdate(sql);
 			System.out.println("Table created");
 			String s1 = "PREFIX wd: <http://www.wikidata.org/entity/>\n"
@@ -240,10 +241,12 @@ public class AtakanServlet extends HttpServlet {
 					+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
 					+ "PREFIX bd: <http://www.bigdata.com/rdf#>\n" +
 
-					"#Most eponymous mathematicians\n" + "SELECT ?eponym ?eponymLabel ?count ?sample ?sampleLabel\n"
+					"#Most eponymous mathematicians\n"
+					+ "SELECT ?eponym ?eponymLabel ?count ?sample ?sampleLabel ?birthplace ?birthplaceLabel ?area ?areaLabel\n"
 					+ "WHERE\n" + "{\n" + "{\n" + "SELECT ?eponym (COUNT(?item) as ?count) (SAMPLE(?item) AS ?sample)\n"
 					+ "WHERE\n" + "{\n" + "?item wdt:P138 ?eponym.\n" + "?eponym wdt:P106 wd:Q170790.\n" + "}\n"
-					+ "GROUP BY ?eponym\n" + "}\n"
+					+ "GROUP BY ?eponym\n" + "}\n" + "?eponym wdt:P106 wd:Q170790 .\n" + " ?eponym wdt:P101 ?area.\n"
+					+ "?eponym wdt:P19 ?place .\n" + "?place wdt:P625 ?coord .\n" + "?place wdt:P17 ?birthplace.\n"
 					+ "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" }\n" + "}\n"
 					+ "ORDER BY DESC(?count)\n";
 			Query query = QueryFactory.create(s1);
@@ -257,6 +260,10 @@ public class AtakanServlet extends HttpServlet {
 				String nameURI = currentSolution.getResource("?eponym").toString();
 				String sample = currentSolution.getLiteral("?sampleLabel").toString();
 				String sampleURI = currentSolution.getResource("?sample").toString();
+				String birthPlace = currentSolution.getLiteral("?birthplaceLabel").toString();
+				String birthPlaceURI = currentSolution.getResource("?birthplace").toString();
+				String area = currentSolution.getLiteral("?areaLabel").toString();
+				String areaURI = currentSolution.getResource("?area").toString();
 				String count = currentSolution.getLiteral("?count").toString();
 				if (name.contains("@"))
 					sql += " \"" + nameURI + "\", \"" + name.substring(0, name.indexOf('@'));
@@ -269,7 +276,20 @@ public class AtakanServlet extends HttpServlet {
 				else {
 					sql += "\"" + sampleURI + "\", \"" + sample;
 				}
-				sql += "\", \"" + count.substring(0, count.indexOf('^')) + "\" )";
+				sql += "\", \"" + count.substring(0, count.indexOf('^'));
+				sql += "\", ";
+				if (birthPlace.contains("@"))
+					sql += " \"" + birthPlaceURI + "\", \"" + birthPlace.substring(0, birthPlace.indexOf('@'));
+				else {
+					sql += "\"" + birthPlaceURI + "\", \"" + birthPlace;
+				}
+				sql += "\", ";
+				if (area.contains("@"))
+					sql += " \"" + areaURI + "\", \"" + area.substring(0, area.indexOf('@'));
+				else {
+					sql += "\"" + areaURI + "\", \"" + area;
+				}
+				sql += "\" )";
 				stmt.executeUpdate(sql);
 				i++;
 				System.out.println(i + "th data added!");
@@ -330,29 +350,39 @@ public class AtakanServlet extends HttpServlet {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
 			String sql = "SELECT * FROM ATAKAN_MATHEMATICIANS";
-			java.sql.ResultSet results = stmt.executeQuery(sql);
+			java.sql.ResultSet rs = stmt.executeQuery(sql);
 			String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/atakan-guney\">";
-			table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>"
-					+ "<th>Mathematician</th>\n" + "<th>Sample</th>\n" + "<th>Count</th>\n" + "</tr>\n";
+			table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>\n"
+					+ "<th>Mathematician</th>\n" + "<th>Sample</th>\n" + "<th>Count</th>\n"
+					+ "<th>Place of Birth</th>\n" + "<th>Area in Math</th>\n" + "</tr>\n";
 
-			while (results.next()) {
-				String name = results.getString("name");
-				String nameURI = results.getString("nameURI");
-				String sample = results.getString("sample");
-				String sampleURI = results.getString("sampleURI");
-				String count = results.getString("count");
+			while (rs.next()) {
+				String name = rs.getString("name");
 				if (!name.toLowerCase().contains(searchQuery.toLowerCase()))
 					continue;
+				String nameURI = rs.getString("nameURI");
+				String sample = rs.getString("sample");
+				String sampleURI = rs.getString("sampleURI");
+				String count = rs.getString("count");
+				String birthPlace = rs.getString("birthplace");
+				String birthPlaceURI = rs.getString("birthplaceURI");
+				String area = rs.getString("area");
+				String areaURI = rs.getString("areaURI");
+
 				table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"selected\" value=\"" + nameURI + ","
-						+ name + "," + sampleURI + "," + sample + "," + count + "\"/>" + "</td>\n" + "<td>\n";
+						+ name + "," + sampleURI + "," + sample + "," + count + "," + birthPlaceURI + "," + birthPlace
+						+ "," + areaURI + "," + area + "\"/>" + "</td>\n";
+				table += "<td>\n" + "<a href=\"" + nameURI + "\">" + name + "</td>\n";
 
-				table += "<a href=\"" + nameURI + "\">" + name;
+				table += "<td>\n" + "<a href=\"" + sampleURI + "\">" + sample + "</td>\n";
 
-				table += "</td>\n" + "<td>\n";
+				table += "<td>\n" + count + "</td>\n";
 
-				table += "<a href=\"" + sampleURI + "\">" + sample;
+				table += "<td>\n" + "<a href=\"" + birthPlaceURI + "\">" + birthPlace + "</td>\n";
 
-				table += "<td>\n" + count + "</td>\n" + "</tr>\n";
+				table += "<td>\n" + "<a href=\"" + areaURI + "\">" + area + "</td>\n";
+
+				table += "</tr>\n";
 			}
 			table += "</table>";
 			table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"save\"/></td></tr></table>";
@@ -415,8 +445,8 @@ public class AtakanServlet extends HttpServlet {
 					conn.close();
 			} catch (SQLException se) {
 				se.printStackTrace();
-			} // end finally try
-		} // end try
+			}
+		}
 	}
 
 	/**
