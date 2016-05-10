@@ -13,6 +13,7 @@
 			<input type="text" name="input" size="32">
 		<br> 
 		<input type="submit" name="submit" value="Search">
+		<br>
 		<input type="submit" name="retrieve" value="Retrieve saved results">
 		<input type="submit" name="clear" value="Clear saved results">
 	</form>

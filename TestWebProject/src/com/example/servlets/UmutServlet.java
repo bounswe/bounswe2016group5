@@ -57,15 +57,13 @@ public class UmutServlet extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		// TODO Auto-generated method stub
-		
 		/**
 		 * Check for the input parameter and redirect.
 		 */
 		PrintWriter writer = response.getWriter();
 		response.setContentType("text/html");
 				
-		if (request.getParameter("input") != null)
+		if (request.getParameter("input") != null && request.getParameter("input") != "")
 		{
 			String wikiDataQuery = "PREFIX p: <http://www.wikidata.org/prop/>\r\n" + 
 					"PREFIX wdt: <http://www.wikidata.org/prop/direct/>\r\n" + 
@@ -100,6 +98,15 @@ public class UmutServlet extends HttpServlet
 			insertSelectedValuesToDB(request);
 			response.sendRedirect("/TestWebProject/umut-dabager.jsp");
 		}
+		else if(request.getParameter("retrieve") != null)
+		{
+			writer.println(retrieveSavedResults());
+		}
+		else if(request.getParameter("clear") != null)
+		{
+			clearSavedResults();
+			response.sendRedirect("/TestWebProject/umut-dabager.jsp");
+		}
 		else
 		{
 			response.sendRedirect("/TestWebProject/umut-dabager.jsp");
@@ -110,7 +117,7 @@ public class UmutServlet extends HttpServlet
 	 * Originally written as a utility function by Atakan Guney.
 	 * Modified by Umut Dabager.
 	 */
-	public void createResultTable(ResultSet results, PrintWriter out, String searchQuery)
+	public void createResultTable(ResultSet results, PrintWriter writer, String searchQuery)
 	{
 		String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/umut-dabager\">";
 		table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>"
@@ -135,7 +142,7 @@ public class UmutServlet extends HttpServlet
 		table += "</table>";
 		table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"Save the selected results.\"/></td></tr></table>";
 		table += "</form>";
-		out.println(table);
+		writer.println(table);
 
 	}
 	
@@ -174,9 +181,9 @@ public class UmutServlet extends HttpServlet
             statement.execute(sqlInsertQuery);
 
 		} 
-		catch (SQLException se) 
+		catch (SQLException exc) 
 		{
-			se.printStackTrace();
+			exc.printStackTrace();
 		}
 	}
 	
@@ -228,7 +235,90 @@ public class UmutServlet extends HttpServlet
 		}
 	}
 	
+	private String retrieveSavedResults()
+	{
+		String table = "";
+		Connection conn = null;
+		Statement statement = null;
+		try 
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			statement = conn.createStatement();
+			java.sql.ResultSet savedResults = statement.executeQuery("SELECT * FROM umut_savedData");
+			
+			
+			table = "<form method=\"post\" name=\"resulttable\" action=\"/TestWebProject/umut-dabager\">";
+			table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Musician</th>\n"
+					+ "<th>Genre</th>\n";
+
+			while (savedResults.next()) {
+				String musician = savedResults.getString("musician");
+				String musicianURI = savedResults.getString("musicianid");
+				String genre = savedResults.getString("genre");
+				String genreURI = savedResults.getString("genreid");
+				table += "<tr>\n";
+
+				table += "<td>\n" + "<a href=\"" + musicianURI + "\">" + musician + "</td>\n";
+
+				table += "<td>\n" + "<a href=\"" + genreURI + "\">" + genre + "</td></tr>\n";
+			}
+			table += "</table></form>";
+		} 
+		catch (SQLException se) 
+		{
+			se.printStackTrace();
+		}
+		catch (ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (conn != null) conn.close();
+			} 
+			catch (SQLException exc) 
+			{
+				exc.printStackTrace();
+			}
+		}
+
+		return table;
+	}
 	
+	private void clearSavedResults()
+	{
+		Connection conn = null;
+		Statement statement = null;
+		try 
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			statement = conn.createStatement();
+            statement.execute("TRUNCATE TABLE umut_savedData");
+		} 
+		catch (SQLException exc) 
+		{
+			exc.printStackTrace();
+		}
+		catch (ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (conn != null) conn.close();
+			} 
+			catch (SQLException exc) 
+			{
+				exc.printStackTrace();
+			}
+		}
+	}
 	
 
 	/**
