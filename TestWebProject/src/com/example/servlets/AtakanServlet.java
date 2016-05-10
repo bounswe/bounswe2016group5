@@ -56,9 +56,11 @@ public class AtakanServlet extends HttpServlet {
 			throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
+		//if the input given 
 		if (request.getParameter("query") != null) {
 			String query1 = request.getParameter("query");
 			search(query1, out);
+		//if user wants to show saved datas	
 		} else if (request.getParameter("show") != null) {
 			Connection conn = null;
 			Statement stmt = null;
@@ -119,6 +121,7 @@ public class AtakanServlet extends HttpServlet {
 					se.printStackTrace();
 				}
 			}
+		// if user wants to save datas	
 		} else if (request.getParameter("selected") != null) {
 			String[] selectedItems = request.getParameterValues("selected");
 
@@ -156,16 +159,20 @@ public class AtakanServlet extends HttpServlet {
 					se.printStackTrace();
 				}
 			}
-
+		//if user wants to delete saved files from database	
 		} else if (request.getParameter("delete") != null) {
 			dropSaveTable();
 			createSaveTable();
 			out.println("DONE!!!<a href=\"/TestWebProject/atakan-guney\"> click here</a> to redirect.");
+		//otherwise main page
 		} else {
 			response.sendRedirect("/TestWebProject/atakan-guney.jsp");
 		}
 	}
 
+	/**
+	 * Deletes save table from database
+	 */
 	public void dropSaveTable() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -194,6 +201,9 @@ public class AtakanServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Creates save table in my database
+	 */
 	public void createSaveTable() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -221,7 +231,9 @@ public class AtakanServlet extends HttpServlet {
 			}
 		}
 	}
-
+	/**
+	 * Creates table to put datas in my database
+	 */
 	public void createTable() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -313,7 +325,10 @@ public class AtakanServlet extends HttpServlet {
 			}
 		}
 	}
-
+	/**
+	 * 
+	 * Deletes the table
+	 */
 	public void dropTable() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -341,7 +356,12 @@ public class AtakanServlet extends HttpServlet {
 			}
 		}
 	}
-
+	/**
+	 * Searches in table for given query
+	 * 
+	 * @param searchQuery given input from user
+	 * @param out page PrintWriter
+	 */
 	public void search(String searchQuery, PrintWriter out) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -358,8 +378,6 @@ public class AtakanServlet extends HttpServlet {
 
 			while (rs.next()) {
 				String name = rs.getString("name");
-				if (!name.toLowerCase().contains(searchQuery.toLowerCase()))
-					continue;
 				String nameURI = rs.getString("nameURI");
 				String sample = rs.getString("sample");
 				String sampleURI = rs.getString("sampleURI");
@@ -383,6 +401,7 @@ public class AtakanServlet extends HttpServlet {
 				table += "<td>\n" + "<a href=\"" + areaURI + "\">" + area + "</td>\n";
 
 				table += "</tr>\n";
+
 			}
 			table += "</table>";
 			table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"save\"/></td></tr></table>";
@@ -407,7 +426,10 @@ public class AtakanServlet extends HttpServlet {
 			}
 		}
 	}
-
+	/**
+	 * To create my database
+	 * 
+	 */
 	public void createDatabase() {
 		Connection conn = null;
 		Statement stmt = null;

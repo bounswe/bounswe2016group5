@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['umutservlet_2ejava',['UmutServlet.java',['../_umut_servlet_8java.html',1,'']]]
+  ['sevdaservlet_2ejava',['SevdaServlet.java',['../_sevda_servlet_8java.html',1,'']]]
 ];
