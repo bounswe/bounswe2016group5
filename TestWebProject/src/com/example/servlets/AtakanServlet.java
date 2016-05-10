@@ -7,10 +7,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +35,7 @@ public class AtakanServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://bounswegroup5.cpp0ryqf88fx.us-west-2.rds.amazonaws.com:3306/group5db";
+	static final String DB_URL = "jdbc:mysql://bounswegroup5.cpp0ryqf88fx.us-west-2.rds.amazonaws.com:3306/ATAKAN";
 
 	// Database credentials
 	static final String USER = "group5";
@@ -43,7 +46,7 @@ public class AtakanServlet extends HttpServlet {
 	 */
 	public AtakanServlet() {
 		super();
-		// TODO Auto-generated constructor stub
+		// createTable();
 	}
 
 	/**
@@ -55,72 +58,8 @@ public class AtakanServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 		if (request.getParameter("query") != null) {
-			String s1 = "PREFIX wd: <http://www.wikidata.org/entity/>\n"
-					+ "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n"
-					+ "PREFIX wikibase: <http://wikiba.se/ontology#>\n" + "PREFIX p: <http://www.wikidata.org/prop/>\n"
-					+ "PREFIX ps: <http://www.wikidata.org/prop/statement/>\n"
-					+ "PREFIX pq: <http://www.wikidata.org/prop/qualifier/>\n"
-					+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
-					+ "PREFIX bd: <http://www.bigdata.com/rdf#>\n" +
-
-					"#Most eponymous mathematicians\n" + "SELECT ?eponym ?eponymLabel ?count ?sample ?sampleLabel\n"
-					+ "WHERE\n" + "{\n" + "{\n" + "SELECT ?eponym (COUNT(?item) as ?count) (SAMPLE(?item) AS ?sample)\n"
-					+ "WHERE\n" + "{\n" + "?item wdt:P138 ?eponym.\n" + "?eponym wdt:P106 wd:Q170790.\n" + "}\n"
-					+ "GROUP BY ?eponym\n" + "}\n"
-					+ "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" }\n" + "}\n"
-					+ "ORDER BY DESC(?count)\n";
-			Query query = QueryFactory.create(s1);
-			QueryExecution qExe = QueryExecutionFactory.sparqlService("https://query.wikidata.org/sparql", query);
-			ResultSet results = qExe.execSelect();
-
 			String query1 = request.getParameter("query");
-			createResultTable(results, out, query1);
-		} else if (request.getParameter("selected") != null) {
-			String[] selectedItems = request.getParameterValues("selected");
-			out.println(Arrays.toString(selectedItems));
-
-			Connection conn = null;
-			Statement stmt = null;
-			try {
-				Class.forName("com.mysql.jdbc.Driver");
-				conn = DriverManager.getConnection(DB_URL, USER, PASS);
-				stmt = conn.createStatement();
-				/*
-				 * String sql = "DROP TABLE ATAKAN_SAVED_ITEMS";
-				 * stmt.executeUpdate(sql); createTable();
-				 */
-				String sql = "";
-				for (int i = 0; i < selectedItems.length; i++) {
-					String[] elts = selectedItems[i].split(",");
-					sql = "SELECT nameURI, name, sampleURI, sample, count FROM ATAKAN_SAVED_ITEMS WHERE nameURI='"
-							+ elts[0] + "';";
-					java.sql.ResultSet rs = stmt.executeQuery(sql);
-					if (!rs.next()) {
-						sql = "INSERT INTO ATAKAN_SAVED_ITEMS " + "VALUES ( \"" + elts[0] + "\", \"" + elts[1]
-								+ "\", \"" + elts[2] + "\", \"" + elts[3] + "\", \"" + elts[4] + "\")";
-						stmt.executeUpdate(sql);
-
-					}
-				}
-				out.print("DONE!!!<br>Please <a href=\"/TestWebProject/atakan-guney\"> click here</a> to redirect.");
-
-			} catch (SQLException se) {
-				se.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					if (stmt != null)
-						conn.close();
-				} catch (SQLException se) {
-				}
-				try {
-					if (conn != null)
-						conn.close();
-				} catch (SQLException se) {
-					se.printStackTrace();
-				}
-			}
+			search(query1, out);
 		} else if (request.getParameter("show") != null) {
 			Connection conn = null;
 			Statement stmt = null;
@@ -128,7 +67,7 @@ public class AtakanServlet extends HttpServlet {
 				Class.forName("com.mysql.jdbc.Driver");
 				conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				stmt = conn.createStatement();
-				String sql = "SELECT nameURI, name, sampleURI, sample, count FROM ATAKAN_SAVED_ITEMS";
+				String sql = "SELECT nameURI, name, sampleURI, sample, count FROM ATAKAN_SAVE";
 				java.sql.ResultSet rs = stmt.executeQuery(sql);
 				String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/atakan-guney\">";
 				table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Mathematician</th>\n"
@@ -142,24 +81,20 @@ public class AtakanServlet extends HttpServlet {
 					String sampleURI = rs.getString("sampleURI");
 					String count = rs.getString("count");
 
-					table += "<tr>\n"+"<td>\n";
-					if (name.contains("@"))
-						table += "<a href=\"" + nameURI + "\">" + name.substring(0, name.indexOf('@'));
-					else {
-						table += "<a href=\"" + nameURI + "\">" + name;
-					}
+					table += "<tr>\n" + "<td>\n";
+
+					table += "<a href=\"" + nameURI + "\">" + name;
+
 					table += "</td>\n" + "<td>\n";
-					if (sample.contains("@"))
-						table += "<a href=\"" + sampleURI + "\">" + sample.substring(0, sample.indexOf('@'));
-					else {
-						table += "<a href=\"" + sampleURI + "\">" + sample;
-					}
-					table += "<td>\n" + count.substring(0, count.indexOf('^')) + "</td>\n" + "</tr>\n";
+
+					table += "<a href=\"" + sampleURI + "\">" + sample;
+
+					table += "<td>\n" + count + "</td>\n" + "</tr>\n";
 				}
 				table += "</table>";
 				table += "</form>";
 				out.println(table);
-
+				out.println("<a href=\"/TestWebProject/atakan-guney\"> Click here</a> to redirect.");
 				rs.close();
 			} catch (SQLException se) {
 				se.printStackTrace();
@@ -178,8 +113,111 @@ public class AtakanServlet extends HttpServlet {
 					se.printStackTrace();
 				}
 			}
-		} else {
+		} else if (request.getParameter("selected") != null) {
+			String[] selectedItems = request.getParameterValues("selected");
+
+			Connection conn = null;
+			Statement stmt = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				conn = DriverManager.getConnection(DB_URL, USER, PASS);
+				stmt = conn.createStatement();
+				/*
+				 * String sql = "DROP TABLE ATAKAN_SAVED_ITEMS";
+				 * stmt.executeUpdate(sql); createTable();
+				 */
+				String sql = "";
+				for (int i = 0; i < selectedItems.length; i++) {
+					String uniqueID = new SimpleDateFormat("yyyyMMddHHmmss").format(Calendar.getInstance().getTime());
+					String[] elts = selectedItems[i].split(",");
+
+					sql = "INSERT INTO ATAKAN_SAVE " + "VALUES ( \"" + uniqueID + i + "\", \"" + elts[0] + "\", \""
+							+ elts[1] + "\", \"" + elts[2] + "\", \"" + elts[3] + "\", \"" + elts[4] + "\")";
+					stmt.executeUpdate(sql);
+
+				}
+				out.print("DONE!!!<br>Please <a href=\"/TestWebProject/atakan-guney\"> click here</a> to redirect.");
+			} catch (SQLException se) {
+				se.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (stmt != null)
+						conn.close();
+				} catch (SQLException se) {
+				}
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException se) {
+					se.printStackTrace();
+				}
+			}
+
+		}else if (request.getParameter("delete") != null){
+			dropSaveTable();
+			createSaveTable();
+			out.println("DONE!!!<a href=\"/TestWebProject/atakan-guney\"> click here</a> to redirect.");
+		} 
+		else {
 			response.sendRedirect("/TestWebProject/atakan-guney.jsp");
+		}
+	}
+
+	public void dropSaveTable() {
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			String sql = "DROP TABLE ATAKAN_SAVE";
+			stmt.executeUpdate(sql);
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					conn.close();
+			} catch (SQLException se) {
+			}
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+	}
+
+	public void createSaveTable() {
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			String sql = "CREATE TABLE ATAKAN_SAVE (ID VARCHAR(255) not NULL, nameURI VARCHAR(255),name VARCHAR(255),sampleURI VARCHAR(255),sample VARCHAR(255),count VARCHAR(255), PRIMARY KEY (ID))";
+			stmt.executeUpdate(sql);
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					conn.close();
+			} catch (SQLException se) {
+			}
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
 		}
 	}
 
@@ -190,10 +228,52 @@ public class AtakanServlet extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			String sql = "CREATE TABLE ATAKAN_SAVED_ITEMS" + "(" + " nameURI VARCHAR(255), " + "name VARCHAR(255), "
-					+ " sampleURI VARCHAR(255), " + "sample VARCHAR(255), " + " count VARCHAR(255)" + ")";
-
+			String sql = "CREATE TABLE ATAKAN_MATHEMATICIANS" + "("
+					+ "nameURI VARCHAR(255), name VARCHAR(255), sampleURI VARCHAR(255), sample VARCHAR(255), count VARCHAR(255) )";
 			stmt.executeUpdate(sql);
+			System.out.println("Table created");
+			String s1 = "PREFIX wd: <http://www.wikidata.org/entity/>\n"
+					+ "PREFIX wdt: <http://www.wikidata.org/prop/direct/>\n"
+					+ "PREFIX wikibase: <http://wikiba.se/ontology#>\n" + "PREFIX p: <http://www.wikidata.org/prop/>\n"
+					+ "PREFIX ps: <http://www.wikidata.org/prop/statement/>\n"
+					+ "PREFIX pq: <http://www.wikidata.org/prop/qualifier/>\n"
+					+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+					+ "PREFIX bd: <http://www.bigdata.com/rdf#>\n" +
+
+					"#Most eponymous mathematicians\n" + "SELECT ?eponym ?eponymLabel ?count ?sample ?sampleLabel\n"
+					+ "WHERE\n" + "{\n" + "{\n" + "SELECT ?eponym (COUNT(?item) as ?count) (SAMPLE(?item) AS ?sample)\n"
+					+ "WHERE\n" + "{\n" + "?item wdt:P138 ?eponym.\n" + "?eponym wdt:P106 wd:Q170790.\n" + "}\n"
+					+ "GROUP BY ?eponym\n" + "}\n"
+					+ "SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\" }\n" + "}\n"
+					+ "ORDER BY DESC(?count)\n";
+			Query query = QueryFactory.create(s1);
+			QueryExecution qExe = QueryExecutionFactory.sparqlService("https://query.wikidata.org/sparql", query);
+			ResultSet results = qExe.execSelect();
+			int i = 0;
+			while (results.hasNext()) {
+				sql = "INSERT INTO ATAKAN_MATHEMATICIANS " + "VALUES (";
+				QuerySolution currentSolution = results.nextSolution();
+				String name = currentSolution.getLiteral("?eponymLabel").toString();
+				String nameURI = currentSolution.getResource("?eponym").toString();
+				String sample = currentSolution.getLiteral("?sampleLabel").toString();
+				String sampleURI = currentSolution.getResource("?sample").toString();
+				String count = currentSolution.getLiteral("?count").toString();
+				if (name.contains("@"))
+					sql += " \"" + nameURI + "\", \"" + name.substring(0, name.indexOf('@'));
+				else {
+					sql += "\"" + nameURI + "\", \"" + name;
+				}
+				sql += "\", ";
+				if (sample.contains("@"))
+					sql += "\"" + sampleURI + "\", \"" + sample.substring(0, sample.indexOf('@'));
+				else {
+					sql += "\"" + sampleURI + "\", \"" + sample;
+				}
+				sql += "\", \"" + count.substring(0, count.indexOf('^')) + "\" )";
+				stmt.executeUpdate(sql);
+				i++;
+				System.out.println(i + "th data added!");
+			}
 
 		} catch (SQLException se) {
 			se.printStackTrace();
@@ -214,40 +294,129 @@ public class AtakanServlet extends HttpServlet {
 		}
 	}
 
-	public void createResultTable(ResultSet results, PrintWriter out, String searchQuery) {
-		String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/atakan-guney\">";
-		table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>"
-				+ "<th>Mathematician</th>\n" + "<th>Sample</th>\n" + "<th>Count</th>\n" + "</tr>\n";
-
-		while (results.hasNext()) {
-			QuerySolution currentSolution = results.nextSolution();
-			String name = currentSolution.getLiteral("?eponymLabel").toString();
-			String nameURI = currentSolution.getResource("?eponym").toString();
-			String sample = currentSolution.getLiteral("?sampleLabel").toString();
-			String sampleURI = currentSolution.getResource("?sample").toString();
-			String count = currentSolution.getLiteral("?count").toString();
-			if (!name.toLowerCase().contains(searchQuery.toLowerCase()))
-				continue;
-			table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"selected\" value=\"" + nameURI + "," + name
-					+ "," + sampleURI + "," + sample + "," + count + "\"/>" + "</td>\n" + "<td>\n";
-			if (name.contains("@"))
-				table += "<a href=\"" + nameURI + "\">" + name.substring(0, name.indexOf('@'));
-			else {
-				table += "<a href=\"" + nameURI + "\">" + name;
+	public void dropTable() {
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			String sql = "DROP TABLE ATAKAN_MATHEMATICIANS";
+			stmt.executeUpdate(sql);
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					conn.close();
+			} catch (SQLException se) {
 			}
-			table += "</td>\n" + "<td>\n";
-			if (sample.contains("@"))
-				table += "<a href=\"" + sampleURI + "\">" + sample.substring(0, sample.indexOf('@'));
-			else {
-				table += "<a href=\"" + sampleURI + "\">" + sample;
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
 			}
-			table += "<td>\n" + count.substring(0, count.indexOf('^')) + "</td>\n" + "</tr>\n";
 		}
-		table += "</table>";
-		table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"save\"/></td></tr></table>";
-		table += "</form>";
-		out.println(table);
+	}
 
+	public void search(String searchQuery, PrintWriter out) {
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM ATAKAN_MATHEMATICIANS";
+			java.sql.ResultSet results = stmt.executeQuery(sql);
+			String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/atakan-guney\">";
+			table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>"
+					+ "<th>Mathematician</th>\n" + "<th>Sample</th>\n" + "<th>Count</th>\n" + "</tr>\n";
+
+			while (results.next()) {
+				String name = results.getString("name");
+				String nameURI = results.getString("nameURI");
+				String sample = results.getString("sample");
+				String sampleURI = results.getString("sampleURI");
+				String count = results.getString("count");
+				if (!name.toLowerCase().contains(searchQuery.toLowerCase()))
+					continue;
+				table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"selected\" value=\"" + nameURI + ","
+						+ name + "," + sampleURI + "," + sample + "," + count + "\"/>" + "</td>\n" + "<td>\n";
+
+				table += "<a href=\"" + nameURI + "\">" + name;
+
+				table += "</td>\n" + "<td>\n";
+
+				table += "<a href=\"" + sampleURI + "\">" + sample;
+
+				table += "<td>\n" + count + "</td>\n" + "</tr>\n";
+			}
+			table += "</table>";
+			table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"save\"/></td></tr></table>";
+			table += "</form>";
+			out.println(table);
+
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					conn.close();
+			} catch (SQLException se) {
+			}
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+	}
+
+	public void createDatabase() {
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			// STEP 2: Register JDBC driver
+			Class.forName("com.mysql.jdbc.Driver");
+
+			// STEP 3: Open a connection
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(
+					"jdbc:mysql://bounswegroup5.cpp0ryqf88fx.us-west-2.rds.amazonaws.com:3306/", USER, PASS);
+
+			// STEP 4: Execute a query
+			System.out.println("Creating database...");
+			stmt = conn.createStatement();
+
+			String sql = "CREATE DATABASE ATAKAN";
+			stmt.executeUpdate(sql);
+			System.out.println("Database created successfully...");
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception e) {
+			// Handle errors for Class.forName
+			e.printStackTrace();
+		} finally {
+			// finally block used to close resources
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException se2) {
+			} // nothing we can do
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			} // end finally try
+		} // end try
 	}
 
 	/**
@@ -256,6 +425,8 @@ public class AtakanServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// createDatabase();
 		this.doGet(request, response);
+
 	}
 }

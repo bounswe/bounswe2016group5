@@ -7,10 +7,10 @@
 <title>CmpE Group5 - Assignment6 - Atakan Guney - Mathematicians</title>
 </head>
 <body>
-
+	<h1>Most eponymous mathematicians</h1>	
 	<form id="queryform" method="post" name="queryform"
 		action="/TestWebProject/atakan-guney">
-			Name/Count: <input type="text" name="query" size="32" value="search for name">
+			Search for name: <input type="text" name="query" size="32">
 		<br> <input type="submit" name="submit"
 			value="Search">
 	</form>
@@ -19,6 +19,9 @@
 		action="/TestWebProject/atakan-guney">
 		<br> <input type="submit" name="show"
 			value="Saved items">
+		<br> <input type="submit" name="delete"
+			value="Delete Saved Items">
+
 	</form>
 </body>
 </html>
