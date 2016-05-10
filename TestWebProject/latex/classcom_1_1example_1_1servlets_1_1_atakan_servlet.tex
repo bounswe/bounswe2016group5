@@ -10,16 +10,17 @@ Inheritance diagram for com.\+example.\+servlets.\+Atakan\+Servlet\+:\begin{figu
 \begin{DoxyCompactItemize}
 \item 
 \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a87e2532962ccd888df5a6e642ab6c047}{Atakan\+Servlet} ()
-\end{DoxyCompactItemize}
-\subsection*{Static Public Member Functions}
-\begin{DoxyCompactItemize}
 \item 
-static String \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a71394804fa75e2d1038b4ee08c7e7f71}{get\+H\+T\+M\+L} (String url\+To\+Read)  throws Exception 
+void \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a58d74748199c3d7e4c4fc4a4dc4a4a9e}{create\+Table} ()
+\item 
+void \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac2023bcad8a5a066a74333ea8be8f9db}{create\+Result\+Table} (Result\+Set results, Print\+Writer out, String search\+Query)
 \end{DoxyCompactItemize}
 \subsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a958df833cc34bf6033b56121d82459d1}{do\+Get} (Http\+Servlet\+Request request, Http\+Servlet\+Response response)  throws Servlet\+Exception, I\+O\+Exception 
+\item 
+void \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac40ca8b0badf1b9e4ef13f6ba72bf3b6}{do\+Post} (Http\+Servlet\+Request request, Http\+Servlet\+Response response)  throws Servlet\+Exception, I\+O\+Exception 
 \end{DoxyCompactItemize}
 \subsection*{Static Private Attributes}
 \begin{DoxyCompactItemize}
@@ -29,7 +30,7 @@ static final long \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet_
 
 
 \subsection{Detailed Description}
-Servlet implementation class \hyperlink{classcom_1_1example_1_1servlets_1_1_hello_servlet}{Hello\+Servlet} 
+Servlet implementation class \hyperlink{classcom_1_1example_1_1servlets_1_1_atakan_servlet}{Atakan\+Servlet} 
 
 \subsection{Constructor \& Destructor Documentation}
 \hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a87e2532962ccd888df5a6e642ab6c047}{}\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!Atakan\+Servlet@{Atakan\+Servlet}}
@@ -45,6 +46,22 @@ Http\+Servlet\+::\+Http\+Servlet()
 
 
 \subsection{Member Function Documentation}
+\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac2023bcad8a5a066a74333ea8be8f9db}{}\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!create\+Result\+Table@{create\+Result\+Table}}
+\index{create\+Result\+Table@{create\+Result\+Table}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
+\subsubsection[{create\+Result\+Table(\+Result\+Set results, Print\+Writer out, String search\+Query)}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+create\+Result\+Table (
+\begin{DoxyParamCaption}
+\item[{Result\+Set}]{results, }
+\item[{Print\+Writer}]{out, }
+\item[{String}]{search\+Query}
+\end{DoxyParamCaption}
+)}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac2023bcad8a5a066a74333ea8be8f9db}
+\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a58d74748199c3d7e4c4fc4a4dc4a4a9e}{}\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!create\+Table@{create\+Table}}
+\index{create\+Table@{create\+Table}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
+\subsubsection[{create\+Table()}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+create\+Table (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a58d74748199c3d7e4c4fc4a4dc4a4a9e}
 \hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a958df833cc34bf6033b56121d82459d1}{}\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!do\+Get@{do\+Get}}
 \index{do\+Get@{do\+Get}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
 \subsubsection[{do\+Get(\+Http\+Servlet\+Request request, Http\+Servlet\+Response response)}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+do\+Get (
@@ -56,13 +73,17 @@ Http\+Servlet\+::\+Http\+Servlet()
 \begin{DoxySeeAlso}{See also}
 Http\+Servlet\+::do\+Get(Http\+Servlet\+Request request, Http\+Servlet\+Response response) 
 \end{DoxySeeAlso}
-\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a71394804fa75e2d1038b4ee08c7e7f71}{}\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!get\+H\+T\+M\+L@{get\+H\+T\+M\+L}}
-\index{get\+H\+T\+M\+L@{get\+H\+T\+M\+L}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
-\subsubsection[{get\+H\+T\+M\+L(\+String url\+To\+Read)}]{\setlength{\rightskip}{0pt plus 5cm}static String com.\+example.\+servlets.\+Atakan\+Servlet.\+get\+H\+T\+M\+L (
+\hypertarget{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac40ca8b0badf1b9e4ef13f6ba72bf3b6}{}\index{com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}!do\+Post@{do\+Post}}
+\index{do\+Post@{do\+Post}!com\+::example\+::servlets\+::\+Atakan\+Servlet@{com\+::example\+::servlets\+::\+Atakan\+Servlet}}
+\subsubsection[{do\+Post(\+Http\+Servlet\+Request request, Http\+Servlet\+Response response)}]{\setlength{\rightskip}{0pt plus 5cm}void com.\+example.\+servlets.\+Atakan\+Servlet.\+do\+Post (
 \begin{DoxyParamCaption}
-\item[{String}]{url\+To\+Read}
+\item[{Http\+Servlet\+Request}]{request, }
+\item[{Http\+Servlet\+Response}]{response}
 \end{DoxyParamCaption}
-) throws Exception\hspace{0.3cm}{\ttfamily [static]}}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_a71394804fa75e2d1038b4ee08c7e7f71}
+) throws Servlet\+Exception, I\+O\+Exception\hspace{0.3cm}{\ttfamily [protected]}}\label{classcom_1_1example_1_1servlets_1_1_atakan_servlet_ac40ca8b0badf1b9e4ef13f6ba72bf3b6}
+\begin{DoxySeeAlso}{See also}
+Http\+Servlet\+::do\+Post(Http\+Servlet\+Request request, Http\+Servlet\+Response response) 
+\end{DoxySeeAlso}
 
 
 \subsection{Member Data Documentation}

@@ -274,7 +274,7 @@ public class KerimServlet extends HttpServlet {
 					"%20%20SERVICE%20wikibase:label%20{%20bd:serviceParam%20wikibase:language%20\"en\"%20}%20"
 					+
 
-					"}";
+					"}ORDER%20BY%20(?item)";
 
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
