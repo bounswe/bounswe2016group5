@@ -25,5 +25,12 @@
 		<br> <input type="submit" name="show"
 			value="Retrieve Saved Items">
 	</form>
+	
+	<br> <br>
+	<form id="deletefilesform" method="post" name="deletefilesform"
+		action="/TestWebProject/burak-suyunu">
+		<br> <input type="submit" name="delete"
+			value="Delete Saved Items">
+	</form>
 </body>
 </html>
