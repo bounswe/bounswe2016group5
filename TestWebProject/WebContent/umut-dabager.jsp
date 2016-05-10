@@ -8,11 +8,13 @@
 </head>
 <body>
 
-	<form id="queryform" method="post" name="queryform"
-		action="/TestWebProject/umut-dabager">
-			Test: <input type="text" name="input" size="32">
-		<br> <input type="submit" name="submit"
-			value="Search">
+	<form id="queryform" method="post" name="queryform" action="/TestWebProject/umut-dabager">
+			Enter a musician or genre to search : 
+			<input type="text" name="input" size="32">
+		<br> 
+		<input type="submit" name="submit" value="Search">
+		<input type="submit" name="retrieve" value="Retrieve saved results">
+		<input type="submit" name="clear" value="Clear saved results">
 	</form>
 	
 </body>

@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,6 +34,7 @@ import org.apache.jena.query.ResultSet;
 @WebServlet("/umut-dabager")
 public class UmutServlet extends HttpServlet 
 {
+	private static String valueSeperatorChar = "#";
 	private static final long serialVersionUID = 1L;
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -82,21 +85,67 @@ public class UmutServlet extends HttpServlet
 			Query rawQuery = QueryFactory.create(wikiDataQuery);
 			QueryExecution execute = QueryExecutionFactory.sparqlService("https://query.wikidata.org/sparql", rawQuery);
 			ResultSet wikiDataResults = execute.execSelect();
-			try {
+			/*try 
+			{
 				insertRawDataToDB(wikiDataResults);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+			} 
+			catch (ClassNotFoundException e) 
+			{
 				e.printStackTrace();
-			}
-			//createResultTable(wikiDataResults,writer,request.getParameter("input"));
-		} 
+			}*/
+			createResultTable(wikiDataResults,writer,request.getParameter("input"));
+		}
+		else if(request.getParameter("check") != null)
+		{
+			insertSelectedValuesToDB(request);
+			response.sendRedirect("/TestWebProject/umut-dabager.jsp");
+		}
 		else
 		{
 			response.sendRedirect("/TestWebProject/umut-dabager.jsp");
 		}
+	}	
+	
+	/*
+	 * Originally written as a utility function by Atakan Guney.
+	 * Modified by Umut Dabager.
+	 */
+	public void createResultTable(ResultSet results, PrintWriter out, String searchQuery)
+	{
+		String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/umut-dabager\">";
+		table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>"
+				+ "<th>Musician</th>\n" + "<th>Genre</th>\n" + "</tr>\n";
+
+		while (results.hasNext())
+		{
+			QuerySolution currentSolution = results.nextSolution();
+			String musicianName = currentSolution.getLiteral("?musicianLabel").toString().replace("@en", "");
+			String musicianURI = currentSolution.getResource("?musician").toString();
+			String genreName = currentSolution.getLiteral("?genreLabel").toString().replace("@en", "");
+			String genreURI = currentSolution.getResource("?genre").toString();
+			if (musicianName.toLowerCase().contains(searchQuery.toLowerCase()) || genreName.toLowerCase().contains(searchQuery.toLowerCase()))
+			{
+				table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"check\" value=\"" + musicianURI + valueSeperatorChar + musicianName
+						+ valueSeperatorChar + genreURI + valueSeperatorChar + genreName + "\"/>" + "</td>\n" + "<td>\n";
+				table += "<a href=\"" + musicianURI + "\">" + musicianName + "</td>\n" + "<td>\n" + "<a href=\"" + genreURI + "\">" + genreName;
+
+			}
+			
+		}
+		table += "</table>";
+		table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"Save the selected results.\"/></td></tr></table>";
+		table += "</form>";
+		out.println(table);
+
 	}
+	
+
 	/*
 	 * Inserts raw data into database.
+	 * @param results Retrieved results from wikiData
+	 * 
+	 * UPDATE !! Tried to insert all the raw data into db and pulling data from there.
+	 * Insert is taking too long for big data. ABANDONED!
 	 */
 	private void insertRawDataToDB(ResultSet results) throws ClassNotFoundException
 	{
@@ -131,50 +180,56 @@ public class UmutServlet extends HttpServlet
 		}
 	}
 	
-	
-	
 	/*
-	 * Originally written as a utility function by Atakan Guney.
-	 * Edited by Umut Dabager.
+	 * Inserts selected values to database.
 	 */
-	public void createResultTable(ResultSet results, PrintWriter out, String searchQuery)
+	private void insertSelectedValuesToDB(HttpServletRequest request)
 	{
-		String table = "<form name=\"ftable\" method=\"post\" action=\"/TestWebProject/umut-dabager\">";
-		table += "<table border=\"1\" style=\"width:100%\">\n" + "<tr>\n" + "<th>Select</th>"
-				+ "<th>Musician</th>\n" + "<th>Genre</th>\n" + "</tr>\n";
-
-		while (results.hasNext())
+		Connection conn = null;
+		Statement statement = null;
+		String sqlInsertQuery = "";
+		try 
 		{
-			QuerySolution currentSolution = results.nextSolution();
-			String name = currentSolution.getLiteral("?musicianLabel").toString();
-			String nameURI = currentSolution.getResource("?musician").toString();
-			String sample = currentSolution.getLiteral("?genreLabel").toString();
-			String sampleURI = currentSolution.getResource("?genre").toString();
-			if (name.toLowerCase().contains(searchQuery.toLowerCase()) || sample.toLowerCase().contains(searchQuery.toLowerCase()))
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			statement = conn.createStatement();
+			String[] itemsToAdd = request.getParameterValues("check");
+			for(String item : itemsToAdd)
 			{
-				table += "<tr>\n" + "<td>\n" + "<input type=\"checkbox\" name=\"selected\" value=\"" + nameURI + "," + name
-						+ "," + sampleURI + "," + sample + "\"/>" + "</td>\n" + "<td>\n";
-				if (name.contains("@"))
-					table += "<a href=\"" + nameURI + "\">" + name.substring(0, name.indexOf('@'));
-				else {
-					table += "<a href=\"" + nameURI + "\">" + name;
-				}
-				table += "</td>\n" + "<td>\n";
-				if (sample.contains("@"))
-					table += "<a href=\"" + sampleURI + "\">" + sample.substring(0, sample.indexOf('@'));
-				else {
-					table += "<a href=\"" + sampleURI + "\">" + sample;
-				}
-				//table += "<td>\n" + count.substring(0, count.indexOf('^')) + "</td>\n" + "</tr>\n";
-			}
-			
+				String[] itemValues = item.split(valueSeperatorChar);
+				String musicianURI = itemValues[0];
+				String musicianName = itemValues[1];
+				String genreURI = itemValues[2];
+				String genreName = itemValues[3];
+				
+				sqlInsertQuery += "INSERT INTO group5db.umut_savedData (musicianid,musician,genreid,genre) VALUES ('" 
+						+ musicianURI + "', '" + musicianName + "', '" + genreURI + "', '" + genreName + "') ";
+			};
+            statement.execute(sqlInsertQuery);
+		} 
+		catch (SQLException se) 
+		{
+			se.printStackTrace();
 		}
-		table += "</table>";
-		table += "<table><tr><td><input id=\"submit\" name=\"submit\" type=\"submit\" value=\"save\"/></td></tr></table>";
-		table += "</form>";
-		out.println(table);
-
+		catch (ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (conn != null) conn.close();
+			} 
+			catch (SQLException exc) 
+			{
+				exc.printStackTrace();
+			}
+		}
 	}
+	
+	
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
