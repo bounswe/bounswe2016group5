@@ -15,3 +15,4 @@ We are working on a project named "An exploratory learning platform".
 * [Umut M. Dabager](https://github.com/bounswe/bounswe2016group5/wiki/Umut-M.-Dabager)
 * [Özer Biber](https://github.com/bounswe/bounswe2016group5/wiki/%C3%96zer-Biber)
 * [Ahmet Enes Bayraktar](https://github.com/bounswe/bounswe2016group5/wiki/Ahmet-Enes-Bayraktar)
+* [Öykü Yılmaz](https://github.com/bounswe/bounswe2016group5/wiki/Oyku-Yilmaz)
