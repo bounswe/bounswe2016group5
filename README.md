@@ -16,3 +16,4 @@ We are working on a project named "An exploratory learning platform".
 * [Özer Biber](https://github.com/bounswe/bounswe2016group5/wiki/%C3%96zer-Biber)
 * [Ahmet Enes Bayraktar](https://github.com/bounswe/bounswe2016group5/wiki/Ahmet-Enes-Bayraktar)
 * [Öykü Yılmaz](https://github.com/bounswe/bounswe2016group5/wiki/Oyku-Yilmaz)
+* [Şahin Batmaz](https://github.com/bounswe/bounswe2016group5/wiki/Sahin-Batmaz)
