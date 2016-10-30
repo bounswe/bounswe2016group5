@@ -1,6 +1,6 @@
 ## Digest API
 # Requirements
-	Tomcat v9.0
+	Tomcat v8.0
 	Maven
 # Push Notes
 	Do not push database.properties file with the database information in it.
