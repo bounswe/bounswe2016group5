@@ -1,6 +1,15 @@
 <resources>
-    <string name="app_name">Material Login Example</string>
+    <string name="app_name">Digest</string>
+    <string name="view_topic_label">View Topic</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="topic_general_tab">General</string>
+    <string name="topic_comment_tab">Comment</string>
+    <string name="topic_material_tab">Material</string>
+    <string name="topic_Quiz_tab">Quiz</string>
+
+
 </resources>

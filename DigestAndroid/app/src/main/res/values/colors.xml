@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  // signup and login pages
   <color name="primary">#E43F3F</color>
   <color name="primary_dark">#E12929</color>
   <color name="primary_darker">#CC1D1D</color>
@@ -14,4 +15,13 @@
   <color name="base">#AAAAAA</color>
   <color name="iron">#CCCCCC</color>
   <color name="white">#FFFFFF</color>
+
+  // view topic
+  <color name="colorPrimary">#125688</color>
+  <color name="colorPrimaryDark">#125688</color>
+  <color name="textColorPrimary">#FFFFFF</color>
+  <color name="windowBackground">#FFFFFF</color>
+  <color name="navigationBarColor">#000000</color>
+  <color name="colorAccent">#c8e8ff</color>
+
 </resources>
