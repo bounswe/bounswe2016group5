@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.bounswe.digest.api.database.ConnectionPool;
 import org.bounswe.digest.api.database.UserJDBC;
+import org.bounswe.digest.api.database.model.Role;
 
 @WebServlet("/")
 public class DigestAPIServlet extends HttpServlet {
@@ -39,7 +40,21 @@ public class DigestAPIServlet extends HttpServlet {
 			String username = req.getParameter(DigestParameters.USERNAME);
 			String password = req.getParameter(DigestParameters.PASSWORD);
 			resp.getWriter().append(UserJDBC.login(username,password));
-
+		}else if(f.equals(DigestParameters.REGISTER)){
+			String username = req.getParameter(DigestParameters.USERNAME);
+			String password = req.getParameter(DigestParameters.PASSWORD);
+			String email = req.getParameter(DigestParameters.EMAIL);
+			String first_name = req.getParameter(DigestParameters.FIRST_NAME);
+			String last_name = req.getParameter(DigestParameters.LAST_NAME);
+			int status = Integer.parseInt(req.getParameter(DigestParameters.STATUS));
+			/* role is implicit for now */
+			Role role = new Role(2, "user");
+			if(UserJDBC.register(username, password, email, first_name, last_name, status, role) == 0){
+				resp.setStatus(200);
+			}else{
+				resp.setStatus(400);
+			}
+			
 		}
 		// doPost(req, resp);
 	}

@@ -136,9 +136,52 @@ public class UserJDBC {
 	 * @param role
 	 * @return
 	 */
-	public static String register(String username, String password, String email, String first_name, String last_name, int status,
+	public static int register(String username, String password, String email, String first_name, String last_name, int status,
 			Role role) {
-		return "";
+		Connection connection = ConnectionPool.getConnection();
+		PreparedStatement statement = null;
+		int result = 0;
+		String query = "INSERT INTO user (username, password, email, first_name, last_name, status, rid) VALUES ?, ?, ?, ?, ?, ?, ?";
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setString(1, username);
+			statement.setString(2, password);
+			statement.setString(3, email);
+			statement.setString(4, first_name);
+			statement.setString(5, last_name);
+			statement.setInt(6, status);
+			statement.setInt(7, role.getId());
+			statement.executeQuery();
+		} catch (SQLException e) {
+			result = -1;
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+				
+			}
+			
+		}finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				result = -1;
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 
 }
