@@ -32,7 +32,7 @@ public class DigestAPIServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Connection conn = ConnectionPool.getConnection();
+		
 		String f = req.getParameter(DigestParameters.FUNC);
 		if(f == null || f.length() == 0){
 			
@@ -54,6 +54,9 @@ public class DigestAPIServlet extends HttpServlet {
 			}else{
 				resp.setStatus(400);
 			}
+			
+		}else{
+			resp.getWriter().append("Welcome to Digest API");
 			
 		}
 		// doPost(req, resp);

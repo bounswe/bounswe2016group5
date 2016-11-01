@@ -24,8 +24,8 @@ public class UserJDBC {
 		PreparedStatement statement = null;
 		ResultSet results = null;
 		String query = "SELECT user.id," + "user.username," + "user.password," + "user.email," + "user.first_name,"
-				+ "user.last_name," + "user.status," + "user_role.id, " + "user_role.name  " + "FROM digest.user "
-				+ "WHERE (user.username = ? OR user.email = ?) AND user.password = ? AND user_role.id = user.rid";
+				+ "user.last_name," + "user.status," + "role.id, " + "role.name  " + "FROM digest.user, digest.role "
+				+ "WHERE (user.username = ? OR user.email = ?) AND user.password = ? AND role.id = user.rid";
 
 		try {
 			connection.setAutoCommit(false);
@@ -39,7 +39,7 @@ public class UserJDBC {
 				user = new User(results.getInt(1), results.getString(2), results.getString(3), results.getString(4),
 						results.getString(5), results.getString(6), results.getInt(7), role);
 				if (writeSessionInformation((User)user) != 0) {
-					user = new Error("database_error", "An error occured in the database");
+					user = new Error("database_error", "An error occured in the database session");
 				}
 			} else {
 				user = new Error("incorrect_credentials", "Incorrect username/email or password");
@@ -85,16 +85,18 @@ public class UserJDBC {
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;
 		int result = 0;
-		String query = "INSERT INTO user_session (uid, sid, duration) VALUES ?, ?, ?";
+		String query = "INSERT INTO user_session (uid, sid, duration) VALUES (?, ?, ?)";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, user.getId());
 			statement.setString(2, user.getSession());
 			statement.setInt(3, 0);
-			statement.executeQuery();
+			statement.executeUpdate();
+			
 		} catch (SQLException e) {
 			result = -1;
+			e.printStackTrace();
 			try {
 				System.err.print("Transaction is being rolled back");
 				connection.rollback();
@@ -141,7 +143,7 @@ public class UserJDBC {
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;
 		int result = 0;
-		String query = "INSERT INTO user (username, password, email, first_name, last_name, status, rid) VALUES ?, ?, ?, ?, ?, ?, ?";
+		String query = "INSERT INTO user (username, password, email, first_name, last_name, status, rid) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
@@ -152,9 +154,10 @@ public class UserJDBC {
 			statement.setString(5, last_name);
 			statement.setInt(6, status);
 			statement.setInt(7, role.getId());
-			statement.executeQuery();
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			result = -1;
+			e.printStackTrace();
 			try {
 				System.err.print("Transaction is being rolled back");
 				connection.rollback();

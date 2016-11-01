@@ -95,10 +95,10 @@ public class User extends Model {
 
 	private void setSession() {
 		Random rand = new Random();
-		int r1 = rand.nextInt(0xEFFFFFFF) + 0x10000000;
-		int r2 = rand.nextInt(0xEFFFFFFF) + 0x10000000;
-		int r3 = rand.nextInt(0xEFFFFFFF) + 0x10000000;
-		int r4 = rand.nextInt(0xEFFFFFFF) + 0x10000000;
+		int r1 = rand.nextInt(0xEFFF) + 0x1000;
+		int r2 = rand.nextInt(0xEFFF) + 0x1000;
+		int r3 = rand.nextInt(0xEFFF) + 0x1000;
+		int r4 = rand.nextInt(0xEFFF) + 0x1000;
 		this.session = Integer.toHexString(r1) + Integer.toHexString(r2) + Integer.toHexString(r3)
 				+ Integer.toHexString(r4);
 	}
