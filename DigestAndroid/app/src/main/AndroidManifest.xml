@@ -29,6 +29,9 @@
         <activity
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.Dark" />
+        <activity
+            android:name=".ForgetPasswordActivity"
+            android:theme="@style/AppTheme.Dark" />
         <!--
         <activity
             android:name=".ViewTopicActivity"
