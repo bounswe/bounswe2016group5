@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
-<%@ page import="java.io.*,java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Home</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Add Material</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -14,10 +13,12 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <style>
 body {
 	background-color: lightgrey;
 }
+
 @media ( min-width : 768px) {
 	.sidebar-nav {
 		padding: 12px;
@@ -58,7 +59,7 @@ body {
 	position: relative;
 	width: 100%;
 	overflow: auto;
-	margin-bottom:84px;
+	margin-bottom: 84px;
 }
 
 #form-aligned {
@@ -82,14 +83,34 @@ ul#horizontal-list a:hover {
 	text-decoration: none;
 	color: white;
 }
+
+.open-topic {
+	width: 100%;
+	heigth: 100%;
+}
+
+.open-topic button {
+	float: right;
+}
+
+.topic-header {
+	width: 100%;
+}
+
+.topic-body {
+	with: 100%;
+	margin: 2px 2px 2px 2px;
+}
 </style>
 
 </head>
 <body>
 	<%
-		session = request.getSession();
-		Object userName = session.getAttribute("username");
-		Object pass = session.getAttribute("password");
+		/*
+				session = request.getSession();
+				Object userName = session.getAttribute("username");
+				Object pass = session.getAttribute("password");
+				*/
 
 		if (false) {
 			//   response.sendRedirect("login.jsp");
@@ -133,28 +154,12 @@ ul#horizontal-list a:hover {
 			</div>
 		</div>
 	</nav>
-	<div class="row col-sm-12" id="content">
-		<div class="row"
-			style="height: 33%; text-align: center; padding: 15px;">
-			<h1>Popular</h1>
-			<br /> Contents Goes Here
-		</div>
-		<div class="row"
-			style="height: 33%; text-align: center; padding: 15px;">
-			<h1>Might Interest</h1>
-			<br /> Contents Goes Here
-		</div>
 
-		<div class="row"
-			style="height: 33%; text-align: center; padding: 15px;">
-			<h1>Recent</h1>
-			<br /> Contents Goes Here
-		</div>
-	</div>
+	<h1>You have to be signed up and login to the system to create a
+		topic!!!</h1>
 	<%
 		} else {
 	%>
-
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -182,19 +187,18 @@ ul#horizontal-list a:hover {
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="messages.jsp"><span
-							class="glyphicon glyphicon-envelope"></span> Messages</a></li>
-					<li><a href="settings.jsp"><span
-							class="glyphicon glyphicon-cog"></span> Settings</a></li>
-					<li><a href="notifications.jsp"><span
-							class="glyphicon glyphicon-th-list"></span> Notifications</a></li>
-					<li><a href="_logout"><span
-							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
+							Messages</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
+							Settings</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-th-list"></span>
+							Notifications</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-log-out"></span>
+							Logout</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
-
 	<div class="row col-sm-12" id="content">
 		<div class="row">
 			<div class="col-sm-3">
@@ -220,25 +224,21 @@ ul#horizontal-list a:hover {
 								<li><a href="user-topics.jsp"><span
 										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>
-
-							<div class="panel panel-default">
+							<div class="panel panel-default"
+								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Your Notes</div>
 								<div class="panel-body">Notes go here. adsd asda fc sd ds
-									cds cds dsc sd \n sdf \n sdcds\n<br/>
-									Notes go here. adsd asda fc sd ds
-									cds cds dsc sd \n sdf \n sdcds\n<br/>
-									Notes go here. adsd asda fc sd ds
-									cds cds dsc sd \n sdf \n sdcds\n<br/>
-									
-									</div>
+									cds cds dsc sd \n sdf \n sdcds\n</div>
 
 							</div>
-							<div class="panel panel-default">
+							<div class="panel panel-default"
+								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>
 								<div class="panel-body">Channels and some links</div>
 
 							</div>
-							<div class="panel panel-default">
+							<div class="panel panel-default"
+								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Recents</div>
 								<div class="panel-body">Some recent topics</div>
 
@@ -248,30 +248,59 @@ ul#horizontal-list a:hover {
 				</div>
 			</div>
 			<div class="col-sm-9">
-				<div class="row"
-					style="height: 33%; text-align: center; padding: 15px;">
-					<h1>Popular</h1>
-					<br /> Contents Goes Here
-				</div>
-				<div class="row"
-					style="height: 33%; text-align: center; padding: 15px;">
-					<h1>Might Interest</h1>
-					<br /> Contents Goes Here
-				</div>
+				<h1>Add material</h1>
 
-				<div class="row"
-					style="height: 33%; text-align: center; padding: 15px;">
-					<h1>Recent</h1>
-					<br /> Contents Goes Here
-				</div>
+				<form class="form-horizontal" action="#">
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="file-name">
+							File name: </label>
+						<div class="row col-sm-10">
+							<input class="form-control" type="text" id="file-name">
+						</div>
+						<div class="row col-sm-12">
+							<input class="form-control" type="file" value="Upload a file"
+								name="file">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<button class="btn btn-default btn-block" type="submit">Next</button>
+
+					</div>
+				</form>
+
+				<table class="table table-striped">
+
+					<thead>
+						<tr>
+							<th>Your files:</th>
+						</tr>
+					</thead>
+
+					<tr>
+						<td>Some filess</td>
+					</tr>
+					<tr>
+						<td>Some filess</td>
+					</tr>
+					<tr>
+						<td>Some filess</td>
+					</tr>
+					<tr>
+						<td>Some filess</td>
+					</tr>
+
+				</table>
 
 			</div>
 		</div>
 	</div>
 
+
 	<%
 		}
 	%>
+
 
 	<footer id="menu-outer">
 		<div class="col-sm-offset-2 col-sm-10">
