@@ -72,7 +72,7 @@ public class UserJDBC {
 				e.printStackTrace();
 			}
 		}
-
+		ConnectionPool.close(connection);
 		return user.printable();
 	}
 
@@ -123,6 +123,7 @@ public class UserJDBC {
 				e.printStackTrace();
 			}
 		}
+		ConnectionPool.close(connection);
 		return result;
 		
 
@@ -184,6 +185,7 @@ public class UserJDBC {
 				e.printStackTrace();
 			}
 		}
+		ConnectionPool.close(connection);
 		return result;
 	}
 

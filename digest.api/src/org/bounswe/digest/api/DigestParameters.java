@@ -11,5 +11,7 @@ public class DigestParameters {
 
 	public static final String LOGIN = "login";
 	public static final String REGISTER = "register";
+	public static final String CREATE_TOPIC = "create_topic";
+	public static final String GET_TOPICS_OF_USER = "get_topics_of_user";
 
 }

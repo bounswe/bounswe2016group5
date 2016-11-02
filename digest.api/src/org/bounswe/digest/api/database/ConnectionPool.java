@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -14,12 +15,31 @@ public class ConnectionPool {
 	private static final String URL = "jdbc.url";
 	private static final String USERNAME = "jdbc.username";
 	private static final String PASSWORD = "jdbc.password";
-	private static BasicDataSource dataSource;
-
-	public static Connection getConnection() {
+	//private static BasicDataSource dataSource;
+	public static Connection getConnection(){
+		String url = "";
+		String username = "";
+		String password="";
+		String driver ="com.mysql.cj.jdbc.Driver";
+		try {
+			Class.forName(driver);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			return DriverManager.getConnection(url, username, password);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	/*public static Connection _getConnection() {
 		Connection conn = null;
 		if (dataSource == null) {
-			Properties prop = new Properties();
+			/*Properties prop = new Properties();
 			try {
 				prop.load(new FileInputStream("database.properties"));
 			} catch (IOException e) {
@@ -32,6 +52,7 @@ public class ConnectionPool {
 			String url = prop.getProperty(URL);
 			String username = prop.getProperty(USERNAME);
 			String password = prop.getProperty(PASSWORD);
+			
 
 			if ((null == driver) || (null == url) || (null == username)) {
 				// Error
@@ -58,6 +79,17 @@ public class ConnectionPool {
 		}
 		return conn;
 
+	}*/
+
+	public static void close(Connection connection) {
+		// TODO fix
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

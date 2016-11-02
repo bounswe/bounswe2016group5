@@ -35,6 +35,12 @@ public class DigestAPIServlet extends HttpServlet {
 		
 		String f = req.getParameter(DigestParameters.FUNC);
 		if(f == null || f.length() == 0){
+			resp.getWriter().append("Welcome to Digest API");
+		}else if(f.equals(DigestParameters.CREATE_TOPIC)){
+			
+			
+		}else if(f.equals(DigestParameters.GET_TOPICS_OF_USER)){
+			
 			
 		}else if(f.equals(DigestParameters.LOGIN)){
 			String username = req.getParameter(DigestParameters.USERNAME);
@@ -55,7 +61,8 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.setStatus(400);
 			}
 			
-		}else{
+		}
+		else{
 			resp.getWriter().append("Welcome to Digest API");
 			
 		}
