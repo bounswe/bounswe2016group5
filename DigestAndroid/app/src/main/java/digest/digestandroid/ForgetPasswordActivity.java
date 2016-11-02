@@ -65,10 +65,12 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
         String email = _emailText.getText().toString();
 
+        // TODO: Implement your own authentication logic here.
+
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        onResetPasswordFailed();
+                        onResetPasswordSuccess();
                         progressDialog.dismiss();
                     }
                 }, 3000);
