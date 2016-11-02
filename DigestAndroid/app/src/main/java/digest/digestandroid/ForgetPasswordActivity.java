@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -21,17 +22,26 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.btn_resetpassword) Button _resetpasswordButton;
+    @InjectView(R.id.link_forgetpassword) TextView _forgetpasswordLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_forget_password);
         ButterKnife.inject(this);
 
         _resetpasswordButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 resetpassword();
+            }
+        });
+
+        _forgetpasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Finish the resetting screen and return to the Login activity
+                finish();
             }
         });
     }

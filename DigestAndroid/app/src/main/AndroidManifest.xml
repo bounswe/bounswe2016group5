@@ -16,16 +16,16 @@
         <activity
             android:name=".ViewTopicActivity"
             android:label="@string/view_topic_label"
-            android:theme="@style/MyMaterialTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/MyMaterialTheme"/>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.Dark" />
+            android:theme="@style/AppTheme.Dark">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.Dark" />

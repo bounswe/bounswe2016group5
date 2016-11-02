@@ -61,5 +61,13 @@
             android:gravity="center"
             android:textSize="16dip"/>
 
+        <TextView android:id="@+id/link_forgetpassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="Forget your password? Reset it"
+            android:gravity="center"
+            android:textSize="16dip"/>
+
     </LinearLayout>
 </ScrollView>
