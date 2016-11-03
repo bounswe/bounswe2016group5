@@ -11,6 +11,6 @@
         android:text="@string/topic_general_tab"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:layout_centerInParent="true" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

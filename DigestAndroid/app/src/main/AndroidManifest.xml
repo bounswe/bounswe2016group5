@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ViewTopicActivity"
             android:label="@string/view_topic_label"
-            android:theme="@style/MyMaterialTheme">
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
         </activity>
         <activity android:name=".LoginActivity"
