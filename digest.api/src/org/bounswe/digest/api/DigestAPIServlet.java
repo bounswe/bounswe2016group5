@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.bounswe.digest.api.database.ConnectionPool;
+import org.bounswe.digest.api.database.TopicJDBC;
 import org.bounswe.digest.api.database.UserJDBC;
 import org.bounswe.digest.api.database.model.Role;
 
@@ -25,20 +26,27 @@ public class DigestAPIServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 8204342910649235663L;
 	
-	
-	
-	
-	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
 		String f = req.getParameter(DigestParameters.FUNC);
 		if(f == null || f.length() == 0){
 			resp.getWriter().append("Welcome to Digest API");
 		}else if(f.equals(DigestParameters.CREATE_TOPIC)){
-			
-			
+			//header, type, image, url, body, owner, status
+			String header = req.getParameter(DigestParameters.HEADER);
+			String type = req.getParameter(DigestParameters.TYPE);
+			String image = req.getParameter(DigestParameters.IMAGE);
+			String url = req.getParameter(DigestParameters.URL);
+			String body = req.getParameter(DigestParameters.BODY);
+			int owner = Integer.parseInt(req.getParameter(DigestParameters.OWNER));
+			int status = Integer.parseInt(req.getParameter(DigestParameters.STATUS));
+			//TODO Tag, topic manager should be added
+		    if(TopicJDBC.createTopic(header,type,image,url,body,owner,status,null,null)==0){
+		    	resp.setStatus(200);
+			}else{
+				resp.setStatus(400);
+			}
 		}else if(f.equals(DigestParameters.GET_TOPICS_OF_USER)){
 			
 			
@@ -60,11 +68,9 @@ public class DigestAPIServlet extends HttpServlet {
 			}else{
 				resp.setStatus(400);
 			}
-			
 		}
 		else{
 			resp.getWriter().append("Welcome to Digest API");
-			
 		}
 		// doPost(req, resp);
 	}
@@ -84,7 +90,6 @@ public class DigestAPIServlet extends HttpServlet {
 		 * resp.getWriter().append("Hello world" +  } catch (SQLException | NoSuchAlgorithmException
 		 * e) { // TODO Auto-generated catch block e.printStackTrace(); }
 		 */
-
 	}
 
 	private static String byteToHex(final byte[] hash) {
