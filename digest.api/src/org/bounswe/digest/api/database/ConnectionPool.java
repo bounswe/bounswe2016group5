@@ -8,19 +8,30 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+
 
 public class ConnectionPool {
 	private static final String DRIVER = "jdbc.driver.classname";
 	private static final String URL = "jdbc.url";
 	private static final String USERNAME = "jdbc.username";
 	private static final String PASSWORD = "jdbc.password";
-	//private static BasicDataSource dataSource;
+	private static BasicDataSource dataSource;
+	/*private static Logger logger;
+	
+	public ConnectionPool(){
+		logger = Logger.getLogger(ConnectionPool.class);
+	    BasicConfigurator.configure();
+	}*/
+	
 	public static Connection getConnection(){
 		String url = "";
 		String username = "";
 		String password="";
-		String driver ="com.mysql.cj.jdbc.Driver";
+		String driver ="";
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
@@ -36,16 +47,18 @@ public class ConnectionPool {
 		}
 		
 	}
-	/*public static Connection _getConnection() {
+	/*
+	public static Connection getConnection() {
 		Connection conn = null;
 		if (dataSource == null) {
-			/*Properties prop = new Properties();
+			Properties prop = new Properties();
 			try {
 				prop.load(new FileInputStream("database.properties"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				//logger.error(new File(".").getAbsolutePath());
 				e.printStackTrace();
-				System.exit(-1);
+				//System.exit(-1);
 			}
 
 			String driver = prop.getProperty(DRIVER);
@@ -79,8 +92,8 @@ public class ConnectionPool {
 		}
 		return conn;
 
-	}*/
-
+	}
+*/
 	public static void close(Connection connection) {
 		// TODO fix
 		try {

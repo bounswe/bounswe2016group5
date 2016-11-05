@@ -89,8 +89,5 @@ public class Topic extends Model{
 	public void setTags(ArrayList<TopicTag> tags) {
 		this.tags = tags;
 	}
-	
-	
-	
 
 }

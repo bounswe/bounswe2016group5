@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Formatter;
 
 import javax.servlet.ServletException;
@@ -17,6 +18,7 @@ import org.bounswe.digest.api.database.ConnectionPool;
 import org.bounswe.digest.api.database.TopicJDBC;
 import org.bounswe.digest.api.database.UserJDBC;
 import org.bounswe.digest.api.database.model.Role;
+import org.bounswe.digest.api.database.model.Topic;
 
 @WebServlet("/")
 public class DigestAPIServlet extends HttpServlet {
@@ -48,8 +50,8 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.setStatus(400);
 			}
 		}else if(f.equals(DigestParameters.GET_TOPICS_OF_USER)){
-			
-			
+			int uid=Integer.parseInt(req.getParameter(DigestParameters.UID));
+			ArrayList<Topic> ar=TopicJDBC.getTopicsWithUser(uid);
 		}else if(f.equals(DigestParameters.LOGIN)){
 			String username = req.getParameter(DigestParameters.USERNAME);
 			String password = req.getParameter(DigestParameters.PASSWORD);

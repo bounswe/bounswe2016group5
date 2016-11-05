@@ -21,4 +21,5 @@ public class DigestParameters {
 	public static final String BODY = "body";
 	public static final String OWNER = "owner";
 	
+	public static final String UID="uid";
 }
