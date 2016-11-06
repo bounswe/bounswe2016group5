@@ -3,6 +3,12 @@
 <%@page import="java.io.*"%>
 <%@page import="java.net.*"%>
 <%@page import="java.util.Enumeration"%>
+<%
+	session = request.getSession(false);
+	if (session.getAttribute("session") != null) {
+		response.sendRedirect("index.jsp");
+	}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +19,10 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"
+	type="text/javascript"></script>
+
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
@@ -85,6 +95,41 @@ ul#horizontal-list a:hover {
 	color: white;
 }
 </style>
+<script>
+	$(document).ready(function() {
+
+		$('#signup_form').validate({ // initialize the plugin
+			rules : {
+				username : {
+					required : true
+
+				},
+				first_name : {
+					required : true
+
+				},
+				last_name : {
+					required : true
+
+				},
+				email : {
+					required : true,
+					email : true
+
+				},
+				password : {
+					required : true,
+					minlength : 8
+				},
+				agree : {
+					required : true
+
+				},
+			}
+		});
+
+	});
+</script>
 
 </head>
 <body>
@@ -126,7 +171,8 @@ ul#horizontal-list a:hover {
 
 	<div class="row col-sm-12" id="content">
 		<div id="form-aligned" class="col-sm-offset-3 col-sm-6">
-			<form class="form-horizontal" action="signup.jsp" method="GET">
+			<form class="form-horizontal" id="signup_form" action="signup.jsp"
+				method="POST">
 				<div class="form-group">
 					<label class="col-xs-3 control-label">Full name</label>
 					<div class="col-xs-4">
@@ -190,9 +236,9 @@ ul#horizontal-list a:hover {
 						</div>
 					</div>
 				</div>
-				
-			
-	
+
+
+
 				<div class="form-group">
 					<div class="col-xs-9 col-xs-offset-3">
 						<input type="hidden" name="status" value="0">
@@ -201,6 +247,37 @@ ul#horizontal-list a:hover {
 					</div>
 				</div>
 			</form>
+
+			<%
+				String recv = "";
+				String recvbuff = "";
+
+				StringBuffer bf = new StringBuffer();
+				bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
+				bf.append("?");
+
+				Enumeration<String> names = request.getParameterNames();
+				while (names.hasMoreElements()) {
+					String attr = names.nextElement();
+					String value = request.getParameter(attr);
+					bf.append(attr + "=" + value);
+					if (names.hasMoreElements())
+						bf.append("&");
+				}
+				String url = bf.toString();
+				URL connpage = new URL(url);
+				HttpURLConnection urlcon = (HttpURLConnection) connpage.openConnection();
+
+				int responseCode = urlcon.getResponseCode();
+
+				if (responseCode == 200 && request.getParameter("f") != null) {
+					response.sendRedirect("index.jsp");
+				} else if (responseCode == 400) {
+			%>
+			<p>Unexpected Error occured!!</p>
+			<%
+				}
+			%>
 		</div>
 	</div>
 	<footer id="menu-outer">
@@ -214,33 +291,6 @@ ul#horizontal-list a:hover {
 			</ul>
 		</div>
 	</footer>
-	<%
-		String recv = "";
-		String recvbuff = "";
 
-		StringBuffer bf = new StringBuffer();
-		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
-		bf.append("?");
-		
-		Enumeration<String> names = request.getParameterNames();
-
-		while (names.hasMoreElements()) {
-			String attr = names.nextElement();
-			String value = request.getParameter(attr);
-			bf.append(attr + "=" + value);
-			if (names.hasMoreElements())
-				bf.append("&");
-		}
-		String url = bf.toString();
-		URL jsonpage = new URL(url);
-		URLConnection urlcon = jsonpage.openConnection();
-		BufferedReader buffread = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
-
-		while ((recv = buffread.readLine()) != null)
-			recvbuff += recv;
-		buffread.close();
-
-		System.out.println(recvbuff + "assdlflsdclsmdcl");
-	%>
 </body>
 </html>

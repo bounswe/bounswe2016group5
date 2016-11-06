@@ -1,8 +1,17 @@
+<%@page import="javax.swing.text.StyledEditorKit.ForegroundAction"%>
 <%@page import="java.util.Enumeration"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.util.*"%>
 <%@page import="java.io.*"%>
 <%@page import="java.net.*"%>
+<%@page import="org.json.*"%>
+<%
+	session = request.getSession(false);
+	if (session.getAttribute("session") != null) {
+		response.sendRedirect("index.jsp");
+	}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +22,9 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"
+	type="text/javascript"></script>	
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
@@ -85,6 +97,23 @@ ul#horizontal-list a:hover {
 	color: white;
 }
 </style>
+<script>
+	$(document).ready(function() {
+
+		$('#login_form').validate({ // initialize the plugin
+			rules : {
+				username : {
+					required : true
+
+				},
+				password : {
+					required : true
+				},
+			}
+		});
+
+	});
+</script>
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -125,7 +154,7 @@ ul#horizontal-list a:hover {
 	<div class="row col-sm-12" id="content">
 		<div class="col-sm-offset-3 col-sm-6"
 			style="border: 1px solid white; padding: 10px">
-			<form class="form-horizontal" action="login.jsp" method="GET">
+			<form class="form-horizontal" id="login_form"action="login.jsp" method="POST">
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="username">Username:</label>
 					<div class="col-sm-10">
@@ -147,6 +176,60 @@ ul#horizontal-list a:hover {
 					</div>
 				</div>
 			</form>
+			<%
+				String recv = "";
+				String recvbuff = "";
+
+				StringBuffer bf = new StringBuffer();
+				bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
+				bf.append("?");
+				Enumeration<String> names = request.getParameterNames();
+
+				while (names.hasMoreElements()) {
+					String attr = names.nextElement();
+					String value = request.getParameter(attr);
+					bf.append(attr + "=" + value);
+					if (names.hasMoreElements())
+						bf.append("&");
+				}
+				String url = bf.toString();
+				URL jsonpage = new URL(url);
+				URLConnection urlcon = jsonpage.openConnection();
+
+				BufferedReader buffread = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
+
+				while ((recv = buffread.readLine()) != null)
+					recvbuff += recv;
+				buffread.close();
+
+				try {
+					JSONObject obj = new JSONObject(recvbuff);
+					System.out.println(obj);
+					if (obj.has("errorName")) {
+
+						String msg = obj.getString("errorDescription");
+			%>
+			<p><%=msg%></p>
+			<%
+				} else {
+						session = request.getSession();
+
+						Set<String> sattr = obj.keySet();
+
+						for (String attribute : sattr) {
+							if (!attribute.contentEquals("role")) {
+								session.setAttribute(attribute, obj.get(attribute));
+							}
+						}
+
+						response.sendRedirect("index.jsp");
+
+					}
+
+				} catch (JSONException ex) {
+					//Do nothing
+				}
+			%>
 		</div>
 	</div>
 	<footer id="menu-outer">
@@ -161,36 +244,7 @@ ul#horizontal-list a:hover {
 		</div>
 	</footer>
 
-	<%
-		String recv = "";
-		String recvbuff = "";
 
-		StringBuffer bf = new StringBuffer();
-		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
-		bf.append("?");
-		Enumeration<String> names = request.getParameterNames();
-
-		System.out.println(names.hasMoreElements());
-		while (names.hasMoreElements()) {
-			String attr = names.nextElement();
-			String value = request.getParameter(attr);
-			bf.append(attr + "=" + value);
-			if (names.hasMoreElements())
-				bf.append("&");
-		}
-		String url = bf.toString();
-		System.out.println(url);
-		URL jsonpage = new URL(url);
-		URLConnection urlcon = jsonpage.openConnection();
-		BufferedReader buffread = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
-
-		while ((recv = buffread.readLine()) != null)
-			recvbuff += recv;
-		buffread.close();
-
-		System.out.println(recvbuff + "assdlflsdclsmdcl");
-
-	%>
 </body>
 </html>
 
