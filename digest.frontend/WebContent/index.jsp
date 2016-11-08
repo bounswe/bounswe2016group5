@@ -87,10 +87,8 @@ ul#horizontal-list a:hover {
 </head>
 <body>
 	<%
-		session = request.getSession();
 		Object sessionID = session.getAttribute("session");
-
-		if (sessionID == null) {
+		if (sessionID == null||sessionID == "") {
 	%>
 
 	<nav class="navbar navbar-inverse">
@@ -186,7 +184,7 @@ ul#horizontal-list a:hover {
 							class="glyphicon glyphicon-cog"></span> Settings</a></li>
 					<li><a href="notifications.jsp"><span
 							class="glyphicon glyphicon-th-list"></span> Notifications</a></li>
-					<li><a href="logout.jsp"><span
+					<li><a href="LogoutServlet"><span
 							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 				</ul>
 			</div>

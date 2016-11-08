@@ -171,7 +171,7 @@ ul#horizontal-list a:hover {
 
 	<div class="row col-sm-12" id="content">
 		<div id="form-aligned" class="col-sm-offset-3 col-sm-6">
-			<form class="form-horizontal" id="signup_form" action="signup.jsp"
+			<form class="form-horizontal" id="signup_form" action="SignupServlet"
 				method="POST">
 				<div class="form-group">
 					<label class="col-xs-3 control-label">Full name</label>
@@ -247,35 +247,13 @@ ul#horizontal-list a:hover {
 					</div>
 				</div>
 			</form>
-
 			<%
-				String recv = "";
-				String recvbuff = "";
-
-				StringBuffer bf = new StringBuffer();
-				bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
-				bf.append("?");
-
-				Enumeration<String> names = request.getParameterNames();
-				while (names.hasMoreElements()) {
-					String attr = names.nextElement();
-					String value = request.getParameter(attr);
-					bf.append(attr + "=" + value);
-					if (names.hasMoreElements())
-						bf.append("&");
-				}
-				String url = bf.toString();
-				URL connpage = new URL(url);
-				HttpURLConnection urlcon = (HttpURLConnection) connpage.openConnection();
-
-				int responseCode = urlcon.getResponseCode();
-
-				if (responseCode == 200 && request.getParameter("f") != null) {
-					response.sendRedirect("index.jsp");
-				} else if (responseCode == 400) {
+				Object errMsg = session.getAttribute("error");
+				if (errMsg != null) {
 			%>
-			<p>Unexpected Error occured!!</p>
+			<p><%=errMsg%></p>
 			<%
+				session.removeAttribute("error");
 				}
 			%>
 		</div>
