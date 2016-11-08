@@ -105,16 +105,15 @@ ul#horizontal-list a:hover {
 
 </head>
 <body>
-	<%/*
-		session = request.getSession();
-		Object userName = session.getAttribute("username");
-		Object pass = session.getAttribute("password");
-		*/
+	<%
+		/*
+				session = request.getSession();
+				Object userName = session.getAttribute("username");
+				Object pass = session.getAttribute("password");
+				*/
 
 		if (false) {
 			//   response.sendRedirect("login.jsp");
-			
-			
 	%>
 
 	<nav class="navbar navbar-inverse">
@@ -188,14 +187,14 @@ ul#horizontal-list a:hover {
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span
-							class="glyphicon glyphicon-envelope"></span> Messages</a></li>
-					<li><a href="#"><span
-							class="glyphicon glyphicon-cog"></span> Settings</a></li>
-					<li><a href="#"><span
-							class="glyphicon glyphicon-th-list"></span> Notifications</a></li>
-					<li><a href="#"><span
-							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
+							Messages</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
+							Settings</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-th-list"></span>
+							Notifications</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-log-out"></span>
+							Logout</a></li>
 				</ul>
 			</div>
 		</div>
@@ -255,99 +254,104 @@ ul#horizontal-list a:hover {
 				<div class="view-topic col-sm-12">
 					<!--<form class="form-horizontal" action="#">
 						<div class="form-group">-->
-							<div class="topic-header">
-								<div class="row">
-									<div class="container col-sm-2">
-										<img id="topic-img"
-										style="display: block; width: 150px; height: 150px;"
-										alt="topic image" src="topic.png"></img>
+					<div class="topic-header">
+						<div class="row">
+							<div class="container col-sm-2">
+								<img id="topic-img"
+									style="display: block; width: 150px; height: 150px;"
+									alt="topic image" src="topic.png"></img>
+							</div>
+							<div class="container col-sm-10">
+								<textarea class="form-control" name="body" id="body" rows="7"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="topic-tabs container col-sm-12">
+						<ul class="nav nav-tabs">
+							<li class="active"><a data-toggle="tab" href="#comments">Comments</a></li>
+							<li><a data-toggle="tab" href="#materials">Materials</a></li>
+							<li><a data-toggle="tab" href="#quiz">Quiz</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div id="comments" class="tab-pane fade in active">
+								<div class="panel panel-default"
+									style="height: 500px; overflow-y: auto;">
+									<div class="row">
+										<div class="col-sm-10 col-sm-offset-1" id="logout">
+											<ul class="media-list">
+												<li class="media"><a class="pull-left" href="#"> <img
+														class="media-object img-circle" alt="profile">
+												</a>
+													<div class="media-body">
+														<div class="well well-lg">
+															<h4 class="media-heading text-uppercase reviews">Account
+																Name</h4>
+															<p class="media-comment">Text Example.</p>
+															<a class="btn btn-info btn-circle text-uppercase"
+																href="#" id="reply"><span
+																class="glyphicon glyphicon-share-alt"></span> Reply</a> <a
+																class="btn btn-warning btn-circle text-uppercase"
+																data-toggle="collapse" href="#reply1"><span
+																class="glyphicon glyphicon-comment"></span> 2 Comments</a>
+														</div>
+													</div>
+													<div class="collapse col-sm-9 pull-right " id="reply1">
+														<ul class="media-list">
+															<li class="media media-replied"><a class="pull-left"
+																href="#"> <img class="media-object img-circle"
+																	alt="profile">
+															</a>
+																<div class="media-body">
+																	<div class="well well-lg">
+																		<h4 class="media-heading text-uppercase reviews">
+																			<span class="glyphicon glyphicon-share-alt"></span>
+																			Account Name
+																		</h4>
+																		<p class="media-comment">Text Example.</p>
+																	</div>
+																</div></li>
+															<li class="media media-replied" id="replied"><a
+																class="pull-left" href="#"> <img
+																	class="media-object img-circle" alt="profile">
+															</a>
+																<div class="media-body">
+																	<div class="well well-lg">
+																		<h4 class="media-heading text-uppercase reviews">
+																			<span class="glyphicon glyphicon-share-alt"></span>
+																			Account Name
+																		</h4>
+																		</h4>
+																		<p class="media-comment">Text Example</p>
+																	</div>
+																</div></li>
+														</ul>
+													</div></li>
+											</ul>
+										</div>
 									</div>
-									<div class="container col-sm-10">
-										<textarea class="form-control" name="body" id="body" rows="7"></textarea>
-									</div>	
 								</div>
 							</div>
-							<div class="topic-tabs container col-sm-12">
-								<ul class="nav nav-tabs">
-							    	<li class="active"><a data-toggle="tab" href="#comments">Comments</a></li>
-							    	<li><a data-toggle="tab" href="#materials">Materials</a></li>
-							    	<li><a data-toggle="tab" href="#quiz">Quiz</a></li>
-							  	</ul>
-
-							  	<div class="tab-content">
-							    	<div id="comments" class="tab-pane fade in active">
-							      		<div class="panel panel-default" style="height: 500px; overflow-y: auto;">
-											<div class="row">
-											    <div class="col-sm-10 col-sm-offset-1" id="logout">                        
-								                    <ul class="media-list">
-								                      <li class="media">
-								                        <a class="pull-left" href="#">
-								                          <img class="media-object img-circle" alt="profile">
-								                        </a>
-								                        <div class="media-body">
-								                          <div class="well well-lg">
-								                              <h4 class="media-heading text-uppercase reviews">Account Name </h4>
-								                              <p class="media-comment">
-								                                Text Example.
-								                              </p>
-								                              <a class="btn btn-info btn-circle text-uppercase" href="#" id="reply"><span class="glyphicon glyphicon-share-alt"></span> Reply</a>
-								                              <a class="btn btn-warning btn-circle text-uppercase" data-toggle="collapse" href="#reply1"><span class="glyphicon glyphicon-comment"></span> 2 Comments</a>
-								                          </div>              
-								                        </div>
-								                        <div class="collapse col-sm-9 pull-right " id="reply1">
-								                            <ul class="media-list">
-								                                <li class="media media-replied">
-								                                    <a class="pull-left" href="#">
-								                                      <img class="media-object img-circle"  alt="profile">
-								                                    </a>
-								                                    <div class="media-body">
-								                                      <div class="well well-lg">
-								                                          <h4 class="media-heading text-uppercase reviews"><span class="glyphicon glyphicon-share-alt"></span> Account Name</h4>
-								                                          <p class="media-comment">
-								                                            Text Example.
-								                                          </p>
-								                                      </div>              
-								                                    </div>
-								                                </li>
-								                                <li class="media media-replied" id="replied">
-								                                    <a class="pull-left" href="#">
-								                                      <img class="media-object img-circle" alt="profile">
-								                                    </a>
-								                                    <div class="media-body">
-								                                      <div class="well well-lg">
-								                                          <h4 class="media-heading text-uppercase reviews"><span class="glyphicon glyphicon-share-alt"></span> Account Name</h4></h4>
-								                                          <p class="media-comment">
-								                                            Text Example
-								                                          </p>
-								                                      </div>              
-								                                    </div>
-								                                </li>
-								                            </ul>  
-								                        </div>
-								                      </li>     
-								                    </ul>
-												</div>
-											</div>
-										</div>
-							    	</div>
-							    	<div id="materials" class="tab-pane fade">
-							      		<div class="panel panel-default" style="height: 500px; overflow-y: auto;">
-							      		</div>
-							    	</div>
-							    	<div id="quiz" class="tab-pane fade">
-							      		<div class="panel panel-default" style="height: 500px; overflow-y: auto;">
-							      		</div>
-							    	</div>
-							  	</div>
+							<div id="materials" class="tab-pane fade">
+								<div class="panel panel-default"
+									style="height: 500px; overflow-y: auto;"></div>
 							</div>
-						<!--</div>
+							<div id="quiz" class="tab-pane fade">
+								<div class="panel panel-default"
+									style="height: 500px; overflow-y: auto;"></div>
+							</div>
+						</div>
+					</div>
+					<!--</div>
 					</form>-->
 				</div>
 			</div>
 		</div>
 	</div>
 
-
+	<%
+		}
+	%>
 
 	<footer id="menu-outer">
 		<div class="col-sm-offset-2 col-sm-10">
