@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Digest</string>
     <string name="view_topic_label">View Topic</string>
+    <string name="create_topic_label">Create Topic</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -10,6 +11,10 @@
     <string name="topic_comment_tab">Comment</string>
     <string name="topic_material_tab">Material</string>
     <string name="topic_Quiz_tab">Quiz</string>
+
+    <string name="topic_Create_title">Title</string>
+    <string name="topic_Create_body">Description</string>
+    <string name="topic_Create_tags">Tags</string>
 
 
 </resources>

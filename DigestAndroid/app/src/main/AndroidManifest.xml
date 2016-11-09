@@ -13,27 +13,51 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewTopicActivity"
+        <activity
+            android:name=".ViewTopicActivity"
             android:label="@string/view_topic_label"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-            <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
-        </activity>
-        <activity android:name=".LoginActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".LoginActivity"
             android:theme="@style/AppTheme.Dark">
-            <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".SignupActivity"
+        <activity
+            android:name=".SignupActivity"
             android:theme="@style/AppTheme.Dark" />
-        <activity android:name=".ForgetPasswordActivity"
+        <activity
+            android:name=".ForgetPasswordActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity android:name=".ViewRegisteredHomeActivity">
-            <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CreateTopicActivity"
+            android:exported="true"
+            android:label="@string/create_topic_label"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!--
         <activity
             android:name=".ViewTopicActivity"
             android:theme="@style/MyMaterialTheme" />
         -->
+        <activity
+            android:name=".AddMaterialActivity"
+            android:label="@string/create_topic_label"/>
+        <activity android:name=".AddQuizActivity"></activity>
     </application>
 
 </manifest>
