@@ -1,29 +1,41 @@
 package digest.digestandroid.Models;
 
+import com.google.gson.Gson;
+
+import java.util.Arrays;
+
 /**
  * Created by Suyunu on 10.11.2016.
  */
 
 public class User {
+    // {"id":32,"username":"android","password":"1234","email":"asdf@asdf.com",
+    // "first_name":"android","last_name":"android","status":1,
+    // "role":{"id":2,"name":"user"},"session":"1c01360fd1a2aa97"}
     private int id;
     private String username;
-    private String email;
     private String password;
-    private String name;
-    private String surname;
-    private String photo;
-    private String followers;
-    private String followings;
-    public int numberOfFollowers;
-    public int numberOfFollowings;
+    private String email;
+    private String first_name;
+    private String last_name;
+    private int status;
+    private Role role;
+    private String session;
 
-    public User(int id) {
-        this.id = id;
+    public User() {
     }
 
-    public User(String username, String email) {
+    public User(String username, String password) {
         this.username = username;
-        this.email = email;
+        this.password = password;
+    }
+
+    public String getSession() {
+        return session;
+    }
+
+    public void setSession(String session) {
+        this.session = session;
     }
 
     public int getId() {
@@ -42,14 +54,6 @@ public class User {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -58,59 +62,92 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
-    public String getFollowers() {
-        return followers;
+    public int getStatus() {
+        return status;
     }
 
-    public void setFollowers(String followers) {
-        this.followers = followers;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getFollowings() {
-        return followings;
+    public Role getRole() {
+        return role;
     }
 
-    public void setFollowings(String followings) {
-        this.followings = followings;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
-    public int getNumberOfFollowers() {
-        return numberOfFollowers;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", status=" + status +
+                ", role=" + role.toString() +
+                ", session='" + session + '\'' +
+                '}';
     }
 
-    public void setNumberOfFollowers(int numberOfFollowers) {
-        this.numberOfFollowers = numberOfFollowers;
-    }
+    private class Role {
+        private int id;
+        private String name;
 
-    public int getNumberOfFollowings() {
-        return numberOfFollowings;
-    }
+        public Role() {
+        }
 
-    public void setNumberOfFollowings(int numberOfFollowings) {
-        this.numberOfFollowings = numberOfFollowings;
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "Role{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
     }
 }
+
+

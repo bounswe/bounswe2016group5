@@ -1,6 +1,6 @@
-package digest.digestandroid.API;
+package digest.digestandroid.api;
 
-import android.content.Context;
+import android.app.Application;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
@@ -12,14 +12,21 @@ import com.android.volley.toolbox.Volley;
 /**
  * Created by Suyunu on 10.11.2016.
  */
-public class VolleySingleton {
+public class VolleySingleton extends Application{
     private static VolleySingleton mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private static Context mCtx;
+    //private static Context mCtx;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mInstance = this;
+    }
+
+    /*
     private VolleySingleton(Context context) {
-        mCtx = context;
+        //mCtx = context;
         mRequestQueue = getRequestQueue();
 
         mImageLoader = new ImageLoader(mRequestQueue,
@@ -38,11 +45,13 @@ public class VolleySingleton {
                     }
                 });
     }
+    */
 
-    public static synchronized VolleySingleton getInstance(Context context) {
-        if (mInstance == null) {
+
+    public static synchronized VolleySingleton getInstance() {
+        /*if (mInstance == null) {
             mInstance = new VolleySingleton(context);
-        }
+        }*/
         return mInstance;
     }
 
@@ -50,7 +59,7 @@ public class VolleySingleton {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
             // Activity or BroadcastReceiver if someone passes one in.
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+            mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
         return mRequestQueue;
     }
@@ -59,7 +68,30 @@ public class VolleySingleton {
         getRequestQueue().add(req);
     }
 
-    public ImageLoader getImageLoader() {
+    /*public ImageLoader getImageLoader() {
         return mImageLoader;
+    }
+    */
+
+    public ImageLoader getImageLoader() {
+        getRequestQueue();
+        if (mImageLoader == null) {
+            mImageLoader = new ImageLoader(mRequestQueue,
+                    new ImageLoader.ImageCache() {
+                        private final LruCache<String, Bitmap>
+                                cache = new LruCache<String, Bitmap>(20);
+
+                        @Override
+                        public Bitmap getBitmap(String url) {
+                            return cache.get(url);
+                        }
+
+                        @Override
+                        public void putBitmap(String url, Bitmap bitmap) {
+                            cache.put(url, bitmap);
+                        }
+                    });
+        }
+        return this.mImageLoader;
     }
 }

@@ -4,8 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import android.content.Intent;
@@ -15,13 +13,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import digest.digestandroid.api.APIHandler;
+import digest.digestandroid.Models.User;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     private static final int REQUEST_FORGETPASSWORD = 0;
+    //Context context;
 
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
@@ -34,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
+
+        //context = this;
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -67,10 +80,16 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         Log.d(TAG, "Login");
 
+        /*
         if (!validate()) {
             onLoginFailed();
             return;
-        }
+        }*/
+
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=login&username=android&password=1234";
+
 
         _loginButton.setEnabled(false);
 
@@ -80,12 +99,14 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = _emailText.getText().toString();
+        //String email = _emailText.getText().toString();
+        final String username = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
+        User user = new User(username, password);
+
         // TODO: Implement your own authentication logic here.
-
-
+        APIHandler.getInstance().login("TesT", user);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
