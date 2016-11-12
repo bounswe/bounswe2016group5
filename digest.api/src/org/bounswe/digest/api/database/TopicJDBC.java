@@ -77,7 +77,7 @@ public class TopicJDBC {
 			while(resultSet.next()){
 				result.add(new Topic(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),
 						resultSet.getString(4),resultSet.getString(5)/*,resultSet.getString(6)*/,
-						resultSet.getInt(6), resultSet.getInt(7),null));
+						resultSet.getInt(6), resultSet.getInt(7),null,null,null));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

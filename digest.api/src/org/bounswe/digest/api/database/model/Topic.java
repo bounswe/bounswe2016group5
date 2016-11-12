@@ -13,10 +13,11 @@ public class Topic extends Model{
 	private int status;
 	
 	private ArrayList<TopicTag> tags;
-	
+	private ArrayList<Quiz> quizzes;
+	private ArrayList<String> media;
 	
 	public Topic(int id, String header, /*String type,*/ String image, String url, String body, int owner, 
-			int status, ArrayList<TopicTag> tags) {
+			int status, ArrayList<TopicTag> tags,ArrayList<Quiz> quizzes, ArrayList<String> media) {
 		this.id = id;
 		this.header = header;
 		//this.type = type;
@@ -26,6 +27,8 @@ public class Topic extends Model{
 		this.owner = owner;
 		this.status = status;
 		this.tags = tags;
+		this.quizzes=quizzes;
+		this.media=media;
 	}
 	public int getId() {
 		return id;
@@ -80,6 +83,18 @@ public class Topic extends Model{
 	}
 	public void setTags(ArrayList<TopicTag> tags) {
 		this.tags = tags;
+	}
+	public ArrayList<Quiz> getQuizzes() {
+		return quizzes;
+	}
+	public void setQuizzes(ArrayList<Quiz> quizzes) {
+		this.quizzes = quizzes;
+	}
+	public ArrayList<String> getMedia() {
+		return media;
+	}
+	public void setMedia(ArrayList<String> media) {
+		this.media = media;
 	}
 
 }
