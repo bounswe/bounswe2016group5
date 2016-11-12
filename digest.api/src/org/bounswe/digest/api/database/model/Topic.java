@@ -5,28 +5,26 @@ import java.util.ArrayList;
 public class Topic extends Model{
 	private int id;
 	private String header;
-	private String type;
+	//private String type;
 	private String image;
 	private String url;
 	private String body;
 	private int owner;
 	private int status;
 	
-	private ArrayList<TopicManager> topicManagers;
 	private ArrayList<TopicTag> tags;
 	
 	
-	public Topic(int id, String header, String type, String image, String url, String body, int owner, int status,
-			ArrayList<TopicManager> topicManagers, ArrayList<TopicTag> tags) {
+	public Topic(int id, String header, /*String type,*/ String image, String url, String body, int owner, 
+			int status, ArrayList<TopicTag> tags) {
 		this.id = id;
 		this.header = header;
-		this.type = type;
+		//this.type = type;
 		this.image = image;
 		this.url = url;
 		this.body = body;
 		this.owner = owner;
 		this.status = status;
-		this.topicManagers = topicManagers;
 		this.tags = tags;
 	}
 	public int getId() {
@@ -41,12 +39,12 @@ public class Topic extends Model{
 	public void setHeader(String header) {
 		this.header = header;
 	}
-	public String getType() {
+	/*public String getType() {
 		return type;
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
+	}*/
 	public String getImage() {
 		return image;
 	}
@@ -76,12 +74,6 @@ public class Topic extends Model{
 	}
 	public void setStatus(int status) {
 		this.status = status;
-	}
-	public ArrayList<TopicManager> getTopicManagers() {
-		return topicManagers;
-	}
-	public void setTopicManagers(ArrayList<TopicManager> topicManagers) {
-		this.topicManagers = topicManagers;
 	}
 	public ArrayList<TopicTag> getTags() {
 		return tags;

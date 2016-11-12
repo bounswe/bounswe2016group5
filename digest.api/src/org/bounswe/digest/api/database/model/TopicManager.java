@@ -1,5 +1,9 @@
 package org.bounswe.digest.api.database.model;
-
+/**
+ * @deprecated
+ *
+ * We removed this feature.
+ */
 public class TopicManager extends Model{
 	public static final int ADMIN = 1;
 	public static final int MODERATOR = 2;

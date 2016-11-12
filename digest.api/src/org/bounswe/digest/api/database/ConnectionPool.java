@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 
@@ -20,6 +21,7 @@ public class ConnectionPool {
 	private static final String USERNAME = "jdbc.username";
 	private static final String PASSWORD = "jdbc.password";
 	private static BasicDataSource dataSource;
+    private final Logger logger = LogManager.getLogger(ConnectionPool.class);
 	/*private static Logger logger;
 	
 	public ConnectionPool(){
@@ -31,7 +33,7 @@ public class ConnectionPool {
 		String url = "";
 		String username = "";
 		String password="";
-		String driver ="";
+		String driver ="com.mysql.cj.jdbc.Driver";
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {

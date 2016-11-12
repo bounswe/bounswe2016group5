@@ -15,7 +15,7 @@ public class DigestParameters {
 	public static final String GET_TOPICS_OF_USER = "get_topics_of_user";
 
 	public static final String HEADER = "header";
-	public static final String TYPE = "type";
+	//public static final String TYPE = "type";
 	public static final String IMAGE = "image";
 	public static final String URL = "url";
 	public static final String BODY = "body";

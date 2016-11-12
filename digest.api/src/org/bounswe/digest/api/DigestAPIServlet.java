@@ -37,21 +37,21 @@ public class DigestAPIServlet extends HttpServlet {
 		}else if(f.equals(DigestParameters.CREATE_TOPIC)){
 			//header, type, image, url, body, owner, status
 			String header = req.getParameter(DigestParameters.HEADER);
-			String type = req.getParameter(DigestParameters.TYPE);
+			//String type = req.getParameter(DigestParameters.TYPE);
 			String image = req.getParameter(DigestParameters.IMAGE);
 			String url = req.getParameter(DigestParameters.URL);
 			String body = req.getParameter(DigestParameters.BODY);
 			int owner = Integer.parseInt(req.getParameter(DigestParameters.OWNER));
 			int status = Integer.parseInt(req.getParameter(DigestParameters.STATUS));
-			//TODO Tag, topic manager should be added
-		    if(TopicJDBC.createTopic(header,type,image,url,body,owner,status,null,null)==0){
+		    //TODO add tags
+			if(TopicJDBC.createTopic(header,/*type,*/image,url,body,owner,status,null)==0){
 		    	resp.setStatus(200);
 			}else{
 				resp.setStatus(400);
 			}
 		}else if(f.equals(DigestParameters.GET_TOPICS_OF_USER)){
 			int uid=Integer.parseInt(req.getParameter(DigestParameters.UID));
-			ArrayList<Topic> ar=TopicJDBC.getTopicsWithUser(uid);
+			resp.getWriter().append(TopicJDBC.getTopicsWithUser(uid));
 		}else if(f.equals(DigestParameters.LOGIN)){
 			String username = req.getParameter(DigestParameters.USERNAME);
 			String password = req.getParameter(DigestParameters.PASSWORD);
