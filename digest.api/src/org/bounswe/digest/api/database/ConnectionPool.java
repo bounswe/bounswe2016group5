@@ -22,12 +22,14 @@ public class ConnectionPool {
 	private static final String PASSWORD = "jdbc.password";
 	private static BasicDataSource dataSource;
     private final Logger logger = LogManager.getLogger(ConnectionPool.class);
-	/*private static Logger logger;
+	/*
+	private static Logger logger;
 	
 	public ConnectionPool(){
 		logger = Logger.getLogger(ConnectionPool.class);
 	    BasicConfigurator.configure();
-	}*/
+	}
+	*/
 	
 	public static Connection getConnection(){
 		String url = "";

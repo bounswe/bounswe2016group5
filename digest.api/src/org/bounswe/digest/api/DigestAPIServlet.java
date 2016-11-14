@@ -1,6 +1,8 @@
 package org.bounswe.digest.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -19,6 +21,8 @@ import org.bounswe.digest.api.database.TopicJDBC;
 import org.bounswe.digest.api.database.UserJDBC;
 import org.bounswe.digest.api.database.model.Role;
 import org.bounswe.digest.api.database.model.Topic;
+
+import com.google.gson.Gson;
 
 @WebServlet("/")
 public class DigestAPIServlet extends HttpServlet {
@@ -80,6 +84,17 @@ public class DigestAPIServlet extends HttpServlet {
 	@Override
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		/*String f = req.getParameter(DigestParameters.FUNC);
+		if(f == null || f.length() == 0){
+			
+		}else{
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(req.getInputStream()));
+			Gson gson = new Gson();
+			Role role=gson.fromJson(bufferedReader, Role.class);
+			resp.getWriter().append(role.getName());
+			resp.getWriter().append("hoop");
+		}
+		*/
 		doGet(req, resp);
 		/*
 		 * try {

@@ -4,43 +4,29 @@ import java.util.ArrayList;
 
 public class Quiz extends Model{
 	private String name;
-	private String question;
+	private ArrayList<Question> questions;
 	
-	private ArrayList<String> choices;
-	private ArrayList<Integer> answers;
-	
-	public Quiz(String name,String question,ArrayList<String> choices,ArrayList<Integer> answers){
+	public Quiz(String name,ArrayList<Question> questions){
 		this.name=name;
-		this.question=question;
-		this.choices=choices;
-		this.setAnswers(answers);
+		this.setQuestions(questions);
 	}
 	
-	public ArrayList<String> getChoices() {
-		return choices;
-	}
-	public void setChoices(ArrayList<String> choices) {
-		this.choices = choices;
-	}
-	public String getQuestion() {
-		return question;
-	}
-	public void setQuestion(String question) {
-		this.question = question;
-	}
+
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public ArrayList<Integer> getAnswers() {
-		return answers;
+	public ArrayList<Question> getQuestions() {
+		return questions;
 	}
 
-	public void setAnswers(ArrayList<Integer> answers) {
-		this.answers = answers;
+
+	public void setQuestions(ArrayList<Question> questions) {
+		this.questions = questions;
 	}
-	
+
 }
