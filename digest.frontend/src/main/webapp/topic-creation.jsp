@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.io.*"%>
+<%@page import="java.net.*"%>
+<%@page import="java.util.Enumeration"%>
+<%
+	session = request.getSession(false);
+	if (session.getAttribute("session") == null) {
+		response.sendRedirect("index.jsp");
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +20,9 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"
+	type="text/javascript"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -102,65 +114,37 @@ ul#horizontal-list a:hover {
 	margin: 2px 2px 2px 2px;
 }
 </style>
+<script>
+	$(document).ready(function() {
+
+		$('#create_topic_form').validate({ // initialize the plugin
+			rules : {
+				header : {
+					required : true
+				},
+				body : {
+					required : true
+				},
+				owner : {
+					required : true
+				},
+				image : {
+					required : false
+				},
+				status : {
+					required : true
+				},
+				url : {
+					required : true
+				},
+			}
+		});
+
+	});
+</script>
 
 </head>
 <body>
-	<%/*
-		session = request.getSession();
-		Object userName = session.getAttribute("username");
-		Object pass = session.getAttribute("password");
-		*/
-
-		if (false) {
-			//   response.sendRedirect("login.jsp");
-			
-			
-	%>
-
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#myNavbar">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="index.jsp">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
-			</div>
-			<div class=" collapse navbar-collapse" id="myNavbar">
-				<div class="col-sm-6 pull">
-					<form action="_search" method="POST" class="navbar-form"
-						role="search">
-						<div class="input-group col-sm-12">
-							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="srch-term">
-							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
-									<i class="glyphicon glyphicon-search"></i>
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
-				<ul class="nav navbar-nav navbar-right">
-
-					<li><a href="signup.jsp"><span
-							class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-
-					<li><a href="login.jsp"><span
-							class="glyphicon glyphicon-log-in"></span> Login</a></li>
-
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<h1>You have to be signed up and login to the system to create a
-		topic!!!</h1>
-	<%
-		} else {
-	%>
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -194,7 +178,7 @@ ul#horizontal-list a:hover {
 							class="glyphicon glyphicon-cog"></span> Settings</a></li>
 					<li><a href="#"><span
 							class="glyphicon glyphicon-th-list"></span> Notifications</a></li>
-					<li><a href="#"><span
+					<li><a href="LogoutServlet"><span
 							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 				</ul>
 			</div>
@@ -251,7 +235,8 @@ ul#horizontal-list a:hover {
 			<div class="col-sm-9">
 				<h1>Open a new topic</h1>
 				<div class="open-topic col-sm-12">
-					<form class="form-horizontal" action="#">
+					<form class="form-horizontal" id="create_topic_form" action="CreateTopicServlet"
+				method="POST">
 						<div class="form-group">
 							<div class="topic-header">
 								<div class="row col-sm-6">
@@ -262,12 +247,12 @@ ul#horizontal-list a:hover {
 												id="header">
 										</div>
 									</div>
-									<div class="form-group">
+									<!--  <div class="form-group">
 										<label class="control-label col-sm-2" for="type">Type:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="type" id="type">
 										</div>
-									</div>
+									</div>-->
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="tags">Tags:</label>
 										<div class="col-sm-10">
@@ -275,18 +260,18 @@ ul#horizontal-list a:hover {
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-sm-2" for="admins">Admin(s):</label>
+										<label class="control-label col-sm-2" for="admins">Owner:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" name="admins"
+											<input type="text" class="form-control" name="owner"
 												id="admins" value="<%=session.getAttribute("username")%>">
 										</div>
 									</div>
-									<div class="form-group">
+									<!--<div class="form-group">
 										<label class="control-label col-sm-2" for="mods">Mods:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="mods" id="mods">
 										</div>
-									</div>
+									</div>-->
 								</div>
 							</div>
 							<div class="row col-sm-6">
@@ -299,7 +284,7 @@ ul#horizontal-list a:hover {
 								<div class="container col-sm-6">
 									<div class="form-group">
 										<label class="control-label" for="img-url">URL:</label> <input
-											type="text" class="form-control" name="img-url" id="img-url">
+											type="text" class="form-control" name="image" id="image">
 
 									</div>
 									<div class="form-group">
@@ -320,7 +305,11 @@ ul#horizontal-list a:hover {
 							</div>
 						</div>
 						<div class="form-group">
-							<button class="btn btn-default" type="submit">Open Topic</button>
+							<div class="col-xs-9 col-xs-offset-3">
+								<input type="hidden" name="status" value="0">
+								<button type="submit" class="btn btn-primary" name="f"
+							value="create_topic">Create Topic</button>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -329,9 +318,6 @@ ul#horizontal-list a:hover {
 	</div>
 
 
-	<%
-		}
-	%>
 
 
 	<footer id="menu-outer">
