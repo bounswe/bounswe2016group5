@@ -1,0 +1,69 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="digest.digestandroid.fragments.TopicAddDescriptionFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="165dp"
+            app:srcCompat="@mipmap/ic_launcher"
+            android:id="@+id/imageView2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context=".MainActivity" >
+
+            <EditText
+                android:id="@+id/topic_create_title"
+                android:hint="@string/topic_Create_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                 />
+
+            <EditText
+                android:id="@+id/topic_create_body"
+                android:hint="@string/topic_Create_body"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                 />
+
+
+            <EditText
+                android:id="@+id/topic_create_tags"
+                android:hint="@string/topic_Create_tags"
+                android:layout_width="fill_parent"
+                android:layout_height="200sp"
+
+                android:gravity="top"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_material"
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="10dp"
+        android:onClick="jumptoAddMaterial"
+        android:src="@drawable/ic_next" />
+
+
+</FrameLayout>

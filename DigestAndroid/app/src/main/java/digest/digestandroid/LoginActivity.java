@@ -25,7 +25,7 @@ import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import digest.digestandroid.api.APIHandler;
+import digest.digestandroid.API.APIHandler;
 import digest.digestandroid.Models.User;
 
 public class LoginActivity extends AppCompatActivity {
