@@ -263,7 +263,7 @@ ul#horizontal-list a:hover {
 										<label class="control-label col-sm-2" for="admins">Owner:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="owner"
-												id="admins" value="<%=session.getAttribute("username")%>">
+												id="admins" value="<%=session.getAttribute("id")%>">
 										</div>
 									</div>
 									<!--<div class="form-group">
