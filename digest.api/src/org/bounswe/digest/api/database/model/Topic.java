@@ -29,6 +29,7 @@ public class Topic extends Model{
 		this.tags = tags;
 		this.quizzes=quizzes;
 		this.media=media;
+		//this.
 	}
 	public int getId() {
 		return id;

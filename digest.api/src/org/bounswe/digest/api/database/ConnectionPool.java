@@ -17,9 +17,9 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 
 public class ConnectionPool {
 	private static final String DRIVER = "jdbc.driver.classname";
-	private static final String URL = "jdbc.url";
-	private static final String USERNAME = "jdbc.username";
-	private static final String PASSWORD = "jdbc.password";
+	private static final String URL = "";
+	private static final String USERNAME = "";
+	private static final String PASSWORD = "";
 	private static BasicDataSource dataSource;
     private final Logger logger = LogManager.getLogger(ConnectionPool.class);
 	/*
@@ -32,9 +32,9 @@ public class ConnectionPool {
 	*/
 	
 	public static Connection getConnection(){
-		String url = "";
-		String username = "";
-		String password="";
+		String url = "jdbc:mysql://digest-db.c7pdwrhsbu6p.us-east-1.rds.amazonaws.com:3306/digest";
+		String username = "digest";
+		String password="digEST352451.";
 		String driver ="com.mysql.cj.jdbc.Driver";
 		try {
 			Class.forName(driver);
