@@ -3,6 +3,8 @@
 <%@page import="java.io.*"%>
 <%@page import="java.net.*"%>
 <%@page import="java.util.Enumeration"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.HashMap"%>
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("session") == null) {
@@ -206,8 +208,16 @@ ul#horizontal-list a:hover {
 			</div>
 			<div class="col-sm-9">
 				<div class="user-profile col-sm-12">
-					<form class="form-horizontal" id="user-profile"
-						action="UserProfileServlet" method="POST">
+					<form class="form-horizontal" action="UserProfileServlet" method="POST">
+					<% 
+						session.getAttribute("id");
+						@SuppressWarnings("unchecked")
+						ArrayList<Integer> userTopicIds = (ArrayList<Integer>) request.getAttribute("userTopicId");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> userTopicHeaders = (HashMap<Integer,String>) request.getAttribute("userTopicHeader");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> userTopicImage = (HashMap<Integer,String>) request.getAttribute("userTopicImage");
+						%>
 						<div class="form-group">
 							<div class="row col-sm-12">
 								<div class="form-group col-sm-2">
@@ -227,26 +237,21 @@ ul#horizontal-list a:hover {
 							style="height: 200px; width: 95%; overflow-x: scroll;">
 							<div class="panel-header">User Topics</div>
 							<div id="user-topics" class="list-group">
-								<div class="topic-view col-xs-4 col-lg-4" style="padding: 9px 9px 0px 9px;">
+							<% 
+								for(int topicId : userTopicIds  ) {
+							%>
+									<div class="topic-view col-xs-4 col-lg-4" style="padding: 9px 9px 0px 9px;">
 									<div class="thumbnail">
-										<img class="group list-group-image"
-											src="imageurl" alt="" />
+										<img class="group list-group-image" height="100" width="100"
+											src=<%=userTopicImage.get(topicId) %> alt="" />
 										<div class="caption">
-											<h4 class="group inner list-group-item-heading" align="center">Topic
-												Header</h4>
+											<h4 class="group inner list-group-item-heading" align="center"><%=userTopicHeaders.get(topicId) %></h4>
 										</div>
 									</div>
 								</div>
-								<div class="topic-view col-xs-4 col-lg-4"style="padding: 9px 9px 0px 9px;">
-									<div class="thumbnail">
-										<img class="group list-group-image"
-											src="imageurl" alt="" />
-										<div class="caption">
-											<h4 class="group inner list-group-item-heading" align="center">Topic
-												Header</h4>
-										</div>
-									</div>
-								</div>					
+							<% 		
+								} 
+							%>			
 							</div>
 						</div>
 						
@@ -276,6 +281,7 @@ ul#horizontal-list a:hover {
 								</div>					
 							</div>
 						</div>
+						
 						
 				
 					</form>
