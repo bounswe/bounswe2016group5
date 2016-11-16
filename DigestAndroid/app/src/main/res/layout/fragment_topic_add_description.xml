@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="165dp"
             app:srcCompat="@mipmap/ic_launcher"
-            android:id="@+id/imageView2" />
+            android:id="@+id/topic_create_image" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,8 +28,26 @@
             tools:context=".MainActivity" >
 
             <EditText
+                android:id="@+id/topic_create_imageurl"
+                android:hint="Topic Image URL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+
+                android:gravity="top"
+                />
+
+            <Button
+                android:text="Upload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_image_upload"
+
+                style="@style/Widget.AppCompat.Button.Colored" />
+
+            <EditText
                 android:id="@+id/topic_create_title"
                 android:hint="@string/topic_Create_title"
+                android:inputType="text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                  />
@@ -46,9 +64,9 @@
                 android:id="@+id/topic_create_tags"
                 android:hint="@string/topic_Create_tags"
                 android:layout_width="fill_parent"
-                android:layout_height="200sp"
+                android:layout_height="wrap_content"
 
-                android:gravity="top"
+
                 />
 
         </LinearLayout>

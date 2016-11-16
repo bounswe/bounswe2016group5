@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import com.android.volley.toolbox.StringRequest;
 
 import digest.digestandroid.Models.User;
 
@@ -47,7 +48,7 @@ public class APIHandler extends Application{
     // {"id":32,"username":"android","password":"1234","email":"asdf@asdf.com",
     // "first_name":"android","last_name":"android","status":1,
     // "role":{"id":2,"name":"user"},"session":"1c01360fd1a2aa97"}
-    public void loginGET(String tag, User user) {
+    public void login(String tag, User user) {
         Log.d( "11111", "11111");
         GsonRequest<User> myReq = new GsonRequest<User>(Request.Method.GET,
                 mainURL + "/?f=login&username=" + user.getUsername() +  "&password=" + user.getPassword(),
@@ -106,4 +107,33 @@ public class APIHandler extends Application{
 
     }
 
+
+    /*
+    *Sign Up Handler
+    *<API_PATH>/?f=register&username=<USERNAME>&password=<PASSWORD>&email=<EMAIL>&first_name=<FIRST_NAME>&<LAST_NAME>=<LAST_NAME>&status=<STATUS_INT>
+    * returns 200 or 400
+    *
+    */
+    public void signup(String tag, User user) {
+        Log.d( "process", "Signup ");
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, mainURL + "/?f=register&username=" + user.getUsername() +  "&password=" + user.getPassword()
+                + "&email=" + user.getEmail() + "&first_name=" + user.getFirst_name() + "&last_name=" + user.getLast_name() + "&status=" + user.getStatus(),
+                new Response.Listener<String>(){
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d("response", "onResponse: "+ response.toString());
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("response","Sign Up Failed");
+            }
+        });
+
+        VolleySingleton.getInstance().addToRequestQueue(stringRequest);
+
+    }
 }

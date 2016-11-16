@@ -1,4 +1,4 @@
-package digest.digestandroid.api;
+package digest.digestandroid.API;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;

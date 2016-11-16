@@ -30,6 +30,15 @@ public class User {
         this.password = password;
     }
 
+    public User(String username, String password, String email, String first_name, String last_name, int status) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.status = status;
+    }
+
     public String getSession() {
         return session;
     }

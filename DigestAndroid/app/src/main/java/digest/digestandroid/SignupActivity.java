@@ -14,11 +14,15 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import digest.digestandroid.API.APIHandler;
+import digest.digestandroid.Models.User;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
-    @InjectView(R.id.input_name) EditText _nameText;
+    @InjectView(R.id.input_username) EditText _usernameText;
+    @InjectView(R.id.input_firstname) EditText _firstnameText;
+    @InjectView(R.id.input_lastname) EditText _lastnameText;
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_signup) Button _signupButton;
@@ -62,11 +66,16 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = _nameText.getText().toString();
+        String username = _usernameText.getText().toString();
+        String firstname = _firstnameText.getText().toString();
+        String lastname = _lastnameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
+        User user = new User(username, password, email, firstname, lastname, 0);
+
         // TODO: Implement your own signup logic here.
+        APIHandler.getInstance().signup("TestSU", user);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -96,15 +105,15 @@ public class SignupActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String name = _nameText.getText().toString();
+        String name = _usernameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 characters");
+            _usernameText.setError("at least 3 characters");
             valid = false;
         } else {
-            _nameText.setError(null);
+            _usernameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
