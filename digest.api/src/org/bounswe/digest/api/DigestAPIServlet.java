@@ -16,11 +16,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.bounswe.digest.api.database.ConnectionPool;
 import org.bounswe.digest.api.database.TopicJDBC;
 import org.bounswe.digest.api.database.UserJDBC;
-import org.bounswe.digest.api.database.model.Role;
-import org.bounswe.digest.api.database.model.Topic;
+import org.bounswe.digest.api.database.model.*;
 
 import com.google.gson.Gson;
 
@@ -82,20 +82,30 @@ public class DigestAPIServlet extends HttpServlet {
 	}
 
 	@Override
-
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		/*String f = req.getParameter(DigestParameters.FUNC);
+		String f = req.getParameter(DigestParameters.FUNC);
 		if(f == null || f.length() == 0){
 			
-		}else{
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(req.getInputStream()));
+		}else if(f.equals(DigestParameters.ADD_QUIZ)){
+			int tid=Integer.parseInt(req.getParameter(DigestParameters.TID));
+			BufferedReader bufferedReader = new BufferedReader(req.getReader());
+			Gson gson = new Gson();
+			Quiz quiz=gson.fromJson(bufferedReader, Quiz.class);
+			if(TopicJDBC.addQuizToTopic(tid, quiz)==0){
+		    	resp.setStatus(200);
+			}else{
+				resp.setStatus(400);
+			}
+		}
+		/*else if(f=){
+			BufferedReader bufferedReader = new BufferedReader(req.getReader());
 			Gson gson = new Gson();
 			Role role=gson.fromJson(bufferedReader, Role.class);
+			//resp.getWriter().append(role.getName());
 			resp.getWriter().append(role.getName());
-			resp.getWriter().append("hoop");
 		}
 		*/
-		doGet(req, resp);
+		//doGet(req, resp);
 		/*
 		 * try {
 		 * 

@@ -13,6 +13,7 @@ public class DigestParameters {
 	public static final String REGISTER = "register";
 	public static final String CREATE_TOPIC = "create_topic";
 	public static final String GET_TOPICS_OF_USER = "get_topics_of_user";
+	public static final String ADD_QUIZ="add_quiz";
 
 	public static final String HEADER = "header";
 	//public static final String TYPE = "type";
@@ -22,4 +23,6 @@ public class DigestParameters {
 	public static final String OWNER = "owner";
 	
 	public static final String UID="uid";
+	public static final String TID="tid";
+	public static final String QID="qid";
 }
