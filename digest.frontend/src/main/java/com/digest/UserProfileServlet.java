@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
@@ -49,6 +50,9 @@ public class UserProfileServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String contextPath =request.getContextPath();
+		System.out.println("Burada" +contextPath);
+				
 
 		HttpSession session = request.getSession(true);
 		session.getAttribute("id");
@@ -93,5 +97,32 @@ public class UserProfileServlet extends HttpServlet {
 		} catch (JSONException ex) {
 			// Do nothing
 		}
+		
+		
+		//Example topics
+		ArrayList<Integer> userTopicId = new ArrayList<Integer>();
+		userTopicId.add(3);
+		userTopicId.add(4);
+		userTopicId.add(16);
+		userTopicId.add(21);
+		
+		HashMap<Integer,String> userTopicHeader = new HashMap<Integer,String>();
+		HashMap<Integer,String> userTopicImage = new HashMap<Integer,String>();
+		userTopicHeader.put(3, "Software Engineering");
+		userTopicHeader.put(4, "How to make delicious kebabs?");
+		userTopicHeader.put(16, "Where are the best landscapes of Turkey?");
+		userTopicHeader.put(21, "Is studying with music effective?");
+		userTopicImage.put(3, "images/topic=3.png");
+		userTopicImage.put(4, "images/topic=4.png");
+		userTopicImage.put(16, "images/topic=16.png");
+		userTopicImage.put(21, "images/topic=21.png");
+		
+		
+		
+		request.setAttribute("userTopicId", userTopicId);
+		request.setAttribute("userTopicHeader", userTopicHeader);
+		request.setAttribute("userTopicImage", userTopicImage);
+		request.getRequestDispatcher("/profile.jsp").forward(request, response);
+		
 	}
 }
