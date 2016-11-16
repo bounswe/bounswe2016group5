@@ -103,24 +103,37 @@ public class APIHandler extends Application{
     * returns 200 or 400
     *
     */
-    public void signup(String tag, User user) {
+    public void signup(String tag, final User user) {
         Log.d( "process", "Signup ");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL + "/?f=register&username=" + user.getUsername() +  "&password=" + user.getPassword()
-                + "&email=" + user.getEmail() + "&first_name=" + user.getFirst_name() + "&last_name=" + user.getLast_name() + "&status=" + user.getStatus(),
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL + "/?f=register",
                 new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("response", "onResponse: "+ response);
+                        Log.d("Response", "onResponse: "+ response);
 
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    Log.d("Response","Failed");
+                    }
+                }){
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("response","Sign Up Failed");
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("username", user.getUsername());
+                params.put("password", user.getPassword());
+                params.put("email", user.getEmail());
+                params.put("first_name", user.getFirst_name());
+                params.put("last_name", user.getLast_name());
+                params.put("status", Integer.toString(user.getStatus()));
+                return params;
             }
-        });
+        };
 
         VolleySingleton.getInstance().addToRequestQueue(stringRequest);
 
