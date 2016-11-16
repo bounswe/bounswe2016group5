@@ -4,24 +4,13 @@ import android.app.Application;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-import com.android.volley.toolbox.StringRequest;
 
 import digest.digestandroid.Models.User;
 
@@ -117,13 +106,13 @@ public class APIHandler extends Application{
     public void signup(String tag, User user) {
         Log.d( "process", "Signup ");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, mainURL + "/?f=register&username=" + user.getUsername() +  "&password=" + user.getPassword()
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL + "/?f=register&username=" + user.getUsername() +  "&password=" + user.getPassword()
                 + "&email=" + user.getEmail() + "&first_name=" + user.getFirst_name() + "&last_name=" + user.getLast_name() + "&status=" + user.getStatus(),
                 new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d("response", "onResponse: "+ response.toString());
+                        Log.d("response", "onResponse: "+ response);
 
                     }
                 }, new Response.ErrorListener() {

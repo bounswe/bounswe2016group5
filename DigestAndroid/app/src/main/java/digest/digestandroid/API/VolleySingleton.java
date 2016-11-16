@@ -1,4 +1,4 @@
-package digest.digestandroid.API;
+package digest.digestandroid.api;
 
 import android.app.Application;
 import android.graphics.Bitmap;
