@@ -25,8 +25,8 @@ import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import digest.digestandroid.API.APIHandler;
 import digest.digestandroid.Models.User;
+import digest.digestandroid.api.APIHandler;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -103,10 +103,10 @@ public class LoginActivity extends AppCompatActivity {
         final String username = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        User user = new User(username, password);
+        User user = new User("android", "1234");
 
         // TODO: Implement your own authentication logic here.
-        APIHandler.getInstance().login("TesT", user);
+        APIHandler.getInstance().loginPOST("TesT", user);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
