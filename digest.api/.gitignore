@@ -1,1 +1,4 @@
-*.properties
+*.class
+*.DS_Store
+/target/
+database.properties
