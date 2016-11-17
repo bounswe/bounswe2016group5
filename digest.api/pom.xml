@@ -5,6 +5,9 @@
 	<artifactId>digest.api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+	 <properties>
+	 	<failOnMissingWebXml>false</failOnMissingWebXml>
+	 </properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>

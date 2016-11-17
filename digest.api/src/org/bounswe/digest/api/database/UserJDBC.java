@@ -75,6 +75,64 @@ public class UserJDBC {
 		ConnectionPool.close(connection);
 		return user.printable();
 	}
+	/**
+	 * 
+	 * @param uid
+	 * @param session
+	 * @return
+	 */
+	public static boolean isSessionValid(int uid, String session) {
+		Connection connection = ConnectionPool.getConnection();
+		PreparedStatement statement = null;
+		ResultSet results = null;
+		boolean result = false;
+		String query = "SELECT * " + "FROM digest.session "
+				+ "WHERE session.uid = ? AND session.sid = ?";
+
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, uid);
+			statement.setString(2, session);
+			results = statement.executeQuery();
+			if (results != null && results.next()) {
+				result = true;
+			} else {
+				result = false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if (connection != null) {
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					
+				}
+			}
+
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+	}
+	
+	
 
 	/**
 	 * 
