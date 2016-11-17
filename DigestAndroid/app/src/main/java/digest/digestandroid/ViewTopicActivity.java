@@ -1,5 +1,7 @@
 package digest.digestandroid;
 
+import android.content.Intent;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -51,7 +53,7 @@ public class ViewTopicActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar, menu);
+        inflater.inflate(R.menu.viewtopic_actionbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -62,7 +64,9 @@ public class ViewTopicActivity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.action_favorite:
+            case R.id.action_comment:
+                Intent intent = new Intent(getApplicationContext(), AddCommentActivity.class);
+                startActivity(intent);
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
                 return true;
