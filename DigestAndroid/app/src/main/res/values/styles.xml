@@ -41,6 +41,34 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="dBigButton" parent="@android:style/Widget.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:paddingTop">@dimen/et_top_bottom_padding</item>
+        <item name="android:paddingBottom">@dimen/et_top_bottom_padding</item>
+        <item name="android:paddingLeft">@dimen/et_left_right_padding</item>
+        <item name="android:paddingRight">@dimen/et_left_right_padding</item>
+        <item name="android:textColor">@color/accent</item>
+    </style>
+
+    <style name="dEditText" parent="@android:style/Widget.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:paddingTop">@dimen/et_top_bottom_padding</item>
+        <item name="android:paddingBottom">@dimen/et_top_bottom_padding</item>
+        <item name="android:paddingLeft">@dimen/et_left_right_padding</item>
+        <item name="android:paddingRight">@dimen/et_left_right_padding</item>
+        <item name="android:background">@drawable/etround</item>
+        <item name="android:textColorHint">@color/textColorHint</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 
 
 </resources>

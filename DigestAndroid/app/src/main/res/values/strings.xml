@@ -3,6 +3,8 @@
     <string name="view_topic_label">View Topic</string>
     <string name="create_topic_label">Create Topic</string>
 
+    <string name="add_comment_label">Make Comment</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 

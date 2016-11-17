@@ -24,4 +24,9 @@
   <color name="navigationBarColor">#000000</color>
   <color name="colorAccent">#c8e8ff</color>
 
+  <color name="textColor">#575757</color>
+  <color name="textColorHint">#c5c5c5</color>
+  <color name="etBound">#959595</color>
+  <color name="darkButton">#141f72</color>
+
 </resources>

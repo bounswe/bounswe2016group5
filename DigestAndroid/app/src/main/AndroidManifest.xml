@@ -19,7 +19,13 @@
             android:name=".ViewTopicActivity"
             android:exported="true"
             android:label="@string/view_topic_label"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppTheme.Dark">
@@ -50,10 +56,14 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".AddCommentActivity"
+            android:label="@string/add_comment_label"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
     </application>
 
 </manifest>
