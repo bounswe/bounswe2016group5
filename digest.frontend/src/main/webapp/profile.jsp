@@ -3,6 +3,8 @@
 <%@page import="java.io.*"%>
 <%@page import="java.net.*"%>
 <%@page import="java.util.Enumeration"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.HashMap"%>
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("session") == null) {
@@ -13,7 +15,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Create Topic</title>
+<title>Profile</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -114,34 +116,6 @@ ul#horizontal-list a:hover {
 	margin: 2px 2px 2px 2px;
 }
 </style>
-<script>
-	$(document).ready(function() {
-
-		$('#create_topic_form').validate({ // initialize the plugin
-			rules : {
-				header : {
-					required : true
-				},
-				body : {
-					required : true
-				},
-				owner : {
-					required : true
-				},
-				image : {
-					required : false
-				},
-				status : {
-					required : true
-				},
-				url : {
-					required : true
-				},
-			}
-		});
-
-	});
-</script>
 
 </head>
 <body>
@@ -172,12 +146,12 @@ ul#horizontal-list a:hover {
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span
-							class="glyphicon glyphicon-envelope"></span> Messages</a></li>
-					<li><a href="#"><span
-							class="glyphicon glyphicon-cog"></span> Settings</a></li>
-					<li><a href="#"><span
-							class="glyphicon glyphicon-th-list"></span> Notifications</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
+							Messages</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
+							Settings</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-th-list"></span>
+							Notifications</a></li>
 					<li><a href="LogoutServlet"><span
 							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 				</ul>
@@ -233,88 +207,87 @@ ul#horizontal-list a:hover {
 				</div>
 			</div>
 			<div class="col-sm-9">
-				<h1>Open a new topic</h1>
-				<div class="open-topic col-sm-12">
-					<form class="form-horizontal" id="create_topic_form" action="CreateTopicServlet"
-				method="POST">
+				<div class="user-profile col-sm-12">
+					<form class="form-horizontal" action="UserProfileServlet" method="POST">
+					<% 
+						session.getAttribute("id");
+						@SuppressWarnings("unchecked")
+						ArrayList<Integer> userTopicIds = (ArrayList<Integer>) request.getAttribute("userTopicId");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> userTopicHeaders = (HashMap<Integer,String>) request.getAttribute("userTopicHeader");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> userTopicImage = (HashMap<Integer,String>) request.getAttribute("userTopicImage");
+						%>
 						<div class="form-group">
-							<div class="topic-header">
-								<div class="row col-sm-6">
-									<div class="form-group">
-										<label class="control-label col-sm-2" for="header">Header:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="header"
-												id="header">
-										</div>
-									</div>
-									<!--  <div class="form-group">
-										<label class="control-label col-sm-2" for="type">Type:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="type" id="type">
-										</div>
-									</div>-->
-									<div class="form-group">
-										<label class="control-label col-sm-2" for="tags">Tags:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="tags" id="tags">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label col-sm-2" for="admins">Owner:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="owner"
-												id="admins" value="<%=session.getAttribute("id")%>">
-										</div>
-									</div>
-									<!--<div class="form-group">
-										<label class="control-label col-sm-2" for="mods">Mods:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="mods" id="mods">
-										</div>
-									</div>-->
+							<div class="row col-sm-12">
+								<div class="form-group col-sm-2">
+									<label class="control-label" for="username"><%=session.getAttribute("username")%></label>
 								</div>
-							</div>
-							<div class="row col-sm-6">
-								<div class="container col-sm-6">
-									<label class="control-label col-sm-12" for="topic-img">Topic
-										Image:</label> <img id="topic-img"
-										style="display: block; width: 150px; height: 150px;"
-										alt="topic image" src="topic.png"></img>
-								</div>
-								<div class="container col-sm-6">
-									<div class="form-group">
-										<label class="control-label" for="img-url">URL:</label> <input
-											type="text" class="form-control" name="image" id="image">
-
-									</div>
-									<div class="form-group">
-										<a href="#" class="btn btn-default btn-block"
-											type="submit">Upload</a>
+								<div class="form-group col-sm-2 pull-right">
+									<div class="col-xs-9 col-xs-offset-3">
+										<input type="hidden" name="status" value="0">
+										<button type="submit" class="btn btn-primary" name="f"
+											value="edit_profile">Edit Profile</button>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="topic-body col-sm-12">
-								<div class="form-group">
-									<label class="control-label" for="body">Body:</label>
-									<textarea class="form-control" name="body" id="body" rows="15"></textarea>
 
+						<div class="container panel panel-default"
+							style="height: 200px; width: 95%; overflow-x: scroll;">
+							<div class="panel-header">User Topics</div>
+							<div id="user-topics" class="list-group">
+							<% 
+								for(int topicId : userTopicIds  ) {
+							%>
+									<div class="topic-view col-xs-4 col-lg-4" style="padding: 9px 9px 0px 9px;">
+									<div class="thumbnail">
+										<img class="group list-group-image" height="100" width="100"
+											src=<%=userTopicImage.get(topicId) %> alt="" />
+										<div class="caption">
+											<h4 class="group inner list-group-item-heading" align="center"><%=userTopicHeaders.get(topicId) %></h4>
+										</div>
+									</div>
 								</div>
-
+							<% 		
+								} 
+							%>			
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="col-xs-9 col-xs-offset-3">
-								<input type="hidden" name="status" value="0">
-								<button type="submit" class="btn btn-primary" name="f"
-							value="create_topic">Create Topic</button>
+						
+						<div class="container panel panel-default"
+							style="height: 200px; width: 95%; overflow-x: scroll;">
+							<div class="panel-header">Following Topics</div>
+							<div id="following-topics" class="list-group">
+								<div class="topic-view col-xs-4 col-lg-4" style="padding: 9px 9px 0px 9px;">
+									<div class="thumbnail">
+										<img class="group list-group-image"
+											src="imageurl" alt="" />
+										<div class="caption">
+											<h4 class="group inner list-group-item-heading" align="center">Topic
+												Header</h4>
+										</div>
+									</div>
+								</div>
+								<div class="topic-view col-xs-4 col-lg-4"style="padding: 9px 9px 0px 9px;">
+									<div class="thumbnail">
+										<img class="group list-group-image"
+											src="imageurl" alt="" />
+										<div class="caption">
+											<h4 class="group inner list-group-item-heading" align="center">Topic
+												Header</h4>
+										</div>
+									</div>
+								</div>					
 							</div>
 						</div>
+						
+						
+				
 					</form>
 				</div>
 			</div>
-		</div>
+	</div>
 	</div>
 
 
