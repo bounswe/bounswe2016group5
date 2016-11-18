@@ -1,0 +1,172 @@
+package org.bounswe.digest.api.semantic;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.HTTP;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+
+public class Request {
+
+	private final String USER_AGENT = "Mozilla/5.0";
+
+	public static void main(String[] args) throws Exception {
+
+		Request http = new Request();
+
+		System.out.println("Testing 1 - Send Http GET request");
+		http.sendGet();
+
+		System.out.println("\nTesting 2 - Send Http POST request");
+		//http.sendPost();
+
+	}
+
+	// HTTP GET request
+	private void sendGet() throws Exception {
+		
+		String urlString = "http://api.conceptnet.io/related/c/en/tea_kettle";
+		try {
+
+			URL url = new URL(urlString);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : "
+						+ conn.getResponseCode());
+			}
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+				(conn.getInputStream())));
+
+			String output, o="";
+			System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				o = o + output;
+			}
+			System.out.println(o);
+			JSONObject jsonObject = HTTP.toJSONObject(o);
+			
+			System.out.println(jsonObject.keys());
+			
+			conn.disconnect();
+
+		  } catch (MalformedURLException e) {
+
+			e.printStackTrace();
+
+		  } catch (IOException e) {
+
+			e.printStackTrace();
+
+		  }
+
+		
+		
+		
+		
+		/*List<String> list = new ArrayList<String>();
+		JSONArray array = jsonObject.getJSONArray("related");
+		for(int i = 0 ; i < array.length() ; i++){
+		    list.add(array.getJSONObject(i).getString("weight"));
+		}
+		
+		System.out.println(list.toString());*/
+
+	}
+
+	// HTTP POST request
+	private void sendPost() throws Exception {
+
+		String url = "https://selfsolve.apple.com/wcResults.do";
+		URL obj = new URL(url);
+		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+		//add reuqest header
+		con.setRequestMethod("POST");
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+		String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+
+		// Send post request
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.writeBytes(urlParameters);
+		wr.flush();
+		wr.close();
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'POST' request to URL : " + url);
+		System.out.println("Post parameters : " + urlParameters);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+				new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		//print result
+		System.out.println(response.toString());
+
+	}
+
+	 public static HttpResponse http(String url) {
+
+	        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+	            HttpPost request = new HttpPost(url);
+	            request.addHeader("content-type", "application/json");
+	            HttpResponse result = httpClient.execute(request);
+
+	            String json = EntityUtils.toString(result.getEntity(), "UTF-8");
+	            try {
+	                JSONParser parser = new JSONParser();
+	                Object resultObject = parser.parse(json);
+
+	                if (resultObject instanceof JSONArray) {
+	                    JSONArray array=(JSONArray)resultObject;
+	                    for (Object object : array) {
+	                        JSONObject obj =(JSONObject)object;
+	                        System.out.println(obj.get("weight"));
+	                    }
+
+	                }else if (resultObject instanceof JSONObject) {
+	                    JSONObject obj =(JSONObject)resultObject;
+	                    System.out.println(obj.get("weight"));
+	                }
+
+	            } catch (Exception e) {
+	            	System.out.println("aqqqqqqqqqq");
+	            }
+
+	        } catch (IOException ex) {
+	        	System.out.println("aqqqqqqqqqq");
+	        }
+	        return null;
+	    }
+}

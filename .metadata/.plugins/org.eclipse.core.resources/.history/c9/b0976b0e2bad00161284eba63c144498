@@ -1,0 +1,111 @@
+package org.bounswe.digest.api.semantic;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+import org.json.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.github.jsonldjava.core.JsonLdOptions;
+import com.github.jsonldjava.core.JsonLdProcessor;
+import com.github.jsonldjava.utils.JsonUtils;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+
+
+public class Request {
+
+	private final String USER_AGENT = "Mozilla/5.0";
+
+	public static void main(String[] args) throws Exception {
+
+		Request http = new Request();
+
+		System.out.println("Testing 1 - Send Http GET request");
+		http.sendGet();
+
+	}
+
+	// HTTP GET request
+	private void sendGet() throws Exception {
+		
+		String urlString = "http://api.conceptnet.io/c/en/istanbul";			
+		com.mashape.unirest.http.HttpResponse<JsonNode> jb = Unirest.get(urlString)
+				.header("accept", "application/json")
+				.asJson();
+
+		JSONObject obj = jb.getBody().getObject();
+		JSONArray json = obj.getJSONArray("related");
+		for (int i=0; i<json.length(); i++) {
+		    JSONObject item = json.getJSONObject(i);
+		    String name = item.getString("@id");
+		    double surname = item.getDouble("weight");
+		    System.out.println(name + "\n" + surname);
+		}
+	}
+
+	
+
+	// HTTP POST request
+	private void sendPost() throws Exception {
+
+		String url = "https://selfsolve.apple.com/wcResults.do";
+		URL obj = new URL(url);
+		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+		//add reuqest header
+		con.setRequestMethod("POST");
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+		String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+
+		// Send post request
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.writeBytes(urlParameters);
+		wr.flush();
+		wr.close();
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'POST' request to URL : " + url);
+		System.out.println("Post parameters : " + urlParameters);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+				new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		//print result
+		System.out.println(response.toString());
+
+	} 
+}

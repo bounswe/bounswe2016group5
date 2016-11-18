@@ -1,0 +1,9 @@
+1479306021583	Delete element
+1479432936138	Encapsulate field 'relationString'
+1479433011152	Encapsulate field 'relation'
+1479433016714	Encapsulate field 'surfaceText'
+1479433022655	Encapsulate field 'startNode'
+1479433026741	Encapsulate field 'endNode'
+1479433031714	Encapsulate field 'id'
+1479433035924	Encapsulate field 'label'
+1479434180014	Encapsulate field 'relationWeight'

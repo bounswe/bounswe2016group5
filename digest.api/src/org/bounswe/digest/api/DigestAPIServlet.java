@@ -1,6 +1,7 @@
 package org.bounswe.digest.api;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -26,6 +27,11 @@ public class DigestAPIServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		resp.setContentType("text/html");
+
+	      // Actual logic goes here.
+	      PrintWriter out = resp.getWriter();
+	      out.println("<h1>" + "Hello world" + "</h1>");
 		doPost(req, resp);
 	}
 

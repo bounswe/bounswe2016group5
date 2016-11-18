@@ -23,5 +23,31 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/mbugc/Desktop/cmpe451/bounswe2016group5/digest.api/tomcat/bin/bootstrap.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/annotations-api.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/catalina.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/catalina-ant.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/catalina-ha.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/catalina-storeconfig.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/catalina-tribes.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/ecj-4.5.1.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/el-api.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/jasper.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/jasper-el.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/jaspic-api.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-api.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-coyote.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-dbcp.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-i18n-es.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-i18n-fr.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-i18n-ja.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-jdbc.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-jni.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-util.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-util-scan.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/tomcat-websocket.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/websocket-api.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

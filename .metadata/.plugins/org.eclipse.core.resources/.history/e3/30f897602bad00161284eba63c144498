@@ -1,0 +1,230 @@
+package org.bounswe.digest.api.semantic;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+import org.json.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import com.github.jsonldjava.core.JsonLdOptions;
+import com.github.jsonldjava.core.JsonLdProcessor;
+import com.github.jsonldjava.utils.JsonUtils;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+
+
+public class Request {
+
+	private static final String CONCEPTNET_URI = "http://conceptnet5.media.mit.edu/data/5.3/c/en/";
+    private static final String NBR_TO_RETRIEVE = "100";
+
+    // Strings identifying properties in the JSON string.
+    private static final String EDGES = "edges";
+    private static final String NUM_FOUND = "numFound";
+
+    // The item searched on.
+    private String input;
+   
+    // Data on the response for a ConceptNet lookup.
+    private List<Edge> edges = new ArrayList<Edge>();
+    private int numFound = 0;
+    
+    public void ConceptNetQuery(String in)    {
+        input = in;
+        try {
+            String qStr = CONCEPTNET_URI + input + "?limit=" + NBR_TO_RETRIEVE;
+            String json = getJsonString(qStr);
+            JSONTokener jsonTokener = new JSONTokener(json);
+            JSONObject jsonObject = new JSONObject(jsonTokener);
+            numFound = jsonObject.getInt(NUM_FOUND);
+
+            // Each JSONArray element contains data on one edge of the many edges returned. 
+            JSONArray resultArray = jsonObject.getJSONArray(EDGES);
+            for (int i = 0; i < resultArray.length(); i++) {
+                JSONObject result = resultArray.getJSONObject(i);
+                Edge edge = new Edge(input, result);
+                edges.add(edge);
+            }
+        } catch (IOException e) {
+            System.out.println("IOException: Can't retrieve message for: " + in);
+        } catch (JSONException e) {
+            System.out.println("JSONException: Can't retrieve message for: " + in);
+        }
+    }
+
+    private String getJsonString(String queryURI) throws IOException {
+        BufferedReader reader = getReaderForQuery(queryURI);
+        if(reader == null)  {
+            return "";
+        }
+        
+        StringBuffer buffer = new StringBuffer();
+        int read;
+        char[] chars = new char[1024];
+        while ((read = reader.read(chars)) != -1)   {
+            buffer.append(chars, 0, read);  
+        }
+        return buffer.toString();
+    }
+    
+    private BufferedReader getReaderForQuery(String query) throws IOException     {
+        URL url = new URL(query);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+        return reader;
+    }
+}
+
+class Edge {
+    private String lookupStr;
+    
+    // Strings identifying the edge properties in the JSON string.
+    private static final String RELATION = "rel";
+    private static final String WEIGHT = "weight";
+    private static final String SURFACE_TEXT = "surfaceText";
+    private static final String DATASET = "dataset";
+    private static final String START = "start";
+    private static final String END = "end";
+    
+    // This Edge's properties.
+    private String relationString = "";
+    private Relation relation = Relation.Other;
+    private double weight = 0.0;
+    private String surfaceText = "";
+    private Dataset dataset;
+    private String startNode = "";
+    private String endNode = "";
+    
+    public Edge(String lookupString, JSONObject jsonObj)  {
+        lookupStr = lookupString;
+        
+        try {
+            relation = setRelation(cleanRelation(jsonObj.getString(RELATION)));
+            weight = jsonObj.getDouble(WEIGHT);
+            startNode = jsonObj.getString(START);
+            endNode = jsonObj.getString(END);
+            dataset = Dataset.getDataset(jsonObj.getString(DATASET));       
+            surfaceText = cleanSurfaceText(jsonObj.getString(SURFACE_TEXT));
+        } catch (JSONException e) {
+            System.out.println("JSONException in Edge constructor for string: " + lookupString);
+        }
+    }
+
+    private Relation setRelation(String relationStr) {
+        relationString = relationStr;
+        Relation rel = null;
+        try {
+            rel = Relation.valueOf(relationStr);
+        } catch (IllegalArgumentException e) {
+            // The relation isn't in our Relation enum. No problem—we deal with this below.
+        }
+        if(rel == null) {
+            rel = Relation.Other;
+        }
+        return rel;
+    }
+
+    private String cleanRelation(String string) {
+        return string.replaceFirst("/r/", "");
+    }
+
+    // Surface text often appears with square brackets, e.g. "[[Strep throat]] is [[painful]]"
+    private String cleanSurfaceText(String string) {
+        String TO_REMOVE = "(\"|\\[|\\])";
+        return string.replaceAll(TO_REMOVE, "");
+    }
+    
+    // Getters and setters not included.
+    // ...
+}
+
+enum Relation {Other("is somehow related to"), 
+    Antonym("is the opposite of"), NotAntonym("is not the opposite of"), 
+    AtLocation("is at"), NotAtLocation("is not at"), 
+    CapableOf("is capable of"), NotCapableOf("is not capable of"), 
+    Causes("causes"), NotCauses("does not cause"), 
+    DefinedAs("is defined as"), NotDefinedAs("is not defined as"), 
+    DerivedFrom("is derived from"), NotDerivedFrom("is not derived from"),
+    HasA("has a"), NotHasA("doesn't have a"), 
+    HasContext("occurs in the context of"), NotHasContext("does not occur in the context of"), 
+    HasPrerequisite("has a prerequisite of"), NotHasPrerequisite("does not have a prerequisite of"), 
+    HasProperty("has the property of"), NotHasProperty("does not have the property of"), 
+    HasSubevent("has a subevent of"), NotHasSubevent("does not have a subevent of"), 
+    IsA("is a"), NotIsA("is not a"), 
+    MemberOf("is a member of"), NotMemberOf("is not a member of"), 
+    PartOf("is part of"), NotPartOf("is not part of"), 
+    RelatedTo("is related to"), NotRelatedTo("is not related to"), 
+    SimilarTo("is similar to"), NotSimilarTo("is not similar to"), 
+    TranslationOf("is a translation of"), NotTranslationOf("is not a translation of"), 
+    UsedFor("is used for"), NotUsedFor("is not used for");
+
+    private String gloss;
+
+    Relation(String str)   {
+        gloss = str;
+    }
+    
+    @Override
+    public String toString()    {
+        return gloss;
+    }
+}
+
+enum Dataset {
+    ConceptNet, DBPedia, GlobalMind, JmDict, ReVerb, Verbosity, Wiktionary, WordNet, Umbel;
+    
+    public static Dataset getDataset(String input)  {
+        String tempStr = input.toLowerCase();
+        if(tempStr.matches(".*conceptnet.*"))    {
+            return Dataset.ConceptNet;
+        }
+        else if(tempStr.matches(".*dbpedia.*"))    {
+            return Dataset.DBPedia;
+        }
+        else if(tempStr.matches(".*globalmind.*"))    {
+            return Dataset.GlobalMind;
+        }
+        else if(tempStr.matches(".*jmdict.*"))    {
+            return Dataset.JmDict;
+        }
+        else if(tempStr.matches(".*reverb.*"))    {
+            return Dataset.ReVerb;
+        }
+        else if(tempStr.matches(".*verbosity.*"))    {
+            return Dataset.Verbosity;
+        }
+        else if(tempStr.matches(".*wiktionary.*"))    {
+            return Dataset.Wiktionary;
+        }
+        else if(tempStr.matches(".*wordnet.*"))    {
+            return Dataset.WordNet;
+        }
+        else if(tempStr.matches(".*umbel.*"))    {
+            return Dataset.Umbel;
+        }
+        
+        throw new IllegalArgumentException("Dataset not found for input: " + tempStr);
+    }
+}

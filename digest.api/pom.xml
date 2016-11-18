@@ -47,6 +47,20 @@
 			<artifactId>json</artifactId>
 			<version>20160810</version>
 		</dependency>
-
+		<dependency>
+    		<groupId>com.github.jsonld-java</groupId>
+    		<artifactId>jsonld-java</artifactId>
+    		<version>0.8.3</version>
+		</dependency>
+		<dependency>
+    		<groupId>com.mashape.unirest</groupId>
+    		<artifactId>unirest-java</artifactId>
+    		<version>1.4.9</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.glassfish</groupId>
+    		<artifactId>javax.json</artifactId>
+    		<version>1.0.4</version>
+		</dependency>
 	</dependencies>
 </project>
