@@ -1,5 +1,6 @@
 package digest.digestandroid;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,14 +9,20 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.android.volley.toolbox.NetworkImageView;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import digest.digestandroid.Models.Topic;
 import digest.digestandroid.fragments.TopicAddDescriptionFragment;
 import digest.digestandroid.fragments.TopicAddMaterialFragment;
 import digest.digestandroid.fragments.TopicAddQuizFragment;
@@ -32,7 +39,9 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
     private EditText edit_text_tags;
     private EditText edit_text_imageurl;
     private Button button_image_upload;
-    private ImageView image_view_topic;
+    private NetworkImageView image_view_topic;
+
+    private Topic topic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,33 +54,16 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_create_topic);
-
         myPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(myPagerAdapter);
+
 
         edit_text_title = (EditText) findViewById(R.id.topic_create_title);
         edit_text_body = (EditText) findViewById(R.id.topic_create_body);
         edit_text_tags = (EditText) findViewById(R.id.topic_create_tags);
-        edit_text_imageurl = (EditText) findViewById(R.id.topic_create_imageurl);
-        image_view_topic = (ImageView) findViewById(R.id.topic_create_image);
+        // = (EditText) findViewById(R.id.topic_create_imageurl);
+        image_view_topic = (NetworkImageView) findViewById(R.id.topic_create_image_view);
 
-        button_image_upload = (Button) findViewById(R.id.button_image_upload);
-        button_image_upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(edit_text_imageurl.getText().toString().length()>0) {
-                    URL url = null;
-                    try {
-                        url = new URL(edit_text_imageurl.getText().toString());
-                        //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        //.setImageBitmap(bmp);
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        });
 
 
     }
@@ -84,6 +76,41 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
         viewPager.setCurrentItem(2);
     }
 
+    public void createTopicObject(View view) {
+        topic = new Topic();
+
+        topic.setTopic_title(edit_text_title.getText().toString());
+
+        //this.finish();
+
+        //Since home redirects to create topic, is finishing this activity enough?
+        Intent intent = new Intent(getBaseContext(), ViewRegisteredHomeActivity.class);
+        //intent.putExtra()
+        startActivity(intent);
+
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.createtopic_actionbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 
     public class MyViewPagerAdapter extends FragmentStatePagerAdapter {
 

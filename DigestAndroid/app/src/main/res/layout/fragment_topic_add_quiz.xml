@@ -1,14 +1,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="digest.digestandroid.fragments.TopicAddQuizFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Add Quiz" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/edit_text_quiz" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_quiz"
@@ -17,6 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="10dp"
-        android:src="@drawable/ic_done" />
+        android:src="@drawable/ic_done"
+        android:onClick="createTopicObject"
+        app:backgroundTint="@color/primary" />
 
 </FrameLayout>

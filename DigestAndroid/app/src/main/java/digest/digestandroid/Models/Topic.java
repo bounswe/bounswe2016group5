@@ -44,6 +44,8 @@ public class Topic {
         this.topic_quiz = topic_quiz;
     }
 
+
+
     public int getId() {
         return id;
     }

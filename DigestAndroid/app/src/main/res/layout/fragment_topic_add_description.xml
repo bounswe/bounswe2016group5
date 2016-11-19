@@ -11,11 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.android.volley.toolbox.NetworkImageView
             android:layout_width="match_parent"
             android:layout_height="165dp"
-            app:srcCompat="@mipmap/ic_launcher"
-            android:id="@+id/topic_create_image" />
+            android:id="@+id/topic_create_image_view" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,27 +26,21 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             tools:context=".MainActivity" >
 
-            <EditText
-                android:id="@+id/topic_create_imageurl"
-                android:hint="Topic Image URL"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-
-                android:gravity="top"
-                />
 
             <Button
-                android:text="Upload"
+                android:text="Upload Image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:id="@+id/button_image_upload"
-
+                android:background="@color/primary"
                 style="@style/Widget.AppCompat.Button.Colored" />
 
             <EditText
                 android:id="@+id/topic_create_title"
                 android:hint="@string/topic_Create_title"
                 android:inputType="text"
+                android:backgroundTint="@color/primary"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                  />
@@ -55,6 +48,7 @@
             <EditText
                 android:id="@+id/topic_create_body"
                 android:hint="@string/topic_Create_body"
+                android:backgroundTint="@color/primary"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                  />
@@ -63,6 +57,7 @@
             <EditText
                 android:id="@+id/topic_create_tags"
                 android:hint="@string/topic_Create_tags"
+                android:backgroundTint="@color/primary"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
 
@@ -81,7 +76,8 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="10dp"
         android:onClick="jumptoAddMaterial"
-        android:src="@drawable/ic_next" />
+        android:src="@drawable/ic_next"
+        app:backgroundTint="@color/primary" />
 
 
 </FrameLayout>

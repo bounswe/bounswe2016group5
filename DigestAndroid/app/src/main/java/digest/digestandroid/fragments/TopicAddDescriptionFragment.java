@@ -1,15 +1,25 @@
 package digest.digestandroid.fragments;
 
-import android.content.Context;
+
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 
 import digest.digestandroid.R;
+import digest.digestandroid.api.VolleySingleton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +29,7 @@ import digest.digestandroid.R;
  * Use the {@link TopicAddDescriptionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopicAddDescriptionFragment extends Fragment {
+public class TopicAddDescriptionFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -28,8 +38,10 @@ public class TopicAddDescriptionFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String url="";
 
     private OnFragmentInteractionListener mListener;
+    NetworkImageView mImageView;
 
     public TopicAddDescriptionFragment() {
         // Required empty public constructor
@@ -66,8 +78,61 @@ public class TopicAddDescriptionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_topic_add_description, container, false);
+        View rootView= inflater.inflate(R.layout.fragment_topic_add_description, container, false);
+
+        Button button_upload = (Button) rootView.findViewById(R.id.button_image_upload);
+        button_upload.setOnClickListener(this);
+        mImageView = (NetworkImageView) rootView.findViewById(R.id.topic_create_image_view);
+        mImageView.setDefaultImageResId(R.drawable.default_logo);
+
+        return rootView;
+
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button_image_upload:
+
+                final ImageLoader mImageLoader = VolleySingleton.getInstance().getImageLoader();
+                //final String url = ((EditText) getView().findViewById(R.id.topic_create_imageurl)).getText().toString();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Enter your topic image address");
+
+                // Set up the input
+                final EditText input = new EditText(getActivity());
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        url = input.getText().toString();
+
+
+                /*mImageLoader.get(url, ImageLoader.getImageListener(mImageView,
+                R.mipmap.ic_launcher, android.R.drawable
+                        .ic_dialog_alert));*/
+
+                        mImageView.setImageUrl(url, mImageLoader);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
+
+                break;
+        }
+    }
+
 
     /*
     // TODO: Rename method, update argument and hook method into UI event
