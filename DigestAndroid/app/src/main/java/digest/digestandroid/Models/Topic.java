@@ -12,38 +12,20 @@ public class Topic {
 
 
     private int id;
-    private String topic_title;
-    private String topic_body;
-    private ArrayList<TopicTag> topic_tags;
+    private String title;
+    private String body;
+    private ArrayList<TopicTag> tags;
     private String image_url;
-    private User topic_owner;
-    private long topic_rating;
-    private int topic_status;
+    private User owner;
+    private long rating;
+    private int status;
 
-    private ArrayList<Comment> topic_comments;
-
-    private ArrayList<String> topic_materials;
-    private ArrayList<QuizQuestion> topic_quiz;
+    private ArrayList<Comment> comments;
+    private ArrayList<String> materials;
+    private ArrayList<QuizQuestion> quiz;
 
     public Topic() {
     }
-
-    public Topic(int id, String topic_title, String topic_body, ArrayList<TopicTag> topic_tags, String image_url,
-                 User topic_owner, long topic_rating, int topic_status, ArrayList<Comment> topic_comments, ArrayList<String> topic_materials,
-                 ArrayList<QuizQuestion> topic_quiz) {
-        this.id = id;
-        this.topic_title = topic_title;
-        this.topic_body = topic_body;
-        this.topic_tags = topic_tags;
-        this.image_url = image_url;
-        this.topic_owner = topic_owner;
-        this.topic_rating = topic_rating;
-        this.topic_status = topic_status;
-        this.topic_comments = topic_comments;
-        this.topic_materials = topic_materials;
-        this.topic_quiz = topic_quiz;
-    }
-
 
 
     public int getId() {
@@ -54,28 +36,28 @@ public class Topic {
         this.id = id;
     }
 
-    public String getTopic_title() {
-        return topic_title;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTopic_title(String topic_title) {
-        this.topic_title = topic_title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getTopic_body() {
-        return topic_body;
+    public String getBody() {
+        return body;
     }
 
-    public void setTopic_body(String topic_body) {
-        this.topic_body = topic_body;
+    public void setBody(String body) {
+        this.body = body;
     }
 
-    public ArrayList<TopicTag> getTopic_tags() {
-        return topic_tags;
+    public ArrayList<TopicTag> getTags() {
+        return tags;
     }
 
-    public void setTopic_tags(ArrayList<TopicTag> topic_tags) {
-        this.topic_tags = topic_tags;
+    public void setTags(ArrayList<TopicTag> tags) {
+        this.tags = tags;
     }
 
     public String getImage_url() {
@@ -86,51 +68,51 @@ public class Topic {
         this.image_url = image_url;
     }
 
-    public User getTopic_owner() {
-        return topic_owner;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setTopic_owner(User topic_owner) {
-        this.topic_owner = topic_owner;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
-    public long getTopic_rating() {
-        return topic_rating;
+    public long getRating() {
+        return rating;
     }
 
-    public void setTopic_rating(long topic_rating) {
-        this.topic_rating = topic_rating;
+    public void setRating(long rating) {
+        this.rating = rating;
     }
 
-    public int getTopic_status() {
-        return topic_status;
+    public int getStatus() {
+        return status;
     }
 
-    public void setTopic_status(int topic_status) {
-        this.topic_status = topic_status;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public ArrayList<Comment> getTopic_comments() {
-        return topic_comments;
+    public ArrayList<Comment> getComments() {
+        return comments;
     }
 
-    public void setTopic_comments(ArrayList<Comment> topic_comments) {
-        this.topic_comments = topic_comments;
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
     }
 
-    public ArrayList<String> getTopic_materials() {
-        return topic_materials;
+    public ArrayList<String> getMaterials() {
+        return materials;
     }
 
-    public void setTopic_materials(ArrayList<String> topic_materials) {
-        this.topic_materials = topic_materials;
+    public void setMaterials(ArrayList<String> materials) {
+        this.materials = materials;
     }
 
-    public ArrayList<QuizQuestion> getTopic_quiz() {
-        return topic_quiz;
+    public ArrayList<QuizQuestion> getQuiz() {
+        return quiz;
     }
 
-    public void setTopic_quiz(ArrayList<QuizQuestion> topic_quiz) {
-        this.topic_quiz = topic_quiz;
+    public void setQuiz(ArrayList<QuizQuestion> quiz) {
+        this.quiz = quiz;
     }
 }

@@ -49,12 +49,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Topic Header"
-            android:id="@+id/tEventDate"
+            android:id="@+id/tTopicHeader"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/ivEventDate"
             android:layout_marginBottom="@dimen/small_margin"
-            android:layout_toEndOf="@+id/ivEventDate" />
+            android:layout_toEndOf="@+id/ivEventDate"
+            android:text="Topic Header" />
 
         <ImageView
             android:id="@+id/ivEventLocation"
@@ -64,18 +64,18 @@
             android:src="@drawable/default_logo"
             android:layout_marginRight="@dimen/big_margin"
             android:layout_marginBottom="@dimen/small_margin"
-            android:layout_below="@id/tEventDate"/>
+            android:layout_below="@id/tTopicHeader"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Topic Creator"
-            android:id="@+id/tEventlocation"
+            android:id="@+id/tTopicOwner"
             android:layout_toRightOf="@+id/ivEventLocation"
             android:layout_toEndOf="@+id/ivEventLocation"
             android:layout_marginBottom="@dimen/small_margin"
-            android:layout_below="@id/tEventDate"/>
+            android:layout_below="@id/tTopicHeader"/>
 
         <ImageView
             android:id="@+id/ivEventHost"
@@ -84,17 +84,17 @@
             android:layout_alignParentLeft="true"
             android:src="@drawable/default_logo"
             android:layout_marginRight="@dimen/big_margin"
-            android:layout_below="@id/tEventlocation"/>
+            android:layout_below="@id/tTopicOwner"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Samting"
-            android:id="@+id/tEventHost"
+            android:text="Rating"
+            android:id="@+id/tRating"
             android:layout_toRightOf="@id/ivEventHost"
             android:layout_toEndOf="@id/ivEventHost"
-            android:layout_below="@id/tEventlocation"/>
+            android:layout_below="@id/tTopicOwner"/>
 
     </RelativeLayout>
 
@@ -110,21 +110,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Description"
-            android:id="@+id/tDesTitle"
+            android:id="@+id/tDescription"
             android:textStyle="bold"
             android:layout_alignParentTop="true"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Description"
-            android:id="@+id/tDes"
-            android:layout_below="@+id/tDesTitle"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+
 
     </RelativeLayout>
     <RelativeLayout
