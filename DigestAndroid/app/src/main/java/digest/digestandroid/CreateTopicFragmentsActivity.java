@@ -79,7 +79,7 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
     public void createTopicObject(View view) {
         topic = new Topic();
 
-        topic.setTopic_title(edit_text_title.getText().toString());
+        topic.setTitle(edit_text_title.getText().toString());
 
         //this.finish();
 

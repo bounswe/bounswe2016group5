@@ -4,10 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
 
 
@@ -20,6 +24,9 @@ import digest.digestandroid.R;
  * create an instance of this fragment.
  */
 public class TopicGeneralFragment extends Fragment {
+    protected View rootView;
+    protected Topic topic = new Topic();
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,6 +42,7 @@ public class TopicGeneralFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -43,6 +51,7 @@ public class TopicGeneralFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment TopicGeneralFragment.
      */
+
     // TODO: Rename and change types and number of parameters
     public static TopicGeneralFragment newInstance(String param1, String param2) {
         TopicGeneralFragment fragment = new TopicGeneralFragment();
@@ -60,23 +69,55 @@ public class TopicGeneralFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        Log.v("onCreate", "onCreate");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_topic_general, container, false);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_topic_general, container, false);
+
+        Log.v("onCreateView", "onCreateView");
+
+        setTopicInfo();
+
+
+        return rootView;
+
     }
 
-    /*
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    public void initializeInfo(Topic topic){
+        this.topic.setTitle(topic.getTitle());
+        this.topic.setBody(topic.getBody());
+        this.topic.setOwner(topic.getOwner());
+        this.topic.setImage_url(topic.getImage_url());
+        this.topic.setRating(topic.getRating());
+        this.topic.setTags(topic.getTags());
     }
+
+    public void setTopicInfo(){
+
+        TextView header = (TextView) rootView.findViewById(R.id.tTopicHeader);
+        header.setText(topic.getTitle());
+
+        TextView desc = (TextView) rootView.findViewById(R.id.tDescription);
+        desc.setText(topic.getBody());
+
+        TextView owner = (TextView) rootView.findViewById(R.id.tTopicOwner);
+        owner.setText(topic.getOwner().getUsername());
+
+        TextView rating = (TextView) rootView.findViewById(R.id.tRating);
+        rating.setText(String.valueOf(topic.getRating()));
+
+
+
+
+    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -95,7 +136,7 @@ public class TopicGeneralFragment extends Fragment {
         mListener = null;
     }
 
-    */
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -109,7 +150,7 @@ public class TopicGeneralFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction();
     }
 
 

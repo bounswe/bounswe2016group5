@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
 
 
@@ -20,6 +22,9 @@ import digest.digestandroid.R;
  * create an instance of this fragment.
  */
 public class TopicQuizFragment extends Fragment {
+    protected View rootView;
+    protected Topic topic = new Topic();
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,6 +73,20 @@ public class TopicQuizFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_topic_quiz, container, false);
     }
+
+    public void initializeInfo(Topic topic){
+        this.topic.setTitle(topic.getTitle());
+        this.topic.setBody(topic.getBody());
+        this.topic.setOwner(topic.getOwner());
+        this.topic.setImage_url(topic.getImage_url());
+        this.topic.setRating(topic.getRating());
+    }
+
+    public void setTopicInfo(){
+
+
+    }
+
 
     /*
     // TODO: Rename method, update argument and hook method into UI event
