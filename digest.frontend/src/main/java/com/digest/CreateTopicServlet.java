@@ -47,7 +47,7 @@ public class CreateTopicServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+
 		StringBuffer bf = new StringBuffer();
 		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
 		bf.append("?");
@@ -62,7 +62,6 @@ public class CreateTopicServlet extends HttpServlet {
 		String url = bf.toString();
 		URL connpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) connpage.openConnection();
-		
 
 		int responseCode = urlcon.getResponseCode();
 		if (responseCode == 200 && request.getParameter("f") != null) {
@@ -73,7 +72,7 @@ public class CreateTopicServlet extends HttpServlet {
 			session.setAttribute("error", errMsg);
 			response.sendRedirect("topic-creation.jsp");
 		}
-		
+
 	}
-	
+
 }

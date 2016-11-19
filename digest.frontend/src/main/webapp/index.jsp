@@ -209,7 +209,7 @@ ul#horizontal-list a:hover {
 							<ul class="nav navbar-nav">
 								<li class="active"><a href="#"><span
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
-								<li><a href="profile.jsp"><span
+								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
 								<li><a href="followed-topics.jsp"><span
 										class="glyphicon glyphicon-star-empty"></span> Followed Topics</a></li>

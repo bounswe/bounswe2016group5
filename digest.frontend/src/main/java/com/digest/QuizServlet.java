@@ -1,6 +1,9 @@
 package com.digest;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Enumeration;
 
 import javax.servlet.RequestDispatcher;
@@ -20,11 +23,14 @@ import org.json.JSONObject;
 public class QuizServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	JSONArray questions;
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public QuizServlet() {
 		super();
+		questions = new JSONArray();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -44,19 +50,8 @@ public class QuizServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
+
 		if (request.getParameter("f").contentEquals("add-question")) {
-
-			JSONArray questions;
-
-			if (session.getAttribute("questions") == null) {
-
-				questions = new JSONArray();
-				session.setAttribute("questions", questions);
-
-			} else {
-				questions = (JSONArray) session.getAttribute("questions");
-			}
 
 			JSONArray options = new JSONArray();
 
@@ -86,52 +81,79 @@ public class QuizServlet extends HttpServlet {
 
 				questions.put(quest);
 
-				session.setAttribute("questions", questions);
-
 			}
+			request.setAttribute("questions", questions);
 
-			System.out.println(questions);
-			response.sendRedirect("quiz-add.jsp");
+			request.getRequestDispatcher("/quiz-add.jsp").forward(request, response);
+
 		} else if (request.getParameter("f").contentEquals("add-quiz")) {
 
 			String quizName = "quiz";
 			JSONObject quiz = new JSONObject();
 			quiz.put("name", quizName);
 
-			JSONArray questions = (JSONArray) session.getAttribute("questions");
-
 			if (questions != null && questions.length() > 0) {
 
 				quiz.put("questions", questions);
 
 				for (int i = 0; i < questions.length(); i++) {
-					
+
 					JSONObject question = questions.getJSONObject(i);
 
 					JSONArray answers = new JSONArray();
 
-					if (request.getParameter("q"+i+"answer0") != null) {
+					if (request.getParameter("q" + i + "answer0") != null) {
 						answers.put(0);
 
 					}
 
-					if (request.getParameter("q"+i+"answer1") != null) {
+					if (request.getParameter("q" + i + "answer1") != null) {
 						answers.put(1);
 
 					}
 
-					if (request.getParameter("q"+i+"answer2") != null) {
+					if (request.getParameter("q" + i + "answer2") != null) {
 						answers.put(2);
 
 					}
-					
+
 					question.put("answers", answers);
 
 				}
 
-				System.out.println(quiz);
-				response.sendRedirect("quiz-add.jsp");
+				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_quiz&tid=2";
+				URL obj = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
+				con.setRequestMethod("POST");
+
+				String postBody = quiz.toString();
+
+				con.setDoOutput(true);
+				DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+
+				wr.writeBytes(postBody);
+				wr.flush();
+				wr.close();
+
+				int responseCod = con.getResponseCode();
+
+				if (responseCod == 200) {
+					System.out.println(quiz);
+					// System.out.println(responseCod);
+					request.setAttribute("success", "Quiz Addded Successfully!");
+					questions = new JSONArray();
+					request.getRequestDispatcher("/quiz-add.jsp").forward(request, response);
+				}else{
+					String err = "Unexpected error occured!!";
+					request.setAttribute("error", err);
+					request.getRequestDispatcher("/quiz-add.jsp").forward(request, response);
+				}
+
+			}else{
+				String err = "At least 1 question should be added to quiz";
+				request.setAttribute("error", err);
+				request.getRequestDispatcher("/quiz-add.jsp").forward(request, response);
 			}
 
 		}

@@ -213,9 +213,9 @@ ul#horizontal-list a:hover {
 						</div>
 						<div class="navbar-collapse collapse sidebar-navbar-collapse">
 							<ul class="nav navbar-nav">
-								<li class="active"><a href="#"><span
+								<li><a href="index.jsp"><span
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
-								<li><a href="profile.jsp"><span
+								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
 								<li><a href="followed-topics.jsp"><span
 										class="glyphicon glyphicon-star-empty"></span> Followed Topics</a></li>
@@ -283,10 +283,11 @@ ul#horizontal-list a:hover {
 
 				<form action="QuizServlet" method="POST">
 					<%
-						if (session.getAttribute("questions") != null) {
-								JSONArray questions = (JSONArray) session.getAttribute("questions");
+						if (request.getAttribute("questions") != null) {
 
-								if (questions != null) {
+								JSONArray questions = (JSONArray) request.getAttribute("questions");
+
+								if (questions.length() > 0) {
 
 									for (int j = 0; j < questions.length(); j++) {
 										JSONObject quest = (JSONObject) questions.get(j);
@@ -301,7 +302,8 @@ ul#horizontal-list a:hover {
 												String option = (String) options.get(i);
 					%>
 					<div class="checkbox">
-						<label><input type="checkbox" name="q<%=j%>answer<%=i%>" value=""><%=option%></label>
+						<label><input type="checkbox" name="q<%=j%>answer<%=i%>"
+							value=""><%=option%></label>
 					</div>
 					<%
 						}
@@ -318,6 +320,20 @@ ul#horizontal-list a:hover {
 					</div>
 				</form>
 				<!-- Show the Quiz Finish -->
+
+				<!-- Quiz add result start-->
+				<%
+					if (request.getAttribute("success") != null) {
+				%>
+				<p><%=request.getAttribute("success")%></p>
+				<%
+					} else if (request.getAttribute("error") != null) {
+				%>
+				<p><%=request.getAttribute("error")%></p>
+				<%
+					}
+				%>
+				<!-- Quiz add result end -->
 			</div>
 		</div>
 	</div>

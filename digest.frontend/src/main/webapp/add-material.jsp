@@ -106,60 +106,11 @@ ul#horizontal-list a:hover {
 </head>
 <body>
 	<%
-		/*
-				session = request.getSession();
-				Object userName = session.getAttribute("username");
-				Object pass = session.getAttribute("password");
-				*/
-
-		if (false) {
-			//   response.sendRedirect("login.jsp");
-	%>
-
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#myNavbar">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="index.jsp">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
-			</div>
-			<div class=" collapse navbar-collapse" id="myNavbar">
-				<div class="col-sm-6 pull">
-					<form action="_search" method="POST" class="navbar-form"
-						role="search">
-						<div class="input-group col-sm-12">
-							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="srch-term">
-							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
-									<i class="glyphicon glyphicon-search"></i>
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
-				<ul class="nav navbar-nav navbar-right">
-
-					<li><a href="signup.jsp"><span
-							class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-
-					<li><a href="login.jsp"><span
-							class="glyphicon glyphicon-log-in"></span> Login</a></li>
-
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<h1>You have to be signed up and login to the system to create a
-		topic!!!</h1>
-	<%
-		} else {
-	%>
+	session = request.getSession(false);
+	if (session.getAttribute("session") == null) {
+		response.sendRedirect("index.jsp");
+	}
+%>
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -215,9 +166,9 @@ ul#horizontal-list a:hover {
 						</div>
 						<div class="navbar-collapse collapse sidebar-navbar-collapse">
 							<ul class="nav navbar-nav">
-								<li class="active"><a href="#"><span
+								<li><a href="index.jsp"><span
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
-								<li><a href="profile.jsp"><span
+								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
 								<li><a href="followed-topics.jsp"><span
 										class="glyphicon glyphicon-star-empty"></span> Followed Topics</a></li>
@@ -295,12 +246,6 @@ ul#horizontal-list a:hover {
 			</div>
 		</div>
 	</div>
-
-
-	<%
-		}
-	%>
-
 
 	<footer id="menu-outer">
 		<div class="col-sm-offset-2 col-sm-10">
