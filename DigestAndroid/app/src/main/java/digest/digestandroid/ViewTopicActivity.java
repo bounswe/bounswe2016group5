@@ -1,6 +1,8 @@
 package digest.digestandroid;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Parcelable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,13 +14,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import digest.digestandroid.Models.Comment;
+import digest.digestandroid.Models.Topic;
+import digest.digestandroid.Models.User;
 import digest.digestandroid.R;
 import digest.digestandroid.fragments.TopicGeneralFragment;
 import digest.digestandroid.fragments.TopicCommentFragment;
@@ -26,11 +35,13 @@ import digest.digestandroid.fragments.TopicMaterialFragment;
 import digest.digestandroid.fragments.TopicQuizFragment;
 
 
-public class ViewTopicActivity extends AppCompatActivity {
+public class ViewTopicActivity extends AppCompatActivity implements TopicGeneralFragment.OnFragmentInteractionListener{
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
+    private Topic topic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +58,53 @@ public class ViewTopicActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        Log.v("MAIN METHOD", "MAIN METHOD");
+
+        // TODO: 19.11.2016 Get topic info from database
+
+
+        User user = new User();
+        user.setUsername("Burki");
+        topic = new Topic();
+        topic.setOwner(user);
+        topic.setImage_url("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
+        topic.setTitle("TITLEEEEEE");
+        topic.setBody("HEBELE HUBELE CCOK GUZEL BI TEXT BU");
+
+        TopicGeneralFragment topicGeneralFragment = (TopicGeneralFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(0);
+        topicGeneralFragment.initializeInfo(topic);
+
+        TopicCommentFragment topicCommentFragment = (TopicCommentFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(1);
+        topicCommentFragment.initializeInfo(topic);
+
+        TopicMaterialFragment topicMaterialFragment = (TopicMaterialFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(2);
+        topicMaterialFragment.initializeInfo(topic);
+
+        TopicQuizFragment topicQuizFragment = (TopicQuizFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(3);
+        topicQuizFragment.initializeInfo(topic);
+
+
+
+
+        //topicGeneralFragment.initializeTopic(topic);
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Is there a new comment added
+        // If yes, prepare comment
+        if(Cache.getInstance().newComment == 1){
+            Cache.getInstance().newComment = 0;
+            Cache.getInstance().getComment().setUsername("111111111");
+            Cache.getInstance().getComment().setRate(123);
+            TopicCommentFragment topicCommentFragment = (TopicCommentFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(1);
+            topicCommentFragment.addComment(Cache.getInstance().getComment());
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,9 +142,16 @@ public class ViewTopicActivity extends AppCompatActivity {
         adapter.addFragment(new TopicMaterialFragment(), "Material");
         adapter.addFragment(new TopicQuizFragment(), "Quiz");
         viewPager.setAdapter(adapter);
+
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+
+    @Override
+    public void onFragmentInteraction() {
+    }
+
+
+    class ViewPagerAdapter extends FragmentPagerAdapter{
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
