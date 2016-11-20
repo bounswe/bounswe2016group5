@@ -1,16 +1,25 @@
+<%@page import="javax.swing.text.StyledEditorKit.ForegroundAction"%>
+<%@page import="java.util.Enumeration"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.util.*"%>
+<%@page import="java.io.*"%>
+<%@page import="java.net.*"%>
+<%@page import="org.json.*"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Create Topic</title>
+<title>View Topic</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"
+	type="text/javascript"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -102,18 +111,23 @@ ul#horizontal-list a:hover {
 	margin: 2px 2px 2px 2px;
 }
 </style>
+<script>
+	$(document).ready(function() {
 
+		$('#view_topic_form').validate({ 
+			rules : {
+				topic_id : {
+					required : true
+				},
+			}
+		});
+
+	});
+</script>
 </head>
 <body>
 	<%
-		/*
-				session = request.getSession();
-				Object userName = session.getAttribute("username");
-				Object pass = session.getAttribute("password");
-				*/
-
-		if (false) {
-			//   response.sendRedirect("login.jsp");
+	if (session.getAttribute("session") == null) {
 	%>
 
 	<nav class="navbar navbar-inverse">
@@ -155,8 +169,7 @@ ul#horizontal-list a:hover {
 		</div>
 	</nav>
 
-	<h1>You have to be signed up and login to the system to create a
-		topic!!!</h1>
+	<h1>Must be updated for unregistered users</h1>
 	<%
 		} else {
 	%>
@@ -193,7 +206,7 @@ ul#horizontal-list a:hover {
 							Settings</a></li>
 					<li><a href="#"><span class="glyphicon glyphicon-th-list"></span>
 							Notifications</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-log-out"></span>
+					<li><a href="LogoutServlet"><span class="glyphicon glyphicon-log-out"></span>
 							Logout</a></li>
 				</ul>
 			</div>
@@ -217,7 +230,7 @@ ul#horizontal-list a:hover {
 							<ul class="nav navbar-nav">
 								<li class="active"><a href="#"><span
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
-								<li><a href="profile.jsp"><span
+								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
 								<li><a href="followed-topics.jsp"><span
 										class="glyphicon glyphicon-star-empty"></span> Followed Topics</a></li>
@@ -258,19 +271,21 @@ ul#horizontal-list a:hover {
 						<div class="row">
 							<div class="container col-sm-2">
 								<img id="topic-img"
-									style="display: block; width: 150px; height: 150px;"
-									alt="topic image" src="topic.png"></img>
+									style="display: block; width: 120%;  margin: 9px 9px 9px 9px;"
+									alt="topic image" src="topic.png" ></img>
 							</div>
 							<div class="container col-sm-10">
-								<textarea class="form-control" name="body" id="body" rows="7"></textarea>
+								<div class="panel panel-default"
+									style="height: 140px; overflow-y: auto; margin: 9px 9px 9px 9px;"></div>
 							</div>
 						</div>
 					</div>
-					<div class="topic-tabs container col-sm-12">
+					<div class="topic-tabs container col-sm-12" style="margin: 25px 0 0 0;">
 						<ul class="nav nav-tabs">
 							<li class="active"><a data-toggle="tab" href="#comments">Comments</a></li>
 							<li><a data-toggle="tab" href="#materials">Materials</a></li>
 							<li><a data-toggle="tab" href="#quiz">Quiz</a></li>
+							<li><a data-toggle="tab" href="#related-topics">Related Topics</a></li>
 						</ul>
 
 						<div class="tab-content">
@@ -278,20 +293,23 @@ ul#horizontal-list a:hover {
 								<div class="panel panel-default"
 									style="height: 500px; overflow-y: auto;">
 									<div class="row">
-										<div class="col-sm-10 col-sm-offset-1" id="logout">
+										<div class="col-sm-10 col-sm-offset-1" id="logout" style="margin: 25px 5px 25px 25px;">
 											<ul class="media-list">
-												<li class="media"><a class="pull-left" href="#"> <img
-														class="media-object img-circle" alt="profile">
+												<li class="media"><a class="pull-left" href="#"> 
+												<p class="media-heading reviews">Account
+																Name</p>
+												<!--<img
+														class="media-object img-circle" alt="profile">-->
 												</a>
 													<div class="media-body">
 														<div class="well well-lg">
-															<h4 class="media-heading text-uppercase reviews">Account
-																Name</h4>
+															<!--<p class="media-heading text-uppercase reviews">Account
+																Name</p>-->
 															<p class="media-comment">Text Example.</p>
-															<a class="btn btn-info btn-circle text-uppercase"
+															<a class="btn btn-info btn-circle"
 																href="#" id="reply"><span
 																class="glyphicon glyphicon-share-alt"></span> Reply</a> <a
-																class="btn btn-warning btn-circle text-uppercase"
+																class="btn btn-warning btn-circle "
 																data-toggle="collapse" href="#reply1"><span
 																class="glyphicon glyphicon-comment"></span> 2 Comments</a>
 														</div>
