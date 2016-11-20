@@ -18,6 +18,7 @@
 body {
 	background-color: lightgrey;
 }
+
 @media ( min-width : 768px) {
 	.sidebar-nav {
 		padding: 12px;
@@ -58,7 +59,7 @@ body {
 	position: relative;
 	width: 100%;
 	overflow: auto;
-	margin-bottom:84px;
+	margin-bottom: 84px;
 }
 
 #form-aligned {
@@ -83,6 +84,20 @@ ul#horizontal-list a:hover {
 	color: white;
 }
 </style>
+
+<script>
+	$(document).ready(function() {
+
+		$('#view_topic_form').validate({ // initialize the plugin
+			rules : {
+				topic_id : {
+					required : true
+				},
+			}
+		});
+
+	});
+</script>
 
 </head>
 <body>
@@ -129,6 +144,8 @@ ul#horizontal-list a:hover {
 			</div>
 		</div>
 	</nav>
+
+
 	<div class="row col-sm-12" id="content">
 		<div class="row"
 			style="height: 33%; text-align: center; padding: 15px;">
@@ -219,14 +236,13 @@ ul#horizontal-list a:hover {
 
 							<div class="panel panel-default">
 								<div class="panel-header">Your Notes</div>
-								<div class="panel-body">Notes go here. adsd asda fc sd ds
-									cds cds dsc sd \n sdf \n sdcds\n<br/>
-									Notes go here. adsd asda fc sd ds
-									cds cds dsc sd \n sdf \n sdcds\n<br/>
-									Notes go here. adsd asda fc sd ds
-									cds cds dsc sd \n sdf \n sdcds\n<br/>
-									
-									</div>
+								<div class="panel-body">
+									Notes go here. adsd asda fc sd ds cds cds dsc sd \n sdf \n
+									sdcds\n<br /> Notes go here. adsd asda fc sd ds cds cds dsc sd
+									\n sdf \n sdcds\n<br /> Notes go here. adsd asda fc sd ds cds
+									cds dsc sd \n sdf \n sdcds\n<br />
+
+								</div>
 
 							</div>
 							<div class="panel panel-default">
@@ -243,25 +259,121 @@ ul#horizontal-list a:hover {
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-9">
-				<div class="row"
-					style="height: 33%; text-align: center; padding: 15px;">
-					<h1>Popular</h1>
-					<br /> Contents Goes Here
-				</div>
-				<div class="row"
-					style="height: 33%; text-align: center; padding: 15px;">
-					<h1>Might Interest</h1>
-					<br /> Contents Goes Here
-				</div>
 
-				<div class="row"
-					style="height: 33%; text-align: center; padding: 15px;">
-					<h1>Recent</h1>
-					<br /> Contents Goes Here
-				</div>
+			<div class="col-sm-9">
+				<form class="form-horizontal" id="view_topic_form"
+					action="ViewTopicServlet" method="POST">
+					<% 
+						session.getAttribute("id");
+						@SuppressWarnings("unchecked")
+						ArrayList<Integer> popularTopicIds = (ArrayList<Integer>) request.getAttribute("popularTopicIds");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> popularTopicHeaders = (HashMap<Integer,String>) request.getAttribute("popularTopicHeaders");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> popularTopicImages = (HashMap<Integer,String>) request.getAttribute("popularTopicImages");
+						%>
+					<div class="row form-group" style="height: 33%; padding: 15px;">
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Popular</h4>
+						<div class="container panel panel-default"
+							style="height: 200px; width: 95%; overflow-x: scroll;">
+							<div class="panel-body" id="user-topics" class="list-group">
+								<% 
+								if(popularTopicIds != null)
+									for(int topicId : popularTopicIds  ) {
+							%>
+								<div class="topic-view col-xs-4 col-lg-4"
+									style="padding: 9px 9px 0px 9px;">
+									<div class="thumbnail">
+										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
+											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
+											src=<%=popularTopicImages.get(topicId) %> alt="" />
+										<div class="caption">
+											<h4 class="group inner list-group-item-heading"
+												align="center"><%=popularTopicHeaders.get(topicId) %></h4>
+										</div>
+									</div>
+								</div>
+								<% 		
+								} 
+							%>
+							</div>
+						</div>
+					</div>
+					<% 
+						@SuppressWarnings("unchecked")
+						ArrayList<Integer> interestTopicIds = (ArrayList<Integer>) request.getAttribute("interestTopicIds");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> interestTopicHeaders = (HashMap<Integer,String>) request.getAttribute("interestTopicHeaders");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> interestTopicImages = (HashMap<Integer,String>) request.getAttribute("interestTopicImages");
+						%>
+					<div class="row form-group" style="height: 33%; padding: 15px;">
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Might
+							Interest</h4>
+						<div class="container panel panel-default"
+							style="height: 200px; width: 95%; overflow-x: scroll;">
+							<div class="panel-body" id="user-topics" class="list-group">
+								<% 
+								if(interestTopicIds != null)
+									for(int topicId : interestTopicIds  ) {
+							%>
+								<div class="topic-view col-xs-4 col-lg-4"
+									style="padding: 9px 9px 0px 9px;">
+									<div class="thumbnail">
+										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
+											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
+											src=<%=interestTopicImages.get(topicId) %> alt="" />
+										<div class="caption">
+											<h4 class="group inner list-group-item-heading"
+												align="center"><%=interestTopicHeaders.get(topicId) %></h4>
+										</div>
+									</div>
+								</div>
+								<% 		
+								} 
+							%>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group" style="height: 33%; padding: 15px;">
+						<% 
+						@SuppressWarnings("unchecked")
+						ArrayList<Integer> recentTopicIds = (ArrayList<Integer>) request.getAttribute("recentTopicIds");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> recentTopicHeaders = (HashMap<Integer,String>) request.getAttribute("recentTopicHeaders");
+						@SuppressWarnings("unchecked")
+						HashMap<Integer,String> recentTopicImages = (HashMap<Integer,String>) request.getAttribute("recentTopicImages");
+						%>
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Recent</h4>
+						<div class="container panel panel-default"
+							style="height: 200px; width: 95%; overflow-x: scroll;">
+							<div class="panel-body" id="user-topics" class="list-group">
+							<% 
+								if(recentTopicIds != null)
+									for(int topicId : recentTopicIds  ) {
+							%>
+								<div class="topic-view col-xs-4 col-lg-4"
+									style="padding: 9px 9px 0px 9px;">
+									<div class="thumbnail">
+										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
+											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
+											src=<%=recentTopicImages.get(topicId) %> alt="" />
+										<div class="caption">
+											<h4 class="group inner list-group-item-heading"
+												align="center"><%=recentTopicHeaders.get(topicId) %></h4>
+										</div>
+									</div>
+								</div>
+								<% 		
+								} 
+							%>
+							</div>
+						</div>
+					</div>
+				</form>
 
 			</div>
+
 		</div>
 	</div>
 
