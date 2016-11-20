@@ -13,17 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import digest.digestandroid.fragments.TopicCommentFragment;
-import digest.digestandroid.fragments.TopicGeneralFragment;
-import digest.digestandroid.fragments.TopicMaterialFragment;
-import digest.digestandroid.fragments.TopicQuizFragment;
-
+import digest.digestandroid.fragments.RegisteredHomeChannelFragment;
+import digest.digestandroid.fragments.RegisteredHomeHomeFragment;
+import digest.digestandroid.fragments.RegisteredHomeProfileFragment;
+import digest.digestandroid.fragments.RegisteredHomeTrendFragment;
 /**
  * Created by Sahin on 11/1/2016.
  */
@@ -110,57 +107,59 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         );
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_home);
-//        setupViewPager(viewPager);
+        defineViewPager(viewPager);
 
-//        tabLayout = (TabLayout) findViewById(R.id.tabs_home);
-//        tabLayout.setupWithViewPager(viewPager);
+        tabLayout = (TabLayout) findViewById(R.id.tabs_home);
+        tabLayout.setupWithViewPager(viewPager);
+
+        loadViewPager();
     }
 
 
-
-
-
-
-
-
-
-
-
-    private void setupViewPager(ViewPager viewPager) {
-        ViewRegisteredHomeActivity.ViewPagerAdapter adapter = new ViewRegisteredHomeActivity.ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TopicGeneralFragment(), "General");
-        adapter.addFragment(new TopicCommentFragment(), "Comment");
-        adapter.addFragment(new TopicMaterialFragment(), "Material");
-        adapter.addFragment(new TopicQuizFragment(), "Quiz");
+    private void defineViewPager(ViewPager viewPager) {
+        ViewRegisteredHomeActivity.HomePagerAdapter adapter = new ViewRegisteredHomeActivity.HomePagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new RegisteredHomeHomeFragment(), "Home");
+        adapter.addFragment(new RegisteredHomeTrendFragment(), "Trending");
+        adapter.addFragment(new RegisteredHomeChannelFragment(), "Channels");
+        adapter.addFragment(new RegisteredHomeProfileFragment(), "Profile");
         viewPager.setAdapter(adapter);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+    private void loadViewPager(){
+        // TODO implement fragments and come back
+        RegisteredHomeHomeFragment homeHomeFragment = (RegisteredHomeHomeFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(0);
+        //homeHomeFragment.initializeInfo();
+        RegisteredHomeTrendFragment homeTrendFragment = (RegisteredHomeTrendFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(1);
+        RegisteredHomeChannelFragment homeChannelFragment = (RegisteredHomeChannelFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(2);
+        RegisteredHomeProfileFragment homeProfileFragment = (RegisteredHomeProfileFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(3);
+    }
 
-        public ViewPagerAdapter(FragmentManager manager) {
+    class HomePagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> homeFragments = new ArrayList<>();
+        private final List<String> homeFragmentTitles = new ArrayList<>();
+
+        public HomePagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            return homeFragments.get(position);
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
+            return homeFragments.size();
         }
 
         public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            homeFragments.add(fragment);
+            homeFragmentTitles.add(title);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return homeFragmentTitles.get(position);
         }
     }
 
