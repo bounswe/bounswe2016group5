@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,7 @@ import digest.digestandroid.fragments.TopicQuizFragment;
 public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
 
+    private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -31,13 +35,24 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_registered_home);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar_home);
+        setSupportActionBar(toolbar);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager_home);
+//        setupViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+//        tabLayout = (TabLayout) findViewById(R.id.tabs_home);
+//        tabLayout.setupWithViewPager(viewPager);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.registered_home_actionbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
 
     private void setupViewPager(ViewPager viewPager) {
         ViewRegisteredHomeActivity.ViewPagerAdapter adapter = new ViewRegisteredHomeActivity.ViewPagerAdapter(getSupportFragmentManager());

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    <item
+        android:id="@+id/action_create_topic"
+        android:icon="@drawable/default_logo"
+        android:title="Create topic"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_message"
+        android:icon="@drawable/default_logo"
+        android:title="Messages"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_followed"
+        android:icon="@drawable/default_logo"
+        android:title="Followed topics"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_notifications"
+        android:icon="@drawable/default_logo"
+        android:title="Notifications"
+        app:showAsAction="always"/>
+
+    <!-- Settings, should always be in the overflow -->
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
+</menu>
+

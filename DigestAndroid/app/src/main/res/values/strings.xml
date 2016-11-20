@@ -2,6 +2,7 @@
     <string name="app_name">Digest</string>
     <string name="view_topic_label">View Topic</string>
     <string name="create_topic_label">Create Topic</string>
+    <string name="home_label">Home</string>
 
     <string name="add_comment_label">Make Comment</string>
 
