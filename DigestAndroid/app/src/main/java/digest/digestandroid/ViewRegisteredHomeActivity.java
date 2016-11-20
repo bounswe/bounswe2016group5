@@ -88,6 +88,26 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         searchView = (SearchView) findViewById(R.id.search_view_home);
+        searchView.setQueryHint("Enter a topic name..");
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+
+                        // TODO implement the functionality
+                        setTitle(query);
+
+                        searchView.setQuery("",true);
+                        searchView.clearFocus();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                }
+        );
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_home);
 //        setupViewPager(viewPager);
