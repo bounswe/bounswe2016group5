@@ -124,15 +124,15 @@ public class QuizServlet extends HttpServlet {
 
 					}
 
-					String url = "http://localhost:8080/digest.api/?f=quiz_add&tid=2";
+					String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=quiz_add&tid=2";
 					URL obj = new URL(url);
 					HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-					con.setDoOutput(true);
+					
 					con.setRequestMethod("POST");
 					con.setRequestProperty("Content-Type", "application/json");
 					String postBody = quiz.toString();
-
 					
+					con.setDoOutput(true);
 					DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 
 					wr.writeBytes(postBody);
