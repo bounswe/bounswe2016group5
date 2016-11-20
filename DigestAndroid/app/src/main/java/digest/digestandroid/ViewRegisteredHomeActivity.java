@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     private Cache cache = Cache.getInstance();
 
     private Toolbar toolbar;
+    private SearchView searchView;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -83,6 +86,8 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
+
+        searchView = (SearchView) findViewById(R.id.search_view_home);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_home);
 //        setupViewPager(viewPager);
