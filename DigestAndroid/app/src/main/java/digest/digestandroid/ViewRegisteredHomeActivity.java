@@ -25,6 +25,7 @@ import digest.digestandroid.fragments.TopicQuizFragment;
 
 public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
+    private Cache cache = Cache.getInstance();
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -33,10 +34,16 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // TODO :  Use cache.getUser().getUsername() when cache is ready
+        setTitle("@uskudarli");
+
         setContentView(R.layout.activity_view_registered_home);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
+
+
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_home);
 //        setupViewPager(viewPager);
