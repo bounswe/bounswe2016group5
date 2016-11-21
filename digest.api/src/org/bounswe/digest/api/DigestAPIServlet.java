@@ -55,7 +55,7 @@ public class DigestAPIServlet extends HttpServlet {
 			String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
 			if (UserJDBC.isSessionValid(uid, session)) {
-				// resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
+				resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
 			} else {
 				resp.getWriter().append(invalidSession());
 
@@ -115,6 +115,17 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.setStatus(400);
 			}
 
+		}else if (f.equals(DigestParameters.ADD_COMMENT)){
+			String body = req.getParameter(DigestParameters.BODY);
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int ucid = Integer.parseInt(req.getParameter(DigestParameters.UCID));
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			if (TopicJDBC.addComment(body, uid, ucid, tid) == 0) {
+				resp.setStatus(200);
+			} else {
+				resp.setStatus(400);
+			}
+			
 		}
 		/*
 		 * else if(f=){ BufferedReader bufferedReader = new
