@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.mysql.cj.api.jdbc.Statement;
 
 public class TopicJDBC {
-	public static int createTopic(String header, /*String type,*/ String image, String url, String body, int owner, int status,
+	public static int createTopic(String header, /*String type,*/ String image, String url, String body, int owner, /*int status,*/
 			/*ArrayList<Integer> topicManager,*/ ArrayList<String> tags) {
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;

@@ -8,7 +8,10 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,22 +41,24 @@ public class DigestAPIServlet extends HttpServlet {
 		String f = req.getParameter(DigestParameters.FUNC);
 		if(f == null || f.length() == 0){
 			resp.getWriter().append("Welcome to Digest API");
-		}else if(f.equals(DigestParameters.CREATE_TOPIC)){
-			//header, type, image, url, body, owner, status
-			String header = req.getParameter(DigestParameters.HEADER);
-			//String type = req.getParameter(DigestParameters.TYPE);
-			String image = req.getParameter(DigestParameters.IMAGE);
-			String url = req.getParameter(DigestParameters.URL);
-			String body = req.getParameter(DigestParameters.BODY);
-			int owner = Integer.parseInt(req.getParameter(DigestParameters.OWNER));
-			int status = Integer.parseInt(req.getParameter(DigestParameters.STATUS));
-		    //TODO add tags
-			if(TopicJDBC.createTopic(header,/*type,*/image,url,body,owner,status,null)==0){
-		    	resp.setStatus(200);
-			}else{
-				resp.setStatus(400);
-			}
-		}else if(f.equals(DigestParameters.GET_TOPICS_OF_USER)){
+		}
+//			else if(f.equals(DigestParameters.CREATE_TOPIC)){
+//			//header, type, image, url, body, owner, status
+//			String header = req.getParameter(DigestParameters.HEADER);
+//			//String type = req.getParameter(DigestParameters.TYPE);
+//			String image = req.getParameter(DigestParameters.IMAGE);
+//			String url = req.getParameter(DigestParameters.URL);
+//			String body = req.getParameter(DigestParameters.BODY);
+//			int owner = Integer.parseInt(req.getParameter(DigestParameters.OWNER));
+//			int status = Integer.parseInt(req.getParameter(DigestParameters.STATUS));
+//		    //TODO add tags
+//			if(TopicJDBC.createTopic(header,/*type,*/image,url,body,owner/*,status*/,null)==0){
+//		    	resp.setStatus(200);
+//			}else{
+//				resp.setStatus(400);
+//			}
+//		} 
+		else if(f.equals(DigestParameters.GET_TOPICS_OF_USER)){
 			int uid=Integer.parseInt(req.getParameter(DigestParameters.UID));
 			String session = req.getParameter(DigestParameters.SESSION);
 			int ruid=Integer.parseInt(req.getParameter(DigestParameters.RUID));
@@ -101,6 +106,7 @@ public class DigestAPIServlet extends HttpServlet {
 		// doPost(req, resp);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String f = req.getParameter(DigestParameters.FUNC);
@@ -117,15 +123,30 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.setStatus(400);
 			}
 		}else if(f.equals(DigestParameters.CREATE_TOPIC)){
-			/*int tid=Integer.parseInt(req.getParameter(DigestParameters.TID));
+
 			BufferedReader bufferedReader = new BufferedReader(req.getReader());
 			Gson gson = new Gson();
-			Quiz quiz=gson.fromJson(bufferedReader, Quiz.class);
-			if(TopicJDBC.addQuizToTopic(tid, quiz)==0){
+			Map<String,String> map = new HashMap<String,String>();
+			map = gson.fromJson(bufferedReader, map.getClass());
+			
+			//header, image, url, body, owner, status
+			String header = map.get("header");
+			String image = map.get("image");
+			String url = map.get("url");
+			String body = map.get("body");
+			int owner = Integer.parseInt(map.get("owner"));
+			String tagsString = map.get("tags");
+			String[] tagsArray = tagsString.split(",");
+			ArrayList<String> tagsArrayList = new ArrayList<String>(Arrays.asList(tagsArray));
+			
+			//int status = Integer.parseInt(map.get("status"));
+		    //TODO add tags
+			if(TopicJDBC.createTopic(header,/*type,*/image,url,body,owner/*,status*/,null)==0){
 		    	resp.setStatus(200);
 			}else{
 				resp.setStatus(400);
-			}*/
+			}
+			
 		}
 		/*else if(f=){
 			BufferedReader bufferedReader = new BufferedReader(req.getReader());
