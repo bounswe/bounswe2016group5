@@ -55,7 +55,11 @@ public class DigestAPIServlet extends HttpServlet {
 			String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
 			if (UserJDBC.isSessionValid(uid, session)) {
+<<<<<<< HEAD
 				resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
+=======
+				// resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
+>>>>>>> 99767304f54aee359be21858a6f1f8a7b8a09bbb
 			} else {
 				resp.getWriter().append(invalidSession());
 
@@ -112,6 +116,7 @@ public class DigestAPIServlet extends HttpServlet {
 			if (TopicJDBC.createTopic(topic) == 0) {
 				resp.setStatus(200);
 			} else {
+<<<<<<< HEAD
 				resp.setStatus(400);
 			}
 
@@ -126,6 +131,11 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.setStatus(400);
 			}
 			
+=======
+				resp.setStatus(400);
+			}
+
+>>>>>>> 99767304f54aee359be21858a6f1f8a7b8a09bbb
 		}
 		/*
 		 * else if(f=){ BufferedReader bufferedReader = new
