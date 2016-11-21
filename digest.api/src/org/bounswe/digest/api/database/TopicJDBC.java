@@ -14,8 +14,8 @@ import org.bounswe.digest.api.database.model.TopicTag;
 import org.bounswe.digest.api.database.model.User;
 
 import com.google.gson.Gson;
-import com.mysql.cj.api.jdbc.Statement;
-
+//import com.mysql.cj.api.jdbc.Statement;
+import java.sql.Statement;
 public class TopicJDBC {
 	public static int createTopic(String header, /*String type,*/ String image, String url, String body, int owner, /*int status,*/
 			/*ArrayList<Integer> topicManager,*/ ArrayList<String> tags) {
@@ -367,6 +367,48 @@ public class TopicJDBC {
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, tid);
 			statement.setInt(2, qid);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			result = -1;
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+				
+			}
+			
+		}finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+	}
+	public static int addComment(String comment, int upperCommentId, int pid) {
+		Connection connection = ConnectionPool.getConnection();
+		PreparedStatement statement = null;
+		int result = 0;
+		String query = "INSERT INTO comment (comment, ucid, pid) VALUES (?, ?)";
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setString(1, comment);
+			statement.setInt(2, upperCommentId);
+			statement.setInt(3, pid);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			result = -1;
