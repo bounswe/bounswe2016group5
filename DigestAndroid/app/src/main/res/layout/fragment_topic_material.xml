@@ -8,21 +8,12 @@
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/list_view_materials"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="URL 1"
-        android:textSize="25sp"
-        android:textStyle="italic"
-        android:textColor="@color/darkButton" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="URL 2"
-        android:textSize="25sp"
-        android:textStyle="italic"
-        android:textColor="@color/darkButton" />
+        android:dividerHeight="2dp">
+    </ListView>
 
 </LinearLayout>
 
