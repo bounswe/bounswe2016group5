@@ -4,10 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+
+import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
 
 /**
@@ -29,6 +40,16 @@ public class TopicAddMaterialFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private Topic mtopic;
+    private View rootView;
+    private ListView mListView;
+
+
+    private ArrayList<String> material_list = new ArrayList<String>();
+    private ArrayAdapter<String> list_adapter;
+
+
+
 
     public TopicAddMaterialFragment() {
         // Required empty public constructor
@@ -65,8 +86,43 @@ public class TopicAddMaterialFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_topic_add_material, container, false);
+        rootView = inflater.inflate(R.layout.fragment_topic_add_material, container, false);
+        mListView = (ListView) rootView.findViewById(R.id.list_view_material);
+        list_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, material_list);
+        mListView.setAdapter(list_adapter);
+
+
+        Button button_more_material = (Button) rootView.findViewById(R.id.button_more_material);
+        button_more_material.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.button_more_material:
+
+                        String mmaterial = ((EditText) rootView.findViewById(R.id.topic_create_material)).getText().toString();
+                        addtoMaterialList(mmaterial);
+                        ((EditText) rootView.findViewById(R.id.topic_create_material)).setText("");
+
+                        break;
+                }
+            }
+        });
+
+
+        return rootView;
     }
+
+    public void fillMaterial(Topic topic) {
+        mtopic = topic;
+        mtopic.setMaterials(material_list);
+    }
+
+    protected void addtoMaterialList(String material) {
+        material_list.add(0,material);
+        list_adapter.notifyDataSetChanged();
+    }
+
+
     /*
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -106,4 +162,6 @@ public class TopicAddMaterialFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    //private class MyListAdapter extends RecyclerView.Adapter<MyListAdapter>
 }

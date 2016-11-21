@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,18 +23,22 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import digest.digestandroid.Models.Topic;
+import digest.digestandroid.Models.User;
 import digest.digestandroid.fragments.TopicAddDescriptionFragment;
 import digest.digestandroid.fragments.TopicAddMaterialFragment;
 import digest.digestandroid.fragments.TopicAddQuizFragment;
+import digest.digestandroid.fragments.TopicCommentFragment;
 import digest.digestandroid.fragments.TopicMaterialFragment;
 
 public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private Toolbar toolbar;
-    private MyViewPagerAdapter myPagerAdapter;
+    private myViewPagerAdapter myPagerAdapter;
 
     private EditText edit_text_title;
     private EditText edit_text_body;
@@ -42,21 +48,25 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
     private NetworkImageView image_view_topic;
 
     private Topic topic;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_topic_fragments);
 
+        //Set up toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar_create_topic);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Set up ViewPager for fragments
         viewPager = (ViewPager) findViewById(R.id.viewpager_create_topic);
-        myPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(myPagerAdapter);
+        setupViewPager(viewPager);
 
+        //Get current user and set the topic owner
+        currentUser = Cache.getInstance().getUser();
+        //topic.setOwner(currentUser);
 
         edit_text_title = (EditText) findViewById(R.id.topic_create_title);
         edit_text_body = (EditText) findViewById(R.id.topic_create_body);
@@ -68,25 +78,40 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
     }
 
+    //Next Fragment in view pager
     public void jumptoAddMaterial(View view) {
         viewPager.setCurrentItem(1);
     }
 
+    //Next Fragment in view pager
     public void jumptoAddQuiz(View view) {
         viewPager.setCurrentItem(2);
     }
 
-    public void createTopicObject(View view) {
+
+    //Sends topic request for created topic
+    public void createTopicRequest(View view) {
         topic = new Topic();
 
-        topic.setTitle(edit_text_title.getText().toString());
+        //topic.setTitle(edit_text_title.getText().toString());
 
         //this.finish();
 
-        //Since home redirects to create topic, is finishing this activity enough?
-        Intent intent = new Intent(getBaseContext(), ViewRegisteredHomeActivity.class);
+        TopicAddDescriptionFragment topicAddDescriptionFragment = (TopicAddDescriptionFragment)((myViewPagerAdapter)viewPager.getAdapter()).getItem(0);
+        topicAddDescriptionFragment.fillInfo(topic);
+
+
+        TopicAddMaterialFragment topicAddMaterialFragment = (TopicAddMaterialFragment) ((myViewPagerAdapter)viewPager.getAdapter()).getItem(1);
+        topicAddMaterialFragment.fillMaterial(topic);
+
+        ArrayList<String> a = topic.getMaterials();
+        Log.d("TOPIC CHECK --------", "mmmm"+a.get(1));
+
+        this.finish();
+        //Back to dashboard, since home redirects to create topic, is finishing this activity enough?
+        //Intent intent = new Intent(getBaseContext(), ViewRegisteredHomeActivity.class);
         //intent.putExtra()
-        startActivity(intent);
+        //startActivity(intent);
 
 
     }
@@ -112,29 +137,46 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
         }
     }
 
-    public class MyViewPagerAdapter extends FragmentStatePagerAdapter {
+    private void setupViewPager(ViewPager viewPager) {
+        myViewPagerAdapter adapter = new myViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new TopicAddDescriptionFragment());
+        adapter.addFragment(new TopicAddMaterialFragment());
+        adapter.addFragment(new TopicAddQuizFragment());
+        viewPager.setAdapter(adapter);
 
-        public MyViewPagerAdapter(FragmentManager fm) {
-            super(fm);
+    }
+
+
+    public void onFragmentInteraction() {
+    }
+
+
+    class myViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public myViewPagerAdapter(FragmentManager manager) {
+            super(manager);
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch (position)
-            {
-                case 0:
-                    return new TopicAddDescriptionFragment();
-                case 1:
-                    return new TopicAddMaterialFragment();
-                case 2:
-                    return new TopicAddQuizFragment();
-            }
-            return null;
+            return mFragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment) {
+            mFragmentList.add(fragment);
+
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
         }
     }
 

@@ -8,13 +8,43 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-    <EditText
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/material_url"
-        android:hint="Add your material address here" />
+        android:layout_height="match_parent">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:inputType="text|textMultiLine"
+            android:gravity="top|left"
+            android:hint="Link here!"
+            android:backgroundTint="@color/primary"
+            android:ems="10"
+            android:id="@+id/topic_create_material" />
+
+        <Button
+                style="?android:buttonBarButtonStyle"
+                android:id="@+id/button_more_material"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="ADD MATERIAL"
+
+                android:background="@color/primary"
+                android:clickable="true"
+
+                android:textSize="15sp"
+                android:textColor="@color/white" />
+
+        <ListView
+            android:id="@+id/list_view_material"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerHeight="8dp">
+        </ListView>
+    </LinearLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_quiz"
@@ -23,7 +53,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="10dp"
-        android:backgroundTint="@color/colorPrimary"
         android:onClick="jumptoAddQuiz"
         android:src="@drawable/ic_next"
         app:backgroundTint="@color/primary" />

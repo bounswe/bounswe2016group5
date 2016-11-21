@@ -15,6 +15,7 @@ public class Topic {
     private String title;
     private String body;
     private ArrayList<TopicTag> tags;
+    private ArrayList<String> string_tags;
     private String image_url;
     private User owner;
     private long rating;
@@ -115,4 +116,14 @@ public class Topic {
     public void setQuiz(ArrayList<QuizQuestion> quiz) {
         this.quiz = quiz;
     }
+
+
+    public ArrayList<String> getString_tags() {
+        return string_tags;
+    }
+
+    public void setString_tags(ArrayList<String> string_tags) {
+        this.string_tags = string_tags;
+    }
+
 }

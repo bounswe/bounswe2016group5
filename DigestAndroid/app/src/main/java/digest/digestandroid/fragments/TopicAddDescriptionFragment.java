@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +17,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.Cache;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import digest.digestandroid.Models.Topic;
+import digest.digestandroid.Models.User;
 import digest.digestandroid.R;
 import digest.digestandroid.api.VolleySingleton;
 
@@ -42,6 +50,10 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
     private OnFragmentInteractionListener mListener;
     NetworkImageView mImageView;
+
+    private Topic mtopic;
+    private View rootView;
+
 
     public TopicAddDescriptionFragment() {
         // Required empty public constructor
@@ -78,12 +90,14 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView= inflater.inflate(R.layout.fragment_topic_add_description, container, false);
+        rootView= inflater.inflate(R.layout.fragment_topic_add_description, container, false);
 
         Button button_upload = (Button) rootView.findViewById(R.id.button_image_upload);
         button_upload.setOnClickListener(this);
         mImageView = (NetworkImageView) rootView.findViewById(R.id.topic_create_image_view);
         mImageView.setDefaultImageResId(R.drawable.default_logo);
+
+
 
         return rootView;
 
@@ -97,7 +111,7 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                 final ImageLoader mImageLoader = VolleySingleton.getInstance().getImageLoader();
                 //final String url = ((EditText) getView().findViewById(R.id.topic_create_imageurl)).getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Enter your topic image address");
+                builder.setTitle("Enter your topic image link");
 
                 // Set up the input
                 final EditText input = new EditText(getActivity());
@@ -131,6 +145,19 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
                 break;
         }
+    }
+
+    //Sets topic title, body, image url and tag list
+    public void fillInfo(Topic topic){
+        mtopic = topic;
+        String mtitle = ((EditText)rootView.findViewById(R.id.topic_create_title)).getText().toString();
+        String mbody = ((EditText)rootView.findViewById(R.id.topic_create_body)).getText().toString();
+        String mtags = ((EditText)rootView.findViewById(R.id.topic_create_tags)).getText().toString();
+        //ArrayList<String> tagList = (ArrayList<String>) Arrays.asList(mtags.split(","));
+        mtopic.setTitle(mtitle);
+        mtopic.setBody(mbody);
+        //mtopic.setString_tags(tagList);
+        mtopic.setImage_url(url);
     }
 
 
