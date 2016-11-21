@@ -30,4 +30,5 @@ public class DigestParameters {
 	public static final String SESSION = "session";
 	public static final String TID="tid";
 	public static final String QID="qid";
+	public static final String UCID = "ucid";
 }
