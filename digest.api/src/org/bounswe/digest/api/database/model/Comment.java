@@ -1,20 +1,26 @@
 package org.bounswe.digest.api.database.model;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 public class Comment {
 	private int id;
 	private int uid;
 	private int ucid;
 	private int tid;
-	// private String username;
 	private String body;
 	private int rate;
-
-	public Comment(int id, int uid, int ucid, int tid, String body, int rate) {
+	private Timestamp timestamp;
+	// private String username; maybe we can use.
+	public Comment(int id, String body, int uid, int tid, int ucid, int rate, Timestamp timestamp) {
 		this.id = id;
-		this.uid = uid;
-		this.ucid = ucid;
 		this.body = body;
+		this.uid = uid;
+		this.tid = tid;
+		this.ucid = ucid;
 		this.rate = rate;
+		this.timestamp = timestamp;
+		
 	}
 
 	public int getUid() {
