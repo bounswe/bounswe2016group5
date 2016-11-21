@@ -536,4 +536,51 @@ public class TopicJDBC {
 		Gson gson=new Gson();
 		return gson.toJson(result);
 	}
+
+	public static String getComment(int tid) {
+		String query = "SELECT * FROM digest.topic WHERE topic.id=(?)";
+		Connection connection = ConnectionPool.getConnection();
+		PreparedStatement statement = null;
+		String result=null;
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, tid);
+			resultSet = statement.executeQuery();
+			// public Topic(int id, String header, String type, String image,
+			// String url, String body,
+			// int owner, int status,ArrayList<TopicManager> topicManagers,
+			// ArrayList<TopicTag> tags)
+			if (resultSet.next()) {
+				result=(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+						resultSet.getString(4),
+						resultSet.getString(5)/* ,resultSet.getString(6) */, resultSet.getInt(6), resultSet.getInt(7),
+						null, null, null)).printable();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+	}
 }
