@@ -36,6 +36,7 @@
 	
 
 ## Get a topic
+	<API_PATH>/?f=get_topics_of_user&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&tid=<TOPIC_ID>
 
 
 # Deployment Information
