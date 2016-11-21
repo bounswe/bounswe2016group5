@@ -114,24 +114,34 @@ public class TopicJDBC {
 
 	public static String getTopicsWithUser(int uid) {
 		String query = "SELECT * FROM digest.topic WHERE topic.owner=(?)";
+		String query2 = "SELECT * FROM digest.topic_tag  WHERE topic_tag.id=?";
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;
 		ArrayList<Topic> result = new ArrayList<Topic>();
-		ResultSet resultSet;
+		ResultSet resultSet,resultSet2;
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, uid);
 			resultSet = statement.executeQuery();
+			
 			// public Topic(int id, String header, String type, String image,
 			// String url, String body,
 			// int owner, int status,ArrayList<TopicManager> topicManagers,
 			// ArrayList<TopicTag> tags)
 			while (resultSet.next()) {
-				result.add(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+				int tid=resultSet.getInt(1);
+				statement=connection.prepareStatement(query2);
+				statement.setInt(1, tid);
+				resultSet2=statement.executeQuery();
+				ArrayList<TopicTag> tags=new ArrayList<TopicTag>();
+				while(resultSet2.next()){
+					tags.add(new TopicTag(resultSet2.getInt(1), resultSet2.getInt(2), resultSet2.getString(3)));
+				}
+				result.add(new Topic(tid, resultSet.getString(2), resultSet.getString(3),
 						resultSet.getString(4),
 						resultSet.getString(5)/* ,resultSet.getString(6) */, resultSet.getInt(6), resultSet.getInt(7),
-						null, null, null));
+						tags, null, null));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -538,11 +548,12 @@ public class TopicJDBC {
 	}
 
 	public static String getComment(int tid) {
-		String query = "SELECT * FROM digest.topic WHERE topic.id=(?)";
+		String query = "SELECT * FROM digest.topic WHERE topic.id=?";
+		String query2 = "SELECT * FROM digest.topic_tag  WHERE topic_tag.id=?";
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;
 		String result=null;
-		ResultSet resultSet;
+		ResultSet resultSet,resultSet2;
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
@@ -553,10 +564,17 @@ public class TopicJDBC {
 			// int owner, int status,ArrayList<TopicManager> topicManagers,
 			// ArrayList<TopicTag> tags)
 			if (resultSet.next()) {
+				statement = connection.prepareStatement(query2);
+				statement.setInt(1, tid);
+				resultSet2 = statement.executeQuery();
+				ArrayList<TopicTag> tags= new ArrayList<TopicTag>();
+				while(resultSet2.next()){
+					tags.add(new TopicTag(resultSet2.getInt(1), resultSet2.getInt(2), resultSet2.getString(3)));
+				}
 				result=(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
 						resultSet.getString(4),
 						resultSet.getString(5)/* ,resultSet.getString(6) */, resultSet.getInt(6), resultSet.getInt(7),
-						null, null, null)).printable();
+						tags, null, null)).printable();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

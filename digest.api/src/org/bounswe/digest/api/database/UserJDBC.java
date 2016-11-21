@@ -86,7 +86,7 @@ public class UserJDBC {
 		PreparedStatement statement = null;
 		ResultSet results = null;
 		boolean result = false;
-		String query = "SELECT * " + "FROM digest.session "
+		String query = "SELECT * " + "FROM digest.user_session "
 				+ "WHERE session.uid = ? AND session.sid = ?";
 
 		try {
