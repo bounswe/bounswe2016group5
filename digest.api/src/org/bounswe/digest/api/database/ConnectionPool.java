@@ -32,9 +32,9 @@ public class ConnectionPool {
 	*/
 	
 	public static Connection getConnection(){
-		String url = "jdbc:mysql://digest-db.c7pdwrhsbu6p.us-east-1.rds.amazonaws.com:3306/digest";
-		String username = "digest";
-		String password="digEST352451.";
+		String url = "";
+		String username = "";
+		String password="";
 		String driver ="com.mysql.cj.jdbc.Driver";
 		try {
 			Class.forName(driver);
