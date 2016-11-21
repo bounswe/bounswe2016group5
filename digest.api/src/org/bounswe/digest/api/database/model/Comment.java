@@ -3,32 +3,18 @@ package org.bounswe.digest.api.database.model;
 public class Comment {
 	private int id;
 	private int uid;
-	private String username;
-	private String text;
+	private int ucid;
+	private int tid;
+	// private String username;
+	private String body;
 	private int rate;
-	
-	public Comment(int id,int uid,String username,String text,int rate){
-		this.id=id;
-		this.setUid(uid);
-		this.setText(text);
-		this.setUsername(username);
-		this.rate=rate;
-	}
 
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
+	public Comment(int id, int uid, int ucid, int tid, String body, int rate) {
+		this.id = id;
+		this.uid = uid;
+		this.ucid = ucid;
+		this.body = body;
+		this.rate = rate;
 	}
 
 	public int getUid() {
@@ -54,6 +40,5 @@ public class Comment {
 	public void setRate(int rate) {
 		this.rate = rate;
 	}
-	
-	
+
 }
