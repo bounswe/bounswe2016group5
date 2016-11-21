@@ -18,10 +18,25 @@
 	also implicitly role set as user.
 
 ## Create Topic
-	Database model implemented but api side is not implemented yet.
-	It will have the following link
+	A json object with following parameters should be sent.
 	
-	<API_PATH>/?f=create_topic&username=<USERNAME>&session=<SESSION>&<TOPIC RELATED ITEMS>
+## Get all topics of user
+	The required parameter is uid of the user of which the topics will return.
+	
+	<API_PATH>/?f=get_topics_of_user&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&ruid=<TOPIC_OWNER_USER_ID>
+
+## Add Quiz
+	A json object with following parameters should be sent.
+	
+## Add Comment
+	POST request with following json
+
+## Get Comments
+	<API_PATH>/?f=get_comment&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&tid=<TOPICID>
+	
+
+## Get a topic
+
 
 # Deployment Information
 ## Requirements
