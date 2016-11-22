@@ -16,25 +16,23 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 
 
 public class ConnectionPool {
-	private static final String DRIVER = "jdbc.driver.classname";
-	private static final String URL = "jdbc.url";
-	private static final String USERNAME = "jdbc.username";
-	private static final String PASSWORD = "jdbc.password";
-	private static BasicDataSource dataSource;
-    private final Logger logger = LogManager.getLogger(ConnectionPool.class);
-	/*
-	private static Logger logger;
-	
-	public ConnectionPool(){
-		logger = Logger.getLogger(ConnectionPool.class);
-	    BasicConfigurator.configure();
+	private static final BasicDataSource dataSource = new BasicDataSource();
+
+	static {
+		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		dataSource.setUrl("jdbc:mysql://");
+		dataSource.setUsername("");
+		dataSource.setPassword("");
 	}
-	*/
+
+	public static Connection getConnection() throws SQLException {
+		return dataSource.getConnection();
+	}
 	
-	public static Connection getConnection(){
-		String url = "jdbc:mysql://digest-db.c7pdwrhsbu6p.us-east-1.rds.amazonaws.com:3306/digest";
-		String username = "digest";
-		String password="digEST352451.";
+	/*public static Connection getConnection(){
+		String url = "jdbc:mysql://";
+		String username = "";
+		String password="";
 		String driver ="com.mysql.cj.jdbc.Driver";
 		try {
 			Class.forName(driver);
@@ -99,13 +97,14 @@ public class ConnectionPool {
 	}
 */
 	public static void close(Connection connection) {
-		// TODO fix
+		/* do nothing*/
+		/*// TODO fix
 		try {
 			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 
