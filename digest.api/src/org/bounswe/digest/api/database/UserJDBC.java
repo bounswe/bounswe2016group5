@@ -19,7 +19,14 @@ public class UserJDBC {
 	 * @return
 	 */
 	public static String login(String username, String password) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
 		Model user = null;
 		PreparedStatement statement = null;
 		ResultSet results = null;
@@ -82,7 +89,14 @@ public class UserJDBC {
 	 * @return
 	 */
 	public static boolean isSessionValid(int uid, String session) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return false;
+		}
 		PreparedStatement statement = null;
 		ResultSet results = null;
 		boolean result = false;
@@ -140,7 +154,14 @@ public class UserJDBC {
 	 * @return
 	 */
 	private static int writeSessionInformation(User user) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		};
 		PreparedStatement statement = null;
 		int result = 0;
 		String query = "INSERT INTO user_session (uid, sid, duration) VALUES (?, ?, ?)";
@@ -199,7 +220,14 @@ public class UserJDBC {
 	 */
 	public static int register(String username, String password, String email, String first_name, String last_name, int status,
 			Role role) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = 0;
 		String query = "INSERT INTO user (username, password, email, first_name, last_name, status, rid) VALUES (?, ?, ?, ?, ?, ?, ?)";

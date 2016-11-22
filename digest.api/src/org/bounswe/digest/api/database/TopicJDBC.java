@@ -21,7 +21,14 @@ import java.sql.Statement;
 
 public class TopicJDBC {
 	public static int createTopic(Topic topic) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = 0;
 		String query = "INSERT INTO topic (header, image, url, body, owner, status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -116,7 +123,14 @@ public class TopicJDBC {
 
 	public static String getTopicsWithUser(int uid) {
 		String query = "SELECT * FROM digest.topic WHERE topic.owner=(?)";
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
 		PreparedStatement statement = null;
 		ArrayList<Topic> result = new ArrayList<Topic>();
 		ResultSet resultSet;
@@ -169,7 +183,14 @@ public class TopicJDBC {
 	
 	private static ArrayList<TopicTag> getTagsOfTopic(int tid){
 		String query = "SELECT * FROM digest.topic_tag  WHERE topic_tag.id=?";
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return new ArrayList<TopicTag>();
+		}
 		PreparedStatement statement = null;
 		ArrayList<TopicTag> tags = new ArrayList<TopicTag>();
 		ResultSet resultSet;
@@ -208,7 +229,14 @@ public class TopicJDBC {
 	}
 
 	private static int addQuiz(Quiz quiz) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int qid = -1;
 		String query = "INSERT INTO quiz (name) VALUES (?)";
@@ -272,7 +300,14 @@ public class TopicJDBC {
 					 + "WHERE digest.quiz.id=digest.quiz_question.quiz_id AND digest.question.id=digest.quiz_question.question_id AND"
 					 + "digest.question.id=digest.question_choice.qid AND digest.choice.id=digest.question_choice.cid AND"
 					 + "digest.topic_quiz.tid=? ;";
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return new ArrayList<Quiz>();
+		}
 		PreparedStatement statement = null;
 		ResultSet resultSet;
 		try {
@@ -314,7 +349,14 @@ public class TopicJDBC {
 	
 	
 	private static int addQuizQuestion(int quizId, int questionId) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = -1;
 		String query = "INSERT INTO quiz_question (quiz_id, question_id) VALUES (?,?)";
@@ -360,7 +402,14 @@ public class TopicJDBC {
 	}
 
 	private static int addQuestionChoice(int qid, int cid) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = -1;
 		String query = "INSERT INTO question_choice (qid,cid) VALUES (?,?)";
@@ -406,7 +455,14 @@ public class TopicJDBC {
 	}
 
 	private static int addQuestion(String text) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = -1;
 		String query = "INSERT INTO question (text) VALUES (?)";
@@ -451,7 +507,14 @@ public class TopicJDBC {
 	}
 
 	private static int addChoice(String c, int isAnswer) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = -1;
 		String query = "INSERT INTO choice (text,isAnswer) VALUES (?, ?)";
@@ -502,7 +565,14 @@ public class TopicJDBC {
 	}
 
 	private static int addTopicQuiz(int tid, int qid) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = 0;
 		String query = "INSERT INTO topic_quiz (tid,qid) VALUES (?, ?)";
@@ -544,7 +614,14 @@ public class TopicJDBC {
 	}
 	// give -1 if there is no upper comment of this comment.
 	public static int addComment(String body, int uid,  int upperCommentId, int tid) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = 0;
 		// what is the default value of rate?
@@ -593,7 +670,14 @@ public class TopicJDBC {
 	}
 	private static ArrayList<Comment> getCommentsArrayOfTopic(int tid){
 		String query="SELECT id, body, uid, tid, ucid, rate, timestamp FROM comment WHERE comment.tid=(?)";
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return new ArrayList<Comment>();
+		}
 		PreparedStatement statement = null;
 		ArrayList<Comment> result=new ArrayList<Comment>();
 		ResultSet resultSet;
@@ -636,7 +720,14 @@ public class TopicJDBC {
 
 	public static String getTopic(int tid) {
 		String query = "SELECT * FROM digest.topic WHERE topic.id=?";
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
 		PreparedStatement statement = null;
 		ArrayList<Topic> result = new ArrayList<Topic>();
 		ResultSet resultSet;
