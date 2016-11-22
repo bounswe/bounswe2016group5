@@ -172,8 +172,10 @@ public class TopicJDBC {
 		}
 		ConnectionPool.close(connection);
 		for(Topic t: result){
-			t.setTags(getTagsOfTopic(t.getId()));
-		//	t.setQuizzes(get);
+			int tid=t.getId();
+			t.setTags(getTagsOfTopic(tid));
+			t.setComments(getCommentsArrayOfTopic(tid));
+			t.setQuizzes(getQuizArrayOfTopic(tid));
 		}
 		Gson gson = new Gson();
 		return gson.toJson(result);
@@ -845,8 +847,9 @@ public class TopicJDBC {
 		}
 		ConnectionPool.close(connection);
 		if(result!=null){
-			result.setTags(getTagsOfTopic(result.getId()));
-			result.setComments(getCommentsArrayOfTopic(result.getId()));
+			result.setTags(getTagsOfTopic(tid));
+			result.setComments(getCommentsArrayOfTopic(tid));
+			result.setQuizzes(getQuizArrayOfTopic(tid));
 		}
 		
 		return result.printable();
