@@ -179,7 +179,7 @@ public class TopicJDBC {
 		return gson.toJson(result);
 	}
 	public static String getRecentTopics(int count) {
-		String query = "SELECT * FROM digest.topic ORDER BY timestamp DESC LIMIT (?)";
+		String query = "SELECT * FROM digest.topic ORDER BY timestamp DESC LIMIT ?";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
