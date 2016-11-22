@@ -41,15 +41,16 @@ public class DigestAPIServlet extends HttpServlet {
 		if (f == null || f.length() == 0) {
 			resp.getWriter().append("Welcome to Digest API");
 		} else if (f.equals(DigestParameters.GET_TOPICS_OF_USER)) {
-			//int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
-			//String session = req.getParameter(DigestParameters.SESSION);
+			// int uid =
+			// Integer.parseInt(req.getParameter(DigestParameters.UID));
+			// String session = req.getParameter(DigestParameters.SESSION);
 			int ruid = Integer.parseInt(req.getParameter(DigestParameters.RUID));
-			//if (UserJDBC.isSessionValid(uid, session)) {
-				resp.getWriter().append(TopicJDBC.getTopicsWithUser(ruid));
-			//} else {
-				//resp.getWriter().append(invalidSession());
+			// if (UserJDBC.isSessionValid(uid, session)) {
+			resp.getWriter().append(TopicJDBC.getTopicsWithUser(ruid));
+			// } else {
+			// resp.getWriter().append(invalidSession());
 
-			//}
+			// }
 		} else if (f.equals(DigestParameters.GET_COMMENT)) {
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			String session = req.getParameter(DigestParameters.SESSION);
@@ -61,27 +62,29 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.getWriter().append(invalidSession());
 
 			}
-		}  else if (f.equals(DigestParameters.GET_TOPIC)) {
-			//int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
-			//String session = req.getParameter(DigestParameters.SESSION);
+		} else if (f.equals(DigestParameters.GET_TOPIC)) {
+			// int uid =
+			// Integer.parseInt(req.getParameter(DigestParameters.UID));
+			// String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			//if (UserJDBC.isSessionValid(uid, session)) {
-				resp.getWriter().append(TopicJDBC.getTopic(tid));
-			//} else {
-				//resp.getWriter().append(invalidSession());
+			// if (UserJDBC.isSessionValid(uid, session)) {
+			resp.getWriter().append(TopicJDBC.getTopic(tid));
+			// } else {
+			// resp.getWriter().append(invalidSession());
 
-			//}
+			// }
 		} else if (f.equals(DigestParameters.GET_RECENT_TOPICS)) {
-			//int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
-			//String session = req.getParameter(DigestParameters.SESSION);
+			// int uid =
+			// Integer.parseInt(req.getParameter(DigestParameters.UID));
+			// String session = req.getParameter(DigestParameters.SESSION);
 			int count = Integer.parseInt(req.getParameter(DigestParameters.COUNT));
-			//if (UserJDBC.isSessionValid(uid, session)) {
-				resp.getWriter().append(TopicJDBC.getRecentTopics(count));
-			//} else {
-				//resp.getWriter().append(invalidSession());
+			// if (UserJDBC.isSessionValid(uid, session)) {
+			resp.getWriter().append(TopicJDBC.getRecentTopics(count));
+			// } else {
+			// resp.getWriter().append(invalidSession());
 
-			//}
-		}else if (f.equals(DigestParameters.LOGIN)) {
+			// }
+		} else if (f.equals(DigestParameters.LOGIN)) {
 			String username = req.getParameter(DigestParameters.USERNAME);
 			String password = req.getParameter(DigestParameters.PASSWORD);
 			resp.getWriter().append(UserJDBC.login(username, password));
@@ -126,15 +129,16 @@ public class DigestAPIServlet extends HttpServlet {
 			BufferedReader bufferedReader = new BufferedReader(req.getReader());
 			Gson gson = new Gson();
 			Topic topic = gson.fromJson(bufferedReader, Topic.class);
-
+			int tid = TopicJDBC.createTopic(topic);
 			// TODO add tags
-			if (TopicJDBC.createTopic(topic) == 0) {
+			if (tid != -1) {
 				resp.setStatus(200);
+				resp.getWriter().append("" + tid);
 			} else {
 				resp.setStatus(400);
 			}
 
-		}else if (f.equals(DigestParameters.ADD_COMMENT)){
+		} else if (f.equals(DigestParameters.ADD_COMMENT)) {
 			String body = req.getParameter(DigestParameters.BODY);
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			int ucid = Integer.parseInt(req.getParameter(DigestParameters.UCID));
@@ -144,7 +148,7 @@ public class DigestAPIServlet extends HttpServlet {
 			} else {
 				resp.setStatus(400);
 			}
-			
+
 		}
 		/*
 		 * else if(f=){ BufferedReader bufferedReader = new

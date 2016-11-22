@@ -32,7 +32,7 @@ public class TopicJDBC {
 		}
 		PreparedStatement statement = null;
 		int result = 0;
-		String query = "INSERT INTO topic (header, image, body, owner, status) VALUES (?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO topic (header, image, body, owner, status) VALUES (?, ?, ?, ?, ?)";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -40,15 +40,16 @@ public class TopicJDBC {
 			// statement.setString(2, type);
 			statement.setString(2, topic.getImage());
 			//statement.setString(3, topic.getUrl());
-			statement.setString(4, topic.getBody());
-			statement.setInt(5, topic.getOwner());
-			statement.setInt(6, 0); // Doktor bu ne?
+			statement.setString(3, topic.getBody());
+			statement.setInt(4, topic.getOwner());
+			statement.setInt(5, 0); // Doktor bu ne?
 			statement.executeUpdate();
 
 			int tid = -1;
 			ResultSet resultSet = statement.getGeneratedKeys();
 			if (resultSet.next()) {
 				tid = resultSet.getInt(1);
+				result = tid;
 			}
 
 			ArrayList<TopicTag> tags = topic.getTags();
