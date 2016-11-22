@@ -29,6 +29,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
     private Cache cache = Cache.getInstance();
 
+    // TODO adjust the heights and sizes
     private Toolbar toolbar;
     private SearchView searchView;
     private TabLayout tabLayout;
@@ -49,6 +50,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_create_topic:
+                // TODO fix the create topic transition problem
                 Intent intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
                 startActivity(intent);
                 return true;
