@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.bounswe.digest.api.database.model.Comment;
 import org.bounswe.digest.api.database.model.Question;
@@ -267,12 +268,47 @@ public class TopicJDBC {
 	
 	private static ArrayList<Quiz> getQuizArrayOfTopic(int tid){
 		String query = "SELECT digest.quiz.*, digest.question.text, digest.choice.text,digest.choice.isAnswer "
-					 + "FROM digest.quiz, digest.question, digest.choice,digest.quiz_question,digest.question_choice"
+					 + "FROM digest.quiz, digest.question, digest.choice,digest.quiz_question,digest.question_choice,digest.topic_quiz"
 					 + "WHERE digest.quiz.id=digest.quiz_question.quiz_id AND digest.question.id=digest.quiz_question.question_id AND"
-					 + "digest.question.id=digest.question_choice.qid AND digest.choice.id=digest.question_choice.cid;";
-		
-		
-		
+					 + "digest.question.id=digest.question_choice.qid AND digest.choice.id=digest.question_choice.cid AND"
+					 + "digest.topic_quiz.tid=? ;";
+		Connection connection = ConnectionPool.getConnection();
+		PreparedStatement statement = null;
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, tid);
+			resultSet = statement.executeQuery();
+			ArrayList<Quiz> result=new ArrayList<Quiz>();
+			HashSet<Integer> quiz=new HashSet<Integer>();
+			while (resultSet.next()) {
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+
 		return null;
 	}
 	

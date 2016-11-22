@@ -20,7 +20,7 @@ public class ConnectionPool {
 
 	static {
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://");
+		dataSource.setUrl("");
 		dataSource.setUsername("");
 		dataSource.setPassword("");
 	}
