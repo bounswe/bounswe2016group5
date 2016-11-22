@@ -8,7 +8,20 @@
 	digest.us-east-1.elasticbeanstalk.com/digest.api 
 	
 ## Login
-	<API_PATH>/?f=login&username=<USERNAME>&password=<PASSWORD>
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=login
+		username=<USERNAME>
+		password=<PASSWORD>
+	Succes response:
+		status:200
+		content: {"id":<id>,"username":<username>,"password":<password>,"email":<email>,"first_name":<first_name>,"last_name":<last_name>,"status":1,"role":<for some reason>,"session":<session_id>}
+	Error response:
+		status:200
+		content: {"errorName":"incorrect_credentials","errorDescription":"Incorrect username/email or password"}
 	
 	The login returns an Error object if an error occurred (i.e. wrong credentials, otherwise returns an User object.)
 ## Register
