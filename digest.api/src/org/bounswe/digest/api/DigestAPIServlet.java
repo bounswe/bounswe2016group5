@@ -67,24 +67,35 @@ public class DigestAPIServlet extends HttpServlet {
 			// Integer.parseInt(req.getParameter(DigestParameters.UID));
 			// String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			// if (UserJDBC.isSessionValid(uid, session)) {
-			resp.getWriter().append(TopicJDBC.getTopic(tid));
-			// } else {
-			// resp.getWriter().append(invalidSession());
+			//if (UserJDBC.isSessionValid(uid, session)) {
+				resp.getWriter().append(TopicJDBC.getTopic(tid));
+		//	} else {
+			//	resp.getWriter().append(invalidSession());
 
-			// }
+			//}
+		} else if (f.equals(DigestParameters.GET_QUIZ)) {
+			//int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			//String session = req.getParameter(DigestParameters.SESSION);
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			//if (UserJDBC.isSessionValid(uid, session)) {
+				resp.getWriter().append(TopicJDBC.getQuizzesOfTopic(tid));
+		//	} else {
+			//	resp.getWriter().append(invalidSession());
+
+			//}		
 		} else if (f.equals(DigestParameters.GET_RECENT_TOPICS)) {
 			// int uid =
 			// Integer.parseInt(req.getParameter(DigestParameters.UID));
 			// String session = req.getParameter(DigestParameters.SESSION);
 			int count = Integer.parseInt(req.getParameter(DigestParameters.COUNT));
+
 			// if (UserJDBC.isSessionValid(uid, session)) {
 			resp.getWriter().append(TopicJDBC.getRecentTopics(count));
 			// } else {
-			// resp.getWriter().append(invalidSession());
+				// resp.getWriter().append(invalidSession());
 
-			// }
-		} else if (f.equals(DigestParameters.LOGIN)) {
+			//}	
+		}else if (f.equals(DigestParameters.LOGIN)) {
 			String username = req.getParameter(DigestParameters.USERNAME);
 			String password = req.getParameter(DigestParameters.PASSWORD);
 			resp.getWriter().append(UserJDBC.login(username, password));

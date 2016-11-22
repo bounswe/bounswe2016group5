@@ -173,8 +173,10 @@ public class TopicJDBC {
 		}
 		ConnectionPool.close(connection);
 		for(Topic t: result){
-			t.setTags(getTagsOfTopic(t.getId()));
-		//	t.setQuizzes(get);
+			int tid=t.getId();
+			t.setTags(getTagsOfTopic(tid));
+			t.setComments(getCommentsArrayOfTopic(tid));
+			t.setQuizzes(getQuizArrayOfTopic(tid));
 		}
 		Gson gson = new Gson();
 		return gson.toJson(result);
@@ -350,11 +352,11 @@ public class TopicJDBC {
 	}
 	
 	private static ArrayList<Quiz> getQuizArrayOfTopic(int tid){
-		String query = "SELECT digest.quiz.*, digest.question.text, digest.choice.text,digest.choice.isAnswer "
-					 + "FROM digest.quiz, digest.question, digest.choice,digest.quiz_question,digest.question_choice,digest.topic_quiz"
-					 + "WHERE digest.quiz.id=digest.quiz_question.quiz_id AND digest.question.id=digest.quiz_question.question_id AND"
-					 + "digest.question.id=digest.question_choice.qid AND digest.choice.id=digest.question_choice.cid AND"
-					 + "digest.topic_quiz.tid=? ;";
+		String query = "SELECT quiz.*, question.*, choice.text, choice.isAnswer "
+					 + "FROM quiz, question, choice, digest.quiz_question, question_choice, topic_quiz "
+					 + "WHERE quiz.id=quiz_question.quiz_id AND question.id=quiz_question.question_id AND "
+					 + "question.id=digest.question_choice.qid AND choice.id=question_choice.cid AND "
+					 + "topic_quiz.tid=?;";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -365,15 +367,31 @@ public class TopicJDBC {
 		}
 		PreparedStatement statement = null;
 		ResultSet resultSet;
+		ArrayList<Quiz> result=new ArrayList<Quiz>();
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, tid);
 			resultSet = statement.executeQuery();
-			ArrayList<Quiz> result=new ArrayList<Quiz>();
+			
 			HashSet<Integer> quiz=new HashSet<Integer>();
+			HashSet<Integer> question=new HashSet<Integer>();
 			while (resultSet.next()) {
-				
+				int quizId=resultSet.getInt(1);
+				if(!quiz.contains(quizId)){
+					quiz.add(quizId);
+					result.add(new Quiz(resultSet.getString(2), new ArrayList<Question>()));
+				}
+				int questionId=resultSet.getInt(3);
+				ArrayList<Question> questions=result.get(result.size()-1).getQuestions();
+				if(!question.contains(questionId)){
+					question.add(questionId);
+					questions.add(new Question(resultSet.getString(4), new ArrayList<String>(), new ArrayList<Integer>()));
+				}
+				questions.get(questions.size()-1).getChoices().add(resultSet.getString(5));
+				if(resultSet.getInt(6)==1){
+					questions.get(questions.size()-1).getAnswers().add(questions.get(questions.size()-1).getChoices().size()-1);
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -399,7 +417,12 @@ public class TopicJDBC {
 		}
 		ConnectionPool.close(connection);
 
-		return null;
+		return result;
+	}
+	
+	public static String getQuizzesOfTopic(int tid){
+		Gson gson=new Gson();
+		return gson.toJson(getQuizArrayOfTopic(tid));
 	}
 	
 	
@@ -784,7 +807,7 @@ public class TopicJDBC {
 			return "";
 		}
 		PreparedStatement statement = null;
-		ArrayList<Topic> result = new ArrayList<Topic>();
+		Topic result=null;
 		ResultSet resultSet;
 		try {
 			connection.setAutoCommit(false);
@@ -796,8 +819,8 @@ public class TopicJDBC {
 			// String url, String body,
 			// int owner, int status,ArrayList<TopicManager> topicManagers,
 			// ArrayList<TopicTag> tags)
-			while (resultSet.next()) {
-				result.add(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+			if (resultSet.next()) {
+				result = (new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
 						resultSet.getString(4),
 						resultSet.getInt(5), resultSet.getInt(6), null, null, null, null, resultSet.getTimestamp(7)));
 			}
@@ -824,11 +847,12 @@ public class TopicJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
-		for(Topic t: result){
-			t.setTags(getTagsOfTopic(t.getId()));
-			t.setComments(getCommentsArrayOfTopic(t.getId()));
+		if(result!=null){
+			result.setTags(getTagsOfTopic(tid));
+			result.setComments(getCommentsArrayOfTopic(tid));
+			result.setQuizzes(getQuizArrayOfTopic(tid));
 		}
-		Gson gson = new Gson();
-		return gson.toJson(result);
+		
+		return result.printable();
 	}
 }
