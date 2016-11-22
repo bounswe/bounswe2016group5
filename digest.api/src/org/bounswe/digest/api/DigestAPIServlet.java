@@ -190,20 +190,6 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.setStatus(400);
 			}
 
-<<<<<<< HEAD
-=======
-		} else if (f.equals(DigestParameters.ADD_COMMENT)) {
-			String body = req.getParameter(DigestParameters.BODY);
-			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
-			int ucid = Integer.parseInt(req.getParameter(DigestParameters.UCID));
-			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			if (TopicJDBC.addComment(body, uid, ucid, tid) == 0) {
-				resp.setStatus(200);
-			} else {
-				resp.setStatus(400);
-			}
-
->>>>>>> f6e4751f85a723fbf4104f86b817c560a89044ec
 		}
 		/*
 		 * else if(f=){ BufferedReader bufferedReader = new
