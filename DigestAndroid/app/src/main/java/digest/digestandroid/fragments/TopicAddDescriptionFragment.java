@@ -46,10 +46,14 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private String url="";
+
 
     private OnFragmentInteractionListener mListener;
     NetworkImageView mImageView;
+    private String url="";
+    EditText etTitle;
+    EditText etBody;
+    EditText etTags;
 
     private Topic mtopic;
     private View rootView;
@@ -97,7 +101,9 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         mImageView = (NetworkImageView) rootView.findViewById(R.id.topic_create_image_view);
         mImageView.setDefaultImageResId(R.drawable.default_logo);
 
-
+        etTitle = (EditText) rootView.findViewById(R.id.topic_create_title);
+        etBody = (EditText) rootView.findViewById(R.id.topic_create_body);
+        etTags = (EditText) rootView.findViewById(R.id.topic_create_tags);
 
         return rootView;
 
@@ -150,10 +156,10 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
     //Sets topic title, body, image url and tag list
     public void fillInfo(Topic topic){
         mtopic = topic;
-        String mtitle = ((EditText)rootView.findViewById(R.id.topic_create_title)).getText().toString();
-        String mbody = ((EditText)rootView.findViewById(R.id.topic_create_body)).getText().toString();
-        String mtags = ((EditText)rootView.findViewById(R.id.topic_create_tags)).getText().toString();
-        //ArrayList<String> tagList = (ArrayList<String>) Arrays.asList(mtags.split(","));
+        String mtitle = etTitle.getText().toString();
+        String mbody = etBody.getText().toString();
+        String mtags = etTags.getText().toString();
+        //ArrayList<String> tagList = Arrays.asList(mtags.split(","));
         mtopic.setTitle(mtitle);
         mtopic.setBody(mbody);
         //mtopic.setString_tags(tagList);

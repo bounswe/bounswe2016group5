@@ -17,7 +17,7 @@ public class Topic {
     private ArrayList<TopicTag> tags;
     private ArrayList<String> string_tags;
     private String image_url;
-    private User owner;
+    private int owner;
     private long rating;
     private int status;
 
@@ -69,11 +69,11 @@ public class Topic {
         this.image_url = image_url;
     }
 
-    public User getOwner() {
+    public int getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(int owner) {
         this.owner = owner;
     }
 

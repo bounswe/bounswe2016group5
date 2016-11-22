@@ -105,7 +105,7 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
         topicAddMaterialFragment.fillMaterial(topic);
 
         ArrayList<String> a = topic.getMaterials();
-        Log.d("TOPIC CHECK --------", "mmmm"+a.get(1));
+        Log.d("TOPIC CHECK --------", "mmmm"+a.get(0));
 
         this.finish();
         //Back to dashboard, since home redirects to create topic, is finishing this activity enough?

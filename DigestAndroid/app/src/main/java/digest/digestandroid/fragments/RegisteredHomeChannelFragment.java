@@ -108,7 +108,7 @@ public class RegisteredHomeChannelFragment extends Fragment {
         desc.setText(topic.getBody());
 
         TextView owner = (TextView) rootView.findViewById(R.id.tTopicOwner);
-        owner.setText(topic.getOwner().getUsername());
+        owner.setText(topic.getOwner());
 
         TextView rating = (TextView) rootView.findViewById(R.id.tRating);
         rating.setText(String.valueOf(topic.getRating()));

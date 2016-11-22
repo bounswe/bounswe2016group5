@@ -7,12 +7,20 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <EditText
-        android:layout_width="wrap_content"
+
+    <Button
+        style="?android:buttonBarButtonStyle"
+        android:id="@+id/button_more_question"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/edit_text_quiz" />
+        android:layout_weight="0"
+        android:text="ADD QUIZ QUESTION"
+
+        android:background="@color/primary"
+        android:clickable="true"
+
+        android:textSize="15sp"
+        android:textColor="@color/white" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_quiz"
