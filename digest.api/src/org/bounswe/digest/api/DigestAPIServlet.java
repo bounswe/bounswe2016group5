@@ -95,7 +95,37 @@ public class DigestAPIServlet extends HttpServlet {
 				// resp.getWriter().append(invalidSession());
 
 			//}	
-		}else if (f.equals(DigestParameters.LOGIN)) {
+		}else if (f.equals(DigestParameters.ADD_SUBSCRIBER)) {
+			// int uid =
+			// Integer.parseInt(req.getParameter(DigestParameters.UID));
+			// String session = req.getParameter(DigestParameters.SESSION);
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+
+			// if (UserJDBC.isSessionValid(uid, session)) {
+			if(TopicJDBC.addSubscriberToTopic(tid, uid) != -1){
+				resp.setStatus(200);
+				
+			}else{
+				resp.setStatus(400);
+			}
+			// } else {
+				// resp.getWriter().append(invalidSession());
+
+			//}	
+		}else if (f.equals(DigestParameters.GET_SUBSCRIBED_TOPICS)) {
+			// int uid =
+			// Integer.parseInt(req.getParameter(DigestParameters.UID));
+			// String session = req.getParameter(DigestParameters.SESSION);
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+
+			// if (UserJDBC.isSessionValid(uid, session)) {
+			resp.getWriter().append(TopicJDBC.getSubscribedTopics(uid));
+			// } else {
+				// resp.getWriter().append(invalidSession());
+
+			//}	
+		} else if (f.equals(DigestParameters.LOGIN)) {
 			String username = req.getParameter(DigestParameters.USERNAME);
 			String password = req.getParameter(DigestParameters.PASSWORD);
 			resp.getWriter().append(UserJDBC.login(username, password));

@@ -19,6 +19,8 @@ public class DigestParameters {
 	public static final String GET_TOPIC = "get_topic";
 	public static final String GET_QUIZ = "get_quiz";
 	public static final String GET_RECENT_TOPICS = "get_recent_topics";
+	public static final String ADD_SUBSCRIBER = "add_subscriber";
+	public static final String GET_SUBSCRIBED_TOPICS = "get_subscribed_topics";
 
 	public static final String HEADER = "header";
 	// public static final String TYPE = "type";
