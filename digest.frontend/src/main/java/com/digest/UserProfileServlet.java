@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,10 +60,11 @@ public class UserProfileServlet extends HttpServlet {
 		String recvbuff = "";
 
 		StringBuffer bf = new StringBuffer();
-		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
-		bf.append("?f=get_topics_of_user&id=" + session.getAttribute("id"));
+		bf.append("http://localhost:8080/digest.api/");
+		bf.append("?f=get_topics_of_user&uid=" + session.getAttribute("id")+"&ruid="+session.getAttribute("id")+"&session="+session.getAttribute("session"));
 
 		String url = bf.toString();
+		System.out.println(url);
 		URL jsonpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
 		BufferedReader buffread = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
@@ -70,33 +72,21 @@ public class UserProfileServlet extends HttpServlet {
 		while ((recv = buffread.readLine()) != null)
 			recvbuff += recv;
 		buffread.close();
-
+		System.out.println(recvbuff);
 		try {
-			JSONObject obj = new JSONObject(recvbuff);
-			if (obj.has("errorName")) {
-				session = request.getSession(true);
-				String msg = obj.getString("errorDescription");
-				session.setAttribute("error", msg);
-
-			} else {
-
-				Set<String> sattr = obj.keySet();
-				ArrayList<Integer> user_topics = new ArrayList<Integer>();
-				for (String attribute : sattr) {
-					if (!attribute.contentEquals("role")) {
-						//add to user_topics
-					}
-				}
-
-				response.sendRedirect("profile.jsp");
-
+			JSONArray topicArray = new JSONArray(recvbuff);
+			
+			if(topicArray != null){
+				request.setAttribute("topics", topicArray);
+				request.getRequestDispatcher("/profile.jsp").forward(request, response);
 			}
 
 		} catch (JSONException ex) {
-			// Do nothing
+			request.setAttribute("err", "Unexpected error occured!!");
+			request.getRequestDispatcher("/profile.jsp").forward(request, response);
 		}
 		
-		
+		/*
 		//Example topics
 		ArrayList<Integer> userTopicId = new ArrayList<Integer>();
 		userTopicId.add(3);
@@ -120,7 +110,7 @@ public class UserProfileServlet extends HttpServlet {
 		request.setAttribute("userTopicId", userTopicId);
 		request.setAttribute("userTopicHeader", userTopicHeader);
 		request.setAttribute("userTopicImage", userTopicImage);
-		request.getRequestDispatcher("/profile.jsp").forward(request, response);
+		request.getRequestDispatcher("/profile.jsp").forward(request, response);*/
 		
 	}
 }

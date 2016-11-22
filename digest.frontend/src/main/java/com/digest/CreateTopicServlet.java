@@ -62,7 +62,7 @@ public class CreateTopicServlet extends HttpServlet {
 		 * (names.hasMoreElements()) bf.append("&"); } String url =
 		 * bf.toString(); System.out.println(url);
 		 */
-		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=create_topic";
+		String url = "http://localhost:8080/digest.api/?f=create_topic";
 		URL connpage = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) connpage.openConnection();
 
@@ -73,6 +73,7 @@ public class CreateTopicServlet extends HttpServlet {
 		JSONArray tags = new JSONArray();
 		JSONArray quizes = new JSONArray();
 		JSONArray media = new JSONArray();
+		JSONArray comments = new JSONArray();
 
 		Enumeration<String> names = request.getParameterNames();
 		while (names.hasMoreElements()) {
@@ -97,10 +98,10 @@ public class CreateTopicServlet extends HttpServlet {
 		}
 		
 		topic.put("id",-1);
-		topic.put("url", "");
 		topic.put("status", -1);
 		topic.put("quizes", quizes);
 		topic.put("media", media);
+		topic.put("comments", comments);
 
 		con.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -108,8 +109,20 @@ public class CreateTopicServlet extends HttpServlet {
 		wr.writeBytes(topic.toString());
 		wr.flush();
 		wr.close();
+		
 		int responseCode = con.getResponseCode();
 		if (responseCode == 200 && request.getParameter("f") != null) {
+			BufferedReader in = new BufferedReader(
+			        new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer res = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				res.append(inputLine);
+			}
+			in.close();
+			
+			System.out.println(res.toString());
 			response.sendRedirect("index.jsp");
 		} else if (responseCode == 400) {
 			HttpSession session = request.getSession(true);

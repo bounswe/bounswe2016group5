@@ -5,6 +5,7 @@
 <%@page import="java.util.Enumeration"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.HashMap"%>
+<%@page import="org.json.*"%>
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("session") == null) {
@@ -221,91 +222,113 @@ ul#horizontal-list a:hover {
 			</div>
 			<div class="col-sm-9">
 				<div class="user-profile col-sm-12">
-					<form class="form-horizontal" id="view_topic_form" action="ViewTopicServlet" method="POST">
-					<% 
-						session.getAttribute("id");
-						@SuppressWarnings("unchecked")
-						ArrayList<Integer> userTopicIds = (ArrayList<Integer>) request.getAttribute("userTopicId");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> userTopicHeaders = (HashMap<Integer,String>) request.getAttribute("userTopicHeader");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> userTopicImage = (HashMap<Integer,String>) request.getAttribute("userTopicImage");
-						@SuppressWarnings("unchecked")
-						ArrayList<Integer> followingTopicIds = (ArrayList<Integer>) request.getAttribute("followingTopicIds");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> followingTopicHeaders = (HashMap<Integer,String>) request.getAttribute("followingTopicHeaders");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> followingTopicImage = (HashMap<Integer,String>) request.getAttribute("followingTopicImage");
+					<form class="form-horizontal" id="view_topic_form"
+						action="ViewTopicServlet" method="POST">
+						<%
+							session.getAttribute("id");
+							@SuppressWarnings("unchecked")
+							ArrayList<Integer> userTopicIds = (ArrayList<Integer>) request.getAttribute("userTopicId");
+							@SuppressWarnings("unchecked")
+							HashMap<Integer, String> userTopicHeaders = (HashMap<Integer, String>) request
+									.getAttribute("userTopicHeader");
+							@SuppressWarnings("unchecked")
+							HashMap<Integer, String> userTopicImage = (HashMap<Integer, String>) request.getAttribute("userTopicImage");
+							@SuppressWarnings("unchecked")
+							ArrayList<Integer> followingTopicIds = (ArrayList<Integer>) request.getAttribute("followingTopicIds");
+							@SuppressWarnings("unchecked")
+							HashMap<Integer, String> followingTopicHeaders = (HashMap<Integer, String>) request
+									.getAttribute("followingTopicHeaders");
+							@SuppressWarnings("unchecked")
+							HashMap<Integer, String> followingTopicImage = (HashMap<Integer, String>) request
+									.getAttribute("followingTopicImage");
 						%>
 						<div class="form-group">
 							<div class="row col-sm-12">
 								<div class="form-group col-sm-2">
-								
-									<h2 class="control-label" for="username" style="color:#295e8b"><%=session.getAttribute("username")%></h2>
+
+									<h2 class="control-label" for="username" style="color: #295e8b"><%=session.getAttribute("username")%></h2>
 								</div>
 								<div class="form-group col-sm-2 pull-right">
 									<div class="col-xs-9 col-xs-offset-3">
 										<input type="hidden" name="status" value="0">
 										<button type="submit" class="btn btn-primary" name="f"
-											value="edit_profile" style=" margin: 20px 20px 0 0;">Edit Profile</button>
+											value="edit_profile" style="margin: 20px 20px 0 0;">Edit
+											Profile</button>
 									</div>
 								</div>
 							</div>
 						</div>
 
-		
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">My Topics</h4>		
+
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">My
+							Topics</h4>
 						<div class="container panel panel-default"
-							style="height: 200px; width: 95%; overflow-x: scroll;">					
-							<div class="panel-body" id="user-topics" class="list-group">
-							<% 
-								if(userTopicIds != null)
-									for(int topicId : userTopicIds  ) {
-							%>
-									<div class="topic-view col-xs-4 col-lg-4" style="padding: 9px 9px 0px 9px;">
+							style="height: 200px; width: 95%; overflow-x: scroll;">
+							<%
+								if (request.getAttribute("topics") != null) {
+
+									JSONArray topicArray = (JSONArray) request.getAttribute("topics");
+							%><div class="panel-body" id="user-topics" class="list-group">
+
+								<%
+									for (Object top : topicArray) {
+											JSONObject topic = (JSONObject) top;
+								%>
+
+								<div class="topic-view col-xs-4 col-lg-4"
+									style="padding: 9px 9px 0px 9px;">
 									<div class="thumbnail">
-										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
-											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
-											src=<%=userTopicImage.get(topicId) %> alt="" />
+										<input type="image" class="group list-group-image"
+											style="display: block; margin: 0 auto;" height="100"
+											width="100" name="topic_id" id="topic_id"
+											value=<%=topic.get("id")%> src="<%=topic.get("image")%>" alt="" />
 										<div class="caption">
-											<h4 class="group inner list-group-item-heading" align="center"><%=userTopicHeaders.get(topicId) %></h4>
+											<h4 class="group inner list-group-item-heading"
+												align="center"><%=topic.get("header")%></h4>
 										</div>
 									</div>
 								</div>
-							<% 		
-								} 
-							%>			
+
+								<%
+									}
+									}
+								%>
+
 							</div>
 						</div>
-						
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Following Topics</h4>	
+
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Following
+							Topics</h4>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
 
 							<div class="panel-body" id="following-topics" class="list-group">
-							<% 
-								if(followingTopicIds != null)
-									for(int topicId : followingTopicIds  ) {
-							%>
-								<div class="topic-view col-xs-4 col-lg-4" style="padding: 9px 9px 0px 9px;">
+								<%
+									if (followingTopicIds != null)
+										for (int topicId : followingTopicIds) {
+								%>
+								<div class="topic-view col-xs-4 col-lg-4"
+									style="padding: 9px 9px 0px 9px;">
 									<div class="thumbnail">
-										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
-											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
-											src=<%=followingTopicImage.get(topicId) %> alt="" />
+										<input type="image" class="group list-group-image"
+											style="display: block; margin: 0 auto;" height="100"
+											width="100" name="topic_id" id="topic_id" value=<%=topicId%>
+											src=<%=followingTopicImage.get(topicId)%> alt="" />
 										<div class="caption">
-											<h4 class="group inner list-group-item-heading" align="center"><%=followingTopicHeaders.get(topicId) %></h4>
-										</div>	
+											<h4 class="group inner list-group-item-heading"
+												align="center"><%=followingTopicHeaders.get(topicId)%></h4>
+										</div>
 									</div>
-								</div>	
-								<% 		
-								} 
-							%>				
+								</div>
+								<%
+									}
+								%>
 							</div>
 						</div>
 					</form>
 				</div>
 			</div>
-	</div>
+		</div>
 	</div>
 
 
