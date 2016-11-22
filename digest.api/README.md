@@ -40,6 +40,11 @@
 	
 ## Get recent topics
 	<API_PATH>/?f=get_recent_topics&count=<MAX LIMIT OF TOPICS>
+## Get Subscribed Topics
+	<API_PATH>/?f=get_subscribed_topics&uid=<USER_ID>
+## Subscribe A Topic
+	<API_PATH>/?f=add_subscriber&uid=<USER_ID>&tid=<TOPIC_ID>
+	
 
 
 # Deployment Information

@@ -21,6 +21,9 @@ public class DigestParameters {
 	public static final String GET_USERNAME = "get_username";
 	public static final String GET_RECENT_TOPICS = "get_recent_topics";
 	public static final String ADD_MEDIA = "add_media";
+	public static final String ADD_SUBSCRIBER = "add_subscriber";
+	public static final String GET_SUBSCRIBED_TOPICS = "get_subscribed_topics";
+
 
 	public static final String HEADER = "header";
 	// public static final String TYPE = "type";
