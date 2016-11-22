@@ -283,7 +283,11 @@ public class TopicJDBC {
 			ArrayList<Quiz> result=new ArrayList<Quiz>();
 			HashSet<Integer> quiz=new HashSet<Integer>();
 			while (resultSet.next()) {
-				
+				int quizId=resultSet.getInt(1);
+				if(!quiz.contains(quizId)){
+					quiz.add(quizId);
+				//	result.add(arg0)
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

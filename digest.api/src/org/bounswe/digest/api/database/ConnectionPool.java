@@ -20,9 +20,9 @@ public class ConnectionPool {
 
 	static {
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("");
-		dataSource.setUsername("");
-		dataSource.setPassword("");
+		dataSource.setUrl("jdbc:mysql://digest-db.c7pdwrhsbu6p.us-east-1.rds.amazonaws.com:3306/digest");
+		dataSource.setUsername("digest");
+		dataSource.setPassword("digEST352451.");
 	}
 
 	public static Connection getConnection() throws SQLException {
