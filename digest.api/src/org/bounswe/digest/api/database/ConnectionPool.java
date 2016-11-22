@@ -20,17 +20,21 @@ public class ConnectionPool {
 
 	static {
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://digest-db.c7pdwrhsbu6p.us-east-1.rds.amazonaws.com:3306/digest");
-		dataSource.setUsername("digest");
-		dataSource.setPassword("digEST352451.");
+		dataSource.setUrl("");
+		dataSource.setUsername("");
+		dataSource.setPassword("");
+		dataSource.setInitialSize(8);
+		dataSource.setMaxTotal(-1);
+		
+		
 	}
 
 	public static Connection getConnection() throws SQLException {
 		return dataSource.getConnection();
 	}
 	
-	/*public static Connection getConnection(){
-		String url = "jdbc:mysql://";
+	/*public static Connection getConnection() throws SQLException{
+		String url = "";
 		String username = "";
 		String password="";
 		String driver ="com.mysql.cj.jdbc.Driver";
@@ -40,15 +44,10 @@ public class ConnectionPool {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try {
-			return DriverManager.getConnection(url, username, password);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		return DriverManager.getConnection(url, username, password);
 		
-	}
+		
+	}*/
 	/*
 	public static Connection getConnection() {
 		Connection conn = null;

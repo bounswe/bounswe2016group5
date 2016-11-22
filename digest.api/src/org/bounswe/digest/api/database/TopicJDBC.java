@@ -18,6 +18,7 @@ import org.bounswe.digest.api.database.model.User;
 import com.google.gson.Gson;
 //import com.mysql.cj.api.jdbc.Statement;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 public class TopicJDBC {
 	public static int createTopic(Topic topic) {
@@ -31,14 +32,14 @@ public class TopicJDBC {
 		}
 		PreparedStatement statement = null;
 		int result = 0;
-		String query = "INSERT INTO topic (header, image, url, body, owner, status) VALUES (?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO topic (header, image, body, owner, status) VALUES (?, ?, ?, ?, ?, ?)";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, topic.getHeader());
 			// statement.setString(2, type);
 			statement.setString(2, topic.getImage());
-			statement.setString(3, topic.getUrl());
+			//statement.setString(3, topic.getUrl());
 			statement.setString(4, topic.getBody());
 			statement.setInt(5, topic.getOwner());
 			statement.setInt(6, 0); // Doktor bu ne?
@@ -140,15 +141,68 @@ public class TopicJDBC {
 			statement.setInt(1, uid);
 			resultSet = statement.executeQuery();
 			
-			// public Topic(int id, String header, String type, String image,
-			// String url, String body,
-			// int owner, int status,ArrayList<TopicManager> topicManagers,
-			// ArrayList<TopicTag> tags)
+			//public Topic(int id, String header, String image, String body, int owner, int status,
+					//ArrayList<TopicTag> tags, ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments, Timestamp timestamp) {
 			while (resultSet.next()) {
 				result.add(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
 						resultSet.getString(4),
-						resultSet.getString(5)/* ,resultSet.getString(6) */, resultSet.getInt(6), resultSet.getInt(7),
-						null, null,null, null));
+						resultSet.getInt(5), resultSet.getInt(6), null, null, null, null, resultSet.getTimestamp(7)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		for(Topic t: result){
+			t.setTags(getTagsOfTopic(t.getId()));
+		//	t.setQuizzes(get);
+		}
+		Gson gson = new Gson();
+		return gson.toJson(result);
+	}
+	public static String getRecentTopics(int count) {
+		String query = "SELECT * FROM digest.topic ORDER BY timestamp DESC LIMIT ?";
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
+		PreparedStatement statement = null;
+		ArrayList<Topic> result = new ArrayList<Topic>();
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, count);
+			resultSet = statement.executeQuery();
+			
+			//public Topic(int id, String header, String image, String body, int owner, int status,
+					//ArrayList<TopicTag> tags, ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments, Timestamp timestamp) {
+			while (resultSet.next()) {
+				result.add(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+						resultSet.getString(4),
+						resultSet.getInt(5), resultSet.getInt(6), null, null, null, null, resultSet.getTimestamp(7)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -765,8 +819,7 @@ public class TopicJDBC {
 			if (resultSet.next()) {
 				result = (new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
 						resultSet.getString(4),
-						resultSet.getString(5)/* ,resultSet.getString(6) */, resultSet.getInt(6), resultSet.getInt(7),
-						null, null, null,null));
+						resultSet.getInt(5), resultSet.getInt(6), null, null, null, null, resultSet.getTimestamp(7)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
