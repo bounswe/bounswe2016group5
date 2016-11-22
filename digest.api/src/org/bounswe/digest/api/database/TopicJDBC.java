@@ -140,9 +140,6 @@ public class TopicJDBC {
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, uid);
 			resultSet = statement.executeQuery();
-			
-			//public Topic(int id, String header, String image, String body, int owner, int status,
-					//ArrayList<TopicTag> tags, ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments, Timestamp timestamp) {
 			while (resultSet.next()) {
 				result.add(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
 						resultSet.getString(4),
@@ -176,6 +173,7 @@ public class TopicJDBC {
 			t.setTags(getTagsOfTopic(tid));
 			t.setComments(getCommentsArrayOfTopic(tid));
 			t.setQuizzes(getQuizArrayOfTopic(tid));
+			t.setMedia(getMediaArray(tid));
 		}
 		Gson gson = new Gson();
 		return gson.toJson(result);
@@ -355,7 +353,7 @@ public class TopicJDBC {
 					 + "FROM quiz, question, choice, digest.quiz_question, question_choice, topic_quiz "
 					 + "WHERE quiz.id=quiz_question.quiz_id AND question.id=quiz_question.question_id AND "
 					 + "question.id=digest.question_choice.qid AND choice.id=question_choice.cid AND "
-					 + "topic_quiz.tid=?;";
+					 + "topic_quiz.tid=? AND topic_quiz.qid=quiz.id;";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -689,6 +687,104 @@ public class TopicJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
+	
+	private static ArrayList<String> getMediaArray(int tid){
+		String query = "SELECT url FROM digest.media WHERE tid=?";
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return null;
+		}
+		PreparedStatement statement = null;
+		ArrayList<String> result = new ArrayList<String>();
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, tid);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				result.add(resultSet.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+	}
+	
+	public static int addMedia(int tid,String url){
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
+		PreparedStatement statement = null;
+		int result = 0;
+		// what is the default value of rate?
+		String query = "INSERT INTO media(tid,url) VALUES (?, ?)";
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, tid);
+			statement.setString(2, url);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			result = -1;
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+				
+			}
+			
+		}finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+	}
+	
 	// give -1 if there is no upper comment of this comment.
 	public static int addComment(String body, int uid,  int upperCommentId, int tid) {
 		Connection connection;
@@ -702,7 +798,7 @@ public class TopicJDBC {
 		PreparedStatement statement = null;
 		int result = 0;
 		// what is the default value of rate?
-		String query = "INSERT INTO comment (body, uid, ucid, tid) VALUES (?, ?, ?, ?)";
+		String query = "INSERT INTO comment (body, uid, ucid, rate, tid) VALUES (?, ?, ?, 0, ?)";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
@@ -850,6 +946,7 @@ public class TopicJDBC {
 			result.setTags(getTagsOfTopic(tid));
 			result.setComments(getCommentsArrayOfTopic(tid));
 			result.setQuizzes(getQuizArrayOfTopic(tid));
+			result.setMedia(getMediaArray(tid));
 		}
 		
 		return result.printable();

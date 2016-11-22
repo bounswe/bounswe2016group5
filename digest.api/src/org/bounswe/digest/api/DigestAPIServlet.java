@@ -61,17 +61,21 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.getWriter().append(invalidSession());
 
 			}
-		}  else if (f.equals(DigestParameters.GET_TOPIC)) {
-			//int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
-			//String session = req.getParameter(DigestParameters.SESSION);
+		}else if (f.equals(DigestParameters.GET_TOPIC)) {
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			//if (UserJDBC.isSessionValid(uid, session)) {
-				resp.getWriter().append(TopicJDBC.getTopic(tid));
-		//	} else {
-			//	resp.getWriter().append(invalidSession());
-
-			//}
-		} else if (f.equals(DigestParameters.GET_QUIZ)) {
+			resp.getWriter().append(TopicJDBC.getTopic(tid));
+		}else if (f.equals(DigestParameters.GET_USERNAME)) {
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			resp.getWriter().append(UserJDBC.getUserName(uid));
+		}else if (f.equals(DigestParameters.ADD_MEDIA)) {
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			String url = req.getParameter(DigestParameters.URL);
+			if(TopicJDBC.addMedia(tid, url)==0){
+				resp.setStatus(200);
+			}else{
+				resp.setStatus(400);
+			}
+		}else if (f.equals(DigestParameters.GET_QUIZ)) {
 			//int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			//String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
@@ -90,7 +94,17 @@ public class DigestAPIServlet extends HttpServlet {
 			//} else {
 				//resp.getWriter().append(invalidSession());
 			//}
-		}else if (f.equals(DigestParameters.LOGIN)) {
+		} else if (f.equals(DigestParameters.ADD_COMMENT)){
+			String body = req.getParameter(DigestParameters.BODY);
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int ucid = Integer.parseInt(req.getParameter(DigestParameters.UCID));
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			if (TopicJDBC.addComment(body, uid, ucid, tid) == 0) {
+				resp.setStatus(200);
+			} else {
+				resp.setStatus(400);
+			}
+		} else if (f.equals(DigestParameters.LOGIN)) {
 			String username = req.getParameter(DigestParameters.USERNAME);
 			String password = req.getParameter(DigestParameters.PASSWORD);
 			resp.getWriter().append(UserJDBC.login(username, password));
@@ -143,17 +157,6 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.setStatus(400);
 			}
 
-		}else if (f.equals(DigestParameters.ADD_COMMENT)){
-			String body = req.getParameter(DigestParameters.BODY);
-			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
-			int ucid = Integer.parseInt(req.getParameter(DigestParameters.UCID));
-			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			if (TopicJDBC.addComment(body, uid, ucid, tid) == 0) {
-				resp.setStatus(200);
-			} else {
-				resp.setStatus(400);
-			}
-			
 		}
 		/*
 		 * else if(f=){ BufferedReader bufferedReader = new

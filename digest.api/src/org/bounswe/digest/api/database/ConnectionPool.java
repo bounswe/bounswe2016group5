@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -20,13 +22,11 @@ public class ConnectionPool {
 
 	static {
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUrl("");
-		dataSource.setUsername("");
-		dataSource.setPassword("");
+		dataSource.setUrl("jdbc:mysql://digest-db.c7pdwrhsbu6p.us-east-1.rds.amazonaws.com:3306/digest");
+		dataSource.setUsername("digest");
+		dataSource.setPassword("digEST352451.");
 		dataSource.setInitialSize(8);
-		dataSource.setMaxTotal(-1);
-		
-		
+		dataSource.setMaxTotal(15);
 	}
 
 	public static Connection getConnection() throws SQLException {
@@ -95,16 +95,34 @@ public class ConnectionPool {
 
 	}
 */
-	public static void close(Connection connection) {
-		/* do nothing*/
-		/*// TODO fix
+	
+	public static void close(Connection con,PreparedStatement statement,ResultSet resultSet){
 		try {
-			connection.close();
+			resultSet.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
-		
+		}
+		close(con,statement);
 	}
-
+	
+	public static void close(Connection con,PreparedStatement statement){
+		try {
+			statement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		close(con);
+	}
+	
+	
+	public static void close(Connection con) {
+		try {
+			if(con!=null) con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
 }

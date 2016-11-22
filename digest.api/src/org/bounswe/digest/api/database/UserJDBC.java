@@ -274,5 +274,58 @@ public class UserJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
+	
+	public static String getUserName(int uid){
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
+		String user = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
+		String query = "SELECT username from digest.user where user.id=?";
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, uid);
+			results = statement.executeQuery();
+			if (results.next()) {
+				user=(results.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if (connection != null) {
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					//user = new Error("database_error", "An error occured in the database");
+				}
+			}
+
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return user;
+	}
 
 }
