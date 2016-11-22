@@ -17,6 +17,7 @@ import org.bounswe.digest.api.database.model.User;
 import com.google.gson.Gson;
 //import com.mysql.cj.api.jdbc.Statement;
 import java.sql.Statement;
+
 public class TopicJDBC {
 	public static int createTopic(Topic topic) {
 		Connection connection = ConnectionPool.getConnection();
@@ -114,11 +115,10 @@ public class TopicJDBC {
 
 	public static String getTopicsWithUser(int uid) {
 		String query = "SELECT * FROM digest.topic WHERE topic.owner=(?)";
-		String query2 = "SELECT * FROM digest.topic_tag  WHERE topic_tag.id=?";
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;
 		ArrayList<Topic> result = new ArrayList<Topic>();
-		ResultSet resultSet,resultSet2;
+		ResultSet resultSet;
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
@@ -130,18 +130,10 @@ public class TopicJDBC {
 			// int owner, int status,ArrayList<TopicManager> topicManagers,
 			// ArrayList<TopicTag> tags)
 			while (resultSet.next()) {
-				int tid=resultSet.getInt(1);
-				statement=connection.prepareStatement(query2);
-				statement.setInt(1, tid);
-				resultSet2=statement.executeQuery();
-				ArrayList<TopicTag> tags=new ArrayList<TopicTag>();
-				while(resultSet2.next()){
-					tags.add(new TopicTag(resultSet2.getInt(1), resultSet2.getInt(2), resultSet2.getString(3)));
-				}
-				result.add(new Topic(tid, resultSet.getString(2), resultSet.getString(3),
+				result.add(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
 						resultSet.getString(4),
 						resultSet.getString(5)/* ,resultSet.getString(6) */, resultSet.getInt(6), resultSet.getInt(7),
-						tags, null, null));
+						null, null,null, null));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -166,8 +158,52 @@ public class TopicJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
+		for(Topic t: result){
+			t.setTags(getTagsOfTopic(t.getId()));
+		//	t.setQuizzes(get);
+		}
 		Gson gson = new Gson();
 		return gson.toJson(result);
+	}
+	
+	private static ArrayList<TopicTag> getTagsOfTopic(int tid){
+		String query = "SELECT * FROM digest.topic_tag  WHERE topic_tag.id=?";
+		Connection connection = ConnectionPool.getConnection();
+		PreparedStatement statement = null;
+		ArrayList<TopicTag> tags = new ArrayList<TopicTag>();
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, tid);
+			resultSet = statement.executeQuery();
+			while(resultSet.next()){
+				tags.add(new TopicTag(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return tags;
 	}
 
 	private static int addQuiz(Quiz quiz) {
@@ -228,7 +264,19 @@ public class TopicJDBC {
 
 		return qid;
 	}
-
+	
+	private static ArrayList<Quiz> getQuizArrayOfTopic(int tid){
+		String query = "SELECT digest.quiz.*, digest.question.text, digest.choice.text,digest.choice.isAnswer "
+					 + "FROM digest.quiz, digest.question, digest.choice,digest.quiz_question,digest.question_choice"
+					 + "WHERE digest.quiz.id=digest.quiz_question.quiz_id AND digest.question.id=digest.quiz_question.question_id AND"
+					 + "digest.question.id=digest.question_choice.qid AND digest.choice.id=digest.question_choice.cid;";
+		
+		
+		
+		return null;
+	}
+	
+	
 	private static int addQuizQuestion(int quizId, int questionId) {
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;
@@ -504,6 +552,10 @@ public class TopicJDBC {
 		return result;
 	}
 	public static String getCommentsOfTopic(int tid){
+		Gson gson = new Gson();
+		return gson.toJson(getCommentsArrayOfTopic(tid));
+	}
+	private static ArrayList<Comment> getCommentsArrayOfTopic(int tid){
 		String query="SELECT id, body, uid, tid, ucid, rate, timestamp FROM comment WHERE comment.tid=(?)";
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;
@@ -543,38 +595,30 @@ public class TopicJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
-		Gson gson=new Gson();
-		return gson.toJson(result);
+		return result;
 	}
 
-	public static String getComment(int tid) {
+	public static String getTopic(int tid) {
 		String query = "SELECT * FROM digest.topic WHERE topic.id=?";
-		String query2 = "SELECT * FROM digest.topic_tag  WHERE topic_tag.id=?";
 		Connection connection = ConnectionPool.getConnection();
 		PreparedStatement statement = null;
-		String result=null;
-		ResultSet resultSet,resultSet2;
+		ArrayList<Topic> result = new ArrayList<Topic>();
+		ResultSet resultSet;
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, tid);
 			resultSet = statement.executeQuery();
+			
 			// public Topic(int id, String header, String type, String image,
 			// String url, String body,
 			// int owner, int status,ArrayList<TopicManager> topicManagers,
 			// ArrayList<TopicTag> tags)
-			if (resultSet.next()) {
-				statement = connection.prepareStatement(query2);
-				statement.setInt(1, tid);
-				resultSet2 = statement.executeQuery();
-				ArrayList<TopicTag> tags= new ArrayList<TopicTag>();
-				while(resultSet2.next()){
-					tags.add(new TopicTag(resultSet2.getInt(1), resultSet2.getInt(2), resultSet2.getString(3)));
-				}
-				result=(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
+			while (resultSet.next()) {
+				result.add(new Topic(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
 						resultSet.getString(4),
 						resultSet.getString(5)/* ,resultSet.getString(6) */, resultSet.getInt(6), resultSet.getInt(7),
-						tags, null, null)).printable();
+						null, null, null,null));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -599,6 +643,11 @@ public class TopicJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
-		return result;
+		for(Topic t: result){
+			t.setTags(getTagsOfTopic(t.getId()));
+			t.setComments(getCommentsArrayOfTopic(t.getId()));
+		}
+		Gson gson = new Gson();
+		return gson.toJson(result);
 	}
 }

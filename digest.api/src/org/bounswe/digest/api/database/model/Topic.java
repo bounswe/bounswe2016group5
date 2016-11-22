@@ -15,9 +15,10 @@ public class Topic extends Model{
 	private ArrayList<TopicTag> tags;
 	private ArrayList<Quiz> quizzes;
 	private ArrayList<String> media;
+	private ArrayList<Comment> comments;
 	
 	public Topic(int id, String header, /*String type,*/ String image, String url, String body, int owner, 
-			int status, ArrayList<TopicTag> tags,ArrayList<Quiz> quizzes, ArrayList<String> media) {
+			int status, ArrayList<TopicTag> tags,ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments) {
 		this.id = id;
 		this.header = header;
 		//this.type = type;
@@ -29,7 +30,7 @@ public class Topic extends Model{
 		this.tags = tags;
 		this.quizzes=quizzes;
 		this.media=media;
-		//this.
+		this.comments=comments;
 	}
 	public int getId() {
 		return id;
@@ -96,6 +97,12 @@ public class Topic extends Model{
 	}
 	public void setMedia(ArrayList<String> media) {
 		this.media = media;
+	}
+	public ArrayList<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(ArrayList<Comment> comments) {
+		this.comments = comments;
 	}
 
 }

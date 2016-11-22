@@ -66,8 +66,7 @@ public class DigestAPIServlet extends HttpServlet {
 			String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
 			if (UserJDBC.isSessionValid(uid, session)) {
-				resp.getWriter().append(TopicJDBC.getComment(tid));
-				 resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
+				resp.getWriter().append(TopicJDBC.getTopic(tid));
 			} else {
 				resp.getWriter().append(invalidSession());
 
