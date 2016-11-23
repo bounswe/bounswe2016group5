@@ -75,8 +75,8 @@ public class RegisteredHomeHomeFragment extends Fragment {
 
 
 
-        //homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getUserTopics());
-        homeAdapter = new HomeAdapter(homeTopics);
+        homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getUserTopics());
+        //homeAdapter = new HomeAdapter(homeTopics);
         homeRecyclerView.setAdapter(homeAdapter);
 
         return rootView;
