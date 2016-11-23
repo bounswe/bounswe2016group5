@@ -6,7 +6,7 @@
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("session") == null) {
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("MainServlet"); 
 	}
 %>
 <!DOCTYPE html>
@@ -137,7 +137,7 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">DIGest <span><img
+				<a class="navbar-brand" href="MainServlet" >DIGest <span><img
 						alt="digest-icon" src="dig-icon.png"></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
@@ -184,7 +184,7 @@ ul#horizontal-list a:hover {
 						</div>
 						<div class="navbar-collapse collapse sidebar-navbar-collapse">
 							<ul class="nav navbar-nav">
-								<li><a href="index.jsp"><span
+								<li><a href="MainServlet"><span
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
 								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
