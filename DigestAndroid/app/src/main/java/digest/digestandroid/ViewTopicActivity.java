@@ -20,6 +20,7 @@ import java.util.List;
 
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
+import digest.digestandroid.api.APIHandler;
 import digest.digestandroid.fragments.TopicCommentFragment;
 import digest.digestandroid.fragments.TopicGeneralFragment;
 import digest.digestandroid.fragments.TopicMaterialFragment;
@@ -51,6 +52,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         tabLayout.setupWithViewPager(viewPager);
 
         Log.v("MAIN METHOD", "MAIN METHOD");
+        //APIHandler.getInstance().getTopic("ASDASD", 43);
 
         // TODO: 19.11.2016 Get topic info from database
 
