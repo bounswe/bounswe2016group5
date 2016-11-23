@@ -222,8 +222,8 @@ ul#horizontal-list a:hover {
 			</div>
 			<div class="col-sm-9">
 				<div class="user-profile col-sm-12">
-					<form class="form-horizontal" id="view_topic_form"
-						action="ViewTopicServlet" method="POST">
+				<form class="form-horizontal" id="create_topic_form"
+						action="topic-creation.jsp" method="POST">
 						<div class="form-group">
 							<div class="row col-sm-12">
 								<div class="form-group col-sm-2">
@@ -238,18 +238,26 @@ ul#horizontal-list a:hover {
 											Profile</button>
 									</div>
 								</div>
+								<div class="form-group col-sm-2 pull-right">
+									<div class="col-xs-9 ">
+										<input type="hidden" name="status" value="0">
+										<button type="submit" class="btn btn-primary" name="f"
+											value="edit_profile" style="margin: 20px 20px 0 0;">Create Topic</button>
+									</div>
+								</div>
 							</div>
 						</div>
-
-
+						</form>
+						<form class="form-horizontal" id="view_topic_form"
+						action="ViewTopicServlet" method="POST">
 						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">My
 							Topics</h4>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
 							<%
-								if (request.getAttribute("topics") != null) {
+								if (request.getAttribute("my_topics") != null) {
 
-									JSONArray topicArray = (JSONArray) request.getAttribute("topics");
+									JSONArray topicArray = (JSONArray) request.getAttribute("my_topics");
 							%><div class="panel-body" id="user-topics" class="list-group">
 
 								<%
@@ -281,24 +289,44 @@ ul#horizontal-list a:hover {
 
 						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Following
 							Topics</h4>
+							<%
+								if (request.getAttribute("fol_topics") != null) {
+
+									JSONArray topicArray = (JSONArray) request.getAttribute("fol_topics");
+							%>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
 							<div class="panel-body" id="following-topics" class="list-group">
+								<%
+									for (Object top : topicArray) {
+											JSONObject topic = (JSONObject) top;
+
+											String header = "";
+											try{
+												header = topic.get("header").toString(); 
+											}
+											catch(JSONException e){
+												
+											}
+								%>
+								
 								<div class="topic-view col-xs-4 col-lg-4"
 									style="padding: 9px 9px 0px 9px;">
 									<div class="thumbnail">
 										<input type="image" class="group list-group-image"
 											style="display: block; margin: 0 auto;" height="100"
-											width="100" name="topic_id" id="topic_id" value=""
-											src="" alt="" />
+											width="100" name="topic_id" id="topic_id" value=<%=topic.get("id")%>
+											src="<%=topic.get("image")%>" alt="" />
 										<div class="caption">
 											<h4 class="group inner list-group-item-heading"
-												align="center"></h4>
+												align="center"><%=header %>
+												</h4>
 										</div>
 									</div>
 								</div>
 								<%
-									//}
+									}
+								}
 								%>
 							</div>
 						</div>
