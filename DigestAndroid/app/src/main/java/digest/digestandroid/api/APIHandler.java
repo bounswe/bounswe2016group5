@@ -115,24 +115,12 @@ public class APIHandler extends Application{
     * returns 200 or 400
     *
     */
-    public void signup(String tag, final User user) {
-        Log.d( "process", "Signup ");
+    public void signup(String tag, final User user, Response.Listener<String> successListener,
+                       Response.ErrorListener errorListener ) {
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL + "/?f=register",
-                new Response.Listener<String>(){
-                    @Override
-                    public void onResponse(String response) {
-
-                        Log.d("Response", "onResponse: "+ response);
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    Log.d("Response","Failed");
-                    }
-                }){
+                successListener, errorListener){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -144,6 +132,15 @@ public class APIHandler extends Application{
                 params.put("last_name", user.getLast_name());
                 params.put("status", Integer.toString(user.getStatus()));
                 return params;
+            }
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                String responseString = "";
+                if (response != null) {
+                    responseString = String.valueOf(response.statusCode);
+                    // can get more details such as response.headers
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
             }
         };
 
