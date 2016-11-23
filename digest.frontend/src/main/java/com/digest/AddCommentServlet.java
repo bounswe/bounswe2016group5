@@ -67,7 +67,12 @@ public class AddCommentServlet extends HttpServlet {
 		int responseCode = urlcon.getResponseCode();
 		System.out.println("response " + responseCode);
 		if (responseCode == 200 ) {
-			response.sendRedirect("/ViewTopicServlet");
+			int tid = -1;
+			if(request.getParameter("tid")!=null){
+				tid = Integer.parseInt(request.getParameter("tid"));
+			}
+			request.setAttribute("topic_id", tid);
+			request.getRequestDispatcher("/ViewTopicServlet").forward(request, response);
 		} else if (responseCode == 400) {
 			HttpSession session = request.getSession(true);
 			String errMsg = "Unexpected Error occured!!";
