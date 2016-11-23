@@ -5,12 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Set;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,16 +15,13 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-@WebServlet("/UserProfileServlet")
-public class UserProfileServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
+@WebServlet("/MainServlet")
+public class MainServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public UserProfileServlet() {
+	public MainServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -50,22 +42,12 @@ public class UserProfileServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-				
-
-		HttpSession session = request.getSession(true);
-		session.getAttribute("id");
-		
+		// TODO Auto-generated method stub						
 		String recv = "";
 		String recvbuff = "";
-
-		StringBuffer bf = new StringBuffer();
-		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
-		bf.append("?f=get_topics_of_user&ruid="+session.getAttribute("id"));
 		
-		
-
-		String url = bf.toString();
+		//String url = bf.toString();
+		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_recent_topics&count=15";
 		System.out.println(url);
 		URL jsonpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
@@ -79,16 +61,14 @@ public class UserProfileServlet extends HttpServlet {
 			JSONArray topicArray = new JSONArray(recvbuff);
 			
 			if(topicArray != null){
-				request.setAttribute("topics", topicArray);
-				request.getRequestDispatcher("/profile.jsp").forward(request, response);
+				request.setAttribute("recentTopics", topicArray);
+				request.getRequestDispatcher("/index.jsp").forward(request, response);
 			}
 
 		} catch (JSONException ex) {
 			request.setAttribute("err", "Unexpected error occured!!");
-			request.getRequestDispatcher("/profile.jsp").forward(request, response);
+			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		
-		
-		
-	}
+	}	
 }
