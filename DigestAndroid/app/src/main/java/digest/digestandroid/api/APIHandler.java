@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import digest.digestandroid.Cache;
+import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
@@ -280,11 +281,10 @@ public class APIHandler extends Application{
 
                                 GsonRequest<Topic> tempGson = new GsonRequest<Topic>(Request.Method.GET,"",Topic.class,null,null);
                                 tempTop = tempGson.getGson().fromJson(tempObj.toString(),Topic.class);
-
-                                Log.d("DOOOOOOOONE -------", tempTop.toString());
+                                arrayList.add(tempTop);
                             }
 
-
+                            CacheTopiclist.getInstance().setUserTopics(arrayList);
 
                         }catch (JSONException e){}
 
@@ -324,11 +324,11 @@ public class APIHandler extends Application{
 
                                 GsonRequest<Topic> tempGson = new GsonRequest<Topic>(Request.Method.GET,"",Topic.class,null,null);
                                 tempTop = tempGson.getGson().fromJson(tempObj.toString(),Topic.class);
-
-                                Log.d("DOOOOOOOONE -------", tempTop.toString());
+                                arrayList.add(tempTop);
                             }
 
 
+                            CacheTopiclist.getInstance().setUserTopics(arrayList);
 
                         }catch (JSONException e){}
 
