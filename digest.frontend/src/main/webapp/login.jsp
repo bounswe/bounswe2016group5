@@ -8,7 +8,7 @@
 <%@page import="org.json.*"%>
 <%
 	if (session.getAttribute("session") != null) {
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("MainServlet");
 	}
 %>
 <!DOCTYPE html>
@@ -123,7 +123,7 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">DIGest <span><img
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img
 						alt="digest-icon" src="dig-icon.png"></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">

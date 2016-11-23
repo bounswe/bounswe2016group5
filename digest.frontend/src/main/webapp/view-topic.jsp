@@ -1,4 +1,3 @@
-<%@page import="javax.swing.text.StyledEditorKit.ForegroundAction"%>
 <%@page import="java.util.Enumeration"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -152,7 +151,7 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">DIGest <span><img
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img
 						alt="digest-icon" src="dig-icon.png"></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
@@ -195,7 +194,7 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">DIGest <span><img
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img
 						alt="digest-icon" src="dig-icon.png"></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
@@ -274,7 +273,7 @@ ul#horizontal-list a:hover {
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-9">
+			<div class="row col-sm-9">
 				<% 
 				String header = (String) request.getAttribute("header");
 				int owner = (Integer) request.getAttribute("owner");
@@ -283,12 +282,26 @@ ul#horizontal-list a:hover {
 				String image = (String) request.getAttribute("image");
 				String body = (String) request.getAttribute("body");
 				%>
-				<h1><%= header%></h1>
-				<p>Owner: <%= owner %></p>
-				<p>Followers: </p>
+				<div class="col-sm-2">
+					<h1><%= header%></h1>
+					<p>Owner: <%= owner %></p>
+					<p>Followers: </p>
+				</div>
+				<%
+					if(owner != (Integer) session.getAttribute("id")){
+				%>
+				<form class="form-horizontal" id="add_subscriber_form" action="SubscribeServlet" method="POST">
+					<div class="form-group col-sm-2 pull-right">
+						<div class="col-xs-9 col-xs-offset-3">
+							<input type="hidden" name="status" value="0">
+							<button type="submit" class="btn btn-primary" style="margin: 20px 20px 0 0;">Subscribe</button>
+						</div>
+					</div>
+				</form>
+				<% } %>
+				</div>
+				<div class="row col-sm-9">
 				<div class="view-topic col-sm-12">
-					<!--<form class="form-horizontal" action="#">
-						<div class="form-group">-->
 					<div class="topic-header">
 						<div class="row">
 							<div class="container col-sm-2">
@@ -380,9 +393,9 @@ ul#horizontal-list a:hover {
 																	<div class="form">
 																		<textarea placeholder="Reply message here" name="body"></textarea>
 																		<label><%=session.getAttribute("username")%></label> 
-																		<input type="hidden" name="userId" value=<%=session.getAttribute("id")%>>
-																		<input type="hidden" name="commentId" value=""> 
-																		<input type="hidden" name="topicId" value=<%=tid%>>
+																		<input type="hidden" name="uid" value=<%=session.getAttribute("id")%>>
+																		<input type="hidden" name="cuid" value=""> 
+																		<input type="hidden" name="tid" value=<%=tid%>>
 																		<button type="submit" class="btn btn-success green">
 																			<i class="fa fa-share"></i> Share
 																		</button>
@@ -405,10 +418,11 @@ ul#horizontal-list a:hover {
 															action="AddCommentServlet" method="POST">
 															<div class="form">
 																<textarea placeholder="Comment here" name="body"></textarea>
-																<label><%=session.getAttribute("username")%></label> <input
-																	type="hidden" name="userId"
-																	value=<%=session.getAttribute("id")%>> <input
-																	type="hidden" name="topicId" value=<%=tid%>>
+																<label><%=session.getAttribute("username")%></label> 
+																	<input type="hidden" name="uid"
+																	value=<%=session.getAttribute("id")%>> 
+																	<input type="hidden" name="cuid" value="-1"> 
+																	<input type="hidden" name="tid" value=<%=tid%>>
 																<button type="submit" class="btn btn-success green">
 																	<i class="fa fa-share"></i> Share
 																</button>

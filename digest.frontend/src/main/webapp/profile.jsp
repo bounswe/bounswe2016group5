@@ -9,7 +9,7 @@
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("session") == null) {
-		response.sendRedirect("index.jsp");
+		response.sendRedirect("MainServlet");
 	}
 %>
 <!DOCTYPE html>
@@ -141,7 +141,7 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.jsp">DIGest <span><img
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img
 						alt="digest-icon" src="dig-icon.png"></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
@@ -188,7 +188,7 @@ ul#horizontal-list a:hover {
 						</div>
 						<div class="navbar-collapse collapse sidebar-navbar-collapse">
 							<ul class="nav navbar-nav">
-								<li><a href="index.jsp"><span
+								<li><a href="MainServlet"><span
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
 								<li class="active"><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
@@ -224,24 +224,6 @@ ul#horizontal-list a:hover {
 				<div class="user-profile col-sm-12">
 					<form class="form-horizontal" id="view_topic_form"
 						action="ViewTopicServlet" method="POST">
-						<%
-							session.getAttribute("id");
-							@SuppressWarnings("unchecked")
-							ArrayList<Integer> userTopicIds = (ArrayList<Integer>) request.getAttribute("userTopicId");
-							@SuppressWarnings("unchecked")
-							HashMap<Integer, String> userTopicHeaders = (HashMap<Integer, String>) request
-									.getAttribute("userTopicHeader");
-							@SuppressWarnings("unchecked")
-							HashMap<Integer, String> userTopicImage = (HashMap<Integer, String>) request.getAttribute("userTopicImage");
-							@SuppressWarnings("unchecked")
-							ArrayList<Integer> followingTopicIds = (ArrayList<Integer>) request.getAttribute("followingTopicIds");
-							@SuppressWarnings("unchecked")
-							HashMap<Integer, String> followingTopicHeaders = (HashMap<Integer, String>) request
-									.getAttribute("followingTopicHeaders");
-							@SuppressWarnings("unchecked")
-							HashMap<Integer, String> followingTopicImage = (HashMap<Integer, String>) request
-									.getAttribute("followingTopicImage");
-						%>
 						<div class="form-group">
 							<div class="row col-sm-12">
 								<div class="form-group col-sm-2">
@@ -301,27 +283,22 @@ ul#horizontal-list a:hover {
 							Topics</h4>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
-
 							<div class="panel-body" id="following-topics" class="list-group">
-								<%
-									if (followingTopicIds != null)
-										for (int topicId : followingTopicIds) {
-								%>
 								<div class="topic-view col-xs-4 col-lg-4"
 									style="padding: 9px 9px 0px 9px;">
 									<div class="thumbnail">
 										<input type="image" class="group list-group-image"
 											style="display: block; margin: 0 auto;" height="100"
-											width="100" name="topic_id" id="topic_id" value=<%=topicId%>
-											src=<%=followingTopicImage.get(topicId)%> alt="" />
+											width="100" name="topic_id" id="topic_id" value=""
+											src="" alt="" />
 										<div class="caption">
 											<h4 class="group inner list-group-item-heading"
-												align="center"><%=followingTopicHeaders.get(topicId)%></h4>
+												align="center"></h4>
 										</div>
 									</div>
 								</div>
 								<%
-									}
+									//}
 								%>
 							</div>
 						</div>
