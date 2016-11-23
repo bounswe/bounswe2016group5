@@ -45,44 +45,6 @@ public class RegisteredHomeHomeFragment extends Fragment {
         homeRecyclerView.setLayoutManager(homeLayoutManager);
         homeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
-        //--------------
-        Topic topic;
-        User user = new User("burrrk","1234");
-        user.setId(25);
-        topic = new Topic();
-        //topic.setOwner(user);
-        topic.setImage("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
-        topic.setHeader("TITLEEEEEE");
-        topic.setBody("HEBELE HUBELE CCOK GUZEL BI TEXT BU");
-        topic.setMedia(new ArrayList<String>());
-        topic.getMedia().add("111111111111111");
-        topic.getMedia().add("22222222222222222");
-        topic.getMedia().add("333333333333");
-
-        ArrayList<Topic> homeTopics = new ArrayList<Topic>();
-        homeTopics.add(topic);
-        homeTopics.add(topic);
-        homeTopics.add(topic);
-        homeTopics.add(topic);
-
-
-        //--------------
-
-
-        APIHandler.getInstance().getAllTopicsOfAUser(user);
-        APIHandler.getInstance().getRecentTopics(3);
-
-        while(true) {
-            try {
-                if(CacheTopiclist.getInstance().getUserTopics().size() !=-1){
-                    break;
-                }
-            } catch (Exception e) {
-                Log.d("xox","bi string daha");
-            }
-        }
-
         homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getUserTopics());
         homeRecyclerView.setAdapter(homeAdapter);
 

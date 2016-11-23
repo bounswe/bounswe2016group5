@@ -242,38 +242,10 @@ public class APIHandler extends Application{
     // Get all topics of a user
     // http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 
-    public void getAllTopicsOfAUser(User user) {
+    public void getAllTopicsOfAUser(User user, Response.Listener<String> userTopLis) {
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 mainURL + "/?f=get_topics_of_user&ruid=" + user.getId(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("Success", "Success");
-                        Log.d("Success", response.toString());
-
-
-                        try{
-                            JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
-                            ArrayList<Topic> arrayList = new ArrayList<Topic>();
-
-                            Log.d("Suc", obj.get(0).toString());
-
-                            int topicNumber = obj.length();
-                            for(int i = 0 ; i < topicNumber ; i++){
-                                JSONObject tempObj = (JSONObject) obj.get(i);
-                                Topic tempTop = new Topic();
-
-                                GsonRequest<Topic> tempGson = new GsonRequest<Topic>(Request.Method.GET,"",Topic.class,null,null);
-                                tempTop = tempGson.getGson().fromJson(tempObj.toString(),Topic.class);
-                                arrayList.add(tempTop);
-                            }
-
-                            CacheTopiclist.getInstance().setUserTopics(arrayList);
-
-                        }catch (JSONException e){}
-
-                    }
-                },
+                userTopLis,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -285,40 +257,10 @@ public class APIHandler extends Application{
     }
 
     //?f=get_recent_topics&count=<MAX LIMIT OF TOPICS>
-    public void getRecentTopics(int limit) {
+    public void getRecentTopics(int limit,Response.Listener<String> recentTopLis) {
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 mainURL + "/?f=get_recent_topics&count=" + limit,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("Success", "Success");
-                        Log.d("Success", response.toString());
-
-
-                        try{
-                            JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
-                            ArrayList<Topic> arrayList = new ArrayList<Topic>();
-
-
-                            int topicNumber = obj.length();
-                            for(int i = 0 ; i < topicNumber ; i++){
-                                JSONObject tempObj = (JSONObject) obj.get(i);
-                                Topic tempTop = new Topic();
-
-                                GsonRequest<Topic> tempGson = new GsonRequest<Topic>(Request.Method.GET,"",Topic.class,null,null);
-                                tempTop = tempGson.getGson().fromJson(tempObj.toString(),Topic.class);
-                                arrayList.add(tempTop);
-                            }
-
-                            Log.d("SucArray", ""+arrayList.size());
-                            Log.d("SucArray", arrayList.toString());
-
-                            CacheTopiclist.getInstance().setRecentTopics(arrayList);
-
-                        }catch (JSONException e){}
-
-                    }
-                },
+                recentTopLis,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
