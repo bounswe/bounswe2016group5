@@ -25,6 +25,7 @@ import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 import digest.digestandroid.R;
 import digest.digestandroid.HomeAdapter;
+import digest.digestandroid.api.APIHandler;
 
 
 public class RegisteredHomeHomeFragment extends Fragment {
@@ -60,10 +61,10 @@ public class RegisteredHomeHomeFragment extends Fragment {
 
         //--------------
         Topic topic;
-        User user = new User();
-        user.setUsername("Burki");
+        User user = new User("burrrk","1234");
+        user.setId(25);
         topic = new Topic();
-        topic.setOwner(user);
+        topic.setOwner(user.getId());
         topic.setImage_url("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
         topic.setTitle("TITLEEEEEE");
         topic.setBody("HEBELE HUBELE CCOK GUZEL BI TEXT BU");
@@ -72,6 +73,12 @@ public class RegisteredHomeHomeFragment extends Fragment {
         topic.getMaterials().add("22222222222222222");
         topic.getMaterials().add("333333333333");
         homeTopics.add(topic);
+        homeTopics.add(topic);
+        homeTopics.add(topic);
+        homeTopics.add(topic);
+
+        APIHandler.getInstance().getAllTopicsOfAUser(user);
+
         //--------------
 
         homeAdapter = new HomeAdapter(homeTopics);
@@ -87,16 +94,13 @@ public class RegisteredHomeHomeFragment extends Fragment {
 
     }
 
-    // TODO initialize homeTopics , implement onResume, implement adapter
-
-
     @Override
     public void onResume(){
         super.onResume();
         ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener(){
            @Override
             public void onItemClick(int pos, View v){
-
+               Log.i("Test1","test");
            }
         });
     }

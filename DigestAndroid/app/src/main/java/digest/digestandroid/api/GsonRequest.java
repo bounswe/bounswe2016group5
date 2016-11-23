@@ -22,6 +22,9 @@ public class GsonRequest<T> extends Request<T> {
     //private final Map<String, String> headers;
     private final Response.Listener<T> listener;
 
+    public Gson getGson(){
+        return gson;
+    }
     /**
      * Make a GET request and return a parsed object from JSON.
      *

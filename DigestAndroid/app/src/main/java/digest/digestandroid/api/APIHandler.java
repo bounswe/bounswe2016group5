@@ -13,11 +13,18 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONTokener;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -190,6 +197,64 @@ public class APIHandler extends Application{
                     public void onResponse(Topic response) {
                         Log.d("Success", "Success");
                         Log.d("Success", response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+    // Get all topics of a user
+    // http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
+
+    public void getAllTopicsOfAUser(User user) {
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_topics_of_user&ruid=" + user.getId(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Success", "Success");
+                        Log.d("Success", response.toString());
+
+
+
+
+                        try{
+                            JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
+                            ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+                            Log.d("Suc", obj.get(0).toString());
+
+                            int topicNumber = obj.length();
+                            for(int i = 0 ; i < topicNumber ; i++){
+                                JSONObject tempObj = (JSONObject) obj.get(i);
+                                Topic tempTop = new Topic();
+
+                                GsonRequest<Topic> tempGson = new GsonRequest<Topic>(Request.Method.GET,"",Topic.class,null,null);
+                                tempTop = tempGson.getGson().fromJson(tempObj.toString(),Topic.class);
+
+                                Log.d("DOOOOOOOONE -------", tempTop.toString());
+//                                tempTop.setId(Integer.parseInt(tempObj.getString("id")));
+//                                tempTop.setImage_url(tempObj.getString("image"));
+//                                tempTop.setBody(tempObj.getString("body"));
+//                                tempTop.setOwner(Integer.parseInt(tempObj.getString("owner")));
+//                                tempTop.setStatus(Integer.parseInt(tempObj.getString("status")));
+//                                tempTop.setTimestamp(new Timestamp( (new Date()).getTime() ));
+//                                tempTop.setTags(null);
+//                                tempTop.setQuiz(null);
+//                                tempTop.setMaterials(null); // media?
+//                                tempTop.setComments(null);
+                            }
+
+
+
+                        }catch (JSONException e){}
+
                     }
                 },
                 new Response.ErrorListener() {
