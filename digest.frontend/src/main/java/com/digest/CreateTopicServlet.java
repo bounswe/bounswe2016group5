@@ -86,6 +86,7 @@ public class CreateTopicServlet extends HttpServlet {
 			JSONArray quizes = new JSONArray();
 			JSONArray media = new JSONArray();
 			JSONArray comments = new JSONArray();
+			
 
 			Enumeration<String> names = request.getParameterNames();
 			while (names.hasMoreElements()) {
@@ -119,15 +120,14 @@ public class CreateTopicServlet extends HttpServlet {
 				}
 			}
 			topic.put("image", "url");
+			System.out.println(topic.toString());
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			System.out.println(topic.toString());
 			wr.writeBytes(topic.toString());
 			wr.flush();
 			wr.close();
-
+			
 			int responseCode = con.getResponseCode();
-			System.out.println(responseCode);
 			if (responseCode == 200 && request.getParameter("f") != null) {
 				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 				String inputLine;
@@ -137,7 +137,6 @@ public class CreateTopicServlet extends HttpServlet {
 					res.append(inputLine);
 				}
 				in.close();
-				System.out.println("topic_id" + Integer.parseInt(res.toString()));
 				request.setAttribute("topic_id", Integer.parseInt(res.toString()));
 				request.getRequestDispatcher("/ViewTopicServlet").forward(request, response);
 				// response.sendRedirect("index.jsp");
@@ -151,7 +150,6 @@ public class CreateTopicServlet extends HttpServlet {
 	
 
 		}
-		System.out.println("Post succed with " + f + " " + ServletFileUpload.isMultipartContent(request));
 
 	}
 
