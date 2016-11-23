@@ -58,6 +58,7 @@ public class LoginServlet extends HttpServlet {
 		StringBuffer bf = new StringBuffer();
 		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
 		bf.append("?");
+		
 		Enumeration<String> names = request.getParameterNames();
 
 		while (names.hasMoreElements()) {
@@ -68,15 +69,13 @@ public class LoginServlet extends HttpServlet {
 				bf.append("&");
 		}
 		String url = bf.toString();
-
 		URL jsonpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
 		BufferedReader buffread = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
-
 		while ((recv = buffread.readLine()) != null)
 			recvbuff += recv;
 		buffread.close();
-
+		
 		try {
 			JSONObject obj = new JSONObject(recvbuff);
 			if (obj.has("errorName")) {
@@ -84,7 +83,6 @@ public class LoginServlet extends HttpServlet {
 				String msg = obj.getString("errorDescription");
 				session.setAttribute("error", msg);
 				response.sendRedirect("login.jsp");
-
 			} else {
 
 				Set<String> sattr = obj.keySet();
@@ -94,8 +92,7 @@ public class LoginServlet extends HttpServlet {
 						session.setAttribute(attribute, obj.get(attribute));
 					}
 				}
-
-				response.sendRedirect("index.jsp");
+				response.sendRedirect("MainServlet");
 
 			}
 
