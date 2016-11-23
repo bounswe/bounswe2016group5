@@ -1,6 +1,7 @@
 package digest.digestandroid;
 
 import digest.digestandroid.Models.Comment;
+import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 
 /**
@@ -18,6 +19,7 @@ public class Cache {
     Comment comment;
     int newComment = 0;
     User user;
+    Topic topic;
 
     public static Cache getInstance() {
         return ourInstance;
@@ -32,6 +34,14 @@ public class Cache {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 
     public Comment getComment() {

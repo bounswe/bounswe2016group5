@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import digest.digestandroid.Cache;
 import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
@@ -157,6 +158,34 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(stringRequest);
 
     }
+
+    public void getTopic(String tag, int topicId) {
+        Log.d( "process", "Get Topic ");
+
+        GsonRequest<Topic> myReq = new GsonRequest<Topic>(Request.Method.GET,
+                mainURL + "/?f=get_topic&tid=" + topicId,
+                Topic.class,
+                new Response.Listener<Topic>() {
+                    @Override
+                    public void onResponse(Topic response) {
+                        Log.d("Success", "Success");
+                        Log.d("Success", response.toString());
+                        // TODO: 23.11.2016 Comment out next statement when click listener on HomePage Topic objects implements and directs here 
+                        //Cache.getInstance().setTopic(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+
+    }
+
+
 
     public void createTopic(String tag, final Topic topic) throws JSONException {
 
