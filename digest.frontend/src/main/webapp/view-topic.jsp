@@ -253,7 +253,7 @@ ul#horizontal-list a:hover {
 						</div>
 						<div class="navbar-collapse collapse sidebar-navbar-collapse">
 							<ul class="nav navbar-nav">
-								<li class="active"><a href="#"><span
+								<li class="active"><a href="MainServlet"><span
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
 								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
@@ -426,8 +426,8 @@ ul#horizontal-list a:hover {
 																					JSONObject comOfcoms = (JSONObject) commentOfcomments;
 
 																					if (comOfcoms.getInt("ucid") == com.getInt("id")) {
-																						int lid = com.getInt("id");
-																						int luid = com.getInt("uid");
+																						int lid = comOfcoms.getInt("id");
+																						int luid = comOfcoms.getInt("uid");
 
 																						String lurl = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
 																								+ luid;
