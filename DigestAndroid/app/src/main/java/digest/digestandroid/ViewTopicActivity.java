@@ -50,17 +50,12 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
         Log.v("MAIN METHOD", "MAIN METHOD");
         // APIHandler.getInstance().getTopic("ASDASD", 43);
 
         // TODO: 19.11.2016 Get topic info from database
 
+        /*
         User user = new User();
         user.setUsername("Burki");
         topic = new Topic();
@@ -72,7 +67,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         topic.getMedia().add("111111111111111");
         topic.getMedia().add("22222222222222222");
         topic.getMedia().add("333333333333");
-
+        */
 
         Response.Listener<String> response = new Response.Listener<String>() {
             @Override
@@ -81,7 +76,12 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
 
                 // Writing data to SharedPreferences
                 Cache.getInstance().setTopicCreator(response);
-                initializeTopic();
+
+                viewPager = (ViewPager) findViewById(R.id.viewpager);
+                setupViewPager(viewPager);
+
+                tabLayout = (TabLayout) findViewById(R.id.tabs);
+                tabLayout.setupWithViewPager(viewPager);
             }
         };
 
@@ -92,13 +92,13 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
             }
         };
 
-        APIHandler.getInstance().getUsername("GET TOPIC", topic.getOwner(), response, errorListener);
+        APIHandler.getInstance().getUsername("GET TOPIC", Cache.getInstance().getTopic().getId(), response, errorListener);
 
 
         //topicGeneralFragment.initializeTopic(topic);
 
     }
-
+/*
     public void initializeTopic(){
         TopicGeneralFragment topicGeneralFragment = (TopicGeneralFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(0);
         topicGeneralFragment.initializeInfo(topic);
@@ -112,7 +112,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         TopicQuizFragment topicQuizFragment = (TopicQuizFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(3);
         topicQuizFragment.initializeInfo(topic);
     }
-
+*/
     public void thumbsUp(View view) {
         TopicCommentFragment topicCommentFragment = (TopicCommentFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(1);
         topicCommentFragment.thumbsUp();

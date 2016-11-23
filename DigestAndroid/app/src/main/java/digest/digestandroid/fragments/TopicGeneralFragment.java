@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import digest.digestandroid.Cache;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
 
@@ -25,7 +26,7 @@ import digest.digestandroid.R;
  */
 public class TopicGeneralFragment extends Fragment {
     protected View rootView;
-    protected Topic topic = new Topic();
+    //protected Topic topic = new Topic();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,7 +90,7 @@ public class TopicGeneralFragment extends Fragment {
 
     }
 
-
+/*
     public void initializeInfo(Topic topic){
         this.topic.setHeader(topic.getHeader());
         this.topic.setBody(topic.getBody());
@@ -98,20 +99,21 @@ public class TopicGeneralFragment extends Fragment {
         this.topic.setRating(topic.getRating());
         this.topic.setTags(topic.getTags());
     }
+   */
 
     public void setTopicInfo(){
 
         TextView header = (TextView) rootView.findViewById(R.id.tTopicHeader);
-        header.setText(topic.getHeader());
+        header.setText(Cache.getInstance().getTopic().getHeader());
 
         TextView desc = (TextView) rootView.findViewById(R.id.tDescription);
-        desc.setText(topic.getBody());
+        desc.setText(Cache.getInstance().getTopic().getBody());
 
         TextView owner = (TextView) rootView.findViewById(R.id.tTopicOwner);
-        owner.setText(String.valueOf(topic.getOwner()));
+        owner.setText(Cache.getInstance().getTopicCreator());
 
         TextView rating = (TextView) rootView.findViewById(R.id.tRating);
-        rating.setText(String.valueOf(topic.getRating()));
+        rating.setText(String.valueOf(Cache.getInstance().getTopic().getRating()));
 
 
 
