@@ -93,14 +93,14 @@ public class TopicMaterialFragment extends Fragment {
 
 
     public void initializeInfo(Topic topic){
-        this.topic.setTitle(topic.getTitle());
+        this.topic.setHeader(topic.getHeader());
         this.topic.setBody(topic.getBody());
         this.topic.setOwner(topic.getOwner());
-        this.topic.setImage_url(topic.getImage_url());
+        this.topic.setImage(topic.getImage());
         this.topic.setRating(topic.getRating());
-        this.topic.setMaterials(topic.getMaterials());
+        this.topic.setMedia(topic.getMedia());
 
-        material_list = topic.getMaterials();
+        material_list = topic.getMedia();
 
     }
 

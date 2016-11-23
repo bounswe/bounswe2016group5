@@ -100,6 +100,7 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
     public void createTopicRequest(View view) throws JSONException {
         topic = new Topic();
 
+
         //topic.setTitle(edit_text_title.getText().toString());
 
         //this.finish();
@@ -113,7 +114,7 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
         TopicAddMaterialFragment topicAddMaterialFragment = (TopicAddMaterialFragment) ((myViewPagerAdapter)viewPager.getAdapter()).getItem(1);
         topicAddMaterialFragment.fillMaterial(topic);
 
-        ArrayList<String> a = topic.getMaterials();
+        ArrayList<String> a = topic.getMedia();
         //Log.d("TOPIC CHECK --------", "mmmm"+a.get(0));
         APIHandler.getInstance().createTopic("top", topic);
 

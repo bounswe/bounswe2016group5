@@ -59,13 +59,13 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         user.setUsername("Burki");
         topic = new Topic();
         topic.setOwner(user.getId());
-        topic.setImage_url("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
-        topic.setTitle("TITLEEEEEE");
+        topic.setImage("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
+        topic.setHeader("TITLEEEEEE");
         topic.setBody("HEBELE HUBELE CCOK GUZEL BI TEXT BU");
-        topic.setMaterials(new ArrayList<String>());
-        topic.getMaterials().add("111111111111111");
-        topic.getMaterials().add("22222222222222222");
-        topic.getMaterials().add("333333333333");
+        topic.setMedia(new ArrayList<String>());
+        topic.getMedia().add("111111111111111");
+        topic.getMedia().add("22222222222222222");
+        topic.getMedia().add("333333333333");
 
         TopicGeneralFragment topicGeneralFragment = (TopicGeneralFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(0);
         topicGeneralFragment.initializeInfo(topic);

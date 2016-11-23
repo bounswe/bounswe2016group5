@@ -12,6 +12,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -21,10 +22,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import digest.digestandroid.Models.Comment;
+import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
+import digest.digestandroid.Models.TopicTag;
 import digest.digestandroid.Models.User;
 
 /**
@@ -154,33 +160,27 @@ public class APIHandler extends Application{
 
     public void createTopic(String tag, final Topic topic) throws JSONException {
 
-        JSONObject jsonBody = new JSONObject();
-        JSONArray tags = new JSONArray();
-        JSONArray quizes = new JSONArray();
-        JSONArray media = new JSONArray();
-        JSONArray comments = new JSONArray();
+        Gson gson = new Gson();
+        Topic top = new Topic();
+        top.setOwner(32);
+        top.setHeader("andeneme2");
+        top.setBody("andeneme");
+        top.setImage("");
+        //top.setComments(new ArrayList<Comment>());
+        //top.setQuizzes(new ArrayList<QuizQuestion>());
+        //top.setMedia(new ArrayList<String>());
+        //top.setTimestamp(new Timestamp());
+        top.setId(-1);
+        top.setTags(new ArrayList<TopicTag>());
+        top.setRating(0);
+        top.setStatus(-1);
+
+        final String jsonInString = gson.toJson(top);
 
 
 
-        jsonBody.put("id", -1);
-        jsonBody.put("header", topic.getTitle());
-        jsonBody.put("image", topic.getImage_url());
-        jsonBody.put("body",topic.getBody());
-        jsonBody.put("owner", 32);
-        jsonBody.put("status", -1);
-        jsonBody.put("timestamp", "");
-        jsonBody.put("tags", tags);
-        jsonBody.put("media", media);
 
-
-        jsonBody.put("quizes", quizes);
-        jsonBody.put("comments", comments);
-
-
-        final String mRequestBody = jsonBody.toString();
-        Log.d("---Req", mRequestBody);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL+ "/?f=create_topic", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL+"/?f=create_topic", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.i("VOLLEY", response);
@@ -199,9 +199,10 @@ public class APIHandler extends Application{
             @Override
             public byte[] getBody() throws AuthFailureError {
                 try {
-                    return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    Log.d("---Json in string",jsonInString);
+                    return jsonInString == null ? null : jsonInString.getBytes("utf-8");
                 } catch (UnsupportedEncodingException uee) {
-                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", jsonInString, "utf-8");
                     return null;
                 }
             }
@@ -216,7 +217,7 @@ public class APIHandler extends Application{
                 return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
             }
         };
-            VolleySingleton.getInstance().addToRequestQueue(stringRequest);
 
+        VolleySingleton.getInstance().addToRequestQueue(stringRequest);
     }
 }

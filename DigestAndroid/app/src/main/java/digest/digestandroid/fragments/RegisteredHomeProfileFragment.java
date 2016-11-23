@@ -91,10 +91,10 @@ public class RegisteredHomeProfileFragment extends Fragment {
 
 
     public void initializeInfo(Topic topic){
-        this.topic.setTitle(topic.getTitle());
+        this.topic.setMedia(topic.getMedia());
         this.topic.setBody(topic.getBody());
         this.topic.setOwner(topic.getOwner());
-        this.topic.setImage_url(topic.getImage_url());
+        this.topic.setImage(topic.getImage());
         this.topic.setRating(topic.getRating());
         this.topic.setTags(topic.getTags());
     }
@@ -102,7 +102,7 @@ public class RegisteredHomeProfileFragment extends Fragment {
     public void setTopicInfo(){
 
         TextView header = (TextView) rootView.findViewById(R.id.tTopicHeader);
-        header.setText(topic.getTitle());
+        header.setText(topic.getHeader());
 
         TextView desc = (TextView) rootView.findViewById(R.id.tDescription);
         desc.setText(topic.getBody());

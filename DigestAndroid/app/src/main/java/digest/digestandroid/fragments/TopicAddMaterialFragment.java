@@ -114,7 +114,7 @@ public class TopicAddMaterialFragment extends Fragment {
 
     public void fillMaterial(Topic topic) {
         mtopic = topic;
-        mtopic.setMaterials(material_list);
+        mtopic.setMedia(material_list);
     }
 
     protected void addtoMaterialList(String material) {
