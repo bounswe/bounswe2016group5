@@ -41,34 +41,37 @@ public class SubscribeServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		HttpSession session = request.getSession(true);
+		
 		StringBuffer bf = new StringBuffer();
-		bf.append("http://localhost:8080/digest.api/");
-		bf.append("?");
+		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_subscriber&");
+		bf.append("uid="+session.getAttribute("id")+"&");
 		Enumeration<String> names = request.getParameterNames();
 		
-		
+		int tid=-1;
 		while (names.hasMoreElements()) {
 			String attr = names.nextElement();
 			String value = request.getParameter(attr);
 			bf.append(attr + "=" + value);
+			tid = Integer.parseInt(value);
 			if (names.hasMoreElements())
 				bf.append("&");
 		}
 
-		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_subscriber&tid=38&uid=36";
-		//String url = bf.toString();
+		String url = bf.toString();
 		URL connpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) connpage.openConnection();
 
 		int responseCode = urlcon.getResponseCode();
-		System.out.println("response " + responseCode);
-		if (responseCode == 200 && request.getParameter("f") != null) {
-			response.sendRedirect("index.jsp");
+		if (responseCode == 200 ) {
+			request.setAttribute("topic_id", tid);
+			request.getRequestDispatcher("/ViewTopicServlet").forward(request, response);
 		} else if (responseCode == 400) {
-			HttpSession session = request.getSession(true);
+			//HttpSession session = request.getSession(true);
 			String errMsg = "Unexpected Error occured!!";
 			session.setAttribute("error", errMsg);
-			response.sendRedirect("signup.jsp");
+			request.setAttribute("topic_id", tid);
+			request.getRequestDispatcher("/ViewTopicServlet").forward(request, response);
 		}
 	}
 }
