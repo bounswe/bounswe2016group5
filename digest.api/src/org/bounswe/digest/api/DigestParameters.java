@@ -15,7 +15,7 @@ public class DigestParameters {
 	public static final String GET_TOPICS_OF_USER = "get_topics_of_user";
 	public static final String ADD_QUIZ = "add_quiz";
 	public static final String ADD_COMMENT = "add_comment";
-	public static final String GET_COMMENT = "get_comment";
+	public static final String GET_COMMENTS_OF_TOPIC = "get_comments_of_topic";
 	public static final String GET_TOPIC = "get_topic";
 	public static final String GET_QUIZ = "get_quiz";
 	public static final String GET_USERNAME = "get_username";

@@ -51,17 +51,17 @@ public class DigestAPIServlet extends HttpServlet {
 			// resp.getWriter().append(invalidSession());
 
 			// }
-		} else if (f.equals(DigestParameters.GET_COMMENT)) {
-			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
-			String session = req.getParameter(DigestParameters.SESSION);
+		} else if (f.equals(DigestParameters.GET_COMMENTS_OF_TOPIC)) {
+			//int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			//String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			if (UserJDBC.isSessionValid(uid, session)) {
+			//if (UserJDBC.isSessionValid(uid, session)) {
 				resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
 				// resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
-			} else {
-				resp.getWriter().append(invalidSession());
+			//} else {
+				//resp.getWriter().append(invalidSession());
 
-			}
+			//}
 		}else if (f.equals(DigestParameters.GET_TOPIC)) {
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
 			resp.getWriter().append(TopicJDBC.getTopic(tid));

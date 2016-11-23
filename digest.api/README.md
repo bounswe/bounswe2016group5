@@ -75,8 +75,8 @@ Example:
 ## Add Comment
 	POST request with following json
 
-## Get Comments
-	<API_PATH>/?f=get_comment&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&tid=<TOPICID>
+## Get Comments of Topic
+	<API_PATH>/?f=get_comments_of_topic&tid=<TOPICID>
 	
 
 ## Get topic
