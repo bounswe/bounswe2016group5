@@ -31,7 +31,24 @@
 	also implicitly role set as user.
 
 ## Create Topic
-	A json object with following parameters should be sent.
+	URL:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=create_topic
+	Method:
+		POST
+	Body:
+		JSON object for topic
+	Succes response:
+		status:200
+		content: <tid>
+	Error response:
+		status:400
+	
+	The create_topic returns topic id with resonse code "200" if it succeeds otherwise response code is set to "400"
+	
+	JSON Object example:
+	{"owner":<user-id>,"image":<image-url>,"header":<topic-header>,"body":<topic-body>,"tags":[{"tag":<tag-string>},{"tag":<tag-string>}]}
+
+	Remark: You don't need to specify the fields that are automatically assigned in api. You need to be careful about fields names of JSON object. Names should be exactly the same with Topic model in the api.
 	
 ## Get all topics of user
 	URL:
@@ -68,36 +85,8 @@
 	Error response:
 		hakkimizda hayirlisi olsun
 	Example:
-		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_quiz&tid=25
-		Body:
-		{"name":"Fox quiz","questions":[{"text":"What does the fox say?","choices":
-			[
-				"Ring-ding-ding-ding-dingeringeding!",
-				"Wa-pa-pa-pa-pa-pa-pow!",
-				"meow meow meow",
-				"wof wof wof!"
-			]
-			,"answers":[0,1]
-		}
-		
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 	
-## GetQuiz
-	URL:
-		digest.us-east-1.elasticbeanstalk.com/digest.api 
-	Method:
-		GET
-	Params:
-		f=get_topic
-		tid=<topic_id>
-	Succes response:
-		status:200
-		content:<array_of_quizzes>
-			[<quiz>,<quiz>,..]
-			see add quiz for the json
-	Error response:
-		Kismet artik..
-	Example:
-		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_quiz&tid=8
 	
 ## Add Comment
 	URL:
