@@ -51,23 +51,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Log.v("MAIN METHOD", "MAIN METHOD");
-        // APIHandler.getInstance().getTopic("ASDASD", 43);
 
-        // TODO: 19.11.2016 Get topic info from database
-
-        /*
-        User user = new User();
-        user.setUsername("Burki");
-        topic = new Topic();
-        topic.setOwner(32);
-        topic.setImage("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
-        topic.setHeader("TITLEEEEEE");
-        topic.setBody("HEBELE HUBELE CCOK GUZEL BI TEXT BU");
-        topic.setMedia(new ArrayList<String>());
-        topic.getMedia().add("111111111111111");
-        topic.getMedia().add("22222222222222222");
-        topic.getMedia().add("333333333333");
-        */
 
         Response.Listener<String> response = new Response.Listener<String>() {
             @Override
@@ -128,10 +112,13 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         // If yes, prepare comment
         if(Cache.getInstance().newComment == 1){
             Cache.getInstance().newComment = 0;
-            Cache.getInstance().getComment().setUsername("111111111");
-            Cache.getInstance().getComment().setRate(123);
+            Cache.getInstance().getComment().setUid(Cache.getInstance().getUser().getId());
+            Cache.getInstance().getComment().setTid(Cache.getInstance().getTopic().getId());
+            Cache.getInstance().getComment().setUcid(-1);
+            Cache.getInstance().getComment().setRate(0);
+
             TopicCommentFragment topicCommentFragment = (TopicCommentFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(1);
-            topicCommentFragment.addComment(Cache.getInstance().getComment());
+            topicCommentFragment.addComment();
         }
     }
 

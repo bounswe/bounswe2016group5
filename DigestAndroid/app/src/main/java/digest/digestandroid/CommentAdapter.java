@@ -46,8 +46,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Comment comment = commentList.get(position);
-        holder.body.setText(comment.getText());
-        holder.owner.setText(comment.getUsername());
+        holder.body.setText(comment.getBody());
+        holder.owner.setText(Integer.toString(comment.getUid()));
         holder.rate.setText(String.valueOf(comment.getRate()));
     }
 

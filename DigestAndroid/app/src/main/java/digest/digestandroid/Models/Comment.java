@@ -1,5 +1,7 @@
 package digest.digestandroid.Models;
 
+import java.sql.Timestamp;
+
 /**
  * Created by oykuyilmaz on 15/11/16.
  */
@@ -7,43 +9,14 @@ package digest.digestandroid.Models;
 public class Comment {
     private int id;
     private int uid;
-    private String username;
-    private String text;
+    private int ucid;
+    private int tid;
+    //private String username;
+    private String body;
     private int rate;
+    private Timestamp timestamp;
 
     public Comment() {
-    }
-
-    public Comment(int id, int uid, String username, String text, int rate){
-        this.id=id;
-        this.setUid(uid);
-        this.setText(text);
-        this.setUsername(username);
-        this.setRate(rate);
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getUid() {
-        return uid;
-    }
-
-    public void setUid(int uid) {
-        this.uid = uid;
     }
 
     public int getId() {
@@ -54,6 +27,38 @@ public class Comment {
         this.id = id;
     }
 
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public int getUcid() {
+        return ucid;
+    }
+
+    public void setUcid(int ucid) {
+        this.ucid = ucid;
+    }
+
+    public int getTid() {
+        return tid;
+    }
+
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
     public int getRate() {
         return rate;
     }
@@ -62,4 +67,11 @@ public class Comment {
         this.rate = rate;
     }
 
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
 }

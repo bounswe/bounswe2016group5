@@ -24,7 +24,7 @@ public class AddCommentActivity extends AppCompatActivity {
     public void save(View view) {
         Comment comment = new Comment();
 
-        comment.setText( String.valueOf(((EditText)findViewById(R.id.CommentBox)).getText()) );
+        comment.setBody( String.valueOf(((EditText)findViewById(R.id.CommentBox)).getText()) );
 
         Cache.getInstance().setComment(comment);
 

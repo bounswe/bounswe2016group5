@@ -257,4 +257,33 @@ public class APIHandler extends Application{
     }
 
 
+    public void addComment(String tag, Comment comment, Response.Listener<String> successListener,
+                            Response.ErrorListener failureListener) {
+
+        String commentBody;
+        commentBody = comment.getBody().replace(" ", "%20");
+        Log.e("commentBody:", commentBody);
+
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=add_comment&body=" + commentBody + "&uid=" + comment.getUid() + "&ucid=" + comment.getUcid() + "&tid=" + comment.getTid() ,
+                successListener, failureListener){
+                @Override
+                protected Response<String> parseNetworkResponse (NetworkResponse response){
+                    String responseString = "";
+                    if (response != null) {
+                        responseString = String.valueOf(response.statusCode);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+        };
+
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+
+    }
+
+
+
+
 }
