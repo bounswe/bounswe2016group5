@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import digest.digestandroid.Cache;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
 
@@ -29,7 +31,7 @@ public class TopicMaterialFragment extends Fragment {
     private View rootView;
     private ListView mListView;
 
-    private ArrayList<String> material_list = new ArrayList<String>();
+    private ArrayList<String> material_list;
     private ArrayAdapter<String> list_adapter;
 
     protected Topic topic = new Topic();
@@ -82,6 +84,10 @@ public class TopicMaterialFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_topic_material, container, false);
 
+        material_list = new ArrayList<String>();
+
+        material_list = Cache.getInstance().getTopic().getMedia();
+
         mListView = (ListView) rootView.findViewById(R.id.list_view_materials);
         list_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, material_list);
         mListView.setAdapter(list_adapter);
@@ -89,19 +95,6 @@ public class TopicMaterialFragment extends Fragment {
         list_adapter.notifyDataSetChanged();
 
         return rootView;
-    }
-
-
-    public void initializeInfo(Topic topic){
-        this.topic.setHeader(topic.getHeader());
-        this.topic.setBody(topic.getBody());
-        this.topic.setOwner(topic.getOwner());
-        this.topic.setImage(topic.getImage());
-        this.topic.setRating(topic.getRating());
-        this.topic.setMedia(topic.getMedia());
-
-        material_list = topic.getMedia();
-
     }
 
     public void setTopicInfo(){

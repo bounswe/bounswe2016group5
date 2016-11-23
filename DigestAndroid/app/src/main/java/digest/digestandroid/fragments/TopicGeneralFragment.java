@@ -119,6 +119,12 @@ public class TopicGeneralFragment extends Fragment {
         TextView rating = (TextView) rootView.findViewById(R.id.tRating);
         rating.setText(String.valueOf(Cache.getInstance().getTopic().getRating()));
 
+        String tagss;
+        Cache.getInstance().getTopic().getTags();
+        TextView tags = (TextView) rootView.findViewById(R.id.tagsTitle);
+        rating.setText(String.valueOf(Cache.getInstance().getTopic().getRating()));
+
+
         NetworkImageView imageView  = (NetworkImageView) rootView.findViewById(R.id.topicImage);
         final ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
         imageView.setImageUrl(Cache.getInstance().getTopic().getImage(),imageLoader);
