@@ -118,8 +118,10 @@ public class TopicAddMaterialFragment extends Fragment {
     }
 
     protected void addtoMaterialList(String material) {
-        material_list.add(0,material);
-        list_adapter.notifyDataSetChanged();
+        if(!material.isEmpty()) {
+            material_list.add(0, material);
+            list_adapter.notifyDataSetChanged();
+        }
     }
 
 

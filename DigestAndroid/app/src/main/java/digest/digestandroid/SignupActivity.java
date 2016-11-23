@@ -1,5 +1,6 @@
 package digest.digestandroid;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -10,6 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -73,10 +83,49 @@ public class SignupActivity extends AppCompatActivity {
 
         User user = new User(username, password, email, firstname, lastname, 0);
 
-        // TODO: Implement your own signup logic here.
-        APIHandler.getInstance().signup("TestSU", user);
+        Response.Listener<String> response = new Response.Listener<String>(){
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                Log.i("Response", "onResponse: "+ response);
+                if(response.equals("200")) {
+                    Intent toLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(toLogin);
+                    finish();
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(getBaseContext(), "Sign Up Failed", Toast.LENGTH_LONG).show();
+                    _usernameText.setText("");
+                    _firstnameText.setText("");
+                    _lastnameText.setText("");
+                    _emailText.setText("");
+                    _passwordText.setText("");
+                    _signupButton.setEnabled(true);
+                }
 
-        new android.os.Handler().postDelayed(
+            }
+        };
+
+        Response.ErrorListener errorListener =  new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Log.d("Response","Failed");
+                _usernameText.setText("");
+                _firstnameText.setText("");
+                _lastnameText.setText("");
+                _emailText.setText("");
+                _passwordText.setText("");
+                _signupButton.setEnabled(true);
+            }
+        };
+
+
+
+        // TODO: Implement your own signup logic here.
+        APIHandler.getInstance().signup("TestSU", user, response, errorListener);
+
+        /*new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onSignupSuccess or onSignupFailed
@@ -85,7 +134,7 @@ public class SignupActivity extends AppCompatActivity {
                         // onSignupFailed();
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                }, 3000);*/
     }
 
 
