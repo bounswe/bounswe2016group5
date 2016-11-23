@@ -4,14 +4,25 @@ import android.app.Application;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import digest.digestandroid.Cache;
+import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 
 /**
@@ -63,16 +74,14 @@ public class APIHandler extends Application{
 
     public void loginPOST(String tag, final User user) {
 
-        Log.d("222222", "222222");
-
         GsonRequest<User> myReq = new GsonRequest<User> (Request.Method.POST,
-                mainURL + "/?f=login",
-                User.class,
+                mainURL + "/?f=login", User.class,
                 new Response.Listener<User>() {
                     @Override
                     public void onResponse(User response) {
                         Log.d("Success", "Success");
-                        Log.d("Success", response.toString());
+                        Log.d("Success", "+" + response.toString());
+                        //Cache.getInstance().setUser(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -80,19 +89,9 @@ public class APIHandler extends Application{
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Failed", "Login Failed");
                     }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("username",user.getUsername());
-                params.put("password",user.getPassword());
-                return params;
-            }
-        };
+                });
 
         VolleySingleton.getInstance().addToRequestQueue(myReq);
-
-        Log.d("333333", "333333");
 
     }
 
@@ -138,4 +137,70 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(stringRequest);
 
     }
+
+    /*
+    * Create Topic Handler
+    *<API_PATH>/?f=register&username=<USERNAME>&password=<PASSWORD>&email=<EMAIL>&first_name=<FIRST_NAME>&<LAST_NAME>=<LAST_NAME>&status=<STATUS_INT>
+    * returns 200 or 400
+    *
+    */
+    public void createTopic(String tag, final Topic topic) {
+        Log.d( "process", "Topic Creation ");
+
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(topic);
+        JSONObject json = null;
+        try {
+             json = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, mainURL + "/?f=create_topic",
+                json,
+                new Response.Listener<JSONObject>(){
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("Response", "onResponse: "+ response);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Response","Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(jsonObjectRequest);
+
+    }
+
+
+    // Get A Topic Handler
+    // <API_PATH>/?f=get_topics_of_user&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&tid=<TOPIC_ID>
+    public void getATopic(String tag, Topic topic) {
+        GsonRequest<Topic> myReq = new GsonRequest<Topic>(Request.Method.GET,
+                mainURL + "/?f=tid=" + topic.getId(),
+                Topic.class,
+                new Response.Listener<Topic>() {
+                    @Override
+                    public void onResponse(Topic response) {
+                        Log.d("Success", "Success");
+                        Log.d("Success", response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+
 }
