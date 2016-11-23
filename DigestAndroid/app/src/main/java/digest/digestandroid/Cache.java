@@ -20,6 +20,7 @@ public class Cache {
     int newComment = 0;
     User user;
     Topic topic;
+    String topicCreator; // username of topic creator
 
     public static Cache getInstance() {
         return ourInstance;
@@ -42,6 +43,14 @@ public class Cache {
 
     public void setTopic(Topic topic) {
         this.topic = topic;
+    }
+
+    public String getTopicCreator() {
+        return topicCreator;
+    }
+
+    public void setTopicCreator(String topicCreator) {
+        this.topicCreator = topicCreator;
     }
 
     public Comment getComment() {

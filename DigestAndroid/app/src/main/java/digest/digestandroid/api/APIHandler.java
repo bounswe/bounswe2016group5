@@ -315,5 +315,15 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
 
+    public void getUsername(String tag, int userID, Response.Listener<String> successListener,
+                      Response.ErrorListener failureListener) {
+
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_username&uid=" + userID,
+                successListener, failureListener);
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
 
 }

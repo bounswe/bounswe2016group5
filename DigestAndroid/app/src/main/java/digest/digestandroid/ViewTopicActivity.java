@@ -14,6 +14,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,15 +57,14 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         tabLayout.setupWithViewPager(viewPager);
 
         Log.v("MAIN METHOD", "MAIN METHOD");
-        //APIHandler.getInstance().getTopic("ASDASD", 43);
+        // APIHandler.getInstance().getTopic("ASDASD", 43);
 
         // TODO: 19.11.2016 Get topic info from database
-
 
         User user = new User();
         user.setUsername("Burki");
         topic = new Topic();
-        topic.setOwner(user.getId());
+        topic.setOwner(32);
         topic.setImage("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
         topic.setHeader("TITLEEEEEE");
         topic.setBody("HEBELE HUBELE CCOK GUZEL BI TEXT BU");
@@ -69,6 +73,33 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         topic.getMedia().add("22222222222222222");
         topic.getMedia().add("333333333333");
 
+
+        Response.Listener<String> response = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Get username", "Success " + response);
+
+                // Writing data to SharedPreferences
+                Cache.getInstance().setTopicCreator(response);
+                initializeTopic();
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Failed", "Login Failed");
+            }
+        };
+
+        APIHandler.getInstance().getUsername("GET TOPIC", topic.getOwner(), response, errorListener);
+
+
+        //topicGeneralFragment.initializeTopic(topic);
+
+    }
+
+    public void initializeTopic(){
         TopicGeneralFragment topicGeneralFragment = (TopicGeneralFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(0);
         topicGeneralFragment.initializeInfo(topic);
 
@@ -80,12 +111,6 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
 
         TopicQuizFragment topicQuizFragment = (TopicQuizFragment)((ViewPagerAdapter)viewPager.getAdapter()).getItem(3);
         topicQuizFragment.initializeInfo(topic);
-
-
-
-
-        //topicGeneralFragment.initializeTopic(topic);
-
     }
 
     public void thumbsUp(View view) {
@@ -120,6 +145,10 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
