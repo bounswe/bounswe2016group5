@@ -10,13 +10,24 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.android.volley.Response;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import digest.digestandroid.Models.Topic;
+import digest.digestandroid.api.APIHandler;
 import digest.digestandroid.fragments.RegisteredHomeChannelFragment;
 import digest.digestandroid.fragments.RegisteredHomeHomeFragment;
 import digest.digestandroid.fragments.RegisteredHomeProfileFragment;
@@ -108,13 +119,93 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                 }
         );
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager_home);
-        defineViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs_home);
-        tabLayout.setupWithViewPager(viewPager);
 
-        loadViewPager();
+
+
+        final Response.Listener<String> userTopicsResponseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                try{
+                    JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
+                    ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+
+                    int topicNumber = obj.length();
+                    for(int i = 0 ; i < topicNumber ; i++){
+                        JSONObject tempObj = (JSONObject) obj.get(i);
+                        Topic tempTop = new Topic();
+
+                        Gson gson = new Gson();
+                        tempTop = gson.fromJson(tempObj.toString(),Topic.class);
+                        arrayList.add(tempTop);
+                    }
+
+                    CacheTopiclist.getInstance().setUserTopics(arrayList);
+
+
+
+
+
+                    viewPager = (ViewPager) findViewById(R.id.viewpager_home);
+                    defineViewPager(viewPager);
+
+                    tabLayout = (TabLayout) findViewById(R.id.tabs_home);
+                    tabLayout.setupWithViewPager(viewPager);
+                    loadViewPager();
+
+
+
+
+
+
+                }catch (JSONException e){}
+
+            }
+        };
+        Response.Listener<String> recentTopicsResponseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                try{
+                    JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
+                    ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+
+                    int topicNumber = obj.length();
+                    for(int i = 0 ; i < topicNumber ; i++){
+                        JSONObject tempObj = (JSONObject) obj.get(i);
+                        Topic tempTop = new Topic();
+
+                        Gson gson = new Gson();
+                        tempTop = gson.fromJson(tempObj.toString(),Topic.class);
+                        arrayList.add(tempTop);
+                    }
+
+                    CacheTopiclist.getInstance().setRecentTopics(arrayList);
+
+
+
+
+
+                    APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),userTopicsResponseListener);
+
+
+
+
+
+
+
+                }catch (JSONException e){}
+
+            }
+        };
+
+        APIHandler.getInstance().getRecentTopics(10,recentTopicsResponseListener);
+
     }
 
 
