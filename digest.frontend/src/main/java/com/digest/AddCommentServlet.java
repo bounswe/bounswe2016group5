@@ -65,7 +65,7 @@ public class AddCommentServlet extends HttpServlet {
 		HttpURLConnection urlcon = (HttpURLConnection) connpage.openConnection();
 		
 		int responseCode = urlcon.getResponseCode();
-		System.out.println(responseCode);
+		System.out.println("response " + responseCode);
 		if (responseCode == 200 ) {
 			response.sendRedirect("/ViewTopicServlet");
 		} else if (responseCode == 400) {
@@ -74,8 +74,6 @@ public class AddCommentServlet extends HttpServlet {
 			session.setAttribute("error", errMsg);
 			//response.sendRedirect("view-topic.jsp");
 		}
-		
-		
 		
 	}
 }
