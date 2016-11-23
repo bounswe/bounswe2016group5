@@ -1,5 +1,6 @@
 package digest.digestandroid.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,13 +14,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+
 import java.util.ArrayList;
 
+import digest.digestandroid.Cache;
 import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 import digest.digestandroid.R;
 import digest.digestandroid.HomeAdapter;
+import digest.digestandroid.ViewTopicActivity;
 import digest.digestandroid.api.APIHandler;
 
 
@@ -46,37 +51,7 @@ public class RegisteredHomeHomeFragment extends Fragment {
         homeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
-        //--------------
-        Topic topic;
-        User user = new User("burrrk","1234");
-        user.setId(25);
-        topic = new Topic();
-        //topic.setOwner(user);
-        topic.setImage("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
-        topic.setHeader("TITLEEEEEE");
-        topic.setBody("HEBELE HUBELE CCOK GUZEL BI TEXT BU");
-        topic.setMedia(new ArrayList<String>());
-        topic.getMedia().add("111111111111111");
-        topic.getMedia().add("22222222222222222");
-        topic.getMedia().add("333333333333");
-
-        ArrayList<Topic> homeTopics = new ArrayList<Topic>();
-        homeTopics.add(topic);
-        homeTopics.add(topic);
-        homeTopics.add(topic);
-        homeTopics.add(topic);
-
-
-        //--------------
-
-
-        APIHandler.getInstance().getAllTopicsOfAUser(user);
-        APIHandler.getInstance().getRecentTopics(3);
-
-
-
-        //homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getUserTopics());
-        homeAdapter = new HomeAdapter(homeTopics);
+        homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getRecentTopics());
         homeRecyclerView.setAdapter(homeAdapter);
 
         return rootView;
@@ -95,13 +70,28 @@ public class RegisteredHomeHomeFragment extends Fragment {
         ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener(){
            @Override
             public void onItemClick(int pos, View v){
-
-
-               //Intent intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
-               //startActivity(intent);
-
+               Log.d(""+pos,v.toString());
 
                Log.i("Test1","test");
+
+               int tid = CacheTopiclist.getInstance().getRecentTopics().get(pos).getId();
+
+               Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                   @Override
+                   public void onResponse(Topic response) {
+                       Log.d("Success", "Success");
+                       Log.d("Success", response.toString());
+                       // TODO: 23.11.2016 Comment out next statement when click listener on HomePage Topic objects implements and directs here
+                       Cache.getInstance().setTopic(response);
+
+                       Intent intent = new Intent(getActivity(), ViewTopicActivity.class);
+                       startActivity(intent);
+                   }
+               };
+
+                APIHandler.getInstance().getTopic("",tid,getTopicListener);
+
+
            }
         });
     }
