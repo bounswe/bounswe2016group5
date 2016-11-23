@@ -78,6 +78,7 @@ public class RegisteredHomeHomeFragment extends Fragment {
         homeTopics.add(topic);
 
         APIHandler.getInstance().getAllTopicsOfAUser(user);
+        APIHandler.getInstance().getRecentTopics(10);
 
         //--------------
 

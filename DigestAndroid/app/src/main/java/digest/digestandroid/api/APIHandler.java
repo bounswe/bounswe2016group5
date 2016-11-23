@@ -267,8 +267,6 @@ public class APIHandler extends Application{
                         Log.d("Success", response.toString());
 
 
-
-
                         try{
                             JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
                             ArrayList<Topic> arrayList = new ArrayList<Topic>();
@@ -284,16 +282,50 @@ public class APIHandler extends Application{
                                 tempTop = tempGson.getGson().fromJson(tempObj.toString(),Topic.class);
 
                                 Log.d("DOOOOOOOONE -------", tempTop.toString());
-//                                tempTop.setId(Integer.parseInt(tempObj.getString("id")));
-//                                tempTop.setImage_url(tempObj.getString("image"));
-//                                tempTop.setBody(tempObj.getString("body"));
-//                                tempTop.setOwner(Integer.parseInt(tempObj.getString("owner")));
-//                                tempTop.setStatus(Integer.parseInt(tempObj.getString("status")));
-//                                tempTop.setTimestamp(new Timestamp( (new Date()).getTime() ));
-//                                tempTop.setTags(null);
-//                                tempTop.setQuiz(null);
-//                                tempTop.setMaterials(null); // media?
-//                                tempTop.setComments(null);
+                            }
+
+
+
+                        }catch (JSONException e){}
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+    //?f=get_recent_topics&count=<MAX LIMIT OF TOPICS>
+    public void getRecentTopics(int limit) {
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_recent_topics&count=" + limit,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Success", "Success");
+                        Log.d("Success", response.toString());
+
+
+                        try{
+                            JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
+                            ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+                            Log.d("Suc", obj.toString());
+
+                            int topicNumber = obj.length();
+                            for(int i = 0 ; i < topicNumber ; i++){
+                                JSONObject tempObj = (JSONObject) obj.get(i);
+                                Topic tempTop = new Topic();
+
+                                GsonRequest<Topic> tempGson = new GsonRequest<Topic>(Request.Method.GET,"",Topic.class,null,null);
+                                tempTop = tempGson.getGson().fromJson(tempObj.toString(),Topic.class);
+
+                                Log.d("DOOOOOOOONE -------", tempTop.toString());
                             }
 
 
