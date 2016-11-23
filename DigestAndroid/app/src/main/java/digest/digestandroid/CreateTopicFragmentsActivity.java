@@ -27,9 +27,11 @@ import org.json.JSONException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 import digest.digestandroid.api.APIHandler;
@@ -71,7 +73,8 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
         //Get current user and set the topic owner
         currentUser = Cache.getInstance().getUser();
-        //topic.setOwner(currentUser);
+        topic = new Topic();
+
 
         edit_text_title = (EditText) findViewById(R.id.topic_create_title);
         edit_text_body = (EditText) findViewById(R.id.topic_create_body);
@@ -97,38 +100,21 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
 
     //Sends topic request for created topic
-    public void createTopicRequest(View view) throws JSONException {
-        topic = new Topic();
+    public void createTopicRequest(View view) {
 
-
-        //topic.setTitle(edit_text_title.getText().toString());
-
-        //this.finish();
-
-        //topic.setOwner(currentUser.getId());
+        topic.setOwner(currentUser.getId());
 
         TopicAddDescriptionFragment topicAddDescriptionFragment = (TopicAddDescriptionFragment)((myViewPagerAdapter)viewPager.getAdapter()).getItem(0);
         topicAddDescriptionFragment.fillInfo(topic);
-
-
         TopicAddMaterialFragment topicAddMaterialFragment = (TopicAddMaterialFragment) ((myViewPagerAdapter)viewPager.getAdapter()).getItem(1);
         topicAddMaterialFragment.fillMaterial(topic);
-
-        ArrayList<String> a = topic.getMedia();
-        //Log.d("TOPIC CHECK --------", "mmmm"+a.get(0));
         APIHandler.getInstance().createTopic("top", topic);
 
-
-
-        Log.d("TOPIC", topic.toString());
-
-        //APIHandler.getInstance().createTopic("TOPPIC", topic);
-
-        this.finish();
         //Back to dashboard, since home redirects to create topic, is finishing this activity enough?
-        //Intent intent = new Intent(getBaseContext(), ViewRegisteredHomeActivity.class);
+        Intent intent = new Intent(getBaseContext(), ViewRegisteredHomeActivity.class);
         //intent.putExtra()
-        //startActivity(intent);
+        startActivity(intent);
+        this.finish();
 
 
     }

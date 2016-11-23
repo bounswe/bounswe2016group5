@@ -16,6 +16,13 @@ public class TopicTag {
         this.tid = tid;
         this.tag = tag;
     }
+
+    public TopicTag(String tag) {
+        this.id = -1;
+        this.tid = -1;
+        this.tag = tag;
+    }
+
     public int getId() {
         return id;
     }
@@ -35,4 +42,12 @@ public class TopicTag {
         this.tag = tag;
     }
 
+    @Override
+    public String toString() {
+        return "TopicTag{" +
+                "tag='" + tag + '\'' +
+                ", id=" + id +
+                ", tid=" + tid +
+                '}';
+    }
 }
