@@ -151,21 +151,13 @@ public class APIHandler extends Application{
 
     }
 
-    public void getTopic(String tag, int topicId) {
+    public void getTopic(String tag, int topicId, Response.Listener<Topic> getTopicListener) {
         Log.d( "process", "Get Topic ");
 
         GsonRequest<Topic> myReq = new GsonRequest<Topic>(Request.Method.GET,
                 mainURL + "/?f=get_topic&tid=" + topicId,
                 Topic.class,
-                new Response.Listener<Topic>() {
-                    @Override
-                    public void onResponse(Topic response) {
-                        Log.d("Success", "Success");
-                        Log.d("Success", response.toString());
-                        // TODO: 23.11.2016 Comment out next statement when click listener on HomePage Topic objects implements and directs here 
-                        //Cache.getInstance().setTopic(response);
-                    }
-                },
+                getTopicListener,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
