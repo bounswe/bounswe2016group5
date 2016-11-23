@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,31 +51,24 @@ public class ViewTopicServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-
-		
-		Enumeration<String> names = request.getParameterNames();		
+		HttpSession session = request.getSession();
 		int topicId = -1;
-		try{
+		try {
 			topicId = (Integer) request.getAttribute("topic_id");
 		}
-		
-		catch(NullPointerException e){
-			while (names.hasMoreElements()) {
-				String attr = names.nextElement();
-				String value = request.getParameter(attr);
-				//System.out.println(attr +  " --- " + value);
-				if(attr.equalsIgnoreCase("topic_id"))
-					topicId= Integer.parseInt(value);
+
+		catch (NullPointerException e) {
+			if (request.getParameter("topic_id") != null) {
+				topicId = Integer.parseInt(request.getParameter("topic_id"));
 			}
+
 		}
-			
-		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topic&tid="+topicId;
-		//String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topic&tid="+35;
+
+		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topic&tid=" + topicId;
 		URL jsonpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
 		BufferedReader buffread = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
-		
+
 		String recv = "";
 		String recvbuff = "";
 		while ((recv = buffread.readLine()) != null)
@@ -83,29 +77,81 @@ public class ViewTopicServlet extends HttpServlet {
 
 		try {
 			JSONObject obj = new JSONObject(recvbuff);
-			if (obj.has("errorName")) {							
-				HttpSession session = request.getSession(true);
-				String msg = obj.getString("errorDescription");
-				session.setAttribute("error", msg);
 
-			} else {
-				Set<String> sattr = obj.keySet();
-				for (String attribute : sattr) {
-					System.out.println(attribute + " "+ obj.get(attribute));
-					if(attribute.equalsIgnoreCase("owner") || 
-							attribute.equalsIgnoreCase("image") || 
-							attribute.equalsIgnoreCase("header")||
-							attribute.equalsIgnoreCase("body") ||
-							attribute.equalsIgnoreCase("id")){
-						request.setAttribute(attribute, obj.get(attribute));	
-					}
+			Set<String> sattr = obj.keySet();
+			int owner = -1;
+			for (String attribute : sattr) {
+				if (attribute.equalsIgnoreCase("owner")) {
+					owner = (Integer) obj.get(attribute);
+					request.setAttribute(attribute, obj.get(attribute));
 				}
-				request.getRequestDispatcher("/view-topic.jsp").forward(request, response);
+				if (attribute.equalsIgnoreCase("image") || attribute.equalsIgnoreCase("header")
+						|| attribute.equalsIgnoreCase("body") || attribute.equalsIgnoreCase("id")) {
+					request.setAttribute(attribute, obj.get(attribute));
+				}
 			}
 
-		} catch (JSONException ex) {
+			int subscribed = 0;
+			if ((Integer) session.getAttribute("id") != owner) {
+				String recv2 = "";
+				String recvbuff2 = "";
+
+				StringBuffer bf2 = new StringBuffer();
+				bf2.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
+				bf2.append("?f=get_subscribed_topics&uid=" + session.getAttribute("id"));
+
+				String url2 = bf2.toString();
+				URL jsonpage2 = new URL(url2);
+				HttpURLConnection urlcon2 = (HttpURLConnection) jsonpage2.openConnection();
+				BufferedReader buffread2 = new BufferedReader(new InputStreamReader(urlcon2.getInputStream()));
+
+				while ((recv2 = buffread2.readLine()) != null)
+					recvbuff2 += recv2;
+				buffread2.close();
+
+				try {
+					JSONArray topicArray = new JSONArray(recvbuff2);
+
+					for (Object t : topicArray) {
+						if ((Integer) t == topicId) { // Already subscribed
+							subscribed = 1;
+						}
+					}
+				} catch (JSONException ex) {
+					request.setAttribute("err", "Unexpected error occured!!");
+					// request.getRequestDispatcher("/profile.jsp").forward(request,
+					// response);
+				}
+
+			}
+			request.setAttribute("subscribed", subscribed);
+
+			String commentURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_comments_of_topic&tid="
+					+ topicId;
+			URL commentURL = new URL(commentURLString);
+			HttpURLConnection commentCon = (HttpURLConnection) commentURL.openConnection();
+
+			buffread = new BufferedReader(new InputStreamReader(commentCon.getInputStream()));
+
+			recv = "";
+			recvbuff = "";
+			while ((recv = buffread.readLine()) != null)
+				recvbuff += recv;
+			buffread.close();
+			try {
+				JSONArray comments = new JSONArray(recvbuff);
+				request.setAttribute("comments", comments);
+
+			} catch (JSONException ex) {
+
+			}
+			request.getRequestDispatcher("/view-topic.jsp").forward(request, response);
+
+		} catch (
+
+		JSONException ex) {
 			// Do nothing
 		}
-		
+
 	}
 }
