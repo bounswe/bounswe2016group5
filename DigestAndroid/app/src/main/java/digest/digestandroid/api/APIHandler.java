@@ -192,28 +192,12 @@ public class APIHandler extends Application{
     }
 
 
-
-    public void createTopic(String tag, final Topic topic) throws JSONException {
+    //Creates Topic
+    public void createTopic(String tag, final Topic topic)  {
 
         Gson gson = new Gson();
-        Topic top = new Topic();
-        top.setOwner(32);
-        top.setHeader("andeneme2");
-        top.setBody("andeneme");
-        top.setImage("");
-        //top.setComments(new ArrayList<Comment>());
-        //top.setQuizzes(new ArrayList<QuizQuestion>());
-        //top.setMedia(new ArrayList<String>());
-        //top.setTimestamp(new Timestamp());
-        top.setId(-1);
-        top.setTags(new ArrayList<TopicTag>());
-        top.setRating(0);
-        top.setStatus(-1);
-
-        final String jsonInString = gson.toJson(top);
-
-
-
+        //topic.setOwner(32);
+        final String jsonInString = gson.toJson(topic);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL+"/?f=create_topic", new Response.Listener<String>() {
             @Override

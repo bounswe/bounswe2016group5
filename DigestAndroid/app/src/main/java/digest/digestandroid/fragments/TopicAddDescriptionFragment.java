@@ -23,8 +23,10 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import digest.digestandroid.Models.Topic;
+import digest.digestandroid.Models.TopicTag;
 import digest.digestandroid.Models.User;
 import digest.digestandroid.R;
 import digest.digestandroid.api.VolleySingleton;
@@ -159,10 +161,19 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         String mtitle = etTitle.getText().toString();
         String mbody = etBody.getText().toString();
         String mtags = etTags.getText().toString();
-        //ArrayList<String> tagList = Arrays.asList(mtags.split(","));
+
+        ArrayList<TopicTag> tags = new ArrayList<TopicTag>();
+
+        List<String> tagList = Arrays.asList(mtags.split(","));
+        for (String tg : tagList) {
+            tags.add(new TopicTag(tg));
+        }
+
+        Log.d("tag", tagList.toString());
+
         mtopic.setHeader(mtitle);
         mtopic.setBody(mbody);
-        //mtopic.setString_tags(tagList);
+        mtopic.setTags(tags);
         mtopic.setImage(url);
     }
 
