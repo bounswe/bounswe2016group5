@@ -322,7 +322,7 @@ ul#horizontal-list a:hover {
 					if (owner == (Integer) session.getAttribute("id")) {
 				%>
 				<form class="form-horizontal" id="add_quiz_form"
-					action="quiz-add.jsp" method="POST">
+					action="QuizServlet" method="POST">
 					<div class="form-group col-sm-2 pull-right">
 						<div class="col-xs-9 col-xs-offset-3">
 							<input type="hidden" name="tid" value=<%=tid%>>

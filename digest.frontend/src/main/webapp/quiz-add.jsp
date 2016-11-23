@@ -249,6 +249,11 @@ ul#horizontal-list a:hover {
 			<div class="col-sm-9">
 
 				<!-- Question Form Start -->
+				<%
+					if(request.getAttribute("tid")!=null){
+						request.setAttribute("tid",request.getAttribute("tid"));
+					}
+				%>
 				<form action="QuizServlet" method="POST">
 					<div class="form-group">
 						<label for="question">Question: </label>

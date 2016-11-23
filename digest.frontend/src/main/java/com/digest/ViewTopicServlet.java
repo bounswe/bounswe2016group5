@@ -145,6 +145,9 @@ public class ViewTopicServlet extends HttpServlet {
 			} catch (JSONException ex) {
 
 			}
+			
+			String quizURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_quiz&tid=";
+			
 			request.getRequestDispatcher("/view-topic.jsp").forward(request, response);
 
 		} catch (
