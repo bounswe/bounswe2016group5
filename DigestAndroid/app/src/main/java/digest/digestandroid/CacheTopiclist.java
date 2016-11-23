@@ -24,15 +24,13 @@ public class CacheTopiclist {
         return recentTopics;
     }
 
-    public void setRecentTopics(ArrayList<Topic> x) {
-        recentTopics = x;
-    }
+    public void setRecentTopics(ArrayList<Topic> x) {recentTopics = new ArrayList<Topic>(x);    }
 
     public ArrayList<Topic> getUserTopics() {
         return userTopics;
     }
 
-    public void setUserTopics(ArrayList<Topic> x) {userTopics = x;    }
+    public void setUserTopics(ArrayList<Topic> x) {userTopics = new ArrayList<Topic>(x);   }
 
 
 }

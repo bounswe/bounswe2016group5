@@ -1,9 +1,6 @@
 package digest.digestandroid.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,10 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
-import digest.digestandroid.Models.Comment;
+import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 import digest.digestandroid.R;
@@ -32,21 +27,13 @@ public class RegisteredHomeHomeFragment extends Fragment {
 
     protected View rootView;
 
-    private ArrayList<Topic> homeTopics = new ArrayList<Topic>();
     private RecyclerView.Adapter homeAdapter;
-
     private RecyclerView homeRecyclerView;
     private RecyclerView.LayoutManager homeLayoutManager;
 
     private static String Home_Fragment = "HomeFragment";
-
-
     public RegisteredHomeHomeFragment() {}
 
-    public RegisteredHomeHomeFragment getInstance(){
-
-        return null;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -72,17 +59,31 @@ public class RegisteredHomeHomeFragment extends Fragment {
         topic.getMedia().add("111111111111111");
         topic.getMedia().add("22222222222222222");
         topic.getMedia().add("333333333333");
+
+        ArrayList<Topic> homeTopics = new ArrayList<Topic>();
         homeTopics.add(topic);
         homeTopics.add(topic);
         homeTopics.add(topic);
         homeTopics.add(topic);
+
+
+        //--------------
+
 
         APIHandler.getInstance().getAllTopicsOfAUser(user);
         APIHandler.getInstance().getRecentTopics(3);
 
-        //--------------
+        while(true) {
+            try {
+                if(CacheTopiclist.getInstance().getUserTopics().size() !=-1){
+                    break;
+                }
+            } catch (Exception e) {
+                Log.d("xox","bi string daha");
+            }
+        }
 
-        homeAdapter = new HomeAdapter(homeTopics);
+        homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getUserTopics());
         homeRecyclerView.setAdapter(homeAdapter);
 
         return rootView;
@@ -101,17 +102,16 @@ public class RegisteredHomeHomeFragment extends Fragment {
         ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener(){
            @Override
             public void onItemClick(int pos, View v){
+
+
+               //Intent intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
+               //startActivity(intent);
+
+
                Log.i("Test1","test");
            }
         });
     }
-
-
-
-
-
-
-
 
 
 

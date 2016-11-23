@@ -315,7 +315,6 @@ public class APIHandler extends Application{
                             JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
                             ArrayList<Topic> arrayList = new ArrayList<Topic>();
 
-                            Log.d("Suc", obj.toString());
 
                             int topicNumber = obj.length();
                             for(int i = 0 ; i < topicNumber ; i++){
@@ -327,8 +326,10 @@ public class APIHandler extends Application{
                                 arrayList.add(tempTop);
                             }
 
+                            Log.d("SucArray", ""+arrayList.size());
+                            Log.d("SucArray", arrayList.toString());
 
-                            CacheTopiclist.getInstance().setUserTopics(arrayList);
+                            CacheTopiclist.getInstance().setRecentTopics(arrayList);
 
                         }catch (JSONException e){}
 
