@@ -68,8 +68,36 @@
 	Error response:
 		hakkimizda hayirlisi olsun
 	Example:
-		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_quiz&tid=25
+		Body:
+		{"name":"Fox quiz","questions":[{"text":"What does the fox say?","choices":
+			[
+				"Ring-ding-ding-ding-dingeringeding!",
+				"Wa-pa-pa-pa-pa-pa-pow!",
+				"meow meow meow",
+				"wof wof wof!"
+			]
+			,"answers":[0,1]
+		}
+		
 	
+## GetQuiz
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_topic
+		tid=<topic_id>
+	Succes response:
+		status:200
+		content:<array_of_quizzes>
+			[<quiz>,<quiz>,..]
+			see add quiz for the json
+	Error response:
+		Kismet artik..
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_quiz&tid=8
 	
 ## Add Comment
 	URL:
