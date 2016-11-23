@@ -166,8 +166,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO :  Use cache.getUser().getUsername() when cache is ready
-        setTitle("@"+"uskudarli");
+        setTitle("@"+cache.getUser().getUsername());
 
         setContentView(R.layout.activity_view_registered_home);
 

@@ -103,7 +103,7 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
     public void createTopicRequest(View view) {
 
         //topic.setOwner(currentUser.getId());
-        topic.setOwner(32);
+        topic.setOwner(currentUser.getId());
 
         TopicAddDescriptionFragment topicAddDescriptionFragment = (TopicAddDescriptionFragment)((myViewPagerAdapter)viewPager.getAdapter()).getItem(0);
         topicAddDescriptionFragment.fillInfo(topic);
