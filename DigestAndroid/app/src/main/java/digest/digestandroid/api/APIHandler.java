@@ -63,28 +63,14 @@ public class APIHandler extends Application{
     // {"id":32,"username":"android","password":"1234","email":"asdf@asdf.com",
     // "first_name":"android","last_name":"android","status":1,
     // "role":{"id":2,"name":"user"},"session":"1c01360fd1a2aa97"}
-    public void login(String tag, User user) {
-        Log.d( "11111", "11111");
+    public void login(String tag, User user, Response.Listener<User> successListener,
+                      Response.ErrorListener failureListener) {
+
         GsonRequest<User> myReq = new GsonRequest<User>(Request.Method.GET,
                 mainURL + "/?f=login&username=" + user.getUsername() +  "&password=" + user.getPassword(),
-                User.class,
-                new Response.Listener<User>() {
-                    @Override
-                    public void onResponse(User response) {
-                        Log.d("Success", "Success");
-                        Log.d("Success", response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Failed", "Login Failed");
-                    }
-                });
+                User.class, successListener, failureListener);
 
-        Log.d("222222", "222222");
         VolleySingleton.getInstance().addToRequestQueue(myReq);
-        Log.d("333333", "333333");
     }
 
     public void loginPOST(String tag, final User user) {

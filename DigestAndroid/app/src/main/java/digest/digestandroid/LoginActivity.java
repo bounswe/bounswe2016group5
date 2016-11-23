@@ -97,23 +97,68 @@ public class LoginActivity extends AppCompatActivity {
         String username = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        //User user = new User(username, password);
-        User user = new User("android", "1234");
+        User user = new User(username, password);
+        //User user = new User("android", "1234");
+        user.setId(-10);
 
-        // Log.v("USER", user.toString());
+        Response.Listener<User> response = new Response.Listener<User>() {
+            @Override
+            public void onResponse(User response) {
+                if (response.getEmail() != null) {
+                    progressDialog.dismiss();
+                    Log.d("Login", "Login success " + response.getEmail());
+
+                    // Writing data to SharedPreferences
+                    Cache.getInstance().setUser(response);
+
+                    _loginButton.setEnabled(true);
+                    Intent intent = new Intent(getApplicationContext(), ViewRegisteredHomeActivity.class);
+                    startActivity(intent);
+                    finish();
+
+                } else {
+                    progressDialog.dismiss();
+                    Log.d("Login", "Error: ");
+                    Log.d("Wrong credentials:", "Not valid username and password");
+
+                    Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+                    _loginButton.setEnabled(true);
+                    _emailText.setText("");
+                    _passwordText.setText("");
+
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
+                Log.d("Failed", "Login Failed");
+                Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+                _loginButton.setEnabled(true);
+                _emailText.setText("");
+                _passwordText.setText("");
+
+            }
+        };
 
         // TODO: Implement your own authentication logic here.
-        APIHandler.getInstance().login("LOGIN", user);
+        APIHandler.getInstance().login("LOGIN", user, response, errorListener);
 
+
+        /*
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
+                        // onLoginSuccess();
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
                 }, 3000);
+                */
+
     }
 
 

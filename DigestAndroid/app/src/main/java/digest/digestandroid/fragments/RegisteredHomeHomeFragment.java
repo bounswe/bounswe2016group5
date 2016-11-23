@@ -73,17 +73,10 @@ public class RegisteredHomeHomeFragment extends Fragment {
         APIHandler.getInstance().getAllTopicsOfAUser(user);
         APIHandler.getInstance().getRecentTopics(3);
 
-        while(true) {
-            try {
-                if(CacheTopiclist.getInstance().getUserTopics().size() !=-1){
-                    break;
-                }
-            } catch (Exception e) {
-                Log.d("xox","bi string daha");
-            }
-        }
 
-        homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getUserTopics());
+
+        //homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getUserTopics());
+        homeAdapter = new HomeAdapter(homeTopics);
         homeRecyclerView.setAdapter(homeAdapter);
 
         return rootView;
