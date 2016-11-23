@@ -7,9 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
 import java.util.ArrayList;
 
 import digest.digestandroid.Models.Topic;
+import digest.digestandroid.api.VolleySingleton;
 
 /**
  * Created by sahin on 22.11.2016.
@@ -23,13 +27,13 @@ public class HomeAdapter extends RecyclerView
     private static HomeClickListener homeClickListener;
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        ImageView imageView;
+        NetworkImageView imageView;
         TextView textView1;
         TextView textView2;
 
         public DataObjectHolder(View itemView){
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.home_card_image);
+            imageView = (NetworkImageView) itemView.findViewById(R.id.home_card_image);
             textView1 = (TextView) itemView.findViewById(R.id.home_text_view1);
             textView2 = (TextView) itemView.findViewById(R.id.home_text_view2);
             itemView.setOnClickListener(this);
@@ -59,7 +63,9 @@ public class HomeAdapter extends RecyclerView
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position){
 
-        //holder.imageView.
+        final ImageLoader homeImageLoader = VolleySingleton.getInstance().getImageLoader();
+        holder.imageView.setImageUrl(homeDataset.get(position).getImage(),homeImageLoader);
+
         holder.textView1.setText(homeDataset.get(position).getHeader());
         holder.textView2.setText(homeDataset.get(position).getBody());
     }

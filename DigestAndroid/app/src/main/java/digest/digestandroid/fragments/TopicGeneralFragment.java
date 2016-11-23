@@ -11,9 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
 import digest.digestandroid.Cache;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
+import digest.digestandroid.api.VolleySingleton;
 
 
 /**
@@ -115,7 +119,9 @@ public class TopicGeneralFragment extends Fragment {
         TextView rating = (TextView) rootView.findViewById(R.id.tRating);
         rating.setText(String.valueOf(Cache.getInstance().getTopic().getRating()));
 
-
+        NetworkImageView imageView  = (NetworkImageView) rootView.findViewById(R.id.topicImage);
+        final ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
+        imageView.setImageUrl(Cache.getInstance().getTopic().getImage(),imageLoader);
 
 
     }
