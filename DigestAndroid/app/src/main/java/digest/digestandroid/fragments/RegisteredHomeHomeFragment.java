@@ -63,7 +63,7 @@ public class RegisteredHomeHomeFragment extends Fragment {
         User user = new User();
         user.setUsername("Burki");
         topic = new Topic();
-        topic.setOwner(user);
+        //topic.setOwner(user);
         topic.setImage_url("http://i.dailymail.co.uk/i/pix/2016/04/12/23/3319F89C00000578-3536787-image-m-19_1460498410943.jpg");
         topic.setTitle("TITLEEEEEE");
         topic.setBody("HEBELE HUBELE CCOK GUZEL BI TEXT BU");
