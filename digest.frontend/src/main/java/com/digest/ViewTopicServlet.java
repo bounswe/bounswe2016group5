@@ -51,20 +51,26 @@ public class ViewTopicServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		
-		Enumeration<String> names = request.getParameterNames();
-		
-		int topicId = -1;
-		while (names.hasMoreElements()) {
-			String attr = names.nextElement();
-			String value = request.getParameter(attr);
-			if(attr.equalsIgnoreCase("topic_id"))
-			topicId= Integer.parseInt(value);
-		}
 
-		//System.out.println("topic_id=" + topicId);
 		
-		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=view_topic&topicId="+topicId;
+		Enumeration<String> names = request.getParameterNames();		
+		int topicId = -1;
+		try{
+			topicId = (Integer) request.getAttribute("topic_id");
+		}
+		
+		catch(NullPointerException e){
+			while (names.hasMoreElements()) {
+				String attr = names.nextElement();
+				String value = request.getParameter(attr);
+				//System.out.println(attr +  " --- " + value);
+				if(attr.equalsIgnoreCase("topic_id"))
+					topicId= Integer.parseInt(value);
+			}
+		}
+			
+		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topic&tid="+topicId;
+		//String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topic&tid="+35;
 		URL jsonpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
 		BufferedReader buffread = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
@@ -85,18 +91,21 @@ public class ViewTopicServlet extends HttpServlet {
 			} else {
 				Set<String> sattr = obj.keySet();
 				for (String attribute : sattr) {
-					//tek tek bütün topic attributelarını request.setattribute ekle
-					if (!attribute.contentEquals("role")) {
+					System.out.println(attribute + " "+ obj.get(attribute));
+					if(attribute.equalsIgnoreCase("owner") || 
+							attribute.equalsIgnoreCase("image") || 
+							attribute.equalsIgnoreCase("header")||
+							attribute.equalsIgnoreCase("body") ||
+							attribute.equalsIgnoreCase("id")){
+						request.setAttribute(attribute, obj.get(attribute));	
 					}
 				}
-				//response.setdispatcher(view-topic.jsp);
-
+				request.getRequestDispatcher("/view-topic.jsp").forward(request, response);
 			}
 
 		} catch (JSONException ex) {
 			// Do nothing
 		}
-
 		
 	}
 }
