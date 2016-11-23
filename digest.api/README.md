@@ -34,12 +34,43 @@
 	A json object with following parameters should be sent.
 	
 ## Get all topics of user
-	The required parameter is uid of the user of which the topics will return.
+URL:
+	digest.us-east-1.elasticbeanstalk.com/digest.api 
+Method:
+	GET
+Params:
+	f=get_topics_of_user
+	ruid=<user_id>
+Succes response:
+	status:200
+	content: array_of_topics--->[<topic>,<topic>,...]
+    		please see get topic section for the json of <topic>
+Error response:
+	hakkimizda hayirlisi olsun
+Example:
+	http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 	
-	<API_PATH>/?f=get_topics_of_user&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&ruid=<TOPIC_OWNER_USER_ID>
 
 ## Add Quiz
-	A json object with following parameters should be sent.
+	URL:
+	digest.us-east-1.elasticbeanstalk.com/digest.api 
+Method:
+	POST
+Params:
+	f=add_quiz
+	tid=<topic_id>
+Data Params:
+	{"name":<quiz_name>,"questions":<array_of_questions ex:-- 
+				[{"text":<question_text>,"choices":<array_of_choices
+					[<answer_text>,<answer_text>,<answer_text>,...]
+				,"answers":<array_of_ints: indexes of the answers >}
+Succes response:
+	status:200
+Error response:
+	hakkimizda hayirlisi olsun
+Example:
+	http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
+	
 	
 ## Add Comment
 	POST request with following json
@@ -65,7 +96,7 @@
 		"quizzes":<array_of_quizzes ex:-- 
 			[{"name":<quiz_name>,"questions":<array_of_questions ex:-- 
 				[{"text":<question_text>,"choices":<array_of_choices
-					["cevap1","cvp1","huloo1"]>>
+					[<answer_text>,<answer_text>,<answer_text>,...]>>
 				,"answers":<array_of_ints>},<quiz_object>,....,..
 			],"media":<array_of_urls ex:-- [<url>,<url>,...]>,
 			"comments":<array_of_topics ex:--
