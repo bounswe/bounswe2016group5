@@ -34,49 +34,63 @@
 	A json object with following parameters should be sent.
 	
 ## Get all topics of user
-URL:
-	digest.us-east-1.elasticbeanstalk.com/digest.api 
-Method:
-	GET
-Params:
-	f=get_topics_of_user
-	ruid=<user_id>
-Succes response:
-	status:200
-	content: array_of_topics--->[<topic>,<topic>,...]
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_topics_of_user
+		ruid=<user_id>
+	Succes response:
+		status:200
+		content: array_of_topics--->[<topic>,<topic>,...]
     		please see get topic section for the json of <topic>
-Error response:
-	hakkimizda hayirlisi olsun
-Example:
-	http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
-	
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 
 ## Add Quiz
 	URL:
-	digest.us-east-1.elasticbeanstalk.com/digest.api 
-Method:
-	POST
-Params:
-	f=add_quiz
-	tid=<topic_id>
-Data Params:
-	{"name":<quiz_name>,"questions":<array_of_questions ex:-- 
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		POST
+	Params:
+		f=add_quiz
+		tid=<topic_id>
+	Data Params:
+		{"name":<quiz_name>,"questions":<array_of_questions ex:-- 
 				[{"text":<question_text>,"choices":<array_of_choices
 					[<answer_text>,<answer_text>,<answer_text>,...]
 				,"answers":<array_of_ints: indexes of the answers >}
-Succes response:
-	status:200
-Error response:
-	hakkimizda hayirlisi olsun
-Example:
-	http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 	
 	
 ## Add Comment
 	POST request with following json
 
 ## Get Comments
-	<API_PATH>/?f=get_comment&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&tid=<TOPICID>
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_comment
+		uid=<user_id>
+		tid=<topic_id>
+		session=<session>
+	Succes response:
+		status:200
+		content: 
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:	
+		<API_PATH>/?f=get_comment&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&tid=<TOPICID>
 	
 
 ## Get topic
