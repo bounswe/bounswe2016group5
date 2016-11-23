@@ -66,17 +66,94 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
 
-            case R.id.action_message:
-                // TODO messages
+            case R.id.action_refresh:
+
+                final Response.Listener<String> userTopicsResponseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+
+                        try{
+                            JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
+                            ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+
+                            int topicNumber = obj.length();
+                            for(int i = 0 ; i < topicNumber ; i++){
+                                JSONObject tempObj = (JSONObject) obj.get(i);
+                                Topic tempTop = new Topic();
+
+                                Gson gson = new Gson();
+                                tempTop = gson.fromJson(tempObj.toString(),Topic.class);
+                                arrayList.add(tempTop);
+                            }
+
+                            CacheTopiclist.getInstance().setUserTopics(arrayList);
+
+
+
+
+
+                            viewPager = (ViewPager) findViewById(R.id.viewpager_home);
+                            defineViewPager(viewPager);
+
+                            tabLayout = (TabLayout) findViewById(R.id.tabs_home);
+                            tabLayout.setupWithViewPager(viewPager);
+                            loadViewPager();
+
+
+
+
+
+
+                        }catch (JSONException e){}
+
+                    }
+                };
+                Response.Listener<String> recentTopicsResponseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+
+                        try{
+                            JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
+                            ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+
+                            int topicNumber = obj.length();
+                            for(int i = 0 ; i < topicNumber ; i++){
+                                JSONObject tempObj = (JSONObject) obj.get(i);
+                                Topic tempTop = new Topic();
+
+                                Gson gson = new Gson();
+                                tempTop = gson.fromJson(tempObj.toString(),Topic.class);
+                                arrayList.add(tempTop);
+                            }
+
+                            CacheTopiclist.getInstance().setRecentTopics(arrayList);
+
+
+
+
+
+                            APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),userTopicsResponseListener);
+
+
+
+
+
+
+
+                        }catch (JSONException e){}
+
+                    }
+                };
+
+                APIHandler.getInstance().getRecentTopics(10,recentTopicsResponseListener);
+
+
                 return true;
 
-            case R.id.action_followed:
-                // TODO followed topics
-                return true;
-
-            case R.id.action_notifications:
-                // TODO notifications
-                return true;
 
             default:
                 // If we got here, the user's action was not recognized.
