@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+//import com.mysql.cj.api.jdbc.Statement;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -11,14 +13,10 @@ import org.bounswe.digest.api.database.model.Comment;
 import org.bounswe.digest.api.database.model.Question;
 import org.bounswe.digest.api.database.model.Quiz;
 import org.bounswe.digest.api.database.model.Topic;
-import org.bounswe.digest.api.database.model.TopicManager;
 import org.bounswe.digest.api.database.model.TopicTag;
-import org.bounswe.digest.api.database.model.User;
+import org.bounswe.digest.api.database.model.TopicPreview;
 
 import com.google.gson.Gson;
-//import com.mysql.cj.api.jdbc.Statement;
-import java.sql.Statement;
-import java.sql.Timestamp;
 
 public class TopicJDBC {
 	public static int createTopic(Topic topic) {
@@ -1026,6 +1024,57 @@ public class TopicJDBC {
 					//ArrayList<TopicTag> tags, ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments, Timestamp timestamp) {
 			while (resultSet.next()) {
 				result.add(resultSet.getInt(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		Gson gson = new Gson();
+		return gson.toJson(result);
+	}
+	public static String getTopicsWithTag(String tag) {
+		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, topic_tag WHERE topic_tag.tag LIKE ? AND topic.id = topic_tag.tid";
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
+		PreparedStatement statement = null;
+		ArrayList<TopicPreview> result = new ArrayList<TopicPreview>();
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setString(1, tag);
+	
+			resultSet = statement.executeQuery();
+			
+			/*public TopicPreview(int id, String header, String image, int owner, int status,
+					 Timestamp timestamp) */
+			while (resultSet.next()) {
+				result.add(new TopicPreview(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getInt(4), resultSet.getInt(5), resultSet.getTimestamp(6)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -136,7 +136,19 @@ public class DigestAPIServlet extends HttpServlet {
 				// resp.getWriter().append(invalidSession());
 
 			//}	
-		} else if (f.equals(DigestParameters.LOGIN)) {
+		} else if (f.equals(DigestParameters.GET_TOPICS_WITH_TAG)) {
+			// int uid =
+			// Integer.parseInt(req.getParameter(DigestParameters.UID));
+			// String session = req.getParameter(DigestParameters.SESSION);
+			String tag = req.getParameter(DigestParameters.TAG);
+
+			// if (UserJDBC.isSessionValid(uid, session)) {
+			resp.getWriter().append(TopicJDBC.getTopicsWithTag(tag));
+			// } else {
+				// resp.getWriter().append(invalidSession());
+
+			//}	
+		}else if (f.equals(DigestParameters.LOGIN)) {
 			String username = req.getParameter(DigestParameters.USERNAME);
 			String password = req.getParameter(DigestParameters.PASSWORD);
 			resp.getWriter().append(UserJDBC.login(username, password));
@@ -190,6 +202,8 @@ public class DigestAPIServlet extends HttpServlet {
 				resp.setStatus(400);
 			}
 
+		}else{
+			doGet(req, resp);
 		}
 		/*
 		 * else if(f=){ BufferedReader bufferedReader = new
@@ -198,7 +212,7 @@ public class DigestAPIServlet extends HttpServlet {
 		 * //resp.getWriter().append(role.getName());
 		 * resp.getWriter().append(role.getName()); }
 		 */
-		// doGet(req, resp);
+		// 
 		/*
 		 * try {
 		 * 

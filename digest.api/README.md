@@ -57,7 +57,9 @@
 	<API_PATH>/?f=get_subscribed_topics&uid=<USER_ID>
 ## Subscribe A Topic
 	<API_PATH>/?f=add_subscriber&uid=<USER_ID>&tid=<TOPIC_ID>
-	
+## Get Topics With Tag
+	<API_PATH>?f=get_topics_with_tag&tag=<TAG>
+	It will return not topic but topicpreview, which holds less information about the topic.
 
 
 # Deployment Information

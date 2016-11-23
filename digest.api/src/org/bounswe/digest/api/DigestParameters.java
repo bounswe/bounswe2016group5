@@ -23,6 +23,7 @@ public class DigestParameters {
 	public static final String ADD_MEDIA = "add_media";
 	public static final String ADD_SUBSCRIBER = "add_subscriber";
 	public static final String GET_SUBSCRIBED_TOPICS = "get_subscribed_topics";
+	public static final String GET_TOPICS_WITH_TAG = "get_topics_with_tag";
 
 
 	public static final String HEADER = "header";
@@ -32,6 +33,7 @@ public class DigestParameters {
 	public static final String BODY = "body";
 	public static final String OWNER = "owner";
 	public static final String COMMENT = "comment";
+	public static final String TAG = "tag";
 
 	public static final String UID = "uid";
 	public static final String RUID = "ruid";
