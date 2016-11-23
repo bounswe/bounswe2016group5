@@ -13,6 +13,7 @@
 <title>View Topic</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"  href="css/comment.css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -117,6 +118,19 @@ ul#horizontal-list a:hover {
 		$('#view_topic_form').validate({ 
 			rules : {
 				topic_id : {
+					required : true
+				},
+			}
+		});
+		$('#add_comment_form').validate({ 
+			rules : {
+				topic_id : {
+					required : true
+				},
+				user_id : {
+					required : true
+				},
+				body : {
 					required : true
 				},
 			}
@@ -261,9 +275,17 @@ ul#horizontal-list a:hover {
 				</div>
 			</div>
 			<div class="col-sm-9">
-				<h1>Topic Header</h1>
-				<p>Topic Owner</p>
-				<p>Topic Followers Number</p>
+				<% 
+				String header = (String) request.getAttribute("header");
+				int owner = (Integer) request.getAttribute("owner");
+				int tid = (Integer)request.getAttribute("id");
+				//int topicFollower = (Integer) request.getAttribute("topicFollower");
+				String image = (String) request.getAttribute("image");
+				String body = (String) request.getAttribute("body");
+				%>
+				<h1><%= header%></h1>
+				<p>Owner: <%= owner %></p>
+				<p>Followers: </p>
 				<div class="view-topic col-sm-12">
 					<!--<form class="form-horizontal" action="#">
 						<div class="form-group">-->
@@ -272,11 +294,13 @@ ul#horizontal-list a:hover {
 							<div class="container col-sm-2">
 								<img id="topic-img"
 									style="display: block; width: 120%;  margin: 9px 9px 9px 9px;"
-									alt="topic image" src="topic.png" ></img>
+									alt="topic image" src="<%=image %>" ></img>
 							</div>
 							<div class="container col-sm-10">
 								<div class="panel panel-default"
-									style="height: 140px; overflow-y: auto; margin: 9px 9px 9px 9px;"></div>
+									style="height: 140px; overflow-y: auto; margin: 9px 9px 9px 9px;">
+									<div class="panel-body"><%=body %></div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -307,8 +331,9 @@ ul#horizontal-list a:hover {
 																Name</p>-->
 															<p class="media-comment">Text Example.</p>
 															<a class="btn btn-info btn-circle"
-																href="#" id="reply"><span
-																class="glyphicon glyphicon-share-alt"></span> Reply</a> <a
+																data-toggle="collapse" href="#addcomment" id="reply"><span
+																class="glyphicon glyphicon-share-alt" ></span> Reply</a> 
+																<a
 																class="btn btn-warning btn-circle "
 																data-toggle="collapse" href="#reply1"><span
 																class="glyphicon glyphicon-comment"></span> 2 Comments</a>
@@ -339,13 +364,60 @@ ul#horizontal-list a:hover {
 																			<span class="glyphicon glyphicon-share-alt"></span>
 																			Account Name
 																		</h4>
-																		</h4>
+																
 																		<p class="media-comment">Text Example</p>
 																	</div>
 																</div></li>
 														</ul>
 													</div></li>
+											
+											<div class="collapse row col-sm-9 pull-right " id="addcomment">
+												<div class="row">
+														<div class="widget-area no-padding blank">
+															<div class="status-upload">
+																<form class="form-horizontal" id="add_comment_form"
+																	action="AddCommentServlet" method="POST">
+																	<div class="form">
+																		<textarea placeholder="Reply message here" name="body"></textarea>
+																		<label><%=session.getAttribute("username")%></label> 
+																		<input type="hidden" name="userId" value=<%=session.getAttribute("id")%>>
+																		<input type="hidden" name="commentId" value=""> 
+																		<input type="hidden" name="topicId" value=<%=tid%>>
+																		<button type="submit" class="btn btn-success green">
+																			<i class="fa fa-share"></i> Share
+																		</button>
+																	</div>
+																</form>
+															</div>
+														</div>
+													</div>
+												</div>
+													
 											</ul>
+										</div>
+									</div>
+									<div class="container">
+										<div class="row">
+											<div class="col-sm-8">
+												<div class="widget-area no-padding blank">
+													<div class="status-upload">
+														<form class="form-horizontal" id="add_comment_form"
+															action="AddCommentServlet" method="POST">
+															<div class="form">
+																<textarea placeholder="Comment here" name="body"></textarea>
+																<label><%=session.getAttribute("username")%></label> <input
+																	type="hidden" name="userId"
+																	value=<%=session.getAttribute("id")%>> <input
+																	type="hidden" name="topicId" value=<%=tid%>>
+																<button type="submit" class="btn btn-success green">
+																	<i class="fa fa-share"></i> Share
+																</button>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+
 										</div>
 									</div>
 								</div>
@@ -360,8 +432,6 @@ ul#horizontal-list a:hover {
 							</div>
 						</div>
 					</div>
-					<!--</div>
-					</form>-->
 				</div>
 			</div>
 		</div>
