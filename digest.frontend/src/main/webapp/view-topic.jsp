@@ -121,6 +121,7 @@ ul#horizontal-list a:hover {
 				},
 			}
 		});
+		
 		$('#add_comment_form').validate({ 
 			rules : {
 				topic_id : {
@@ -134,7 +135,19 @@ ul#horizontal-list a:hover {
 				},
 			}
 		});
-
+		$('#add_quiz_form').validate({ 
+			rules : {
+				tid : {
+					required : true
+			}
+		});
+		$('#add_subscriber_form').validate({ 
+			rules : {
+				tid : {
+					required : true
+			}
+		});
+		
 	});
 </script>
 </head>
@@ -281,6 +294,7 @@ ul#horizontal-list a:hover {
 				//int topicFollower = (Integer) request.getAttribute("topicFollower");
 				String image = (String) request.getAttribute("image");
 				String body = (String) request.getAttribute("body");
+				int subscribed = (Integer) request.getAttribute("subscribed");
 				%>
 				<div class="col-sm-2">
 					<h1><%= header%></h1>
@@ -288,13 +302,26 @@ ul#horizontal-list a:hover {
 					<p>Followers: </p>
 				</div>
 				<%
-					if(owner != (Integer) session.getAttribute("id")){
+					if(owner != (Integer) session.getAttribute("id") && subscribed == 0){
 				%>
+				<!-- subscribed olmuş mu -->
 				<form class="form-horizontal" id="add_subscriber_form" action="SubscribeServlet" method="POST">
 					<div class="form-group col-sm-2 pull-right">
 						<div class="col-xs-9 col-xs-offset-3">
-							<input type="hidden" name="status" value="0">
+							<input type="hidden" name="tid" value=<%=tid %>>
 							<button type="submit" class="btn btn-primary" style="margin: 20px 20px 0 0;">Subscribe</button>
+						</div>
+					</div>
+				</form>
+				<% } %>
+				<%
+					if(owner == (Integer) session.getAttribute("id")){
+				%>
+				<form class="form-horizontal" id="add_quiz_form" action="quiz-add.jsp" method="POST">
+					<div class="form-group col-sm-2 pull-right">
+						<div class="col-xs-9 col-xs-offset-3">
+							<input type="hidden" name="tid" value=<%=tid %>>
+							<button type="submit" class="btn btn-primary" style="margin: 20px 20px 0 0;">Add Quiz</button>
 						</div>
 					</div>
 				</form>
@@ -332,7 +359,7 @@ ul#horizontal-list a:hover {
 									<div class="row">
 										<div class="col-sm-10 col-sm-offset-1" id="logout" style="margin: 25px 5px 25px 25px;">
 											<ul class="media-list">
-												<li class="media"><a class="pull-left" href="#"> 
+												<li class="media parent-comment"><a class="pull-left" href="#"> 
 												<p class="media-heading reviews">Account
 																Name</p>
 												<!--<img
@@ -368,6 +395,20 @@ ul#horizontal-list a:hover {
 																	</div>
 																</div></li>
 															<li class="media media-replied" id="replied"><a
+																class="pull-left" href="#"> <img
+																	class="media-object img-circle" alt="profile">
+															</a>
+																<div class="media-body">
+																	<div class="well well-lg">
+																		<h4 class="media-heading text-uppercase reviews">
+																			<span class="glyphicon glyphicon-share-alt"></span>
+																			Account Name
+																		</h4>
+																
+																		<p class="media-comment">Text Example</p>
+																	</div>
+																</div></li>
+																<li class="media media-replied" id="replied"><a
 																class="pull-left" href="#"> <img
 																	class="media-object img-circle" alt="profile">
 															</a>
