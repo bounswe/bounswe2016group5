@@ -13,18 +13,51 @@ public class Topic {
 
 
     private int id;
-    private String title;
+    private String header;
     private String body;
     private ArrayList<TopicTag> tags;
-    private String image_url;
+    private String image;
     private int owner;
     private long rating;
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public ArrayList<String> getMedia() {
+        return media;
+    }
+
+    public void setMedia(ArrayList<String> media) {
+        this.media = media;
+    }
+
+    public ArrayList<QuizQuestion> getQuizzes() {
+        return quizzes;
+    }
+
+    public void setQuizzes(ArrayList<QuizQuestion> quizzes) {
+        this.quizzes = quizzes;
+    }
+
     private int status;
     private Timestamp timestamp;
 
     private ArrayList<Comment> comments;
-    private ArrayList<String> materials;
-    private ArrayList<QuizQuestion> quiz;
+    private ArrayList<String> media;
+    private ArrayList<QuizQuestion> quizzes;
 
     public Topic() {
     }
@@ -38,13 +71,7 @@ public class Topic {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getBody() {
         return body;
@@ -62,13 +89,7 @@ public class Topic {
         this.tags = tags;
     }
 
-    public String getImage_url() {
-        return image_url;
-    }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
-    }
 
     public int getOwner() {
         return owner;
@@ -102,21 +123,7 @@ public class Topic {
         this.comments = comments;
     }
 
-    public ArrayList<String> getMaterials() {
-        return materials;
-    }
 
-    public void setMaterials(ArrayList<String> materials) {
-        this.materials = materials;
-    }
-
-    public ArrayList<QuizQuestion> getQuiz() {
-        return quiz;
-    }
-
-    public void setQuiz(ArrayList<QuizQuestion> quiz) {
-        this.quiz = quiz;
-    }
 
     public Timestamp getTimestamp() {
         return timestamp;
@@ -130,17 +137,17 @@ public class Topic {
     public String toString() {
         return "Topic{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
+                ", title='" + header + '\'' +
                 ", body='" + body + '\'' +
                 ", tags=" + tags +
-                ", image_url='" + image_url + '\'' +
+                ", image_url='" + image + '\'' +
                 ", owner=" + owner +
                 ", rating=" + rating +
                 ", status=" + status +
                 ", timestamp=" + timestamp +
                 ", comments=" + comments +
-                ", materials=" + materials +
-                ", quiz=" + quiz +
+                ", materials=" + media +
+                ", quiz=" + quizzes +
                 '}';
     }
 }

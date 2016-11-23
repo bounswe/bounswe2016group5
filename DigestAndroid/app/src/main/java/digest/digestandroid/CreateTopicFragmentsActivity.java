@@ -20,6 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -93,12 +97,15 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
 
     //Sends topic request for created topic
-    public void createTopicRequest(View view) {
+    public void createTopicRequest(View view) throws JSONException {
         topic = new Topic();
+
 
         //topic.setTitle(edit_text_title.getText().toString());
 
         //this.finish();
+
+        //topic.setOwner(currentUser.getId());
 
         TopicAddDescriptionFragment topicAddDescriptionFragment = (TopicAddDescriptionFragment)((myViewPagerAdapter)viewPager.getAdapter()).getItem(0);
         topicAddDescriptionFragment.fillInfo(topic);
@@ -107,8 +114,11 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
         TopicAddMaterialFragment topicAddMaterialFragment = (TopicAddMaterialFragment) ((myViewPagerAdapter)viewPager.getAdapter()).getItem(1);
         topicAddMaterialFragment.fillMaterial(topic);
 
-        ArrayList<String> a = topic.getMaterials();
-        Log.d("TOPIC CHECK --------", "mmmm"+a.get(0));
+        ArrayList<String> a = topic.getMedia();
+        //Log.d("TOPIC CHECK --------", "mmmm"+a.get(0));
+        APIHandler.getInstance().createTopic("top", topic);
+
+
 
         Log.d("TOPIC", topic.toString());
 

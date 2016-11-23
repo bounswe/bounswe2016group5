@@ -58,8 +58,9 @@ public class HomeAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position){
+
         //holder.imageView.
-        holder.textView1.setText(homeDataset.get(position).getTitle());
+        holder.textView1.setText(homeDataset.get(position).getHeader());
         holder.textView2.setText(homeDataset.get(position).getBody());
     }
 

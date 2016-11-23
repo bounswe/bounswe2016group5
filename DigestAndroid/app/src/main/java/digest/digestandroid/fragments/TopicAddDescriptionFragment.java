@@ -160,10 +160,10 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         String mbody = etBody.getText().toString();
         String mtags = etTags.getText().toString();
         //ArrayList<String> tagList = Arrays.asList(mtags.split(","));
-        mtopic.setTitle(mtitle);
+        mtopic.setHeader(mtitle);
         mtopic.setBody(mbody);
         //mtopic.setString_tags(tagList);
-        mtopic.setImage_url(url);
+        mtopic.setImage(url);
     }
 
 

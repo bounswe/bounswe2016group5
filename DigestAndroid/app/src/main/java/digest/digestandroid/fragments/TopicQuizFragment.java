@@ -75,10 +75,10 @@ public class TopicQuizFragment extends Fragment {
     }
 
     public void initializeInfo(Topic topic){
-        this.topic.setTitle(topic.getTitle());
+        this.topic.setHeader(topic.getHeader());
         this.topic.setBody(topic.getBody());
         this.topic.setOwner(topic.getOwner());
-        this.topic.setImage_url(topic.getImage_url());
+        this.topic.setImage(topic.getImage());
         this.topic.setRating(topic.getRating());
     }
 
