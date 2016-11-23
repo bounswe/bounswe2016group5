@@ -31,52 +31,96 @@
 	also implicitly role set as user.
 
 ## Create Topic
-	A json object with following parameters should be sent.
+	URL:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=create_topic
+	Method:
+		POST
+	Body:
+		JSON object for topic
+	Succes response:
+		status:200
+		content: <tid>
+	Error response:
+		status:400
+	
+	The create_topic returns topic id with resonse code "200" if it succeeds otherwise response code is set to "400"
+	
+	JSON Object example:
+	{"owner":<user-id>,"image":<image-url>,"header":<topic-header>,"body":<topic-body>,"tags":[{"tag":<tag-string>},{"tag":<tag-string>}]}
+
+	Remark: You don't need to specify the fields that are automatically assigned in api. You need to be careful about fields names of JSON object. Names should be exactly the same with Topic model in the api.
 	
 ## Get all topics of user
-URL:
-	digest.us-east-1.elasticbeanstalk.com/digest.api 
-Method:
-	GET
-Params:
-	f=get_topics_of_user
-	ruid=<user_id>
-Succes response:
-	status:200
-	content: array_of_topics--->[<topic>,<topic>,...]
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_topics_of_user
+		ruid=<user_id>
+	Succes response:
+		status:200
+		content: array_of_topics--->[<topic>,<topic>,...]
     		please see get topic section for the json of <topic>
-Error response:
-	hakkimizda hayirlisi olsun
-Example:
-	http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
-	
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 
 ## Add Quiz
 	URL:
-	digest.us-east-1.elasticbeanstalk.com/digest.api 
-Method:
-	POST
-Params:
-	f=add_quiz
-	tid=<topic_id>
-Data Params:
-	{"name":<quiz_name>,"questions":<array_of_questions ex:-- 
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		POST
+	Params:
+		f=add_quiz
+		tid=<topic_id>
+	Data Params:
+		{"name":<quiz_name>,"questions":<array_of_questions ex:-- 
 				[{"text":<question_text>,"choices":<array_of_choices
 					[<answer_text>,<answer_text>,<answer_text>,...]
 				,"answers":<array_of_ints: indexes of the answers >}
-Succes response:
-	status:200
-Error response:
-	hakkimizda hayirlisi olsun
-Example:
-	http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 	
 	
 ## Add Comment
-	POST request with following json
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=add_comment
+		body=<comment_body_text>
+		uid=<user_id> // owner of the comment
+		ucid=<upper_comment_id> // -1 there are no upper comments
+		tid=<topic_id>
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_comment&body=MAASALLAH%20OGLUM&uid=9&ucid=-1&tid=8
 
 ## Get Comments of Topic
-	<API_PATH>/?f=get_comments_of_topic&tid=<TOPICID>
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_comments_of_topic
+		tid=<topic_id>
+	Succes response:
+		status:200
+		content: 
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:	
+		<API_PATH>/?f=get_comment&tid=<TOPICID>
 	
 
 ## Get topic
