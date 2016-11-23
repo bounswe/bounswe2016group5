@@ -72,7 +72,22 @@
 	
 	
 ## Add Comment
-	POST request with following json
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=add_comment
+		body=<comment_body_text>
+		uid=<user_id> // owner of the comment
+		ucid=<upper_comment_id> // -1 there are no upper comments
+		tid=<topic_id>
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_comment&body=MAASALLAH%20OGLUM&uid=9&ucid=-1&tid=8
 
 ## Get Comments
 	URL:
