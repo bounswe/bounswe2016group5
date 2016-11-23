@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import digest.digestandroid.Models.Comment;
+import digest.digestandroid.Models.CommentUser;
 
 /**
  * Created by Burki on 19.11.2016.
@@ -17,7 +18,7 @@ import digest.digestandroid.Models.Comment;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHolder> {
 
-    private List<Comment> commentList;
+    private List<CommentUser> commentList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView body, owner, rate;
@@ -31,7 +32,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     }
 
 
-    public CommentAdapter(List<Comment> commentList) {
+    public CommentAdapter(List<CommentUser> commentList) {
         this.commentList = commentList;
     }
 
@@ -45,9 +46,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Comment comment = commentList.get(position);
+        CommentUser comment = commentList.get(position);
         holder.body.setText(comment.getBody());
-        holder.owner.setText(Integer.toString(comment.getUid()));
+        holder.owner.setText(comment.getUsername());
         holder.rate.setText(String.valueOf(comment.getRate()));
     }
 

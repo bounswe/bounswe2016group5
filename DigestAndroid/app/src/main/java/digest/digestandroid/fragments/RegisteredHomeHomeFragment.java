@@ -81,7 +81,6 @@ public class RegisteredHomeHomeFragment extends Fragment {
                    public void onResponse(Topic response) {
                        Log.d("Success", "Success");
                        Log.d("Success", response.toString());
-                       // TODO: 23.11.2016 Comment out next statement when click listener on HomePage Topic objects implements and directs here
                        Cache.getInstance().setTopic(response);
 
                        Intent intent = new Intent(getActivity(), ViewTopicActivity.class);

@@ -137,17 +137,17 @@ public class Topic {
     public String toString() {
         return "Topic{" +
                 "id=" + id +
-                ", title='" + header + '\'' +
+                ", header='" + header + '\'' +
                 ", body='" + body + '\'' +
                 ", tags=" + tags +
-                ", image_url='" + image + '\'' +
+                ", image='" + image + '\'' +
                 ", owner=" + owner +
                 ", rating=" + rating +
                 ", status=" + status +
                 ", timestamp=" + timestamp +
                 ", comments=" + comments +
-                ", materials=" + media +
-                ", quiz=" + quizzes +
+                ", media=" + media +
+                ", quizzes=" + quizzes +
                 '}';
     }
 }

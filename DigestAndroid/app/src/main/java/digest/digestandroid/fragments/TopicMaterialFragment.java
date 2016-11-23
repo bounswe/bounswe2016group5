@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,6 +88,8 @@ public class TopicMaterialFragment extends Fragment {
         material_list = new ArrayList<String>();
 
         material_list = Cache.getInstance().getTopic().getMedia();
+        Log.e("MATERIALS", material_list.toString());
+        Log.e("MATERIALS", Cache.getInstance().getTopic().getMedia().toString());
 
         mListView = (ListView) rootView.findViewById(R.id.list_view_materials);
         list_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, material_list);

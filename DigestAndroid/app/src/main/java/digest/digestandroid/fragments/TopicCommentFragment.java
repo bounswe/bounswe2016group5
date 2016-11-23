@@ -29,6 +29,7 @@ import digest.digestandroid.Cache;
 import digest.digestandroid.CommentAdapter;
 import digest.digestandroid.DividerItemDecoration;
 import digest.digestandroid.Models.Comment;
+import digest.digestandroid.Models.CommentUser;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
 import digest.digestandroid.api.APIHandler;
@@ -46,7 +47,7 @@ public class TopicCommentFragment extends Fragment {
     protected View rootView;
     protected Topic topic = new Topic();
 
-    private List<Comment> commentList;
+    private List<CommentUser> commentList;
     private RecyclerView recyclerView;
     private CommentAdapter mAdapter;
 
@@ -100,7 +101,7 @@ public class TopicCommentFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_topic_comment, container, false);
 
-        commentList = new ArrayList<Comment>();
+        commentList = new ArrayList<CommentUser>();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
 
@@ -134,10 +135,36 @@ public class TopicCommentFragment extends Fragment {
 
     }
 
-
+    int ctr = 0;
     private void prepareCommentData() {
+        ctr = 0;
+        commentList.clear();
+        Response.Listener<String> response = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Get username", "Success " + response);
+                CommentUser commentUser = new CommentUser();
+                commentUser.setBody(Cache.getInstance().getTopic().getComments().get(ctr).getBody());
+                commentUser.setUsername(response);
+                commentUser.setRate(Cache.getInstance().getTopic().getComments().get(ctr).getRate());
+
+                commentList.add(commentUser);
+
+                ctr++;
+                mAdapter.notifyDataSetChanged();
+                // Writing data to SharedPreferences
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Failed", "Login Failed");
+            }
+        };
+
         for(int i = 0 ; i < Cache.getInstance().getTopic().getComments().size() ; i++){
-            commentList.add(Cache.getInstance().getTopic().getComments().get(i));
+            APIHandler.getInstance().getUsername("GetUsername", Cache.getInstance().getTopic().getComments().get(i).getUid(),response,errorListener);
         }
 
         mAdapter.notifyDataSetChanged();
@@ -155,7 +182,16 @@ public class TopicCommentFragment extends Fragment {
                 // Writing data to SharedPreferences
                 if(response.equals("200")){
                     Cache.getInstance().getTopic().getComments().add(Cache.getInstance().getComment());
-                    commentList.add(Cache.getInstance().getComment());
+                    prepareCommentData();
+                    /*
+                    CommentUser commentUser = new CommentUser();
+                    commentUser.setBody(Cache.getInstance().getTopic().getComments().get(ctr).getBody());
+                    commentUser.setUsername(response);
+                    commentUser.setRate(Cache.getInstance().getTopic().getComments().get(ctr).getRate());
+
+                    commentList.add(commentUser);
+                    */
+                    //commentList.add(Cache.getInstance().getComment());
                     mAdapter.notifyDataSetChanged();
                 }
                 else {

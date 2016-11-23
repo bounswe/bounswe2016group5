@@ -149,7 +149,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     }
                 };
 
-                APIHandler.getInstance().getRecentTopics(10,recentTopicsResponseListener);
+                APIHandler.getInstance().getRecentTopics(15,recentTopicsResponseListener);
 
 
                 return true;
@@ -280,7 +280,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
             }
         };
 
-        APIHandler.getInstance().getRecentTopics(10,recentTopicsResponseListener);
+        APIHandler.getInstance().getRecentTopics(15,recentTopicsResponseListener);
 
     }
 

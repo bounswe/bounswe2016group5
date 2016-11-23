@@ -119,10 +119,12 @@ public class TopicGeneralFragment extends Fragment {
         TextView rating = (TextView) rootView.findViewById(R.id.tRating);
         rating.setText(String.valueOf(Cache.getInstance().getTopic().getRating()));
 
-        String tagss;
-        Cache.getInstance().getTopic().getTags();
+        String tagss = " - ";
+        for (int i = 0 ; i < Cache.getInstance().getTopic().getTags().size() ; i++){
+            tagss += Cache.getInstance().getTopic().getTags().get(i).getTag() + " - ";
+        }
         TextView tags = (TextView) rootView.findViewById(R.id.tagsTitle);
-        rating.setText(String.valueOf(Cache.getInstance().getTopic().getRating()));
+        tags.setText(tagss);
 
 
         NetworkImageView imageView  = (NetworkImageView) rootView.findViewById(R.id.topicImage);
