@@ -17,6 +17,15 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+/*import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import java.io.File;*/
 
 /**
  * Servlet implementation class CreateTopicServlet
@@ -52,19 +61,12 @@ public class CreateTopicServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		/*
-		 * StringBuffer bf = new StringBuffer();
-		 * bf.append("http://localhost:8080/digest.api/?f=create_topic");
-		 * bf.append("?"); Enumeration<String> names =
-		 * request.getParameterNames(); while (names.hasMoreElements()) { String
-		 * attr = names.nextElement(); String value =
-		 * request.getParameter(attr); bf.append(attr + "=" + value); if
-		 * (names.hasMoreElements()) bf.append("&"); } String url =
-		 * bf.toString(); System.out.println(url);
-		 */
-		String url = "http://localhost:8080/digest.api/?f=create_topic";
+		
+		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=create_topic";
 		URL connpage = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) connpage.openConnection();
+		
+		
 
 		con.setRequestMethod("POST");
 		con.setRequestProperty("Content-Type", "application/json");
@@ -74,10 +76,19 @@ public class CreateTopicServlet extends HttpServlet {
 		JSONArray quizes = new JSONArray();
 		JSONArray media = new JSONArray();
 		JSONArray comments = new JSONArray();
-
+		
+		
 		Enumeration<String> names = request.getParameterNames();
 		while (names.hasMoreElements()) {
 			String attr = names.nextElement();
+			/*if(attr.contentEquals("image")){
+				AWSCredentials credentials = new BasicAWSCredentials("AKIAIOUSAJ6QDUPDWJEQ","maGgxZxscQaFL37zxM80YMBh7yc9yiiHiY4p6Kxj");
+				AmazonS3 s3client = new AmazonS3Client(credentials);        
+				s3client.putObject(new PutObjectRequest("suzanuskudarli", "img/2.jpg", new File(request.getParameter(attr))).withCannedAcl(CannedAccessControlList.PublicRead));	
+				String imageUrl = "https://s3.amazonaws.com/suzanuskudarli/img/2.jpg";
+				topic.put(attr, imageUrl);
+			}
+			else */
 			if (!(attr.contentEquals("f") || attr.contentEquals("tags"))) {
 				String value = request.getParameter(attr);
 				topic.put(attr, value);
@@ -109,8 +120,10 @@ public class CreateTopicServlet extends HttpServlet {
 		wr.writeBytes(topic.toString());
 		wr.flush();
 		wr.close();
+
 		
 		int responseCode = con.getResponseCode();
+		System.out.println(responseCode);
 		if (responseCode == 200 && request.getParameter("f") != null) {
 			BufferedReader in = new BufferedReader(
 			        new InputStreamReader(con.getInputStream()));
@@ -121,9 +134,10 @@ public class CreateTopicServlet extends HttpServlet {
 				res.append(inputLine);
 			}
 			in.close();
-			
-			System.out.println(res.toString());
-			response.sendRedirect("index.jsp");
+			System.out.println("topic_id"+ Integer.parseInt(res.toString()));
+			request.setAttribute("topic_id", Integer.parseInt(res.toString()));
+			request.getRequestDispatcher("/ViewTopicServlet").forward(request, response);
+			//response.sendRedirect("index.jsp");
 		} else if (responseCode == 400) {
 			HttpSession session = request.getSession(true);
 			String errMsg = "Unexpected Error occured!!";
