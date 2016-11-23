@@ -1,5 +1,6 @@
 package digest.digestandroid.Models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -15,11 +16,11 @@ public class Topic {
     private String title;
     private String body;
     private ArrayList<TopicTag> tags;
-    private ArrayList<String> string_tags;
     private String image_url;
     private int owner;
     private long rating;
     private int status;
+    private Timestamp timestamp;
 
     private ArrayList<Comment> comments;
     private ArrayList<String> materials;
@@ -117,13 +118,29 @@ public class Topic {
         this.quiz = quiz;
     }
 
-
-    public ArrayList<String> getString_tags() {
-        return string_tags;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setString_tags(ArrayList<String> string_tags) {
-        this.string_tags = string_tags;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
+    @Override
+    public String toString() {
+        return "Topic{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", tags=" + tags +
+                ", image_url='" + image_url + '\'' +
+                ", owner=" + owner +
+                ", rating=" + rating +
+                ", status=" + status +
+                ", timestamp=" + timestamp +
+                ", comments=" + comments +
+                ", materials=" + materials +
+                ", quiz=" + quiz +
+                '}';
+    }
 }

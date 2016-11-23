@@ -28,6 +28,7 @@ import java.util.List;
 
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
+import digest.digestandroid.api.APIHandler;
 import digest.digestandroid.fragments.TopicAddDescriptionFragment;
 import digest.digestandroid.fragments.TopicAddMaterialFragment;
 import digest.digestandroid.fragments.TopicAddQuizFragment;
@@ -74,6 +75,8 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
         // = (EditText) findViewById(R.id.topic_create_imageurl);
         image_view_topic = (NetworkImageView) findViewById(R.id.topic_create_image_view);
 
+        //Log.v("USERRRRRRRR", Cache.getInstance().getUser().toString());
+
 
 
     }
@@ -106,6 +109,10 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
         ArrayList<String> a = topic.getMaterials();
         Log.d("TOPIC CHECK --------", "mmmm"+a.get(0));
+
+        Log.d("TOPIC", topic.toString());
+
+        //APIHandler.getInstance().createTopic("TOPPIC", topic);
 
         this.finish();
         //Back to dashboard, since home redirects to create topic, is finishing this activity enough?

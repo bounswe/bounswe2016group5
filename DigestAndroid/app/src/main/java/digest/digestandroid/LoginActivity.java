@@ -86,11 +86,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }*/
 
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=login&username=android&password=1234";
-
-
         _loginButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
@@ -99,14 +94,16 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        //String email = _emailText.getText().toString();
-        final String username = _emailText.getText().toString();
+        String username = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
+        //User user = new User(username, password);
         User user = new User("android", "1234");
 
+        // Log.v("USER", user.toString());
+
         // TODO: Implement your own authentication logic here.
-        APIHandler.getInstance().loginPOST("TesT", user);
+        APIHandler.getInstance().login("LOGIN", user);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -140,6 +137,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
+        Intent intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
+        startActivity(intent);
         finish();
     }
 
