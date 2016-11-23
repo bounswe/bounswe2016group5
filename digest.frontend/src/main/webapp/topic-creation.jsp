@@ -6,7 +6,7 @@
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("session") == null) {
-		response.sendRedirect("MainServlet");
+		response.sendRedirect("index.jsp");
 	}
 %>
 <!DOCTYPE html>
@@ -153,7 +153,7 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img
+				<a class="navbar-brand" href="index.jsp">DIGest <span><img
 						alt="digest-icon" src="dig-icon.png"></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
@@ -172,12 +172,12 @@ ul#horizontal-list a:hover {
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span
-							class="glyphicon glyphicon-envelope"></span> Messages</a></li>
-					<li><a href="#"><span
-							class="glyphicon glyphicon-cog"></span> Settings</a></li>
-					<li><a href="#"><span
-							class="glyphicon glyphicon-th-list"></span> Notifications</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
+							Messages</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
+							Settings</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-th-list"></span>
+							Notifications</a></li>
 					<li><a href="LogoutServlet"><span
 							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 				</ul>
@@ -200,7 +200,7 @@ ul#horizontal-list a:hover {
 						</div>
 						<div class="navbar-collapse collapse sidebar-navbar-collapse">
 							<ul class="nav navbar-nav">
-								<li><a href="MainServlet"><span
+								<li><a href="index.jsp"><span
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
 								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
@@ -235,8 +235,21 @@ ul#horizontal-list a:hover {
 			<div class="col-sm-9">
 				<h1>Open a new topic</h1>
 				<div class="open-topic col-sm-12">
-					<form class="form-horizontal" id="create_topic_form" action="CreateTopicServlet"
-				method="POST">
+					<form method="POST" class="form-horzontal" id="upload_image_form"
+						action="CreateTopicServlet" enctype="multipart/form-data">
+						<div class="row col-sm-12">
+							<div class="form-group">
+								<label class="control-label" for="img-url">Image:</label> <input
+									type="file" class="form-control" name="image" id="image">
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary" name="f"
+									value="upload_image">Upload</button>
+							</div>
+						</div>
+					</form>
+					<form class="form-horizontal" id="create_topic_form"
+						action="CreateTopicServlet" method="POST">
 						<div class="form-group">
 							<div class="topic-header">
 								<div class="row col-sm-6">
@@ -247,12 +260,6 @@ ul#horizontal-list a:hover {
 												id="header">
 										</div>
 									</div>
-									<!--  <div class="form-group">
-										<label class="control-label col-sm-2" for="type">Type:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="type" id="type">
-										</div>
-									</div>-->
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="tags">Tags:</label>
 										<div class="col-sm-10">
@@ -266,34 +273,18 @@ ul#horizontal-list a:hover {
 												id="admins" value="<%=session.getAttribute("id")%>">
 										</div>
 									</div>
-									<!--<div class="form-group">
-										<label class="control-label col-sm-2" for="mods">Mods:</label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="mods" id="mods">
-										</div>
-									</div>-->
 								</div>
 							</div>
-							
 							<div class="row col-sm-6">
-								<div class="container col-sm-6">
-									<label class="control-label col-sm-12" for="topic-img">Topic
+								<div class="container col-sm-12">
+									<label class="control-label" for="topic-img">Topic
 										Image:</label> <img id="topic-img"
 										style="display: block; width: 150px; height: 150px;"
-										alt="topic image" src="topic.png"></img>
-								</div>
-								<div class="container col-sm-6">
-									<div class="form-group">
-										<label class="control-label" for="img-url">URL:</label> <input
-											type="text" class="form-control" name="image" id="image">
-
-									</div>
-									<div class="form-group">
-										<a href="#" class="btn btn-default btn-block"
-											type="submit">Upload</a>
-									</div>
+										alt="topic image" src="topic.png"
+										class="img-responsive center-block"></img>
 								</div>
 							</div>
+
 						</div>
 						<div class="form-group">
 							<div class="topic-body col-sm-12">
@@ -307,9 +298,8 @@ ul#horizontal-list a:hover {
 						</div>
 						<div class="form-group">
 							<div class="col-xs-9 col-xs-offset-3">
-								<input type="hidden" name="status" value="0">
 								<button type="submit" class="btn btn-primary" name="f"
-							value="create_topic">Create Topic</button>
+									value="create_topic">Create Topic</button>
 							</div>
 						</div>
 					</form>
