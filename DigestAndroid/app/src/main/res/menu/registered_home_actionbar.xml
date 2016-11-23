@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
     <item
         android:id="@+id/action_create_topic"
-        android:icon="@drawable/default_logo"
+        android:icon="@drawable/createtopic"
         android:title="Create topic"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_refresh"
-        android:icon="@drawable/default_logo"
+        android:icon="@drawable/refresh"
         android:title="Refresh"
         app:showAsAction="always"/>
 
