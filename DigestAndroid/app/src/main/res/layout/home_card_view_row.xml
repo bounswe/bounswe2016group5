@@ -3,8 +3,8 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
-    android:padding="5dp"
+    android:layout_height="240dp"
+    android:padding="7dp"
     android:clickable="true">
 
 
@@ -16,19 +16,19 @@
         android:layout_height="match_parent"
         android:layout_margin="5dp"
         card_view:cardCornerRadius="4dp"
-        card_view:contentPadding="5dp">
+        card_view:contentPadding="0dp">
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/home_card"
-            android:background="#e6e6ff">
+            android:background="#ffffff">
 
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/home_card_image"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="160dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
@@ -36,28 +36,38 @@
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_below="@+id/home_card_image"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
+                <!--android:layout_centerInParent="true"-->
+
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/home_text_view1"
                     android:layout_alignParentTop="true"
-                    android:text="Text View1"
                     android:typeface="monospace"
-                    android:fontFamily="sans-serif"
-                    android:textSize="24sp" />
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="24sp"
+                    android:textStyle="normal|bold"
+                    android:textColor="#4c4c4c"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/home_text_view2"
-                    android:layout_below="@+id/home_text_view1"/>
-
+                    android:typeface="monospace"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="8sp"
+                    android:textStyle="normal"
+                    android:textColor="#750ea6b2"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginBottom="5dp"/>
 
             </LinearLayout>
 

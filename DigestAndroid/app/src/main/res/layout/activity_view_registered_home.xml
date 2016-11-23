@@ -37,6 +37,18 @@
         android:id="@+id/viewpager_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#f1f5f8"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
 </android.support.design.widget.CoordinatorLayout>
 
+<!--
+    primary">#F50057</color>
+<color name="colorPrimaryDark">#F50057</color>
+<color name="colorAccent">#FF4081</color>
+<color name="viewBg">#f1f5f8</color>
+<color name="album_title">#4c4c4c</
+
+
+#d4f7f7
+
+-->

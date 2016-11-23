@@ -67,7 +67,9 @@ public class HomeAdapter extends RecyclerView
         holder.imageView.setImageUrl(homeDataset.get(position).getImage(),homeImageLoader);
 
         holder.textView1.setText(homeDataset.get(position).getHeader());
-        holder.textView2.setText(homeDataset.get(position).getBody());
+
+        // TODO showing tags would be positive
+        //holder.textView2.setText(homeDataset.get(position).getTags().toString());
     }
 
     public void addItem(Topic dataObj, int index){
