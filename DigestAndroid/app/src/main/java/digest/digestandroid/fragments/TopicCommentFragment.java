@@ -11,12 +11,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import digest.digestandroid.Cache;
 import digest.digestandroid.CommentAdapter;
+import digest.digestandroid.DividerItemDecoration;
 import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
@@ -95,6 +99,7 @@ public class TopicCommentFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
 
         prepareCommentData();
@@ -102,6 +107,22 @@ public class TopicCommentFragment extends Fragment {
         return rootView;
     }
 
+    public void thumbsUp() {
+        ImageButton imageButton = (ImageButton) rootView.findViewById(R.id.thumbsUp);
+        // TODO: 23.11.2016   hangi commente dokunuldugunu ve hangi commentin degistirilecegini bul adapter ve comment lsit yardimiyla
+        TextView textView = (TextView) rootView.findViewById(R.id.comment_rate);
+        if(imageButton.isEnabled()){
+            topic.setRating(topic.getRating()+1);
+            textView.setText(String.valueOf(topic.getRating()));
+            imageButton.setEnabled(false);
+        }
+        else{
+            topic.setRating(topic.getRating()-1);
+            textView.setText(String.valueOf(topic.getRating()));
+            imageButton.setEnabled(true);
+        }
+
+    }
 
 
     private void prepareCommentData() {

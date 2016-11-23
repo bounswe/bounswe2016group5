@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,13 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
 
     }
 
+    public void thumbsUp(View view) {
+        TopicCommentFragment topicCommentFragment = (TopicCommentFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(1);
+        topicCommentFragment.thumbsUp();
+    }
+
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -140,9 +148,12 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     }
 
 
+
     @Override
     public void onFragmentInteraction() {
     }
+
+
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter{

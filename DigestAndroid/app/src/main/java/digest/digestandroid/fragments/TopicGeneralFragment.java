@@ -108,7 +108,7 @@ public class TopicGeneralFragment extends Fragment {
         desc.setText(topic.getBody());
 
         TextView owner = (TextView) rootView.findViewById(R.id.tTopicOwner);
-        owner.setText(topic.getOwner());
+        owner.setText(String.valueOf(topic.getOwner()));
 
         TextView rating = (TextView) rootView.findViewById(R.id.tRating);
         rating.setText(String.valueOf(topic.getRating()));
