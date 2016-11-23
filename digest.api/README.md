@@ -48,9 +48,32 @@
 	<API_PATH>/?f=get_comment&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&tid=<TOPICID>
 	
 
-## Get a topic
-	<API_PATH>/?f=get_topics_of_user&uid=<REQUEST_OWNER_USER_ID>&session=<SESSION>&tid=<TOPIC_ID>
-	
+## Get topic
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_topic
+		tid=<topic_id>
+	Succes response:
+		status:200
+		content:{
+		"id":<topic_id>,"header":<topic_header>,"image":<topic_image_url>,"body":<body_text>,
+		"owner":<owner_id>,"status":<kismet>,"timestamp":<sql_timestamp>,
+		"tags":< array_of_tags ex:-- [{"id":<tag_id>,"tid":<topic_id>,"tag":<tag>}]>,
+		"quizzes":<array_of_quizzes ex:-- 
+			[{"name":<quiz_name>,"questions":<array_of_questions ex:-- 
+				[{"text":<question_text>,"choices":<array_of_choices
+					["cevap1","cvp1","huloo1"]>>
+				,"answers":<array_of_ints>},<quiz_object>,....,..
+			],"media":<array_of_urls ex:-- [<url>,<url>,...]>,
+			"comments":<array_of_topics ex:--
+			[{"id":<comment_id>,"uid":<user_id>,"ucid":<upper_comment_id,-1 if there are no upper comments >,"tid":<topic_id>,"body":<comment_body>,"rate":<rating>,"timestamp":<sql_time_stamp>}]}
+	Error response:
+		Kismet artik..
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topic&tid=8
 ## Get recent topics
 	<API_PATH>/?f=get_recent_topics&count=<MAX LIMIT OF TOPICS>
 ## Get Subscribed Topics
