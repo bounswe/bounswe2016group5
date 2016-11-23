@@ -47,8 +47,8 @@ public class SignupServlet extends HttpServlet {
 		StringBuffer bf = new StringBuffer();
 		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
 		bf.append("?");
-
 		Enumeration<String> names = request.getParameterNames();
+		
 		while (names.hasMoreElements()) {
 			String attr = names.nextElement();
 			String value = request.getParameter(attr);
@@ -63,7 +63,7 @@ public class SignupServlet extends HttpServlet {
 		int responseCode = urlcon.getResponseCode();
 
 		if (responseCode == 200 && request.getParameter("f") != null) {
-			response.sendRedirect("index.jsp");
+			response.sendRedirect("MainServlet");
 		} else if (responseCode == 400) {
 			HttpSession session = request.getSession(true);
 			String errMsg = "Unexpected Error occured!!";
