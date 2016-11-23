@@ -30,7 +30,6 @@
 body {
 	background-color: lightgrey;
 }
-
 @media ( min-width : 768px) {
 	.sidebar-nav {
 		padding: 12px;
@@ -58,7 +57,6 @@ body {
 		overflow-y: auto;
 	}
 }
-
 #menu-outer {
 	height: 84px;
 	width: 100%;
@@ -66,49 +64,40 @@ body {
 	position: fixed;
 	bottom: 0;
 }
-
 #content {
 	position: relative;
 	width: 100%;
 	overflow: auto;
 	margin-bottom: 84px;
 }
-
 #form-aligned {
 	border: 1px solid white;
 	padding: 10px;
 }
-
 ul#horizontal-list {
 	min-width: 696px;
 	list-style: none;
 	padding-top: 20px;
 }
-
 ul#horizontal-list li, ul#horizontal-list a {
 	display: inline;
 	float: left;
 	color: grey;
 }
-
 ul#horizontal-list a:hover {
 	text-decoration: none;
 	color: white;
 }
-
 .open-topic {
 	width: 100%;
 	heigth: 100%;
 }
-
 .open-topic button {
 	float: right;
 }
-
 .topic-header {
 	width: 100%;
 }
-
 .topic-body {
 	with: 100%;
 	margin: 2px 2px 2px 2px;
@@ -116,7 +105,6 @@ ul#horizontal-list a:hover {
 </style>
 <script>
 	$(document).ready(function() {
-
 		$('#create_topic_form').validate({ // initialize the plugin
 			rules : {
 				header : {
@@ -134,12 +122,8 @@ ul#horizontal-list a:hover {
 				status : {
 					required : true
 				},
-				url : {
-					required : true
-				},
 			}
 		});
-
 	});
 </script>
 
@@ -235,19 +219,19 @@ ul#horizontal-list a:hover {
 			<div class="col-sm-9">
 				<h1>Open a new topic</h1>
 				<div class="open-topic col-sm-12">
-					<form method="POST" class="form-horzontal" id="upload_image_form"
+					<!--<form method="POST" class="form-horzontal" id="upload_image_form"
 						action="CreateTopicServlet" enctype="multipart/form-data">
-						<div class="row col-sm-12">
+						  <div class="row col-sm-12">
 							<div class="form-group">
-								<label class="control-label" for="img-url">Image:</label> <input
-									type="file" class="form-control" name="image" id="image">
+								<label class="control-label" for="img-url">Image:</label> 
+								<input type="file" class="form-control" name="image" id="image">
 							</div>
 							<div class="form-group">
 								<button type="submit" class="btn btn-primary" name="f"
 									value="upload_image">Upload</button>
 							</div>
 						</div>
-					</form>
+					</form>-->
 					<form class="form-horizontal" id="create_topic_form"
 						action="CreateTopicServlet" method="POST">
 						<div class="form-group">
@@ -282,6 +266,8 @@ ul#horizontal-list a:hover {
 										style="display: block; width: 150px; height: 150px;"
 										alt="topic image" src="topic.png"
 										class="img-responsive center-block"></img>
+									<input type="text" class="form-control" name="image"
+												id="image">
 								</div>
 							</div>
 
