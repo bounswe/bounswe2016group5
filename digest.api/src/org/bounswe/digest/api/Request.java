@@ -1,4 +1,4 @@
-package org.bounswe.digest.api.semantic;
+package org.bounswe.digest.api;
 
 import java.util.ArrayList;
 
@@ -175,7 +175,7 @@ class Edge {
         try {
             rel = Relation.valueOf(relationStr);
         } catch (IllegalArgumentException e) {
-            // The relation isn't in our Relation enum. No problem—we deal with this below.
+            // The relation isn't in our Relation enum. No problemï¿½we deal with this below.
         }
         if(rel == null) {
             rel = Relation.Other;
