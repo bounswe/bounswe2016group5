@@ -142,7 +142,7 @@ ul#horizontal-list a:hover {
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
+						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-3 pull">
@@ -197,13 +197,6 @@ ul#horizontal-list a:hover {
 								<li><a href="user-topics.jsp"><span
 										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>
-							<div class="panel panel-default"
-								style="height: 200px; overflow-y: auto;">
-								<div class="panel-header">Your Notes</div>
-								<div class="panel-body">Notes go here. adsd asda fc sd ds
-									cds cds dsc sd \n sdf \n sdcds\n</div>
-
-							</div>
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>

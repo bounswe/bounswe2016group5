@@ -124,7 +124,7 @@ ul#horizontal-list a:hover {
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
+						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">

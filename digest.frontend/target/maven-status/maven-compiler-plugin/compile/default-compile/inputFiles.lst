@@ -1,8 +1,11 @@
 /Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/SignupServlet.java
 /Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/ViewTopicServlet.java
+/Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/MainServlet.java
 /Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/UserProfileServlet.java
 /Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/CreateTopicServlet.java
+/Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/SubscribeServlet.java
 /Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/QuizServlet.java
 /Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/AddCommentServlet.java
 /Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/LoginServlet.java
 /Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/LogoutServlet.java
+/Users/atakan1/git/bounswe2016group5/digest.frontend/src/main/java/com/digest/AddMediaServlet.java

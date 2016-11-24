@@ -110,37 +110,39 @@ public class ViewTopicServlet extends HttpServlet {
 			}
 
 			int subscribed = 0;
-			if ((Integer) session.getAttribute("id") != owner) {
-				String recv2 = "";
-				String recvbuff2 = "";
+			if (session.getAttribute("id") != null) {
+				if ((Integer) session.getAttribute("id") != owner) {
+					String recv2 = "";
+					String recvbuff2 = "";
 
-				StringBuffer bf2 = new StringBuffer();
-				bf2.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
-				bf2.append("?f=get_subscribed_topics&uid=" + session.getAttribute("id"));
+					StringBuffer bf2 = new StringBuffer();
+					bf2.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
+					bf2.append("?f=get_subscribed_topics&uid=" + session.getAttribute("id"));
 
-				String url2 = bf2.toString();
-				URL jsonpage2 = new URL(url2);
-				HttpURLConnection urlcon2 = (HttpURLConnection) jsonpage2.openConnection();
-				BufferedReader buffread2 = new BufferedReader(new InputStreamReader(urlcon2.getInputStream()));
+					String url2 = bf2.toString();
+					URL jsonpage2 = new URL(url2);
+					HttpURLConnection urlcon2 = (HttpURLConnection) jsonpage2.openConnection();
+					BufferedReader buffread2 = new BufferedReader(new InputStreamReader(urlcon2.getInputStream()));
 
-				while ((recv2 = buffread2.readLine()) != null)
-					recvbuff2 += recv2;
-				buffread2.close();
+					while ((recv2 = buffread2.readLine()) != null)
+						recvbuff2 += recv2;
+					buffread2.close();
 
-				try {
-					JSONArray topicArray = new JSONArray(recvbuff2);
+					try {
+						JSONArray topicArray = new JSONArray(recvbuff2);
 
-					for (Object t : topicArray) {
-						if ((Integer) t == topicId) { // Already subscribed
-							subscribed = 1;
+						for (Object t : topicArray) {
+							if ((Integer) t == topicId) { // Already subscribed
+								subscribed = 1;
+							}
 						}
+					} catch (JSONException ex) {
+						request.setAttribute("err", "Unexpected error occured!!");
+						// request.getRequestDispatcher("/profile.jsp").forward(request,
+						// response);
 					}
-				} catch (JSONException ex) {
-					request.setAttribute("err", "Unexpected error occured!!");
-					// request.getRequestDispatcher("/profile.jsp").forward(request,
-					// response);
-				}
 
+				}
 			}
 			request.setAttribute("subscribed", subscribed);
 

@@ -176,7 +176,7 @@ ul#horizontal-list a:hover {
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
+						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">
@@ -206,7 +206,6 @@ ul#horizontal-list a:hover {
 		</div>
 	</nav>
 
-	<h1>Must be updated for unregistered users</h1>
 	<%
 		} else {
 	%>
@@ -219,7 +218,7 @@ ul#horizontal-list a:hover {
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
+						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-3 pull">
@@ -276,13 +275,6 @@ ul#horizontal-list a:hover {
 							</ul>
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
-								<div class="panel-header">Your Notes</div>
-								<div class="panel-body">Notes go here. adsd asda fc sd ds
-									cds cds dsc sd \n sdf \n sdcds\n</div>
-
-							</div>
-							<div class="panel panel-default"
-								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>
 								<div class="panel-body">Channels and some links</div>
 
@@ -297,18 +289,21 @@ ul#horizontal-list a:hover {
 					</div>
 				</div>
 			</div>
+			<%
+				}
+			%>
 			<div class="row col-sm-9">
 				<%
 					String header = (String) request.getAttribute("header");
-						int owner = (Integer) request.getAttribute("ownerId");
-						String ownerName = (String) request.getAttribute("ownerName");
-						int tid = (Integer) request.getAttribute("id");
-						//int topicFollower = (Integer) request.getAttribute("topicFollower");
-						String image = (String) request.getAttribute("image");
-						String body = (String) request.getAttribute("body");
-						int subscribed = (Integer) request.getAttribute("subscribed");
+					int owner = (Integer) request.getAttribute("ownerId");
+					String ownerName = (String) request.getAttribute("ownerName");
+					int tid = (Integer) request.getAttribute("id");
+					//int topicFollower = (Integer) request.getAttribute("topicFollower");
+					String image = (String) request.getAttribute("image");
+					String body = (String) request.getAttribute("body");
+					int subscribed = (Integer) request.getAttribute("subscribed");
 				%>
-				<div class="col-sm-2">
+				<div class="col-sm-12">
 					<h1><%=header%></h1>
 					<p>
 						Owner:
@@ -316,7 +311,8 @@ ul#horizontal-list a:hover {
 					<p>Followers:</p>
 				</div>
 				<%
-					if (owner != (Integer) session.getAttribute("id") && subscribed == 0) {
+					if (session.getAttribute("id") != null) {
+						if (owner != (Integer) session.getAttribute("id") && subscribed == 0) {
 				%>
 				<form class="form-horizontal" id="add_subscriber_form"
 					action="SubscribeServlet" method="POST">
@@ -345,6 +341,7 @@ ul#horizontal-list a:hover {
 					</div>
 				</form>
 				<%
+					}
 					}
 				%>
 			</div>
@@ -387,35 +384,35 @@ ul#horizontal-list a:hover {
 												<%
 													if (request.getAttribute("comments") != null) {
 
-															JSONArray comments = (JSONArray) request.getAttribute("comments");
+														JSONArray comments = (JSONArray) request.getAttribute("comments");
 
-															for (Object comment : comments) {
+														for (Object comment : comments) {
 
-																JSONObject com = (JSONObject) comment;
+															JSONObject com = (JSONObject) comment;
 
-																if (com.getInt("ucid") == -1) {
+															if (com.getInt("ucid") == -1) {
 
-																	int id = com.getInt("id");
-																	int uid = com.getInt("uid");
+																int id = com.getInt("id");
+																int uid = com.getInt("uid");
 
-																	String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
-																			+ uid;
-																	URL jsonpage = new URL(url);
-																	HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
+																String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
+																		+ uid;
+																URL jsonpage = new URL(url);
+																HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
 
-																	String username = "";
-																	if (urlcon.getResponseCode() == 200) {
-																		BufferedReader buffread = new BufferedReader(
-																				new InputStreamReader(urlcon.getInputStream()));
-																		String recv = "";
-																		String recvbuff = "";
-																		while ((recv = buffread.readLine()) != null)
-																			recvbuff += recv;
-																		buffread.close();
+																String username = "";
+																if (urlcon.getResponseCode() == 200) {
+																	BufferedReader buffread = new BufferedReader(
+																			new InputStreamReader(urlcon.getInputStream()));
+																	String recv = "";
+																	String recvbuff = "";
+																	while ((recv = buffread.readLine()) != null)
+																		recvbuff += recv;
+																	buffread.close();
 
-																		username = recvbuff;
+																	username = recvbuff;
 
-																	}
+																}
 												%>
 												<li class="media">
 													<div class="media-body">
@@ -436,30 +433,30 @@ ul#horizontal-list a:hover {
 															<%
 																for (Object commentOfcomments : comments) {
 
-																					JSONObject comOfcoms = (JSONObject) commentOfcomments;
+																				JSONObject comOfcoms = (JSONObject) commentOfcomments;
 
-																					if (comOfcoms.getInt("ucid") == com.getInt("id")) {
-																						int lid = comOfcoms.getInt("id");
-																						int luid = comOfcoms.getInt("uid");
+																				if (comOfcoms.getInt("ucid") == com.getInt("id")) {
+																					int lid = comOfcoms.getInt("id");
+																					int luid = comOfcoms.getInt("uid");
 
-																						String lurl = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
-																								+ luid;
-																						URL ljsonpage = new URL(lurl);
-																						HttpURLConnection lurlcon = (HttpURLConnection) ljsonpage.openConnection();
+																					String lurl = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
+																							+ luid;
+																					URL ljsonpage = new URL(lurl);
+																					HttpURLConnection lurlcon = (HttpURLConnection) ljsonpage.openConnection();
 
-																						String lusername = "";
-																						if (lurlcon.getResponseCode() == 200) {
-																							BufferedReader buffread = new BufferedReader(
-																									new InputStreamReader(lurlcon.getInputStream()));
-																							String recv = "";
-																							String recvbuff = "";
-																							while ((recv = buffread.readLine()) != null)
-																								recvbuff += recv;
-																							buffread.close();
+																					String lusername = "";
+																					if (lurlcon.getResponseCode() == 200) {
+																						BufferedReader buffread = new BufferedReader(
+																								new InputStreamReader(lurlcon.getInputStream()));
+																						String recv = "";
+																						String recvbuff = "";
+																						while ((recv = buffread.readLine()) != null)
+																							recvbuff += recv;
+																						buffread.close();
 
-																							lusername = recvbuff;
+																						lusername = recvbuff;
 
-																						}
+																					}
 															%>
 															<li class="media media-replied"><a class="pull-left"
 																href="#"> <img class="media-object img-circle"
@@ -476,12 +473,12 @@ ul#horizontal-list a:hover {
 																</div></li>
 															<%
 																}
-																				}
+																			}
 															%>
 														</ul>
 													</div>
 												</li>
-
+												<%if(session.getAttribute("id") != null){ %>
 												<div class="collapse row col-sm-9 pull-right "
 													id="addcomment<%=id%>">
 													<div class="row">
@@ -505,19 +502,22 @@ ul#horizontal-list a:hover {
 														</div>
 													</div>
 												</div>
-												<%
+												
+												<%}
 													}
-															}
 														}
+													}
 												%>
 											</ul>
 										</div>
 									</div>
+									<%if(session.getAttribute("id") != null){ %>
 									<div class="container">
 										<div class="row">
 											<div class="col-sm-8">
 												<div class="widget-area no-padding blank">
 													<div class="status-upload">
+													
 														<form class="form-horizontal" id="add_comment_form"
 															action="AddCommentServlet" method="POST">
 															<div class="form">
@@ -538,6 +538,7 @@ ul#horizontal-list a:hover {
 
 										</div>
 									</div>
+									<%} %>
 								</div>
 							</div>
 							<div id="materials" class="tab-pane fade">
@@ -545,15 +546,16 @@ ul#horizontal-list a:hover {
 									style="height: 500px; overflow-y: auto;">
 									<%
 										if (request.getAttribute("media") != null) {
-												JSONArray media = (JSONArray) request.getAttribute("media");
-												for (Object mediaUrl : media) {
+											JSONArray media = (JSONArray) request.getAttribute("media");
+											for (Object mediaUrl : media) {
 									%>
 									<h3 align="center">
 										<a href=<%=mediaUrl.toString()%> name="url" id="url"><%=mediaUrl.toString()%></a>
 									</h3>
 									<%
 										}
-											}
+										}
+										if (session.getAttribute("id") != null) {
 											if (owner == (Integer) session.getAttribute("id")) {
 									%>
 
@@ -571,6 +573,7 @@ ul#horizontal-list a:hover {
 									</form>
 									<%
 										}
+										}
 									%>
 								</div>
 							</div>
@@ -580,28 +583,28 @@ ul#horizontal-list a:hover {
 									<%
 										if (request.getAttribute("quizzes") != null) {
 
-												JSONArray quizzes = (JSONArray) request.getAttribute("quizzes");
+											JSONArray quizzes = (JSONArray) request.getAttribute("quizzes");
 
-												for (Object quiz : quizzes) {
-													JSONObject qu = (JSONObject) quiz;
-													String quizName = qu.getString("name");
-													JSONArray questions = qu.getJSONArray("questions");
-													int len = questions.length();
+											for (Object quiz : quizzes) {
+												JSONObject qu = (JSONObject) quiz;
+												String quizName = qu.getString("name");
+												JSONArray questions = qu.getJSONArray("questions");
+												int len = questions.length();
 									%>
 									<h3><%=quizName%></h3>
 									<%
 										for (int j = 0; j < len; j++) {
 
-														JSONObject ques = questions.getJSONObject(j);
-														String question = ques.getString("text");
+													JSONObject ques = questions.getJSONObject(j);
+													String question = ques.getString("text");
 									%>
 									<p><%=j + 1 + ") " + question%></p>
 									<%
 										JSONArray options = ques.getJSONArray("choices");
 
-														if (options != null) {
-															for (int i = 0; i < options.length(); i++) {
-																String option = (String) options.get(i);
+													if (options != null) {
+														for (int i = 0; i < options.length(); i++) {
+															String option = (String) options.get(i);
 									%>
 									<div class="checkbox">
 										<label><input type="checkbox"
@@ -609,10 +612,10 @@ ul#horizontal-list a:hover {
 									</div>
 									<%
 										}
-														}
 													}
 												}
 											}
+										}
 									%>
 								</div>
 							</div>
@@ -623,9 +626,7 @@ ul#horizontal-list a:hover {
 		</div>
 	</div>
 
-	<%
-		}
-	%>
+
 
 	<footer id="menu-outer">
 		<div class="col-sm-offset-2 col-sm-10">

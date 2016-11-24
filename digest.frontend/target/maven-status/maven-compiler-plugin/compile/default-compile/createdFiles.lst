@@ -1,8 +1,11 @@
 com/digest/LoginServlet.class
+com/digest/AddMediaServlet.class
 com/digest/CreateTopicServlet.class
 com/digest/LogoutServlet.class
 com/digest/QuizServlet.class
 com/digest/ViewTopicServlet.class
+com/digest/MainServlet.class
 com/digest/UserProfileServlet.class
 com/digest/AddCommentServlet.class
 com/digest/SignupServlet.class
+com/digest/SubscribeServlet.class

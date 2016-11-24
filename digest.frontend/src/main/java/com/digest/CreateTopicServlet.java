@@ -119,7 +119,6 @@ public class CreateTopicServlet extends HttpServlet {
 					topic.put("tags", tags);
 				}
 			}
-			topic.put("image", "url");
 			System.out.println(topic.toString());
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -147,8 +146,8 @@ public class CreateTopicServlet extends HttpServlet {
 				response.sendRedirect("topic-creation.jsp");
 			}
 		} else if (ServletFileUpload.isMultipartContent(request)) {
-	
-
+			
+			
 		}
 
 	}
