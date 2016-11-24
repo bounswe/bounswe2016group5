@@ -97,8 +97,8 @@ public class LoginActivity extends AppCompatActivity {
         String username = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        //User user = new User(username, password);
-        User user = new User("android", "1234");
+        User user = new User(username, password);
+        //User user = new User("android", "1234");
         user.setId(-10);
 
         Response.Listener<User> response = new Response.Listener<User>() {

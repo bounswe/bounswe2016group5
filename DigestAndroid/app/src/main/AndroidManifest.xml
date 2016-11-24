@@ -56,6 +56,7 @@
         </activity>
         <activity
             android:name=".CreateTopicFragmentsActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true"
             android:label="@string/create_topic_label"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
