@@ -140,6 +140,18 @@ ul#horizontal-list a:hover {
 					required : true
 			}
 		});
+        $('#add_media_form').validate({ 
+			rules : {
+				tid : {
+					required : true
+				},
+				url : {
+					required : true
+				},
+			}
+			
+		
+		});
 		$('#add_subscriber_form').validate({ 
 			rules : {
 				tid : {
@@ -288,7 +300,8 @@ ul#horizontal-list a:hover {
 			<div class="row col-sm-9">
 				<%
 					String header = (String) request.getAttribute("header");
-						int owner = (Integer) request.getAttribute("owner");
+						int owner = (Integer) request.getAttribute("ownerId");
+						String ownerName = (String) request.getAttribute("ownerName");
 						int tid = (Integer) request.getAttribute("id");
 						//int topicFollower = (Integer) request.getAttribute("topicFollower");
 						String image = (String) request.getAttribute("image");
@@ -299,7 +312,7 @@ ul#horizontal-list a:hover {
 					<h1><%=header%></h1>
 					<p>
 						Owner:
-						<%=owner%></p>
+						<%=ownerName%></p>
 					<p>Followers:</p>
 				</div>
 				<%
@@ -529,11 +542,79 @@ ul#horizontal-list a:hover {
 							</div>
 							<div id="materials" class="tab-pane fade">
 								<div class="panel panel-default"
-									style="height: 500px; overflow-y: auto;"></div>
+									style="height: 500px; overflow-y: auto;">
+									<%
+										if (request.getAttribute("media") != null) {
+												JSONArray media = (JSONArray) request.getAttribute("media");
+												for (Object mediaUrl : media) {
+									%>
+									<h3 align="center">
+										<a href=<%=mediaUrl.toString()%> name="url" id="url"><%=mediaUrl.toString()%></a>
+									</h3>
+									<%
+										}
+											}
+											if (owner == (Integer) session.getAttribute("id")) {
+									%>
+
+									<form class="form-horizontal" id="add_media_form"
+										action="AddMediaServlet" method="POST">
+										<div class="form-group col-sm-8"
+											style="margin: 20px 20px 0 0;">
+											<div class="col-xs-9 col-xs-offset-3">
+												<input type="text" class="form-control" name="url" id="url">
+												<input type="hidden" name="tid" value=<%=tid%>>
+												<button type="submit" class="btn btn-primary"
+													style="margin: 20px 20px 0 0;">Add Media</button>
+											</div>
+										</div>
+									</form>
+									<%
+										}
+									%>
+								</div>
 							</div>
 							<div id="quiz" class="tab-pane fade">
 								<div class="panel panel-default"
-									style="height: 500px; overflow-y: auto;"></div>
+									style="height: 500px; overflow-y: auto; text-align: center;">
+									<%
+										if (request.getAttribute("quizzes") != null) {
+
+												JSONArray quizzes = (JSONArray) request.getAttribute("quizzes");
+
+												for (Object quiz : quizzes) {
+													JSONObject qu = (JSONObject) quiz;
+													String quizName = qu.getString("name");
+													JSONArray questions = qu.getJSONArray("questions");
+													int len = questions.length();
+									%>
+									<h3><%=quizName%></h3>
+									<%
+										for (int j = 0; j < len; j++) {
+
+														JSONObject ques = questions.getJSONObject(j);
+														String question = ques.getString("text");
+									%>
+									<p><%=j + 1 + ") " + question%></p>
+									<%
+										JSONArray options = ques.getJSONArray("choices");
+
+														if (options != null) {
+															for (int i = 0; i < options.length(); i++) {
+																String option = (String) options.get(i);
+									%>
+									<div class="checkbox">
+										<label><input type="checkbox"
+											name="q<%=j%>answer<%=i%>" value=""><%=option%></label>
+									</div>
+									<%
+										}
+														}
+													}
+												}
+											}
+									%>
+								</div>
 							</div>
 						</div>
 					</div>

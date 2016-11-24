@@ -83,7 +83,25 @@ public class ViewTopicServlet extends HttpServlet {
 			for (String attribute : sattr) {
 				if (attribute.equalsIgnoreCase("owner")) {
 					owner = (Integer) obj.get(attribute);
-					request.setAttribute(attribute, obj.get(attribute));
+					// şeyma
+					String url2 = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
+							+ owner;
+					URL jsonpage2 = new URL(url2);
+					HttpURLConnection urlcon2 = (HttpURLConnection) jsonpage2.openConnection();
+					BufferedReader buffread2 = new BufferedReader(new InputStreamReader(urlcon2.getInputStream()));
+
+					String recv2 = "";
+					String recvbuff2 = "";
+					while ((recv2 = buffread2.readLine()) != null)
+						recvbuff2 += recv2;
+					buffread2.close();
+
+					request.setAttribute("ownerId", owner);
+					request.setAttribute("ownerName", recvbuff2.toString());
+				}
+				if (attribute.equalsIgnoreCase("media")) {
+					JSONArray mediaArray = (JSONArray) obj.get(attribute);
+					request.setAttribute("media", mediaArray);
 				}
 				if (attribute.equalsIgnoreCase("image") || attribute.equalsIgnoreCase("header")
 						|| attribute.equalsIgnoreCase("body") || attribute.equalsIgnoreCase("id")) {
@@ -145,9 +163,27 @@ public class ViewTopicServlet extends HttpServlet {
 			} catch (JSONException ex) {
 
 			}
-			
-			String quizURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_quiz&tid=";
-			
+
+			String quizURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_quiz&tid=" + topicId;
+			URL quizURL = new URL(quizURLString);
+			HttpURLConnection quizCon = (HttpURLConnection) quizURL.openConnection();
+
+			buffread = new BufferedReader(new InputStreamReader(quizCon.getInputStream()));
+
+			recv = "";
+			recvbuff = "";
+			while ((recv = buffread.readLine()) != null)
+				recvbuff += recv;
+			buffread.close();
+			System.out.println(recvbuff);
+			try {
+				JSONArray quizzes = new JSONArray(recvbuff);
+				request.setAttribute("quizzes", quizzes);
+
+			} catch (JSONException ex) {
+
+			}
+
 			request.getRequestDispatcher("/view-topic.jsp").forward(request, response);
 
 		} catch (
