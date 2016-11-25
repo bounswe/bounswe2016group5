@@ -74,6 +74,7 @@
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.2.2</version>
+<<<<<<< HEAD
 		</dependency>
 		<dependency>
     			<groupId>com.mashape.unirest</groupId>
@@ -85,15 +86,25 @@
     			<artifactId>javax.json</artifactId>
     			<version>1.0.4</version>
 		</dependency>
+=======
+			</dependency>
+>>>>>>> 27bf4f537efc9140d12cec1503d64c895a1e9891
 		<dependency>
     		<groupId>commons-httpclient</groupId>
     		<artifactId>commons-httpclient</artifactId>
     		<version>3.1</version>
 		</dependency>
 		<dependency>
+<<<<<<< HEAD
     		<groupId>commons-io</groupId>
     		<artifactId>commons-io</artifactId>
     		<version>2.4</version>
 		</dependency>
+=======
+    		<groupId>org.glassfish</groupId>
+    		<artifactId>javax.json</artifactId>
+    		<version>1.0.4</version>
+		</dependency> 
+>>>>>>> 27bf4f537efc9140d12cec1503d64c895a1e9891
 	</dependencies>
 </project>

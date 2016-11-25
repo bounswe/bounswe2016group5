@@ -178,7 +178,8 @@ public class TopicJDBC {
 		return gson.toJson(result);
 	}
 	public static String getRecentTopics(int count) {
-		String query = "SELECT * FROM digest.topic ORDER BY timestamp DESC LIMIT ?";
+		//will be timestamp
+		String query = "SELECT * FROM digest.topic ORDER BY id DESC LIMIT ?";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -227,15 +228,18 @@ public class TopicJDBC {
 		}
 		ConnectionPool.close(connection);
 		for(Topic t: result){
-			t.setTags(getTagsOfTopic(t.getId()));
-		//	t.setQuizzes(get);
+			int tid = t.getId();
+			t.setTags(getTagsOfTopic(tid));
+			t.setComments(getCommentsArrayOfTopic(tid));
+			t.setQuizzes(getQuizArrayOfTopic(tid));
+			t.setMedia(getMediaArray(tid));
 		}
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
 	
 	private static ArrayList<TopicTag> getTagsOfTopic(int tid){
-		String query = "SELECT * FROM digest.topic_tag  WHERE topic_tag.id=?";
+		String query = "SELECT * FROM digest.topic_tag  WHERE topic_tag.tid=?";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
