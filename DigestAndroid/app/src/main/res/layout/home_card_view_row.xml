@@ -44,6 +44,8 @@
 
                 <!--android:layout_centerInParent="true"-->
 
+
+                <!-- Adjust sizes, they overflow the card, adjust wrap content -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -51,7 +53,7 @@
                     android:layout_alignParentTop="true"
                     android:typeface="monospace"
                     android:fontFamily="sans-serif-condensed"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textStyle="normal|bold"
                     android:textColor="#4c4c4c"
                     android:layout_marginLeft="10dp"

@@ -42,7 +42,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
     // TODO adjust the heights and sizes
     private Toolbar toolbar;
-    private SearchView searchView;
+    public SearchView searchView;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
@@ -175,25 +175,6 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
         searchView = (SearchView) findViewById(R.id.search_view_home);
         searchView.setQueryHint("Enter a topic name..");
-        searchView.setOnQueryTextListener(
-                new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-
-                        // TODO implement the functionality
-                        setTitle(query);
-
-                        searchView.setQuery("",true);
-                        searchView.clearFocus();
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        return false;
-                    }
-                }
-        );
 
 
 

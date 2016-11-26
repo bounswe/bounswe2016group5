@@ -283,6 +283,21 @@ public class APIHandler extends Application{
 
     }
 
+    //<API_PATH>?f=get_topics_with_tag&tag=<TAG>
+    public void searchWithTag (String tag, Response.Listener<String> tagListener) {
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_topics_with_tag&tag=" + tag,
+                tagListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
 
 
 
