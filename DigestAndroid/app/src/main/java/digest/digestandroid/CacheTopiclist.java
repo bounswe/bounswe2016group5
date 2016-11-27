@@ -1,12 +1,8 @@
 package digest.digestandroid;
 
-import android.support.v7.widget.RecyclerView;
-
 import java.util.ArrayList;
 
-import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.Topic;
-import digest.digestandroid.Models.User;
 
 
 public class CacheTopiclist {
@@ -35,17 +31,11 @@ public class CacheTopiclist {
 
     public void setUserTopics(ArrayList<Topic> x) {tagTopics = new ArrayList<Topic>(x);   }
 
-    public ArrayList<Topic> getTAGTopics() {
-        return userTopics;
+    public ArrayList<Topic> getTagTopics() {
+        return tagTopics;
     }
 
-    public void setTagTopics(ArrayList<Topic> x, RecyclerView.Adapter homeAdapter, RecyclerView homeRecyclerView) {
-        tagTopics = new ArrayList<Topic>(x);
-
-        homeAdapter = new HomeAdapter(tagTopics);
-        homeRecyclerView.setAdapter(homeAdapter);
-
-    }
+    public void setTagTopics(ArrayList<Topic> x) {tagTopics = new ArrayList<Topic>(x);}
 
 
 }

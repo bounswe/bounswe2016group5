@@ -176,6 +176,54 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         searchView = (SearchView) findViewById(R.id.search_view_home);
         searchView.setQueryHint("Enter a topic name..");
 
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+
+
+                        searchView.clearFocus();
+
+                        final Response.Listener<String> tagListener = new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                                try{
+                                    JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
+                                    ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+
+                                    int topicNumber = obj.length();
+                                    for(int i = 0 ; i < topicNumber ; i++){
+                                        JSONObject tempObj = (JSONObject) obj.get(i);
+                                        Topic tempTop = new Topic();
+
+                                        Gson gson = new Gson();
+                                        tempTop = gson.fromJson(tempObj.toString(),Topic.class);
+                                        arrayList.add(tempTop);
+                                    }
+
+                                    CacheTopiclist.getInstance().setTagTopics(arrayList);
+
+                                    Intent intent = new Intent( getApplicationContext(), ViewSearchActivity.class);
+                                    startActivity(intent);
+
+                                }catch (JSONException e){}
+
+                            }
+                        };
+
+                        APIHandler.getInstance().searchWithTag(query,tagListener);
+
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                }
+        );
 
 
 

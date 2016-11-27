@@ -47,12 +47,11 @@
             android:name=".ViewRegisteredHomeActivity"
             android:label="@string/home_label"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ViewSearchActivity"
+            android:label="Search View Activity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
         <activity
             android:name=".CreateTopicFragmentsActivity"
