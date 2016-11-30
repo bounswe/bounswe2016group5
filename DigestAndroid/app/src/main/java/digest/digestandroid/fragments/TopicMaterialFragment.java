@@ -1,6 +1,7 @@
 package digest.digestandroid.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,9 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -97,10 +101,25 @@ public class TopicMaterialFragment extends Fragment {
 
         list_adapter.notifyDataSetChanged();
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String item = list_adapter.getItem(position);
+
+                Uri uri = Uri.parse(item); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 
-    public void setTopicInfo(){
+    @Override
+    public void onResume() {
+        super.onResume();
+
 
     }
 
