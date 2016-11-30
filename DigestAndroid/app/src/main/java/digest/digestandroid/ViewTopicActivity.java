@@ -97,10 +97,6 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         topicQuizFragment.initializeInfo(topic);
     }
 */
-    public void thumbsUp(View view) {
-        TopicCommentFragment topicCommentFragment = (TopicCommentFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(1);
-        topicCommentFragment.thumbsUp();
-    }
 
 
 

@@ -115,25 +115,36 @@ public class TopicCommentFragment extends Fragment {
 
         prepareCommentData();
 
+        mAdapter.setOnItemClickListener(new CommentAdapter.CommentClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                CommentUser cu = commentList.get(position);
+                Log.e("onItemClick: ", cu.getBody());
+            }
+
+            @Override
+            public void onRateClick(int position, View v) {
+                // TODO: 1.12.2016 tiklandigi zaman gercekten rate artir
+                // TODO: 1.12.2016 suan tilaninca sekil degistiginde obje de degismis gibi oluyor. Oylama icin enabled yerine bi degisken tut ve ona gore ciz. 
+                CommentUser cu = commentList.get(position);
+                Log.e("RATEE: ", cu.getBody());
+
+
+                if(v.isEnabled()){
+                    commentList.get(position).setRate(1);
+                    v.setEnabled(false);
+                }
+                else{
+                    commentList.get(position).setRate(0);;
+                    v.setEnabled(true);
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
         return rootView;
     }
 
-    public void thumbsUp() {
-        ImageButton imageButton = (ImageButton) rootView.findViewById(R.id.thumbsUp);
-        // TODO: 23.11.2016   hangi commente dokunuldugunu ve hangi commentin degistirilecegini bul adapter ve comment lsit yardimiyla
-        TextView textView = (TextView) rootView.findViewById(R.id.comment_rate);
-        if(imageButton.isEnabled()){
-            topic.setRating(topic.getRating()+1);
-            textView.setText(String.valueOf(topic.getRating()));
-            imageButton.setEnabled(false);
-        }
-        else{
-            topic.setRating(topic.getRating()-1);
-            textView.setText(String.valueOf(topic.getRating()));
-            imageButton.setEnabled(true);
-        }
-
-    }
 
     int ctr = 0;
     private void prepareCommentData() {
