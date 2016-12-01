@@ -19,8 +19,7 @@
         android:layout_alignParentLeft="true"
         android:background="@drawable/rate_button_selector"
         android:layout_marginRight="@dimen/small_margin"
-        android:layout_alignParentTop="true"
-         />
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/comment_body"

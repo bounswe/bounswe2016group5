@@ -119,16 +119,12 @@ public class TopicCommentFragment extends Fragment {
             @Override
             public void onItemClick(int position, View v) {
                 CommentUser cu = commentList.get(position);
-                Log.e("onItemClick: ", cu.getBody());
             }
 
             @Override
             public void onRateClick(int position, View v) {
                 // TODO: 1.12.2016 tiklandigi zaman gercekten rate artir
-                // TODO: 1.12.2016 suan tilaninca sekil degistiginde obje de degismis gibi oluyor. Oylama icin enabled yerine bi degisken tut ve ona gore ciz. 
-                CommentUser cu = commentList.get(position);
-                Log.e("RATEE: ", cu.getBody());
-
+                // TODO: 1.12.2016 suan tilaninca sekil degistiginde obje de degismis gibi oluyor. Oylama icin enabled yerine bi degisken tut ve ona gore ciz.
 
                 if(v.isEnabled()){
                     commentList.get(position).setRate(1);

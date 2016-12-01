@@ -2,6 +2,7 @@ package digest.digestandroid;
 
 import android.graphics.Movie;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
 
             if (v.getId() == rateButton.getId()){
                 commentClickListener.onRateClick(getAdapterPosition(), v);
+                Log.e("RATEE: ", "RATEDD");
             } else {
                 commentClickListener.onItemClick(getAdapterPosition(), v);
             }

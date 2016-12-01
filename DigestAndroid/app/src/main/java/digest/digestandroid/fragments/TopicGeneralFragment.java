@@ -75,8 +75,6 @@ public class TopicGeneralFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        Log.v("onCreate", "onCreate");
-
     }
 
     @Override
@@ -84,8 +82,6 @@ public class TopicGeneralFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_topic_general, container, false);
         // Inflate the layout for this fragment
-
-        Log.v("onCreateView", "onCreateView");
 
         setTopicInfo();
 
