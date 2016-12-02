@@ -102,7 +102,7 @@
 	Error response:
 		hakkimizda hayirlisi olsun
 	Example:
-		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_media&url=youtube.com
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_media&url=youtube.com&tid=45
 	
 ## Add Comment
 	URL:
