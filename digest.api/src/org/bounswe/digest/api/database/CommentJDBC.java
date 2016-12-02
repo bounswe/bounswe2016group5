@@ -116,5 +116,112 @@ public class CommentJDBC {
 			ConnectionPool.close(connection);
 			return result;
 		}
+		public static int rateComment(int uid,int cid) {
+			int result=addRateComment(uid, cid);
+			if(result==0){
+				result=updateRate(cid);
+			}
+			return result;
+		}
+		
+		private static int updateRate(int cid){
+			Connection connection;
+			try {
+				connection = ConnectionPool.getConnection();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return -1;
+			}
+			PreparedStatement statement = null;
+			int result = 0;
+			// what is the default value of rate?
+			String query = "UPDATE comment SET rate=rate+1 WHERE id=?";
+			try {
+				connection.setAutoCommit(false);
+				statement = connection.prepareStatement(query);
+				statement.setInt(1, cid);
+				statement.executeUpdate();
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					
+				}
+				
+			}finally {
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						result = -1;
+						e.printStackTrace();
+					}
+				}
+				try {
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			ConnectionPool.close(connection);
+			return result;
+		}
+		
+		private static int addRateComment(int uid,int cid) {
+			Connection connection;
+			try {
+				connection = ConnectionPool.getConnection();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return -1;
+			}
+			PreparedStatement statement = null;
+			int result = 0;
+			// what is the default value of rate?
+			String query = "INSERT INTO rate_comment (uid,cid) VALUES (?, ?)";
+			try {
+				connection.setAutoCommit(false);
+				statement = connection.prepareStatement(query);
+				statement.setInt(1, uid);
+				statement.setInt(2, cid);
+				statement.executeUpdate();
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					
+				}
+				
+			}finally {
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						result = -1;
+						e.printStackTrace();
+					}
+				}
+				try {
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			ConnectionPool.close(connection);
+			return result;
+		}
+		
 
 }
