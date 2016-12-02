@@ -546,19 +546,44 @@ ul#horizontal-list a:hover {
 									style="height: 500px; overflow-y: auto;">
 									<%
 										if (request.getAttribute("media") != null) {
-											JSONArray media = (JSONArray) request.getAttribute("media");
-											for (Object mediaUrl : media) {
+												JSONArray media = (JSONArray) request.getAttribute("media");
+												int mcount = 0;
+												for (Object mediaUrl : media) {
+													mcount++;
 									%>
+								
 									<h3 align="center">
-										<a href=<%=mediaUrl.toString()%> name="url" id="url"><%=mediaUrl.toString()%></a>
+										<%
+										String url = mediaUrl.toString();
+										if(url.matches(".*\\byoutube\\b.*")){
+											url = "https://www.youtube.com/embed/"+ url.substring(url.indexOf("v=")+2);
+										%>
+										<label>Material <%=mcount %>: </label>
+										<iframe width="420" height="315"
+											src=<%=url %>>
+										</iframe>
+										<% 
+										}
+										else if(url.matches("([^\\s]+(\\.(?i)(jpg|png|gif))$)")){
+										%>
+										<label>Material <%=mcount %>: </label>
+										<img src=<%=url %>  style="width:420px;">
+										<% 
+										}else{
+										%>
+										<label>Material <%=mcount %>: </label>
+										<a href=<%=url%> name="url" id="url"><%=mediaUrl.toString()%></a>
+										<% 	
+										}
+										%>
+										
+										
 									</h3>
 									<%
 										}
-										}
-										if (session.getAttribute("id") != null) {
+											}
 											if (owner == (Integer) session.getAttribute("id")) {
 									%>
-
 									<form class="form-horizontal" id="add_media_form"
 										action="AddMediaServlet" method="POST">
 										<div class="form-group col-sm-8"
@@ -572,7 +597,6 @@ ul#horizontal-list a:hover {
 										</div>
 									</form>
 									<%
-										}
 										}
 									%>
 								</div>
