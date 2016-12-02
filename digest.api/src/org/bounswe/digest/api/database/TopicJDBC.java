@@ -17,9 +17,11 @@ import org.bounswe.digest.api.database.model.TopicTag;
 import org.bounswe.digest.api.database.model.TopicPreview;
 
 import com.google.gson.Gson;
+import com.mysql.cj.api.exceptions.StreamingNotifiable;
 
 public class TopicJDBC {
 	public static int createTopic(Topic topic) {
+		int tid = -1;
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -43,7 +45,6 @@ public class TopicJDBC {
 			statement.setInt(5, 0); // Doktor bu ne?
 			statement.executeUpdate();
 
-			int tid = -1;
 			ResultSet resultSet = statement.getGeneratedKeys();
 			if (resultSet.next()) {
 				tid = resultSet.getInt(1);
@@ -116,6 +117,10 @@ public class TopicJDBC {
 				result = -1;
 				e.printStackTrace();
 			}
+		}
+		ArrayList<String> media=topic.getMedia();
+		for(String item : media){
+			addMedia(tid, item);
 		}
 		ConnectionPool.close(connection);
 		return result;
