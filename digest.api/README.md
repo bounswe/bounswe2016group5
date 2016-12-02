@@ -88,6 +88,22 @@
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 	
 	
+## Add Media
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=add_media
+		tid=<topic_id>
+		url=<media_id>
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_media&url=youtube.com
+	
 ## Add Comment
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
