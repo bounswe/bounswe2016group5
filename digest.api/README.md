@@ -96,7 +96,7 @@
 	Params:
 		f=add_media
 		tid=<topic_id>
-		url=<media_id>
+		url=<media_url>
 	Succes response:
 		status:200
 	Error response:
