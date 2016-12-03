@@ -13,6 +13,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import com.google.gson.JsonArray;
@@ -167,12 +168,10 @@ public class APIHandler extends Application{
     }
 
 
-    //Creates Topic
     public void createTopic(String tag, final Topic topic)  {
 
-        Gson gson = new Gson();
-        //topic.setOwner(32);
-        final String jsonInString = gson.toJson(topic);
+        //Gson gson = new Gson();
+        final String jsonInString = new GsonBuilder().setExclusionStrategies().create().toJson(topic, Topic.class);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL+"/?f=create_topic", new Response.Listener<String>() {
             @Override
@@ -187,18 +186,15 @@ public class APIHandler extends Application{
         }) {
             @Override
             public String getBodyContentType() {
-                return "application/json; charset=utf-8";
+                return "application/json" ;
             }
 
             @Override
             public byte[] getBody() throws AuthFailureError {
-                try {
-                    Log.d("---Json in string",jsonInString);
-                    return jsonInString == null ? null : jsonInString.getBytes("utf-8");
-                } catch (UnsupportedEncodingException uee) {
-                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", jsonInString, "utf-8");
-                    return null;
-                }
+
+                Log.d("---Json in string",jsonInString);
+                return jsonInString == null ? null : jsonInString.getBytes();
+
             }
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
@@ -213,6 +209,7 @@ public class APIHandler extends Application{
 
         VolleySingleton.getInstance().addToRequestQueue(stringRequest);
     }
+
 
     // Get all topics of a user
     // http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
@@ -279,7 +276,7 @@ public class APIHandler extends Application{
         };
 
 
-        VolleySingleton.getInstance().addToRequestQueue(myReq);
+        //VolleySingleton.getInstance().addToRequestQueue(myReq);
 
     }
 
