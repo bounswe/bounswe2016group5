@@ -243,12 +243,16 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
 
-    public void getUsername(String tag, int userID, Response.Listener<String> successListener,
-                      Response.ErrorListener failureListener) {
+    public void getUsername(String tag, int userID, Response.Listener<String> successListener) {
 
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 mainURL + "/?f=get_username&uid=" + userID,
-                successListener, failureListener);
+                successListener, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Failed", "Login Failed");
+            }
+        });
 
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
@@ -276,7 +280,7 @@ public class APIHandler extends Application{
         };
 
 
-        // TODO: 5.12.2016 Bu satir comment out yapilmisti??? Kim neden yapti ki 
+        // TODO: 5.12.2016 Bu satir comment out yapilmisti??? Kim neden yapti ki
         VolleySingleton.getInstance().addToRequestQueue(myReq);
 
     }

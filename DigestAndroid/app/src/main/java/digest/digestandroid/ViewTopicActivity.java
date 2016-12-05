@@ -65,14 +65,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Failed", "Login Failed");
-            }
-        };
-
-        APIHandler.getInstance().getUsername("GET TOPIC", Cache.getInstance().getTopic().getOwner(), response, errorListener);
+        APIHandler.getInstance().getUsername("GET TOPIC", Cache.getInstance().getTopic().getOwner(), response);
 
         //topicGeneralFragment.initializeTopic(topic);
 

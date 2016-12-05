@@ -1,5 +1,7 @@
 package digest.digestandroid;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Movie;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -71,9 +73,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         CommentUser comment = commentList.get(position);
+
         holder.body.setText(comment.getBody());
         holder.owner.setText(comment.getUsername());
         holder.rate.setText(String.valueOf(comment.getRate()));
+
+        if(Cache.getInstance().getTopic().getOwner() == comment.getUid()){
+            holder.owner.setTextColor(Color.BLUE);
+        }
+        else
+            holder.owner.setTextColor(Color.BLACK);
+
     }
 
     @Override

@@ -146,7 +146,17 @@ public class TopicCommentFragment extends Fragment {
     private void prepareCommentData() {
         ctr = 0;
         commentList.clear();
-        Response.Listener<String> response = new Response.Listener<String>() {
+
+
+        if(Cache.getInstance().getTopic().getComments().size() > 0) {
+            prepareCommentData2();
+        }
+
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void prepareCommentData2() {
+        final Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("Get username", "Success " + response);
@@ -154,28 +164,28 @@ public class TopicCommentFragment extends Fragment {
                 commentUser.setBody(Cache.getInstance().getTopic().getComments().get(ctr).getBody());
                 commentUser.setUsername(response);
                 commentUser.setRate(Cache.getInstance().getTopic().getComments().get(ctr).getRate());
+                commentUser.setUid(Cache.getInstance().getTopic().getComments().get(ctr).getUid());
+
 
                 commentList.add(commentUser);
 
-                ctr++;
                 mAdapter.notifyDataSetChanged();
+
+                ctr++;
+                if(ctr < Cache.getInstance().getTopic().getComments().size()) {
+                    prepareCommentData2();
+                }
+
                 // Writing data to SharedPreferences
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Failed", "Login Failed");
-            }
-        };
-
-        for(int i = 0 ; i < Cache.getInstance().getTopic().getComments().size() ; i++){
-            APIHandler.getInstance().getUsername("GetUsername", Cache.getInstance().getTopic().getComments().get(i).getUid(),response,errorListener);
+        if(ctr < Cache.getInstance().getTopic().getComments().size()) {
+            APIHandler.getInstance().getUsername("GetUsername", Cache.getInstance().getTopic().getComments().get(ctr).getUid(), responseListener);
         }
-
-        mAdapter.notifyDataSetChanged();
     }
+
+
 
     // new comment added
     public void addComment(){
@@ -199,7 +209,7 @@ public class TopicCommentFragment extends Fragment {
                     commentList.add(commentUser);
                     */
                     //commentList.add(Cache.getInstance().getComment());
-                    mAdapter.notifyDataSetChanged();
+                    //mAdapter.notifyDataSetChanged();
                 }
                 else {
                     Log.d("Failed", "Comment Failed ");
