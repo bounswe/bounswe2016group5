@@ -22,7 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.bounswe.digest.api.database.CommentJDBC;
 import org.bounswe.digest.api.database.ConnectionPool;
+import org.bounswe.digest.api.database.QuizJDBC;
 import org.bounswe.digest.api.database.TopicJDBC;
 import org.bounswe.digest.api.database.UserJDBC;
 import org.bounswe.digest.api.database.model.*;
@@ -61,7 +63,7 @@ public class DigestAPIServlet extends HttpServlet {
 			//String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
 			//if (UserJDBC.isSessionValid(uid, session)) {
-				resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
+				resp.getWriter().append(CommentJDBC.getCommentsOfTopic(tid));
 				// resp.getWriter().append(TopicJDBC.getCommentsOfTopic(tid));
 			//} else {
 				//resp.getWriter().append(invalidSession());
@@ -86,7 +88,7 @@ public class DigestAPIServlet extends HttpServlet {
 			//String session = req.getParameter(DigestParameters.SESSION);
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
 			//if (UserJDBC.isSessionValid(uid, session)) {
-				resp.getWriter().append(TopicJDBC.getQuizzesOfTopic(tid));
+				resp.getWriter().append(QuizJDBC.getQuizzesOfTopic(tid));
 		//	} else {
 			//	resp.getWriter().append(invalidSession());
 
@@ -106,7 +108,7 @@ public class DigestAPIServlet extends HttpServlet {
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			int ucid = Integer.parseInt(req.getParameter(DigestParameters.UCID));
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			if (TopicJDBC.addComment(body, uid, ucid, tid) == 0) {
+			if (CommentJDBC.addComment(body, uid, ucid, tid) == 0) {
 				resp.setStatus(200);
 			} else {
 				resp.setStatus(400);
@@ -222,7 +224,7 @@ public class DigestAPIServlet extends HttpServlet {
 			BufferedReader bufferedReader = new BufferedReader(req.getReader());
 			Gson gson = new Gson();
 			Quiz quiz = gson.fromJson(bufferedReader, Quiz.class);
-			if (TopicJDBC.addQuizToTopic(tid, quiz) == 0) {
+			if (QuizJDBC.addQuizToTopic(tid, quiz) == 0) {
 				resp.setStatus(200);
 			} else {
 				resp.setStatus(400);
