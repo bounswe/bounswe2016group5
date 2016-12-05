@@ -5,6 +5,7 @@
     <string name="home_label">Home</string>
 
     <string name="add_comment_label">Make Comment</string>
+    <string name="add_material_label">Add Material</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

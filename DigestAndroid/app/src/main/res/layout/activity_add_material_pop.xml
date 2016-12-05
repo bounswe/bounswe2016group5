@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_add_comment"
+    android:id="@+id/activity_add_material_pop"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="digest.digestandroid.AddCommentActivity">
+    tools:context="digest.digestandroid.AddMaterialPopActivity">
 
     <EditText
-        android:hint="Your Comment"
-        android:id="@+id/CommentBox"
+        android:hint="Material Link"
+        android:id="@+id/MaterialBox"
         android:layout_height="@dimen/commentbox_height"
         android:layout_marginBottom="@dimen/small_margin"
         android:singleLine="false"
@@ -20,12 +20,12 @@
         android:gravity="top" />
 
     <Button
-        android:text="Save"
-        android:id="@+id/CommentSave"
+        android:text="Add Material"
+        android:id="@+id/MaterialAdd"
         android:background="@drawable/purplebutton"
         style="@style/dBigButton"
-        android:onClick="save"
-        android:layout_below="@+id/CommentBox"
+        android:onClick="addMaterial"
+        android:layout_below="@+id/MaterialBox"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

@@ -8,11 +8,6 @@
         android:title="Make Comment"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/action_bar_title"
-        android:title="@string/app_name"
-        app:showAsAction="ifRoom"/>
-
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"

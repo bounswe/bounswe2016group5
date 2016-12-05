@@ -276,9 +276,36 @@ public class APIHandler extends Application{
         };
 
 
-        //VolleySingleton.getInstance().addToRequestQueue(myReq);
+        // TODO: 5.12.2016 Bu satir comment out yapilmisti??? Kim neden yapti ki 
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
 
     }
+
+
+    public void addMaterial(String tag, String material, int tid, Response.Listener<String> successListener,
+                           Response.ErrorListener failureListener) {
+
+        String materialUrl;
+        materialUrl = material.replace(" ", "%20");
+        Log.e("materialBody:", materialUrl);
+
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=add_media&tid=" + tid + "&url=" + materialUrl,
+                successListener, failureListener){
+            @Override
+            protected Response<String> parseNetworkResponse (NetworkResponse response){
+                String responseString = "";
+                if (response != null) {
+                    responseString = String.valueOf(response.statusCode);
+                    // can get more details such as response.headers
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+            }
+        };
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+
 
     //<API_PATH>?f=get_topics_with_tag&tag=<TAG>
     public void searchWithTag (String tag, Response.Listener<String> tagListener) {

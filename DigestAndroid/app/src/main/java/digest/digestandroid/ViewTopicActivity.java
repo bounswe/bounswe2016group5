@@ -13,18 +13,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import digest.digestandroid.Models.Topic;
-import digest.digestandroid.Models.User;
 import digest.digestandroid.api.APIHandler;
 import digest.digestandroid.fragments.TopicCommentFragment;
 import digest.digestandroid.fragments.TopicGeneralFragment;
@@ -78,7 +74,6 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
 
         APIHandler.getInstance().getUsername("GET TOPIC", Cache.getInstance().getTopic().getOwner(), response, errorListener);
 
-
         //topicGeneralFragment.initializeTopic(topic);
 
     }
@@ -116,28 +111,43 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
             TopicCommentFragment topicCommentFragment = (TopicCommentFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(1);
             topicCommentFragment.addComment();
         }
+
+        if(Cache.getInstance().newMaterial == 1){
+            Cache.getInstance().newMaterial = 0;
+
+            TopicMaterialFragment topicMaterialFragment = (TopicMaterialFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(2);
+            topicMaterialFragment.addMaterial();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.viewtopic_actionbar, menu);
+        if(Cache.getInstance().getTopic().getOwner() == Cache.getInstance().getUser().getId()){
+            inflater.inflate(R.menu.viewtopic_creator_actionbar, menu);
+        }
+        else{
+            inflater.inflate(R.menu.viewtopic_regular_actionbar, menu);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
                 return true;
 
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
+            case R.id.action_bar_title:
+                intent = new Intent(getApplicationContext(), AddMaterialPopActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.action_comment:
-                Intent intent = new Intent(getApplicationContext(), AddCommentActivity.class);
+                intent = new Intent(getApplicationContext(), AddCommentActivity.class);
                 startActivity(intent);
 
                 return true;

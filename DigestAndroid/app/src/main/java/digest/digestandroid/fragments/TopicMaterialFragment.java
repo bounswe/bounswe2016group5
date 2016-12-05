@@ -17,11 +17,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+
 import java.util.ArrayList;
 
 import digest.digestandroid.Cache;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
+import digest.digestandroid.api.APIHandler;
 
 
 /**
@@ -114,6 +118,38 @@ public class TopicMaterialFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public void addMaterial(){
+        Log.e("AdddMaterial", "ADDDDDD");
+
+        Response.Listener<String> response = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Successss", "Success " + response);
+
+                // Writing data to SharedPreferences
+                if(response.equals("200")){
+                    Cache.getInstance().getTopic().getMedia().add(Cache.getInstance().getMaterial());
+                    //material_list.add(Cache.getInstance().getMaterial());
+                    list_adapter.notifyDataSetChanged();
+                }
+                else {
+                    Log.d("Failed", "Comment Failed ");
+                    Toast.makeText(getActivity(), "Comment Add Failed", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Failed", "Comment Failed");
+            }
+        };
+
+        APIHandler.getInstance().addMaterial("Add Comment", Cache.getInstance().getMaterial(), Cache.getInstance().getTopic().getId() ,response, errorListener);
+
     }
 
     @Override

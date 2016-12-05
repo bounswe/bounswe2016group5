@@ -18,6 +18,8 @@ public class Cache {
     private static Cache ourInstance = new Cache();
     Comment comment;
     int newComment = 0;
+    String material;
+    int newMaterial = 0;
     User user;
     Topic topic;
     String topicCreator; // username of topic creator
@@ -60,5 +62,14 @@ public class Cache {
     public void setComment(Comment comment) {
         this.comment = comment;
         newComment = 1;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+        newMaterial = 1;
     }
 }

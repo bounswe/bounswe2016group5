@@ -17,8 +17,6 @@ public class AddCommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_comment);
 
-        // TODO: 19.11.2016 Comment ekleyince recylerview e ekle -- mAdapter.notifyDataSetChanged();--
-
     }
 
     public void save(View view) {

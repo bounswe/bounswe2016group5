@@ -46,19 +46,17 @@
         <activity
             android:name=".ViewRegisteredHomeActivity"
             android:label="@string/home_label"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
         <activity
             android:name=".ViewSearchActivity"
             android:label="Search View Activity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
         <activity
             android:name=".CreateTopicFragmentsActivity"
-            android:windowSoftInputMode="adjustPan"
             android:exported="true"
             android:label="@string/create_topic_label"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,7 +66,11 @@
         <activity
             android:name=".AddCommentActivity"
             android:label="@string/add_comment_label"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
+            android:name=".AddMaterialPopActivity"
+            android:label="@string/add_material_label"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
     </application>
 
 </manifest>
