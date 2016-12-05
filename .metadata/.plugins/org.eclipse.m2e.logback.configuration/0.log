@@ -1,0 +1,33 @@
+2016-12-02 01:29:56,452 [Worker-3] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.maven.ide.eclipse.wtp.WarLifecycleMapping lifecycle mapping for MavenProject: org.bounswe:digest.api:0.0.1-SNAPSHOT @ C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\pom.xml.
+2016-12-02 01:30:08,476 [Worker-3] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-02 01:30:08,498 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-02 01:30:08,500 [Worker-3] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-02 01:30:08,509 [Worker-3] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-02 01:30:10,848 [Worker-1] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-02 01:30:10,855 [Worker-1] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-02 01:30:10,857 [Worker-1] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-02 01:30:10,863 [Worker-1] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-02 01:31:28,660 [Worker-10] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-02 01:31:28,674 [Worker-10] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-02 01:31:28,675 [Worker-10] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-02 01:31:28,682 [Worker-10] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-03 10:29:45,725 [Worker-2] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-03 10:29:45,749 [Worker-2] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-03 10:29:45,752 [Worker-2] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-03 10:29:45,760 [Worker-2] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-03 10:49:21,859 [Worker-28] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-03 10:49:21,866 [Worker-28] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-03 10:49:21,867 [Worker-28] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-03 10:49:21,874 [Worker-28] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-03 11:07:05,841 [Worker-37] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-03 11:07:05,854 [Worker-37] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-03 11:07:05,856 [Worker-37] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-03 11:07:05,862 [Worker-37] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-05 15:07:30,578 [Worker-7] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-05 15:07:30,668 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-05 15:07:30,670 [Worker-7] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-05 15:07:30,677 [Worker-7] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-05 15:30:33,981 [Worker-19] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-05 15:30:34,018 [Worker-19] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-05 15:30:34,020 [Worker-19] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-05 15:30:34,029 [Worker-19] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
