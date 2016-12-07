@@ -13,6 +13,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/comment.css">
+<link rel="stylesheet" href="css/quiz.css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script
@@ -308,7 +309,7 @@ ul#horizontal-list a:hover {
 					<p>
 						Owner:
 						<%=ownerName%></p>
-					<p>Followers:</p>
+					<!-- <p>Followers:</p>  -->
 				</div>
 				<%
 					if (session.getAttribute("id") != null) {
@@ -325,7 +326,17 @@ ul#horizontal-list a:hover {
 					</div>
 				</form>
 				<%
-					}
+					}else if(subscribed == 1){
+					
+				%>		
+				<div class="col-sm-5 pull-right">
+					<div class="text"> Progress:</div>
+					 <div class="progress">
+                      <div data-percentage="0%" style="width: 50%;" class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+				</div>										
+				<%		
+				}
 				%>
 				<%
 					if (owner == (Integer) session.getAttribute("id")) {
@@ -603,7 +614,7 @@ ul#horizontal-list a:hover {
 							</div>
 							<div id="quiz" class="tab-pane fade">
 								<div class="panel panel-default"
-									style="height: 500px; overflow-y: auto; text-align: center;">
+									style="height: 500px; overflow-y: auto; ">
 									<%
 										if (request.getAttribute("quizzes") != null) {
 
@@ -615,14 +626,15 @@ ul#horizontal-list a:hover {
 												JSONArray questions = qu.getJSONArray("questions");
 												int len = questions.length();
 									%>
-									<h3><%=quizName%></h3>
+									<div class="quiz-1">
+									<h3 style=" margin:20px 0 20px 20px;">Quiz: <%=quizName%></h3>
 									<%
 										for (int j = 0; j < len; j++) {
 
 													JSONObject ques = questions.getJSONObject(j);
 													String question = ques.getString("text");
 									%>
-									<p><%=j + 1 + ") " + question%></p>
+									<h4 style="color:#377bb5; margin:20px 0 20px 20px;"><%=j + 1 + ") " + question%></h4>
 									<%
 										JSONArray options = ques.getJSONArray("choices");
 
@@ -630,10 +642,15 @@ ul#horizontal-list a:hover {
 														for (int i = 0; i < options.length(); i++) {
 															String option = (String) options.get(i);
 									%>
-									<div class="checkbox">
+									<label for="q<%=j%>answer<%=i%>" class="btn btn-primary" style=" margin:0 0 0 20px;"><%=option%>
+										<input type="checkbox" name="q<%=j%>answer<%=i%>" value="" id="q<%=j%>answer<%=i%>" class="badgebox">
+										<span class="badge">&check;
+										</span>
+									</label>
+									<!--  <div class="checkbox">
 										<label><input type="checkbox"
 											name="q<%=j%>answer<%=i%>" value=""><%=option%></label>
-									</div>
+									</div>-->
 									<%
 										}
 													}
@@ -641,6 +658,7 @@ ul#horizontal-list a:hover {
 											}
 										}
 									%>
+									</div>
 								</div>
 							</div>
 						</div>
