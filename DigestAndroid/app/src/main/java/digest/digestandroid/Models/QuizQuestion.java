@@ -18,6 +18,8 @@ public class QuizQuestion {
         this.setAnswers(answers);
     }
 
+    public QuizQuestion(){}
+
     public ArrayList<Integer> getAnswers() {
         return answers;
     }

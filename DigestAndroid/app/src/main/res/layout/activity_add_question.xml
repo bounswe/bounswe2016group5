@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_question"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="digest.digestandroid.AddQuestionActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/QuestionBox"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:hint="Write down your question and choices. Please check the correct answers."
+                android:id="@+id/edit_text_question_box"
+                android:inputType="textMultiLine|textLongMessage"
+                android:layout_height="100dp"
+                android:layout_marginBottom="@dimen/small_margin"
+                style="@style/dEditText"
+                android:gravity="top"
+                android:layout_width="match_parent" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="1">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:id="@+id/checkbox_choice_one"
+                    style="@style/Widget.AppCompat.CompoundButton.CheckBox" />
+
+                <EditText
+                    android:inputType="text"
+                    style="@style/dEditText"
+                    android:layout_margin="3dp"
+                    android:text="choice 1"
+                    android:layout_gravity="right"
+                    android:id="@+id/edit_text_choice_one"
+                    android:singleLine="true"
+                    android:layout_width="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:id="@+id/checkbox_choice_two"
+                    style="@style/Widget.AppCompat.CompoundButton.CheckBox" />
+
+                <EditText
+                    android:inputType="text"
+                    style="@style/dEditText"
+                    android:layout_margin="3dp"
+                    android:text="choice 2"
+                    android:layout_gravity="right"
+                    android:id="@+id/edit_text_choice_two"
+                    android:singleLine="true"
+                    android:layout_width="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:id="@+id/checkbox_choice_three"
+                    style="@style/Widget.AppCompat.CompoundButton.CheckBox" />
+
+                <EditText
+                    android:inputType="text"
+                    style="@style/dEditText"
+                    android:layout_margin="3dp"
+                    android:text="choice 3"
+                    android:layout_gravity="right"
+                    android:id="@+id/edit_text_choice_three"
+                    android:singleLine="true"
+                    android:layout_width="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:text="Save Question"
+            android:id="@+id/QuestionSave"
+            style="@style/dBigButton"
+            android:onClick="saveQuestion"
+            android:background="@drawable/purplebutton"
+            android:layout_below="@+id/QuestionBox"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</RelativeLayout>

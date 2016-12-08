@@ -1,12 +1,15 @@
 package digest.digestandroid.fragments;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import digest.digestandroid.AddQuestionActivity;
 import digest.digestandroid.R;
 
 /**
@@ -28,6 +31,7 @@ public class TopicAddQuizFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private View rootView;
 
     public TopicAddQuizFragment() {
         // Required empty public constructor
@@ -64,7 +68,26 @@ public class TopicAddQuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_topic_add_quiz, container, false);
+        rootView = inflater.inflate(R.layout.fragment_topic_add_quiz, container, false);
+
+
+        Button button_more_question = (Button) rootView.findViewById(R.id.button_more_question);
+        button_more_question.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.button_more_question:
+
+                        Intent intent = new Intent(rootView.getContext(), AddQuestionActivity.class);
+                        startActivity(intent);
+
+                        break;
+                }
+            }
+        });
+
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

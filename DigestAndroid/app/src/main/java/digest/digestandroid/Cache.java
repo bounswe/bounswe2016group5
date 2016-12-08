@@ -1,6 +1,7 @@
 package digest.digestandroid;
 
 import digest.digestandroid.Models.Comment;
+import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 
@@ -23,6 +24,10 @@ public class Cache {
     User user;
     Topic topic;
     String topicCreator; // username of topic creator
+
+    QuizQuestion question; //
+
+
 
     public static Cache getInstance() {
         return ourInstance;
@@ -66,6 +71,14 @@ public class Cache {
 
     public String getMaterial() {
         return material;
+    }
+
+    public QuizQuestion getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(QuizQuestion question) {
+        this.question = question;
     }
 
     public void setMaterial(String material) {

@@ -46,11 +46,11 @@
         <activity
             android:name=".ViewRegisteredHomeActivity"
             android:label="@string/home_label"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".ViewSearchActivity"
             android:label="Search View Activity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".CreateTopicFragmentsActivity"
             android:exported="true"
@@ -71,6 +71,14 @@
             android:name=".AddMaterialPopActivity"
             android:label="@string/add_material_label"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
+            android:name=".AddQuestionActivity"
+            android:label="Add Question"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+
+
+
+
     </application>
 
 </manifest>
