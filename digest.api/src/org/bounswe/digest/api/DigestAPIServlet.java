@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.bounswe.digest.api.database.CommentJDBC;
 import org.bounswe.digest.api.database.ConnectionPool;
@@ -26,6 +28,9 @@ import org.bounswe.digest.api.database.QuizJDBC;
 import org.bounswe.digest.api.database.TopicJDBC;
 import org.bounswe.digest.api.database.UserJDBC;
 import org.bounswe.digest.api.database.model.*;
+import org.bounswe.digest.semantic.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
@@ -168,7 +173,41 @@ public class DigestAPIServlet extends HttpServlet {
 			} else {
 				resp.setStatus(400);
 			}
-		} else {
+		} else if (f.equals(DigestParameters.GET_TAG_SUGGESTIONS)){ 
+			String queryText = req.getParameter(DigestParameters.BODY);
+			CalaisAPI httpClientPost = new CalaisAPI();
+			httpClientPost.input = queryText;
+			httpClientPost.client = new HttpClient();
+			httpClientPost.client.getParams().setParameter("http.useragent", "Calais Rest Client");
+			httpClientPost.run();
+			JSONObject jsonObj = new JSONObject(httpClientPost.getOutput());
+	        Iterator<String> i = jsonObj.keys();
+	        JSONArray ja = new JSONArray();
+	        JSONObject jo = new JSONObject();
+			while(i.hasNext()) {
+				String key = (String)i.next();
+				if(key != null) {
+					JSONObject item = (JSONObject)jsonObj.get(key);
+					if (item.has("_typeGroup")) {
+						String typeGroup = item.getString("_typeGroup");
+						if(typeGroup != null && typeGroup.equals("entities")) {
+							String name = item.getString("name");
+							Double relevance = item.getDouble("relevance");
+							jo.put(name, relevance);
+						}
+						if(typeGroup != null && typeGroup.equals("socialTag")) {
+							String name = item.getString("name");
+							Double relevance = item.getDouble("importance");
+							jo.put(name, relevance);
+						}
+					}
+	        	}
+				ja.put(jo);
+	       	}
+			Gson gson = new Gson();
+			resp.getWriter().append(gson.toJson(ja));
+		}
+			else {
 			resp.getWriter().append("Welcome to Digest API");
 		}
 		// doPost(req, resp);

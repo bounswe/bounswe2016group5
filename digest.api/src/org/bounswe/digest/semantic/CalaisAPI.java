@@ -17,10 +17,10 @@ import java.util.Iterator;
 public class CalaisAPI {
  
     private static final String CALAIS_URL = "https://api.thomsonreuters.com/permid/calais";
-    public static String uniqueAccessKey ="ABw03VsxXSFc8w3GaoS3dPrJzLZRP29P";		
-    private String input;
-    private static String output;
-    private HttpClient client;
+    public static final String uniqueAccessKey ="ABw03VsxXSFc8w3GaoS3dPrJzLZRP29P";		
+    public String input;
+    public String output;
+    public HttpClient client;
  
     private PostMethod createPostMethod() {
         PostMethod method = new PostMethod(CALAIS_URL);
@@ -34,7 +34,7 @@ public class CalaisAPI {
         return method;
     }
  
-    private void run() {
+    public void run() {
 	try {
 		postFile(input, createPostMethod());
 	} catch (Exception e) {
@@ -67,6 +67,10 @@ public class CalaisAPI {
             e.printStackTrace();
         }
     }
+    
+    public String getOutput(){
+    	return output;
+    }
  
     @SuppressWarnings("deprecation")
 	private void postFile(String query, PostMethod method) throws IOException {
@@ -74,9 +78,9 @@ public class CalaisAPI {
         doRequest(query, method);
     }
  
-    public static void main(String[] args) throws UnirestException {
+    public void getEntitySuggestions(String query) throws UnirestException {
         CalaisAPI httpClientPost = new CalaisAPI();
-        httpClientPost.input = "Erdogan's plan is to reconstitute Turkey as a presidential system,that would enable him to better tackle Turkey’s internal and external threats. One of the main hurdles allegedly standing in his way is Fethullah Gulen’s movement.";
+        httpClientPost.input = "Boðaziçi University consistently ranks highest in Turkey, having the most number of applicants via the YGS-LYS Turkish university entrance examinations. This allows Boðaziçi University to attract many of the highest scoring students; as well as having the most preferred applied science, education, engineering, and social science programs in Turkey. Boðaziçi University is the only Turkish university among first 200 universities worldwide according to the Times Higher Education World University Rankings of 2013-2014. Boðaziçi University also provides a liberal educational atmosphere and a program of extracurricular activities and sports.";
         httpClientPost.output = "";
         httpClientPost.client = new HttpClient();
         httpClientPost.client.getParams().setParameter("http.useragent", "Calais Rest Client");
