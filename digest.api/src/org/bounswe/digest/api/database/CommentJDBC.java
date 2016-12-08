@@ -11,7 +11,15 @@ import org.bounswe.digest.api.database.model.Comment;
 import com.google.gson.Gson;
 
 public class CommentJDBC {
-	// give -1 if there is no upper comment of this comment.
+		/** 
+		 * Adds comment to database
+		 * 
+		 * @param body comment body
+		 * @param uid user id
+		 * @param upperCommentId: Id of the upper comment, -1 if there is no upper comment
+		 * @param tid topic id
+		 * @return
+		 */
 		public static int addComment(String body, int uid,  int upperCommentId, int tid) {
 			Connection connection;
 			try {
@@ -63,10 +71,20 @@ public class CommentJDBC {
 			ConnectionPool.close(connection);
 			return result;
 		}
+		/**
+		 * Get all  comments of the topic
+		 * @param tid topic id
+		 * @return Array of Comments in Json format
+		 */
 		public static String getCommentsOfTopic(int tid){
 			Gson gson = new Gson();
 			return gson.toJson(getCommentsArrayOfTopic(tid));
 		}
+		/**
+		 * Get all  comments of the topic
+		 * @param tid topic id
+		 * @return ArrayList of Comments
+		 */
 		protected static ArrayList<Comment> getCommentsArrayOfTopic(int tid){
 			String query="SELECT id, body, uid, tid, ucid, rate, timestamp FROM comment WHERE comment.tid=(?)";
 			Connection connection;
@@ -116,6 +134,12 @@ public class CommentJDBC {
 			ConnectionPool.close(connection);
 			return result;
 		}
+		/**
+		 * Upvote Comment
+		 * @param uid user id
+		 * @param cid comment id
+		 * @return 0 if successful
+		 */
 		public static int rateComment(int uid,int cid) {
 			int result=addRateComment(uid, cid);
 			if(result==0){

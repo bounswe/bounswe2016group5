@@ -14,12 +14,21 @@ import org.bounswe.digest.api.database.model.Quiz;
 import com.google.gson.Gson;
 
 public class QuizJDBC {
-	
+	/**
+	 * Get all Quizzes of topic
+	 * @param tid topic id
+	 * @return Array of quizzes in Json format
+	 */
 	public static String getQuizzesOfTopic(int tid){
 		Gson gson=new Gson();
 		return gson.toJson(QuizJDBC.getQuizArrayOfTopic(tid));
 	}
-	
+	/**
+	 * Add quiz and related tables into database
+	 * @param tid topic id
+	 * @param quiz Quiz object
+	 * @return 0 if successful
+	 */
 	public static int addQuizToTopic(int tid, Quiz quiz) {
 		int qid = addQuiz(quiz);
 		return addTopicQuiz(tid, qid);
