@@ -34,6 +34,7 @@ import digest.digestandroid.HomeAdapter;
 import digest.digestandroid.ViewRegisteredHomeActivity;
 import digest.digestandroid.ViewTopicActivity;
 import digest.digestandroid.api.APIHandler;
+import digest.digestandroid.api.GsonRequest;
 
 
 public class RegisteredHomeHomeFragment extends Fragment {
@@ -44,7 +45,6 @@ public class RegisteredHomeHomeFragment extends Fragment {
     private RecyclerView homeRecyclerView;
     private RecyclerView.LayoutManager homeLayoutManager;
 
-    private static String Home_Fragment = "HomeFragment";
     public RegisteredHomeHomeFragment() {}
 
 
@@ -58,51 +58,72 @@ public class RegisteredHomeHomeFragment extends Fragment {
         homeRecyclerView.setLayoutManager(homeLayoutManager);
         homeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
-        homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getRecentTopics());
-        homeRecyclerView.setAdapter(homeAdapter);
-
+        homeRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Do not show recent topics. Show recommended settings.
+                if(CacheTopiclist.getInstance().getRecentTopics() == null){
+                    APIHandler.getInstance().getRecentTopics(15, homeQueryListener());
+                }else{
+                    loadTopics();
+                }
+            }
+        });
         return rootView;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public Response.Listener<String> homeQueryListener(){
+        return
+                new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ArrayList<Topic> arrayList = serializeTopics(response);
+                CacheTopiclist.getInstance().setRecentTopics(arrayList);
+                Log.d("DD", "Home fragment topic list is taken from database.");
 
-
+                loadTopics();
+            }
+        };
     }
+    public ArrayList<Topic> serializeTopics(String resp){
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener(){
-           @Override
-            public void onItemClick(int pos, View v){
-               Log.d(""+pos,v.toString());
+        final ArrayList<Topic> resultArrayList = new ArrayList<>();
 
-               Log.i("Test1","test");
-
-               int tid = CacheTopiclist.getInstance().getRecentTopics().get(pos).getId();
-
-               Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
-                   @Override
-                   public void onResponse(Topic response) {
-                       Log.d("Success", "Success");
-                       Log.d("Success", response.toString());
-                       Cache.getInstance().setTopic(response);
-
-                       Intent intent = new Intent(getActivity(), ViewTopicActivity.class);
-                       startActivity(intent);
-                   }
-               };
-
-                APIHandler.getInstance().getTopic("",tid,getTopicListener);
+        try {
+            JSONArray obj = (JSONArray) new JSONTokener(resp).nextValue();
+            int topicNumber = obj.length();
+            for (int i = 0; i < topicNumber; i++) {
+                JSONObject tempObj = (JSONObject) obj.get(i);
+                Topic tempTop = (new Gson()).fromJson(tempObj.toString(), Topic.class);
+                resultArrayList.add(tempTop);
+            }
+        } catch (JSONException e) {}
 
 
-           }
+        return resultArrayList;
+    }
+    public void loadTopics(){
+        homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getRecentTopics());
+        homeRecyclerView.setAdapter(homeAdapter);
+
+        ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
+            @Override
+            public void onItemClick(int pos, View v) {
+                Log.d("" + pos, v.toString());
+
+                int clickedTopicId = CacheTopiclist.getInstance().getRecentTopics().get(pos).getId();
+                Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                    @Override
+                    public void onResponse(Topic response) {
+                        Log.d("Success", response.toString());
+                        Cache.getInstance().setTopic(response);
+
+                        Intent intent = new Intent(getActivity(), ViewTopicActivity.class);
+                        startActivity(intent);
+                    }
+                };
+                APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
+            }
         });
     }
-
-
-
 }

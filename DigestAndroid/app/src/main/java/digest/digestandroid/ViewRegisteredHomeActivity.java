@@ -226,91 +226,12 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         );
 
 
+        viewPager = (ViewPager) findViewById(R.id.viewpager_home);
+        defineViewPager(viewPager);
 
-
-        final Response.Listener<String> userTopicsResponseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-
-                try{
-                    JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
-                    ArrayList<Topic> arrayList = new ArrayList<Topic>();
-
-
-                    int topicNumber = obj.length();
-                    for(int i = 0 ; i < topicNumber ; i++){
-                        JSONObject tempObj = (JSONObject) obj.get(i);
-                        Topic tempTop = new Topic();
-
-                        Gson gson = new Gson();
-                        tempTop = gson.fromJson(tempObj.toString(),Topic.class);
-                        arrayList.add(tempTop);
-                    }
-
-                    CacheTopiclist.getInstance().setUserTopics(arrayList);
-
-
-
-
-
-                    viewPager = (ViewPager) findViewById(R.id.viewpager_home);
-                    defineViewPager(viewPager);
-
-                    tabLayout = (TabLayout) findViewById(R.id.tabs_home);
-                    tabLayout.setupWithViewPager(viewPager);
-                    loadViewPager();
-
-
-
-
-
-
-                }catch (JSONException e){}
-
-            }
-        };
-        Response.Listener<String> recentTopicsResponseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-
-                try{
-                    JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
-                    ArrayList<Topic> arrayList = new ArrayList<Topic>();
-
-
-                    int topicNumber = obj.length();
-                    for(int i = 0 ; i < topicNumber ; i++){
-                        JSONObject tempObj = (JSONObject) obj.get(i);
-                        Topic tempTop = new Topic();
-
-                        Gson gson = new Gson();
-                        tempTop = gson.fromJson(tempObj.toString(),Topic.class);
-                        arrayList.add(tempTop);
-                    }
-
-                    CacheTopiclist.getInstance().setRecentTopics(arrayList);
-
-
-
-
-
-                    APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),userTopicsResponseListener);
-
-
-
-
-
-
-
-                }catch (JSONException e){}
-
-            }
-        };
-
-        APIHandler.getInstance().getRecentTopics(15,recentTopicsResponseListener);
-
+        tabLayout = (TabLayout) findViewById(R.id.tabs_home);
+        tabLayout.setupWithViewPager(viewPager);
+        loadViewPager();
     }
 
 

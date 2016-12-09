@@ -1,5 +1,7 @@
 package digest.digestandroid;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import digest.digestandroid.Models.Topic;
@@ -10,7 +12,12 @@ public class CacheTopiclist {
     public static CacheTopiclist getInstance() {
         return ourInstance;
     }
-    private CacheTopiclist() {}
+    private CacheTopiclist() {
+        Log.d("CC","Topic lists are initialized as null.");
+        recentTopics = null;
+        userTopics = null;
+        tagTopics = null;
+    }
 
 
     ArrayList<Topic> recentTopics;
