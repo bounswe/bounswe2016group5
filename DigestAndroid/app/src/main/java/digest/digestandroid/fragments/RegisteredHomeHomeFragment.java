@@ -41,8 +41,7 @@ public class RegisteredHomeHomeFragment extends Fragment {
 
     protected View rootView;
 
-    private RecyclerView.Adapter homeAdapter;
-    private RecyclerView homeRecyclerView;
+    public RecyclerView homeRecyclerView;
     private RecyclerView.LayoutManager homeLayoutManager;
 
     public RegisteredHomeHomeFragment() {}
@@ -58,72 +57,24 @@ public class RegisteredHomeHomeFragment extends Fragment {
         homeRecyclerView.setLayoutManager(homeLayoutManager);
         homeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        // TODO IMPORTANT !!!!!!!!!!! --- IN EVERY FRAGMENT CURRENTFRAGMENT VARIABLE SHOULD BE UPDATED
+        // TODO it might be needed to move below code to onstart, because I want them to work when the fragment becomes visible
+        CacheTopiclist.getInstance().setCurrentFragment("Home");
         homeRecyclerView.post(new Runnable() {
             @Override
             public void run() {
                 // TODO Do not show recent topics. Show recommended settings.
                 if(CacheTopiclist.getInstance().getRecentTopics() == null){
-                    APIHandler.getInstance().getRecentTopics(15, homeQueryListener());
+                    APIHandler.getInstance().getRecentTopics(15,((ViewRegisteredHomeActivity)getActivity()).topicListQueryListener(homeRecyclerView));
                 }else{
-                    loadTopics();
+                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(homeRecyclerView,CacheTopiclist.getInstance().getRecentTopics());
                 }
             }
         });
         return rootView;
     }
 
-    public Response.Listener<String> homeQueryListener(){
-        return
-                new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                ArrayList<Topic> arrayList = serializeTopics(response);
-                CacheTopiclist.getInstance().setRecentTopics(arrayList);
-                Log.d("DD", "Home fragment topic list is taken from database.");
+    //--------------------------  ABOVE IS OVERWRITE FUNCTIONS  ------------------------------------------
+    //--------------------------  BELOW IS FRAGMENT FUNCTIONS  -------------------------------------------
 
-                loadTopics();
-            }
-        };
-    }
-    public ArrayList<Topic> serializeTopics(String resp){
-
-        final ArrayList<Topic> resultArrayList = new ArrayList<>();
-
-        try {
-            JSONArray obj = (JSONArray) new JSONTokener(resp).nextValue();
-            int topicNumber = obj.length();
-            for (int i = 0; i < topicNumber; i++) {
-                JSONObject tempObj = (JSONObject) obj.get(i);
-                Topic tempTop = (new Gson()).fromJson(tempObj.toString(), Topic.class);
-                resultArrayList.add(tempTop);
-            }
-        } catch (JSONException e) {}
-
-
-        return resultArrayList;
-    }
-    public void loadTopics(){
-        homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getRecentTopics());
-        homeRecyclerView.setAdapter(homeAdapter);
-
-        ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
-            @Override
-            public void onItemClick(int pos, View v) {
-                Log.d("" + pos, v.toString());
-
-                int clickedTopicId = CacheTopiclist.getInstance().getRecentTopics().get(pos).getId();
-                Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
-                    @Override
-                    public void onResponse(Topic response) {
-                        Log.d("Success", response.toString());
-                        Cache.getInstance().setTopic(response);
-
-                        Intent intent = new Intent(getActivity(), ViewTopicActivity.class);
-                        startActivity(intent);
-                    }
-                };
-                APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
-            }
-        });
-    }
 }

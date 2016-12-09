@@ -8,12 +8,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
@@ -40,16 +42,19 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
     private Cache cache = Cache.getInstance();
 
-    // TODO adjust the heights and sizes
     private Toolbar toolbar;
     public SearchView searchView;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    RegisteredHomeHomeFragment homeHomeFragment;
+    RegisteredHomeTrendFragment homeTrendFragment ;
+    RegisteredHomeChannelFragment homeChannelFragment;
+    RegisteredHomeProfileFragment homeProfileFragment;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        // TODO : Adjust sizes of items in the menu
         inflater.inflate(R.menu.registered_home_actionbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -61,97 +66,23 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_create_topic:
-                // TODO fix the create topic transition problem
                 Intent intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
                 startActivity(intent);
                 return true;
 
             case R.id.action_refresh:
+                String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
+                if(currentFragment.equals("Home")){
+                    APIHandler.getInstance().getRecentTopics(15,topicListQueryListener(currentFragment, homeHomeFragment.homeRecyclerView));
+                }else if(currentFragment.equals("Trending")){
 
-                final Response.Listener<String> userTopicsResponseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                }else if(currentFragment.equals("Followed")){
 
+                }else if(currentFragment.equals("Profile")){
 
-                        try{
-                            JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
-                            ArrayList<Topic> arrayList = new ArrayList<Topic>();
-
-
-                            int topicNumber = obj.length();
-                            for(int i = 0 ; i < topicNumber ; i++){
-                                JSONObject tempObj = (JSONObject) obj.get(i);
-                                Topic tempTop = new Topic();
-
-                                Gson gson = new Gson();
-                                tempTop = gson.fromJson(tempObj.toString(),Topic.class);
-                                arrayList.add(tempTop);
-                            }
-
-                            CacheTopiclist.getInstance().setUserTopics(arrayList);
-
-
-
-
-
-                            viewPager = (ViewPager) findViewById(R.id.viewpager_home);
-                            defineViewPager(viewPager);
-
-                            tabLayout = (TabLayout) findViewById(R.id.tabs_home);
-                            tabLayout.setupWithViewPager(viewPager);
-                            loadViewPager();
-
-
-
-
-
-
-                        }catch (JSONException e){}
-
-                    }
-                };
-                Response.Listener<String> recentTopicsResponseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-
-                        try{
-                            JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
-                            ArrayList<Topic> arrayList = new ArrayList<Topic>();
-
-
-                            int topicNumber = obj.length();
-                            for(int i = 0 ; i < topicNumber ; i++){
-                                JSONObject tempObj = (JSONObject) obj.get(i);
-                                Topic tempTop = new Topic();
-
-                                Gson gson = new Gson();
-                                tempTop = gson.fromJson(tempObj.toString(),Topic.class);
-                                arrayList.add(tempTop);
-                            }
-
-                            CacheTopiclist.getInstance().setRecentTopics(arrayList);
-
-
-
-
-
-                            APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),userTopicsResponseListener);
-
-
-
-
-
-
-
-                        }catch (JSONException e){}
-
-                    }
-                };
-
-                APIHandler.getInstance().getRecentTopics(15,recentTopicsResponseListener);
-
-
+                }else{
+                    Log.d("HEEY","This fragment name is not expected !!! ");
+                }
                 return true;
 
 
@@ -234,6 +165,8 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         loadViewPager();
     }
 
+    //--------------------------  ABOVE IS OVERWRITE FUNCTIONS  ------------------------------------------
+    //--------------------------  BELOW IS FRAGMENT FUNCTIONS  -------------------------------------------
 
     private void defineViewPager(ViewPager viewPager) {
         ViewRegisteredHomeActivity.HomePagerAdapter adapter = new ViewRegisteredHomeActivity.HomePagerAdapter(getSupportFragmentManager());
@@ -246,12 +179,89 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
     private void loadViewPager(){
         // TODO implement fragments and come back
-        RegisteredHomeHomeFragment homeHomeFragment = (RegisteredHomeHomeFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(0);
+        homeHomeFragment = (RegisteredHomeHomeFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(0);
         //homeHomeFragment.initializeInfo();
-        RegisteredHomeTrendFragment homeTrendFragment = (RegisteredHomeTrendFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(1);
-        RegisteredHomeChannelFragment homeChannelFragment = (RegisteredHomeChannelFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(2);
-        RegisteredHomeProfileFragment homeProfileFragment = (RegisteredHomeProfileFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(3);
+        homeTrendFragment = (RegisteredHomeTrendFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(1);
+        homeChannelFragment = (RegisteredHomeChannelFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(2);
+        homeProfileFragment = (RegisteredHomeProfileFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(3);
     }
+    
+    //--------------------------  ABOVE IS FRAGMENT FUNCTIONS  ------------------------------------------
+    //--------------------------  BELOW IS LISTENER FUNCTIONS  ------------------------------------------
+
+
+    public Response.Listener<String> topicListQueryListener(final String currentFragment ,final RecyclerView currentRecyclerView){
+        return
+                new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
+
+                if(currentFragment.equals("Home")){
+                    CacheTopiclist.getInstance().setRecentTopics(arrayList);
+                    loadTopics(currentRecyclerView,arrayList);
+                    Log.d("AA","Home topics are refreshed");
+
+                }else if(currentFragment.equals("Trending")){
+
+                }else if(currentFragment.equals("Followed")){
+
+                }else if(currentFragment.equals("Profile")){
+
+                }else{
+                    Log.d("HEEY","This fragment name is not expected !!! ");
+                }
+            }
+        };
+    }
+    public void loadTopics(RecyclerView currentRecyclerView,final ArrayList<Topic> currentTopicList){
+        RecyclerView.Adapter homeAdapter = new HomeAdapter(currentTopicList);
+        currentRecyclerView.setAdapter(homeAdapter);
+
+        ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
+            @Override
+            public void onItemClick(int pos, View v) {
+                Log.d("" + pos, v.toString());
+
+                int clickedTopicId = currentTopicList.get(pos).getId();
+                Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                    @Override
+                    public void onResponse(Topic response) {
+                        Log.d("Success", response.toString());
+                        Cache.getInstance().setTopic(response);
+
+                        Intent intent = new Intent(getApplicationContext(), ViewTopicActivity.class);
+                        startActivity(intent);
+                    }
+                };
+                APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
+            }
+        });
+    }
+
+    public static ArrayList<Topic> serializeTopicsFromJson(String resp){
+
+        final ArrayList<Topic> resultArrayList = new ArrayList<>();
+
+        try {
+            JSONArray obj = (JSONArray) new JSONTokener(resp).nextValue();
+            int topicNumber = obj.length();
+            for (int i = 0; i < topicNumber; i++) {
+                JSONObject tempObj = (JSONObject) obj.get(i);
+                Topic tempTop = (new Gson()).fromJson(tempObj.toString(), Topic.class);
+                resultArrayList.add(tempTop);
+            }
+        } catch (JSONException e) {}
+
+
+        return resultArrayList;
+    }
+
+
+    //--------------------------  ABOVE IS LISTENER FUNCTIONS  ------------------------------------------
+    //--------------------------  BELOW IS ADAPTER CLASS  ------------------------------------------
+
 
     class HomePagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> homeFragments = new ArrayList<>();

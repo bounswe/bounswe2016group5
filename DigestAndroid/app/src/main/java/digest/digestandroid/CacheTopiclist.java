@@ -23,8 +23,11 @@ public class CacheTopiclist {
     ArrayList<Topic> recentTopics;
     ArrayList<Topic> userTopics;
     ArrayList<Topic> tagTopics;
+    String currentFragment;
 
+    public String getCurrentFragment(){return currentFragment;}
 
+    public void setCurrentFragment(String x){ currentFragment=x;}
 
     public ArrayList<Topic> getRecentTopics() {
         return recentTopics;
