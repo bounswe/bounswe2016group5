@@ -52,47 +52,16 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     RegisteredHomeChannelFragment homeChannelFragment;
     RegisteredHomeProfileFragment homeProfileFragment;
 
+    //--------------------------  ABOVE IS FIELD VARIABLES  -------------------------------------------
+    //--------------------------  BELOW IS OVERRIDE-CREATE FUNCTIONS  ---------------------------------
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.registered_home_actionbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
 
-            case R.id.action_create_topic:
-                Intent intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
-                startActivity(intent);
-                return true;
-
-            case R.id.action_refresh:
-                String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
-                if(currentFragment.equals("Home")){
-                    APIHandler.getInstance().getRecentTopics(15,topicListQueryListener(currentFragment, homeHomeFragment.homeRecyclerView));
-                }else if(currentFragment.equals("Trending")){
-
-                }else if(currentFragment.equals("Followed")){
-
-                }else if(currentFragment.equals("Profile")){
-
-                }else{
-                    Log.d("HEEY","This fragment name is not expected !!! ");
-                }
-                return true;
-
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,7 +134,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         loadViewPager();
     }
 
-    //--------------------------  ABOVE IS OVERWRITE FUNCTIONS  ------------------------------------------
+    //--------------------------  ABOVE IS OVERRIDE-CREATE FUNCTIONS  ------------------------------------
     //--------------------------  BELOW IS FRAGMENT FUNCTIONS  -------------------------------------------
 
     private void defineViewPager(ViewPager viewPager) {
@@ -185,30 +154,68 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         homeChannelFragment = (RegisteredHomeChannelFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(2);
         homeProfileFragment = (RegisteredHomeProfileFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(3);
     }
-    
+
     //--------------------------  ABOVE IS FRAGMENT FUNCTIONS  ------------------------------------------
+    //--------------------------  BELOW IS OVERRIDE-OPTIONS FUNCTION  -----------------------------------
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.action_create_topic:
+                Intent intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.action_refresh:
+                String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
+                if(currentFragment.equals("Home")){
+                    APIHandler.getInstance().getRecentTopics(15,topicListQueryListener(homeHomeFragment.homeRecyclerView));
+                }else if(currentFragment.equals("Trending")){
+
+                }else if(currentFragment.equals("Followed")){
+
+                }else if(currentFragment.equals("Profile")){
+                    APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListener(homeProfileFragment.profileRecyclerView));
+                }else{
+                    Log.d("HEEY","This fragment name is not expected !!! ");
+                }
+                return true;
+
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    //--------------------------  ABOVE IS OVERRIDE-OPTIONS FUNCTION  -----------------------------------
     //--------------------------  BELOW IS LISTENER FUNCTIONS  ------------------------------------------
 
-
-    public Response.Listener<String> topicListQueryListener(final String currentFragment ,final RecyclerView currentRecyclerView){
+    public Response.Listener<String> topicListQueryListener(final RecyclerView currentRecyclerView){
         return
                 new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                final String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
                 final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
 
                 if(currentFragment.equals("Home")){
                     CacheTopiclist.getInstance().setRecentTopics(arrayList);
                     loadTopics(currentRecyclerView,arrayList);
-                    Log.d("AA","Home topics are refreshed");
 
                 }else if(currentFragment.equals("Trending")){
 
                 }else if(currentFragment.equals("Followed")){
 
                 }else if(currentFragment.equals("Profile")){
-
+                    CacheTopiclist.getInstance().setUserTopics(arrayList);
+                    loadTopics(currentRecyclerView,arrayList);
                 }else{
                     Log.d("HEEY","This fragment name is not expected !!! ");
                 }

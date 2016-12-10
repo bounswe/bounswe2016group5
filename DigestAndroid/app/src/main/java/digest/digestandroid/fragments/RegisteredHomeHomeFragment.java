@@ -74,6 +74,13 @@ public class RegisteredHomeHomeFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        CacheTopiclist.getInstance().setCurrentFragment("Home");
+        Log.d("TT","On start is passed - home.");
+    }
+
     //--------------------------  ABOVE IS OVERWRITE FUNCTIONS  ------------------------------------------
     //--------------------------  BELOW IS FRAGMENT FUNCTIONS  -------------------------------------------
 
