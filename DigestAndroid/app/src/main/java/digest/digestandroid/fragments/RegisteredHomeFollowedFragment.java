@@ -25,34 +25,38 @@ import digest.digestandroid.api.APIHandler;
  * Use the {@link TopicGeneralFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RegisteredHomeProfileFragment extends Fragment {
+public class RegisteredHomeFollowedFragment extends Fragment {
     protected View rootView;
 
-    public RecyclerView profileRecyclerView;
-    private RecyclerView.LayoutManager profileLayoutManager;
+    public RecyclerView followedRecyclerView;
+    private RecyclerView.LayoutManager followedLayoutManager;
 
-    public RegisteredHomeProfileFragment() {}
+    public RegisteredHomeFollowedFragment() {}
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_home_profile, container, false);
+        rootView = inflater.inflate(R.layout.fragment_home_followed, container, false);
 
-        profileRecyclerView = (RecyclerView) rootView.findViewById(R.id.profile_recycler_view);
-        profileLayoutManager = new LinearLayoutManager(getActivity());
-        profileRecyclerView.setLayoutManager(profileLayoutManager);
-        profileRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        followedRecyclerView = (RecyclerView) rootView.findViewById(R.id.followed_recycler_view);
+        followedLayoutManager = new LinearLayoutManager(getActivity());
+        followedRecyclerView.setLayoutManager(followedLayoutManager);
+        followedRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        Log.d("TT","4");
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        CacheTopiclist.getInstance().setCurrentFragment("Profile");
-        profileRecyclerView.post(new Runnable() {
+        CacheTopiclist.getInstance().setCurrentFragment("Followed");
+        followedRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-                if(CacheTopiclist.getInstance().getUserTopics() == null){
-                    APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListener(profileRecyclerView));
+                Log.d("TT","5");
+                if(CacheTopiclist.getInstance().getFollowedTopics() == null){
+                    Log.d("TT","6");
+                    APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListener(followedRecyclerView));
                 }else{
-                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(profileRecyclerView,CacheTopiclist.getInstance().getUserTopics());
+                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
+                    Log.d("TT","7");
                 }
             }
         });
@@ -62,8 +66,8 @@ public class RegisteredHomeProfileFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        CacheTopiclist.getInstance().setCurrentFragment("Profile");
-        Log.d("TT","On start is passed - profile.");
+        CacheTopiclist.getInstance().setCurrentFragment("Followed");
+        Log.d("TT","On start is passed - followed.");
     }
 
 

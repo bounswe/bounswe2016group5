@@ -243,6 +243,21 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
 
+    // <API_PATH>/?f=get_subscribed_topics&uid=<USER_ID>
+    public void getFollowedTopics(User user,Response.Listener<String> recentTopLis) {
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_subscribed_topics&uid=" + user.getId() ,
+                recentTopLis,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
     public void getUsername(String tag, int userID, Response.Listener<String> successListener) {
 
         StringRequest myReq = new StringRequest(Request.Method.GET,

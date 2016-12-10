@@ -30,7 +30,7 @@ import java.util.List;
 
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.api.APIHandler;
-import digest.digestandroid.fragments.RegisteredHomeChannelFragment;
+import digest.digestandroid.fragments.RegisteredHomeFollowedFragment;
 import digest.digestandroid.fragments.RegisteredHomeHomeFragment;
 import digest.digestandroid.fragments.RegisteredHomeProfileFragment;
 import digest.digestandroid.fragments.RegisteredHomeTrendFragment;
@@ -49,7 +49,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
     RegisteredHomeHomeFragment homeHomeFragment;
     RegisteredHomeTrendFragment homeTrendFragment ;
-    RegisteredHomeChannelFragment homeChannelFragment;
+    RegisteredHomeFollowedFragment homeFollowedFragment;
     RegisteredHomeProfileFragment homeProfileFragment;
 
     //--------------------------  ABOVE IS FIELD VARIABLES  -------------------------------------------
@@ -132,6 +132,8 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs_home);
         tabLayout.setupWithViewPager(viewPager);
         loadViewPager();
+
+
     }
 
     //--------------------------  ABOVE IS OVERRIDE-CREATE FUNCTIONS  ------------------------------------
@@ -141,7 +143,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         ViewRegisteredHomeActivity.HomePagerAdapter adapter = new ViewRegisteredHomeActivity.HomePagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new RegisteredHomeHomeFragment(), "Home");
         adapter.addFragment(new RegisteredHomeTrendFragment(), "Trending");
-        adapter.addFragment(new RegisteredHomeChannelFragment(), "Channels");
+        adapter.addFragment(new RegisteredHomeFollowedFragment(), "Followed");
         adapter.addFragment(new RegisteredHomeProfileFragment(), "Profile");
         viewPager.setAdapter(adapter);
     }
@@ -151,7 +153,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         homeHomeFragment = (RegisteredHomeHomeFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(0);
         //homeHomeFragment.initializeInfo();
         homeTrendFragment = (RegisteredHomeTrendFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(1);
-        homeChannelFragment = (RegisteredHomeChannelFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(2);
+        homeFollowedFragment = (RegisteredHomeFollowedFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(2);
         homeProfileFragment = (RegisteredHomeProfileFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(3);
     }
 
@@ -177,7 +179,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                 }else if(currentFragment.equals("Trending")){
 
                 }else if(currentFragment.equals("Followed")){
-
+                    APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListener(homeFollowedFragment.followedRecyclerView));
                 }else if(currentFragment.equals("Profile")){
                     APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListener(homeProfileFragment.profileRecyclerView));
                 }else{
@@ -198,14 +200,16 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     //--------------------------  BELOW IS LISTENER FUNCTIONS  ------------------------------------------
 
     public Response.Listener<String> topicListQueryListener(final RecyclerView currentRecyclerView){
+        Log.d("TT","8");
         return
                 new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d("AA",""+response.length());
                 final String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
-                final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
 
                 if(currentFragment.equals("Home")){
+                    final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
                     CacheTopiclist.getInstance().setRecentTopics(arrayList);
                     loadTopics(currentRecyclerView,arrayList);
 
@@ -213,7 +217,32 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
                 }else if(currentFragment.equals("Followed")){
 
+                    final ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+                    response = response.substring(1,response.length()-1);
+                    String[] topicIds = response.split(",");
+
+                    final int numberOfFollowedTopics = topicIds.length;
+                    for(int i = 0; i < numberOfFollowedTopics; i++){
+                        Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                            @Override
+                            public void onResponse(Topic response) {
+                                Log.d("Success", response.toString());
+                                arrayList.add(response);
+                                CacheTopiclist.getInstance().setFollowedTopics(arrayList);
+                                loadTopics(currentRecyclerView,arrayList);
+                            }
+                        };
+                        APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
+                    }
+
+                    Log.d("AA",""+response.length());
+                    Log.d("AA",""+topicIds);
+
+
+
                 }else if(currentFragment.equals("Profile")){
+                    final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
                     CacheTopiclist.getInstance().setUserTopics(arrayList);
                     loadTopics(currentRecyclerView,arrayList);
                 }else{
@@ -223,6 +252,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         };
     }
     public void loadTopics(RecyclerView currentRecyclerView,final ArrayList<Topic> currentTopicList){
+        Log.d("TT","9");
         RecyclerView.Adapter homeAdapter = new HomeAdapter(currentTopicList);
         currentRecyclerView.setAdapter(homeAdapter);
 
@@ -248,6 +278,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     }
 
     public static ArrayList<Topic> serializeTopicsFromJson(String resp){
+        Log.d("TT","10");
 
         final ArrayList<Topic> resultArrayList = new ArrayList<>();
 

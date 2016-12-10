@@ -57,17 +57,19 @@ public class RegisteredHomeHomeFragment extends Fragment {
         homeRecyclerView.setLayoutManager(homeLayoutManager);
         homeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // TODO IMPORTANT !!!!!!!!!!! --- IN EVERY FRAGMENT CURRENTFRAGMENT VARIABLE SHOULD BE UPDATED
-        // TODO it might be needed to move below code to onstart, because I want them to work when the fragment becomes visible
+        // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
         CacheTopiclist.getInstance().setCurrentFragment("Home");
         homeRecyclerView.post(new Runnable() {
             @Override
             public void run() {
+                Log.d("TT","1");
                 // TODO Do not show recent topics. Show recommended settings.
                 if(CacheTopiclist.getInstance().getRecentTopics() == null){
                     APIHandler.getInstance().getRecentTopics(15,((ViewRegisteredHomeActivity)getActivity()).topicListQueryListener(homeRecyclerView));
+                    Log.d("TT","2");
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(homeRecyclerView,CacheTopiclist.getInstance().getRecentTopics());
+                    Log.d("TT","3");
                 }
             }
         });
