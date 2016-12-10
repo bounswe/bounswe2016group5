@@ -44,11 +44,11 @@ public class Topic {
         this.media = media;
     }
 
-    public ArrayList<QuizQuestion> getQuizzes() {
+    public ArrayList<Quiz> getQuizzes() {
         return quizzes;
     }
 
-    public void setQuizzes(ArrayList<QuizQuestion> quizzes) {
+    public void setQuizzes(ArrayList<Quiz> quizzes) {
         this.quizzes = quizzes;
     }
 
@@ -57,7 +57,7 @@ public class Topic {
 
     private ArrayList<Comment> comments;
     private ArrayList<String> media;
-    private ArrayList<QuizQuestion> quizzes;
+    private ArrayList<Quiz> quizzes;
 
     public Topic() {
     }

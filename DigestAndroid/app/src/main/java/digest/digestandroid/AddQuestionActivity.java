@@ -41,6 +41,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         question.setAnswers(answers);
 
         Cache.getInstance().setQuestion(question);
+        setResult(RESULT_OK);
         finish();
 
     }

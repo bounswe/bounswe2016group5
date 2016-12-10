@@ -172,6 +172,7 @@ public class APIHandler extends Application{
 
         //Gson gson = new Gson();
         final String jsonInString = new GsonBuilder().setExclusionStrategies().create().toJson(topic, Topic.class);
+        Log.d("---Json in string",jsonInString);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL+"/?f=create_topic", new Response.Listener<String>() {
             @Override
@@ -295,7 +296,7 @@ public class APIHandler extends Application{
         };
 
 
-        // TODO: 5.12.2016 Bu satir comment out yapilmisti??? Kim neden yapti ki
+        // TODO: 5.12.2016 Bu satir comment out yapilmisti??? Kim neden yapti ki -- Bilemiyorum Altan...
         VolleySingleton.getInstance().addToRequestQueue(myReq);
 
     }

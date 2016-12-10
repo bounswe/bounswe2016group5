@@ -1,15 +1,29 @@
 package digest.digestandroid.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import digest.digestandroid.AddQuestionActivity;
+import digest.digestandroid.Cache;
+import digest.digestandroid.DividerItemDecoration;
+import digest.digestandroid.Models.Quiz;
+import digest.digestandroid.Models.QuizQuestion;
+import digest.digestandroid.Models.Topic;
+import digest.digestandroid.QuestionAdapter;
 import digest.digestandroid.R;
 
 /**
@@ -32,6 +46,10 @@ public class TopicAddQuizFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private View rootView;
+
+    private List<QuizQuestion> questionList;
+    private RecyclerView recyclerView;
+    private QuestionAdapter mAdapter;
 
     public TopicAddQuizFragment() {
         // Required empty public constructor
@@ -70,6 +88,17 @@ public class TopicAddQuizFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_topic_add_quiz, container, false);
 
+        questionList = new ArrayList<QuizQuestion>();
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.question_recycler_view);
+        mAdapter = new QuestionAdapter(questionList);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.setAdapter(mAdapter);
+
+
 
         Button button_more_question = (Button) rootView.findViewById(R.id.button_more_question);
         button_more_question.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +108,7 @@ public class TopicAddQuizFragment extends Fragment {
                     case R.id.button_more_question:
 
                         Intent intent = new Intent(rootView.getContext(), AddQuestionActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, 2); //activity started with request code 2
 
                         break;
                 }
@@ -90,12 +119,33 @@ public class TopicAddQuizFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //If add quiz activity is finished and the question is saved to cache
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            QuizQuestion currentQuestion = Cache.getInstance().getQuestion();
+            questionList.add(currentQuestion);
+            mAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+    public void fillQuiz(Topic topic) {
+        Quiz quiz = new Quiz((ArrayList<QuizQuestion>) questionList);
+        ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
+        quizzes.add(quiz);
+        topic.setQuizzes(quizzes);
+    }
+
     /*
     @Override
     public void onAttach(Context context) {

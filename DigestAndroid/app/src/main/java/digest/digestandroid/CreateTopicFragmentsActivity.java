@@ -109,6 +109,9 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
         topicAddDescriptionFragment.fillInfo(topic);
         TopicAddMaterialFragment topicAddMaterialFragment = (TopicAddMaterialFragment) ((myViewPagerAdapter)viewPager.getAdapter()).getItem(1);
         topicAddMaterialFragment.fillMaterial(topic);
+        TopicAddQuizFragment topicAddQuizFragment = (TopicAddQuizFragment) ((myViewPagerAdapter)viewPager.getAdapter()).getItem(2);
+        topicAddQuizFragment.fillQuiz(topic);
+
         APIHandler.getInstance().createTopic("top", topic);
 
         //Back to dashboard, since home redirects to create topic, is finishing this activity enough?
@@ -153,6 +156,12 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
     public void onFragmentInteraction() {
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 
 
     class myViewPagerAdapter extends FragmentPagerAdapter {

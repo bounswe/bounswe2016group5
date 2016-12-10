@@ -11,6 +11,30 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
-    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_view_question"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_alignParentTop="true"/>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_question"
+        android:id="@+id/checkbox_choice_one"/>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkbox_choice_one"
+        android:id="@+id/checkbox_choice_two"/>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkbox_choice_two"
+        android:id="@+id/checkbox_choice_three"/>
 
 </RelativeLayout>

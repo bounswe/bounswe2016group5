@@ -28,7 +28,6 @@ public class Cache {
     QuizQuestion question; //
 
 
-
     public static Cache getInstance() {
         return ourInstance;
     }

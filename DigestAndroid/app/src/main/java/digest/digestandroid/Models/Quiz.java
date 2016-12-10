@@ -15,6 +15,10 @@ public class Quiz {
         this.setQuestions(questions);
     }
 
+    public Quiz(ArrayList<QuizQuestion> questions){
+        this.setQuestions(questions);
+    }
+
 
     public String getName() {
         return name;
