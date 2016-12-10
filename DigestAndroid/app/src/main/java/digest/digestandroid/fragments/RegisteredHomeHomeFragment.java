@@ -81,6 +81,7 @@ public class RegisteredHomeHomeFragment extends Fragment {
         super.onStart();
         CacheTopiclist.getInstance().setCurrentFragment("Home");
         Log.d("TT","On start is passed - home.");
+
     }
 
     //--------------------------  ABOVE IS OVERWRITE FUNCTIONS  ------------------------------------------

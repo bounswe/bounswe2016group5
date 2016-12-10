@@ -49,7 +49,14 @@ public class RegisteredHomeProfileFragment extends Fragment {
         profileRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-                ((ViewRegisteredHomeActivity)getActivity()).loadTopics(profileRecyclerView,CacheTopiclist.getInstance().getUserTopics());
+
+                if(CacheTopiclist.getInstance().getUserTopics() == null){
+                    APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Profile",profileRecyclerView));
+                    Log.d("TT","2");
+                }else{
+                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(profileRecyclerView,CacheTopiclist.getInstance().getUserTopics());
+                    Log.d("TT","3");
+                }
 
             }
         });
@@ -61,6 +68,7 @@ public class RegisteredHomeProfileFragment extends Fragment {
         super.onStart();
         CacheTopiclist.getInstance().setCurrentFragment("Profile");
         Log.d("TT","On start is passed - profile.");
+
     }
 
 

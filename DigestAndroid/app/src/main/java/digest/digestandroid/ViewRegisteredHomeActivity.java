@@ -45,12 +45,12 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     public SearchView searchView;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    public static ViewPager viewPager;
 
-    RegisteredHomeHomeFragment homeHomeFragment;
-    RegisteredHomeTrendFragment homeTrendFragment ;
-    RegisteredHomeFollowedFragment homeFollowedFragment;
-    RegisteredHomeProfileFragment homeProfileFragment;
+    public static RegisteredHomeHomeFragment homeHomeFragment;
+    public static RegisteredHomeTrendFragment homeTrendFragment ;
+    public static RegisteredHomeFollowedFragment homeFollowedFragment;
+    public static RegisteredHomeProfileFragment homeProfileFragment;
 
     //--------------------------  ABOVE IS FIELD VARIABLES  -------------------------------------------
     //--------------------------  BELOW IS OVERRIDE-CREATE FUNCTIONS  ---------------------------------
@@ -132,8 +132,9 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         loadViewPager();
 
-        APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("FollowedInitial",homeFollowedFragment.followedRecyclerView));
-        APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("ProfileInitial",homeProfileFragment.profileRecyclerView));
+//        APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("FollowedInitial",null));
+//        APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("ProfileInitial",null));
+//        APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("TrendingInitial",null));
     }
 
     //--------------------------  ABOVE IS OVERRIDE-CREATE FUNCTIONS  ------------------------------------
@@ -152,9 +153,9 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         // TODO implement fragments and come back
         homeHomeFragment = (RegisteredHomeHomeFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(0);
         //homeHomeFragment.initializeInfo();
-        homeTrendFragment = (RegisteredHomeTrendFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(1);
-        homeFollowedFragment = (RegisteredHomeFollowedFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(2);
-        homeProfileFragment = (RegisteredHomeProfileFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(3);
+        ViewRegisteredHomeActivity.homeTrendFragment = (RegisteredHomeTrendFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(1);
+        ViewRegisteredHomeActivity.homeFollowedFragment = (RegisteredHomeFollowedFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(2);
+        ViewRegisteredHomeActivity.homeProfileFragment = (RegisteredHomeProfileFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(3);
     }
 
     //--------------------------  ABOVE IS FRAGMENT FUNCTIONS  ------------------------------------------
@@ -174,10 +175,12 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
             case R.id.action_refresh:
                 String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
+                Log.d("Refresh is pressed","Current fragment is"+ currentFragment);
+
                 if(currentFragment.equals("Home")){
                     APIHandler.getInstance().getRecentTopics(15,topicListQueryListenerAndLoader(currentFragment,homeHomeFragment.homeRecyclerView));
                 }else if(currentFragment.equals("Trending")){
-
+                    APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeTrendFragment.trendingRecyclerView));
                 }else if(currentFragment.equals("Followed")){
                     APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeFollowedFragment.followedRecyclerView));
                 }else if(currentFragment.equals("Profile")){
@@ -200,7 +203,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     //--------------------------  BELOW IS LISTENER FUNCTIONS  ------------------------------------------
 
     public Response.Listener<String> topicListQueryListenerAndLoader(final String currentFragment,final RecyclerView currentRecyclerView){
-        Log.d("TT","8");
+        Log.d("TT","8"+currentFragment+(currentFragment.equals("TrendingInitial")));
         return
                 new Response.Listener<String>() {
             @Override
@@ -213,6 +216,9 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     loadTopics(currentRecyclerView,arrayList);
 
                 }else if(currentFragment.equals("Trending")){
+                    final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
+                    CacheTopiclist.getInstance().setTrendingTopics(arrayList);
+                    loadTopics(currentRecyclerView,arrayList);
 
                 }else if(currentFragment.equals("Followed")){
 
@@ -236,8 +242,6 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                         };
                         APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
                     }
-
-
                 }else if(currentFragment.equals("Profile")){
                     final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
                     Log.d("AA",""+arrayList.toString());
@@ -264,10 +268,14 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                         APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
                     }
 
-                }else if(currentFragment.equals("ProfileInitial")){
+                }else if(currentFragment.equals("ProfileInitial")) {
                     final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
-                    Log.d("AA",""+arrayList.toString());
+                    Log.d("AA", "" + arrayList.toString());
                     CacheTopiclist.getInstance().setUserTopics(arrayList);
+                }else if(currentFragment.equals("TrendingInitial")){
+                    final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
+                    Log.d("DFF",""+arrayList.toString());
+                    CacheTopiclist.getInstance().setTrendingTopics(arrayList);
                 }else{
                     Log.d("HEEY","This fragment name is not expected !!! ");
                 }
@@ -324,7 +332,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     //--------------------------  BELOW IS ADAPTER CLASS  ------------------------------------------
 
 
-    class HomePagerAdapter extends FragmentPagerAdapter {
+    public class HomePagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> homeFragments = new ArrayList<>();
         private final List<String> homeFragmentTitles = new ArrayList<>();
 

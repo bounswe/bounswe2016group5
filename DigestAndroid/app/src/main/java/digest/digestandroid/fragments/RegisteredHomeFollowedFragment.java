@@ -52,7 +52,13 @@ public class RegisteredHomeFollowedFragment extends Fragment {
             public void run() {
             Log.d("TT","5");
 
-            ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
+            if(CacheTopiclist.getInstance().getFollowedTopics() == null){
+                APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Followed",followedRecyclerView));
+                Log.d("TT","2");
+            }else{
+                ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
+                Log.d("TT","3");
+            }
 
             }
         });

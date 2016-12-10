@@ -212,6 +212,25 @@ public class APIHandler extends Application{
     }
 
 
+
+
+    public void getTrendingTopics(User user, Response.Listener<String> trendingTopLis) {
+        Log.d("FFSS","We entered getting topics");
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                // TODO change the api for trending topics !!!!!!!!!!!!!!!!!!!!!!!!!! ------------------ Change api when it comes !!!!!!!!!!!!!!!!!!!!!!!
+                mainURL + "/?f=get_topics_of_user&ruid=" + user.getId(),
+                trendingTopLis,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "No trending topics");
+                    }
+                });
+
+        Log.d("FFSS","We sent request");
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
     // Get all topics of a user
     // http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid=25
 
@@ -222,7 +241,7 @@ public class APIHandler extends Application{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Failed", "Login Failed");
+                        Log.d("Failed", "No user topics");
                     }
                 });
 
@@ -237,7 +256,7 @@ public class APIHandler extends Application{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Failed", "Login Failed");
+                        Log.d("Failed", "No recent topics");
                     }
                 });
 
@@ -252,7 +271,7 @@ public class APIHandler extends Application{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Failed", "Login Failed");
+                        Log.d("Failed", "No followed topics");
                     }
                 });
 
