@@ -10,9 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
@@ -43,7 +45,6 @@ public class ViewSearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        // TODO : Adjust sizes of items in the menu
         inflater.inflate(R.menu.search_actionbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -88,9 +89,7 @@ public class ViewSearchActivity extends AppCompatActivity {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
 
-
                         searchView.clearFocus();
-
                         final Response.Listener<String> tagListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -140,6 +139,26 @@ public class ViewSearchActivity extends AppCompatActivity {
 
         searchAdapter = new HomeAdapter(CacheTopiclist.getInstance().getTagTopics());
         searchRecyclerView.setAdapter(searchAdapter);
+
+        ((HomeAdapter) searchAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
+            @Override
+            public void onItemClick(int pos, View v) {
+                Log.d("" + pos, v.toString());
+
+                int clickedTopicId = CacheTopiclist.getInstance().getTagTopics().get(pos).getId();
+                Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                    @Override
+                    public void onResponse(Topic response) {
+                        Log.d("Success", response.toString());
+                        Cache.getInstance().setTopic(response);
+
+                        Intent intent = new Intent(getApplicationContext(), ViewTopicActivity.class);
+                        startActivity(intent);
+                    }
+                };
+                APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
+            }
+        });
 
     }
 

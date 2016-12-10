@@ -61,8 +61,6 @@ public class RegisteredHomeTrendFragment extends Fragment {
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(trendingRecyclerView,CacheTopiclist.getInstance().getTrendingTopics());
                     Log.d("TT","3");
                 }
-//                Log.d("AA",""+CacheTopiclist.getInstance().getTrendingTopics().toString());
-//                ((ViewRegisteredHomeActivity)getActivity()).loadTopics(trendingRecyclerView,CacheTopiclist.getInstance().getTrendingTopics());
 
             }
         });

@@ -81,35 +81,16 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
 
-
                         searchView.clearFocus();
-
                         final Response.Listener<String> tagListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
 
-                                try{
-                                    JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
-                                    ArrayList<Topic> arrayList = new ArrayList<Topic>();
+                            ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
+                            CacheTopiclist.getInstance().setTagTopics(arrayList);
 
-
-                                    int topicNumber = obj.length();
-                                    for(int i = 0 ; i < topicNumber ; i++){
-                                        JSONObject tempObj = (JSONObject) obj.get(i);
-                                        Topic tempTop = new Topic();
-
-                                        Gson gson = new Gson();
-                                        tempTop = gson.fromJson(tempObj.toString(),Topic.class);
-                                        arrayList.add(tempTop);
-                                    }
-
-                                    CacheTopiclist.getInstance().setTagTopics(arrayList);
-
-                                    Intent intent = new Intent( getApplicationContext(), ViewSearchActivity.class);
-                                    startActivity(intent);
-
-                                }catch (JSONException e){}
-
+                            Intent intent = new Intent( getApplicationContext(), ViewSearchActivity.class);
+                            startActivity(intent);
                             }
                         };
 
@@ -132,9 +113,6 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         loadViewPager();
 
-//        APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("FollowedInitial",null));
-//        APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("ProfileInitial",null));
-//        APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("TrendingInitial",null));
     }
 
     //--------------------------  ABOVE IS OVERRIDE-CREATE FUNCTIONS  ------------------------------------
@@ -150,12 +128,11 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     }
 
     private void loadViewPager(){
-        // TODO implement fragments and come back
         homeHomeFragment = (RegisteredHomeHomeFragment)((HomePagerAdapter)viewPager.getAdapter()).getItem(0);
         //homeHomeFragment.initializeInfo();
-        ViewRegisteredHomeActivity.homeTrendFragment = (RegisteredHomeTrendFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(1);
-        ViewRegisteredHomeActivity.homeFollowedFragment = (RegisteredHomeFollowedFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(2);
-        ViewRegisteredHomeActivity.homeProfileFragment = (RegisteredHomeProfileFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(3);
+        homeTrendFragment = (RegisteredHomeTrendFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(1);
+        homeFollowedFragment = (RegisteredHomeFollowedFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(2);
+        homeProfileFragment = (RegisteredHomeProfileFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(3);
     }
 
     //--------------------------  ABOVE IS FRAGMENT FUNCTIONS  ------------------------------------------
@@ -203,7 +180,6 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     //--------------------------  BELOW IS LISTENER FUNCTIONS  ------------------------------------------
 
     public Response.Listener<String> topicListQueryListenerAndLoader(final String currentFragment,final RecyclerView currentRecyclerView){
-        Log.d("TT","8"+currentFragment+(currentFragment.equals("TrendingInitial")));
         return
                 new Response.Listener<String>() {
             @Override
@@ -215,10 +191,12 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     CacheTopiclist.getInstance().setRecentTopics(arrayList);
                     loadTopics(currentRecyclerView,arrayList);
 
+
                 }else if(currentFragment.equals("Trending")){
                     final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
                     CacheTopiclist.getInstance().setTrendingTopics(arrayList);
                     loadTopics(currentRecyclerView,arrayList);
+
 
                 }else if(currentFragment.equals("Followed")){
 
@@ -228,60 +206,36 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     String[] topicIds = response.split(",");
 
                     final int numberOfFollowedTopics = topicIds.length;
-                    for(int i = 0; i < numberOfFollowedTopics; i++){
-                        Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
-                            @Override
-                            public void onResponse(Topic response) {
-                                Log.d("Success", response.toString());
-                                arrayList.add(response);
-                                if(arrayList.size() == numberOfFollowedTopics ) {
-                                    CacheTopiclist.getInstance().setFollowedTopics(arrayList);
-                                    loadTopics(currentRecyclerView, arrayList);
-                                }
+                    Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                        @Override
+                        public void onResponse(Topic response) {
+                            arrayList.add(response);
+                            if(arrayList.size() == numberOfFollowedTopics ) {
+                                CacheTopiclist.getInstance().setFollowedTopics(arrayList);
+                                loadTopics(currentRecyclerView, arrayList);
                             }
-                        };
+                        }
+                    };
+
+                    for(int i = 0; i < numberOfFollowedTopics; i++){
                         APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
                     }
+
+
                 }else if(currentFragment.equals("Profile")){
                     final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
                     Log.d("AA",""+arrayList.toString());
                     CacheTopiclist.getInstance().setUserTopics(arrayList);
                     loadTopics(currentRecyclerView,arrayList);
-                }else if(currentFragment.equals("FollowedInitial")){
-                    final ArrayList<Topic> arrayList = new ArrayList<Topic>();
 
-                    response = response.substring(1,response.length()-1);
-                    String[] topicIds = response.split(",");
 
-                    final int numberOfFollowedTopics = topicIds.length;
-                    for(int i = 0; i < numberOfFollowedTopics; i++){
-                        Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
-                            @Override
-                            public void onResponse(Topic response) {
-                                Log.d("Success", response.toString());
-                                arrayList.add(response);
-                                if(arrayList.size() == numberOfFollowedTopics ) {
-                                    CacheTopiclist.getInstance().setFollowedTopics(arrayList);
-                                }
-                            }
-                        };
-                        APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
-                    }
-
-                }else if(currentFragment.equals("ProfileInitial")) {
-                    final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
-                    Log.d("AA", "" + arrayList.toString());
-                    CacheTopiclist.getInstance().setUserTopics(arrayList);
-                }else if(currentFragment.equals("TrendingInitial")){
-                    final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
-                    Log.d("DFF",""+arrayList.toString());
-                    CacheTopiclist.getInstance().setTrendingTopics(arrayList);
                 }else{
                     Log.d("HEEY","This fragment name is not expected !!! ");
                 }
             }
         };
     }
+
     public void loadTopics(RecyclerView currentRecyclerView,final ArrayList<Topic> currentTopicList){
         Log.d("TT","9");
         RecyclerView.Adapter homeAdapter = new HomeAdapter(currentTopicList);
@@ -307,7 +261,6 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
             }
         });
     }
-
     public static ArrayList<Topic> serializeTopicsFromJson(String resp){
         Log.d("TT","10");
 
