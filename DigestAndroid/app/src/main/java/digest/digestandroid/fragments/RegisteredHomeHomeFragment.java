@@ -65,7 +65,7 @@ public class RegisteredHomeHomeFragment extends Fragment {
                 Log.d("TT","1");
                 // TODO Do not show recent topics. Show recommended settings.
                 if(CacheTopiclist.getInstance().getRecentTopics() == null){
-                    APIHandler.getInstance().getRecentTopics(15,((ViewRegisteredHomeActivity)getActivity()).topicListQueryListener(homeRecyclerView));
+                    APIHandler.getInstance().getRecentTopics(15,((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Home",homeRecyclerView));
                     Log.d("TT","2");
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(homeRecyclerView,CacheTopiclist.getInstance().getRecentTopics());

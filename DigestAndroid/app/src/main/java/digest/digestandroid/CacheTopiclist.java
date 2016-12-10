@@ -46,7 +46,7 @@ public class CacheTopiclist {
         return userTopics;
     }
 
-    public void setUserTopics(ArrayList<Topic> x) {tagTopics = new ArrayList<Topic>(x);   }
+    public void setUserTopics(ArrayList<Topic> x) {userTopics = new ArrayList<Topic>(x);   }
 
     public ArrayList<Topic> getTagTopics() {
         return tagTopics;

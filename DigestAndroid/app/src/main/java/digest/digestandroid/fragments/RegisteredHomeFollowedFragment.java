@@ -50,14 +50,10 @@ public class RegisteredHomeFollowedFragment extends Fragment {
         followedRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-                Log.d("TT","5");
-                if(CacheTopiclist.getInstance().getFollowedTopics() == null){
-                    Log.d("TT","6");
-                    APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListener(followedRecyclerView));
-                }else{
-                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
-                    Log.d("TT","7");
-                }
+            Log.d("TT","5");
+
+            ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
+
             }
         });
         return rootView;

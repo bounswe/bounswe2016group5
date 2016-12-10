@@ -49,11 +49,8 @@ public class RegisteredHomeProfileFragment extends Fragment {
         profileRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-                if(CacheTopiclist.getInstance().getUserTopics() == null){
-                    APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListener(profileRecyclerView));
-                }else{
-                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(profileRecyclerView,CacheTopiclist.getInstance().getUserTopics());
-                }
+                ((ViewRegisteredHomeActivity)getActivity()).loadTopics(profileRecyclerView,CacheTopiclist.getInstance().getUserTopics());
+
             }
         });
         return rootView;

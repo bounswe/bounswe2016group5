@@ -125,7 +125,6 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                 }
         );
 
-
         viewPager = (ViewPager) findViewById(R.id.viewpager_home);
         defineViewPager(viewPager);
 
@@ -133,7 +132,8 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         loadViewPager();
 
-
+        APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("FollowedInitial",homeFollowedFragment.followedRecyclerView));
+        APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader("ProfileInitial",homeProfileFragment.profileRecyclerView));
     }
 
     //--------------------------  ABOVE IS OVERRIDE-CREATE FUNCTIONS  ------------------------------------
@@ -175,13 +175,13 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
             case R.id.action_refresh:
                 String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
                 if(currentFragment.equals("Home")){
-                    APIHandler.getInstance().getRecentTopics(15,topicListQueryListener(homeHomeFragment.homeRecyclerView));
+                    APIHandler.getInstance().getRecentTopics(15,topicListQueryListenerAndLoader(currentFragment,homeHomeFragment.homeRecyclerView));
                 }else if(currentFragment.equals("Trending")){
 
                 }else if(currentFragment.equals("Followed")){
-                    APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListener(homeFollowedFragment.followedRecyclerView));
+                    APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeFollowedFragment.followedRecyclerView));
                 }else if(currentFragment.equals("Profile")){
-                    APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListener(homeProfileFragment.profileRecyclerView));
+                    APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeProfileFragment.profileRecyclerView));
                 }else{
                     Log.d("HEEY","This fragment name is not expected !!! ");
                 }
@@ -199,14 +199,13 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     //--------------------------  ABOVE IS OVERRIDE-OPTIONS FUNCTION  -----------------------------------
     //--------------------------  BELOW IS LISTENER FUNCTIONS  ------------------------------------------
 
-    public Response.Listener<String> topicListQueryListener(final RecyclerView currentRecyclerView){
+    public Response.Listener<String> topicListQueryListenerAndLoader(final String currentFragment,final RecyclerView currentRecyclerView){
         Log.d("TT","8");
         return
                 new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("AA",""+response.length());
-                final String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
 
                 if(currentFragment.equals("Home")){
                     final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
@@ -229,22 +228,46 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                             public void onResponse(Topic response) {
                                 Log.d("Success", response.toString());
                                 arrayList.add(response);
-                                CacheTopiclist.getInstance().setFollowedTopics(arrayList);
-                                loadTopics(currentRecyclerView,arrayList);
+                                if(arrayList.size() == numberOfFollowedTopics ) {
+                                    CacheTopiclist.getInstance().setFollowedTopics(arrayList);
+                                    loadTopics(currentRecyclerView, arrayList);
+                                }
                             }
                         };
                         APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
                     }
 
-                    Log.d("AA",""+response.length());
-                    Log.d("AA",""+topicIds);
-
-
 
                 }else if(currentFragment.equals("Profile")){
                     final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
+                    Log.d("AA",""+arrayList.toString());
                     CacheTopiclist.getInstance().setUserTopics(arrayList);
                     loadTopics(currentRecyclerView,arrayList);
+                }else if(currentFragment.equals("FollowedInitial")){
+                    final ArrayList<Topic> arrayList = new ArrayList<Topic>();
+
+                    response = response.substring(1,response.length()-1);
+                    String[] topicIds = response.split(",");
+
+                    final int numberOfFollowedTopics = topicIds.length;
+                    for(int i = 0; i < numberOfFollowedTopics; i++){
+                        Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                            @Override
+                            public void onResponse(Topic response) {
+                                Log.d("Success", response.toString());
+                                arrayList.add(response);
+                                if(arrayList.size() == numberOfFollowedTopics ) {
+                                    CacheTopiclist.getInstance().setFollowedTopics(arrayList);
+                                }
+                            }
+                        };
+                        APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
+                    }
+
+                }else if(currentFragment.equals("ProfileInitial")){
+                    final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
+                    Log.d("AA",""+arrayList.toString());
+                    CacheTopiclist.getInstance().setUserTopics(arrayList);
                 }else{
                     Log.d("HEEY","This fragment name is not expected !!! ");
                 }
