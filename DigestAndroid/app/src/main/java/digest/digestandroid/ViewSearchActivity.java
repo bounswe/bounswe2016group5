@@ -38,7 +38,6 @@ public class ViewSearchActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private SearchView searchView;
     private RecyclerView searchRecyclerView;
-    private RecyclerView.Adapter searchAdapter;
     private RecyclerView.LayoutManager searchLayoutManager;
 
 
@@ -84,6 +83,17 @@ public class ViewSearchActivity extends AppCompatActivity {
 
         searchView = (SearchView) findViewById(R.id.search_view_search);
         searchView.setQueryHint("Enter a topic name..");
+
+
+        searchRecyclerView = (RecyclerView) findViewById(R.id.search_recycler_view);
+        searchLayoutManager = new LinearLayoutManager(this);
+        searchRecyclerView.setLayoutManager(searchLayoutManager);
+        searchRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+        loadTopics(searchRecyclerView,CacheTopiclist.getInstance().getTagTopics());
+
+
         searchView.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
                     @Override
@@ -94,28 +104,9 @@ public class ViewSearchActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
 
-                                try{
-                                    JSONArray obj = (JSONArray) new JSONTokener(response).nextValue();
-                                    ArrayList<Topic> arrayList = new ArrayList<Topic>();
-
-
-                                    int topicNumber = obj.length();
-                                    for(int i = 0 ; i < topicNumber ; i++){
-                                        JSONObject tempObj = (JSONObject) obj.get(i);
-                                        Topic tempTop = new Topic();
-
-                                        Gson gson = new Gson();
-                                        tempTop = gson.fromJson(tempObj.toString(),Topic.class);
-                                        arrayList.add(tempTop);
-                                    }
-
-                                    CacheTopiclist.getInstance().setTagTopics(arrayList);
-
-                                    searchAdapter = new HomeAdapter(CacheTopiclist.getInstance().getTagTopics());
-                                    searchRecyclerView.setAdapter(searchAdapter);
-
-                                }catch (JSONException e){}
-
+                                ArrayList<Topic> arrayList = ViewRegisteredHomeActivity.serializeTopicsFromJson(response);
+                                CacheTopiclist.getInstance().setTagTopics(arrayList);
+                                loadTopics(searchRecyclerView,arrayList);
                             }
                         };
 
@@ -131,21 +122,20 @@ public class ViewSearchActivity extends AppCompatActivity {
                 }
         );
 
-        searchRecyclerView = (RecyclerView) findViewById(R.id.search_recycler_view);
-        searchLayoutManager = new LinearLayoutManager(this);
-        searchRecyclerView.setLayoutManager(searchLayoutManager);
-        searchRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
 
 
-        searchAdapter = new HomeAdapter(CacheTopiclist.getInstance().getTagTopics());
-        searchRecyclerView.setAdapter(searchAdapter);
+    public void loadTopics(RecyclerView currentRecyclerView,final ArrayList<Topic> currentTopicList){
+        Log.d("TT","9");
+        RecyclerView.Adapter homeAdapter = new HomeAdapter(currentTopicList);
+        currentRecyclerView.setAdapter(homeAdapter);
 
-        ((HomeAdapter) searchAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
+        ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
             @Override
             public void onItemClick(int pos, View v) {
                 Log.d("" + pos, v.toString());
 
-                int clickedTopicId = CacheTopiclist.getInstance().getTagTopics().get(pos).getId();
+                int clickedTopicId = currentTopicList.get(pos).getId();
                 Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
                     @Override
                     public void onResponse(Topic response) {
@@ -159,7 +149,6 @@ public class ViewSearchActivity extends AppCompatActivity {
                 APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
             }
         });
-
     }
 
 }

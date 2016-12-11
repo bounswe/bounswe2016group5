@@ -1,5 +1,8 @@
 package digest.digestandroid;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -7,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -16,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
@@ -40,17 +45,16 @@ import digest.digestandroid.fragments.RegisteredHomeTrendFragment;
 
 public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
-    private Cache cache = Cache.getInstance();
-
     private Toolbar toolbar;
-    public SearchView searchView;
+    private SearchView searchView;
+    private ImageView advancedSearchView;
     private TabLayout tabLayout;
     public static ViewPager viewPager;
 
-    public static RegisteredHomeHomeFragment homeHomeFragment;
-    public static RegisteredHomeTrendFragment homeTrendFragment ;
-    public static RegisteredHomeFollowedFragment homeFollowedFragment;
-    public static RegisteredHomeProfileFragment homeProfileFragment;
+    private static RegisteredHomeHomeFragment homeHomeFragment;
+    private static RegisteredHomeTrendFragment homeTrendFragment ;
+    private static RegisteredHomeFollowedFragment homeFollowedFragment;
+    private static RegisteredHomeProfileFragment homeProfileFragment;
 
     //--------------------------  ABOVE IS FIELD VARIABLES  -------------------------------------------
     //--------------------------  BELOW IS OVERRIDE-CREATE FUNCTIONS  ---------------------------------
@@ -66,7 +70,8 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle("@"+cache.getUser().getUsername());
+
+        setTitle("@"+Cache.getInstance().getUser().getUsername());
 
         setContentView(R.layout.activity_view_registered_home);
 
@@ -105,6 +110,19 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     }
                 }
         );
+
+
+        advancedSearchView = (ImageView) findViewById(R.id.advanced_search_button_inhome);
+        advancedSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        //--------------------------  ABOVE IS TOOLBAR  ------------------------------------
+        //--------------------------  BELOW IS RECYCLERVIEW  -------------------------------------------
+
 
         viewPager = (ViewPager) findViewById(R.id.viewpager_home);
         defineViewPager(viewPager);

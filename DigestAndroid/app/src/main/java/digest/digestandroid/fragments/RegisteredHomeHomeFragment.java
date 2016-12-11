@@ -50,6 +50,8 @@ public class RegisteredHomeHomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
+
+        Log.d("TT","On createview is passed - home.");
         rootView = inflater.inflate(R.layout.fragment_home_home, container, false);
 
         homeRecyclerView = (RecyclerView) rootView.findViewById(R.id.home_recycler_view);
@@ -58,30 +60,37 @@ public class RegisteredHomeHomeFragment extends Fragment {
         homeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        CacheTopiclist.getInstance().setCurrentFragment("Home");
         homeRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-                Log.d("TT","1");
+
                 // TODO Do not show recent topics. Show recommended settings.
                 if(CacheTopiclist.getInstance().getRecentTopics() == null){
                     APIHandler.getInstance().getRecentTopics(15,((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Home",homeRecyclerView));
-                    Log.d("TT","2");
+
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(homeRecyclerView,CacheTopiclist.getInstance().getRecentTopics());
-                    Log.d("TT","3");
+
                 }
             }
         });
         return rootView;
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        CacheTopiclist.getInstance().setCurrentFragment("Home");
-        Log.d("TT","On start is passed - home.");
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.d("TT","Yes - home.");
+            CacheTopiclist.getInstance().setCurrentFragment("Home");
+            ViewRegisteredHomeActivity.viewPager.setCurrentItem(0);
+            // load data here
+        }else{
+
+            Log.d("TT","No - home.");
+            // fragment is no longer visible
+        }
     }
 
     //--------------------------  ABOVE IS OVERWRITE FUNCTIONS  ------------------------------------------

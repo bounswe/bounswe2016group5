@@ -37,6 +37,7 @@ public class RegisteredHomeFollowedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
+        Log.d("TT","On createview is passed - followed.");
         rootView = inflater.inflate(R.layout.fragment_home_followed, container, false);
 
         followedRecyclerView = (RecyclerView) rootView.findViewById(R.id.followed_recycler_view);
@@ -44,20 +45,19 @@ public class RegisteredHomeFollowedFragment extends Fragment {
         followedRecyclerView.setLayoutManager(followedLayoutManager);
         followedRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        Log.d("TT","4");
+
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        CacheTopiclist.getInstance().setCurrentFragment("Followed");
         followedRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-            Log.d("TT","5");
+
 
             if(CacheTopiclist.getInstance().getFollowedTopics() == null){
                 APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Followed",followedRecyclerView));
-                Log.d("TT","2");
+
             }else{
                 ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
-                Log.d("TT","3");
+
             }
 
             }
@@ -65,11 +65,20 @@ public class RegisteredHomeFollowedFragment extends Fragment {
         return rootView;
     }
 
+
     @Override
-    public void onStart(){
-        super.onStart();
-        CacheTopiclist.getInstance().setCurrentFragment("Followed");
-        Log.d("TT","On start is passed - followed.");
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            CacheTopiclist.getInstance().setCurrentFragment("Followed");
+            ViewRegisteredHomeActivity.viewPager.setCurrentItem(2);
+            Log.d("TT","Yes - followed.");
+            // load data here
+        }else{
+
+            Log.d("TT","No - followed.");
+            // fragment is no longer visible
+        }
     }
 
 

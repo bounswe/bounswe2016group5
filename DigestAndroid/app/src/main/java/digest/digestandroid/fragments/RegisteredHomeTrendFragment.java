@@ -42,6 +42,8 @@ public class RegisteredHomeTrendFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
+
+
         rootView = inflater.inflate(R.layout.fragment_home_trend, container, false);
 
         trendingRecyclerView = (RecyclerView) rootView.findViewById(R.id.trending_recycler_view);
@@ -50,16 +52,15 @@ public class RegisteredHomeTrendFragment extends Fragment {
         trendingRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        CacheTopiclist.getInstance().setCurrentFragment("Trending");
         trendingRecyclerView.post(new Runnable() {
             @Override
             public void run() {
                 if(CacheTopiclist.getInstance().getTrendingTopics() == null){
                     APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Trending",trendingRecyclerView));
-                    Log.d("TT","2");
+
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(trendingRecyclerView,CacheTopiclist.getInstance().getTrendingTopics());
-                    Log.d("TT","3");
+
                 }
 
             }
@@ -67,10 +68,19 @@ public class RegisteredHomeTrendFragment extends Fragment {
         return rootView;
     }
 
+
     @Override
-    public void onStart(){
-        super.onStart();
-        CacheTopiclist.getInstance().setCurrentFragment("Trending");
-        Log.d("TT","On start is passed - trending.");
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.d("TT","Yes - trend.");
+            CacheTopiclist.getInstance().setCurrentFragment("Trending");
+            ViewRegisteredHomeActivity.viewPager.setCurrentItem(1);
+            // load data here
+        }else{
+
+            Log.d("TT","No - trend.");
+            // fragment is no longer visible
+        }
     }
 }

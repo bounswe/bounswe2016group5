@@ -26,6 +26,7 @@ import digest.digestandroid.api.APIHandler;
  * create an instance of this fragment.
  */
 public class RegisteredHomeProfileFragment extends Fragment {
+
     protected View rootView;
 
     public RecyclerView profileRecyclerView;
@@ -37,6 +38,7 @@ public class RegisteredHomeProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
+        Log.d("TT","On createview is passed - profile.");
         rootView = inflater.inflate(R.layout.fragment_home_profile, container, false);
 
         profileRecyclerView = (RecyclerView) rootView.findViewById(R.id.profile_recycler_view);
@@ -45,17 +47,16 @@ public class RegisteredHomeProfileFragment extends Fragment {
         profileRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        CacheTopiclist.getInstance().setCurrentFragment("Profile");
         profileRecyclerView.post(new Runnable() {
             @Override
             public void run() {
 
                 if(CacheTopiclist.getInstance().getUserTopics() == null){
                     APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Profile",profileRecyclerView));
-                    Log.d("TT","2");
+
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(profileRecyclerView,CacheTopiclist.getInstance().getUserTopics());
-                    Log.d("TT","3");
+
                 }
 
             }
@@ -63,13 +64,20 @@ public class RegisteredHomeProfileFragment extends Fragment {
         return rootView;
     }
 
+
     @Override
-    public void onStart(){
-        super.onStart();
-        CacheTopiclist.getInstance().setCurrentFragment("Profile");
-        Log.d("TT","On start is passed - profile.");
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.d("TT","Yes - profile.");
+            CacheTopiclist.getInstance().setCurrentFragment("Profile");
+            ViewRegisteredHomeActivity.viewPager.setCurrentItem(3);
+            // load data here
+        }else{
 
+            Log.d("TT","No - profile.");
+            // fragment is no longer visible
+        }
     }
-
 
 }
