@@ -28,8 +28,9 @@
 
 <style>
 body {
-	background-color: lightgrey;
+	background-color: #f5f5f5;
 }
+
 @media ( min-width : 768px) {
 	.sidebar-nav {
 		padding: 12px;
@@ -47,6 +48,7 @@ body {
 		display: block;
 	}
 	.sidebar-nav .navbar li a {
+		font-family: Helvetica Neue;
 		padding-top: 12px;
 		padding-bottom: 12px;
 	}
@@ -57,51 +59,69 @@ body {
 		overflow-y: auto;
 	}
 }
+
 #menu-outer {
 	height: 84px;
 	width: 100%;
-	background: black;
+	background: white;
 	position: fixed;
 	bottom: 0;
 }
+
 #content {
 	position: relative;
 	width: 100%;
 	overflow: auto;
 	margin-bottom: 84px;
 }
+
 #form-aligned {
 	border: 1px solid white;
 	padding: 10px;
 }
+
 ul#horizontal-list {
 	min-width: 696px;
 	list-style: none;
 	padding-top: 20px;
 }
+
 ul#horizontal-list li, ul#horizontal-list a {
 	display: inline;
 	float: left;
-	color: grey;
+	color: white;
 }
+
 ul#horizontal-list a:hover {
 	text-decoration: none;
 	color: white;
 }
-.open-topic {
-	width: 100%;
-	heigth: 100%;
+
+.navbar-inverse {
+    background-color: #377bb5;
+    border-color: #377bb5;
 }
-.open-topic button {
-	float: right;
+
+.navbar-inverse .navbar-brand {
+    color: white;
 }
-.topic-header {
-	width: 100%;
+
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
 }
-.topic-body {
-	with: 100%;
-	margin: 2px 2px 2px 2px;
+
+.panel{
+
+	background-color: #white
 }
+.panel-header {
+	font-family: Helvetica Neue;
+}
+.list-group-item-heading{
+	font-family: Helvetica Neue;
+}
+
+
 </style>
 <script>
 	$(document).ready(function() {
@@ -137,8 +157,8 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet" >DIGest <span><img
-						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-3 pull">
@@ -188,8 +208,8 @@ ul#horizontal-list a:hover {
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
 								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
-								<li><a href="followed-topics.jsp"><span
-										class="glyphicon glyphicon-star-empty"></span> Followed Topics</a></li>
+								<li><a href="FollowingTopicsServlet"><span
+										class="glyphicon glyphicon-star-empty"></span> Following Topics</a></li>
 								<li><a href="user-topics.jsp"><span
 										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>

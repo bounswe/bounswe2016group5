@@ -27,7 +27,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
 body {
-	background-color: lightgrey;
+	background-color: #f5f5f5;
 }
 
 @media ( min-width : 768px) {
@@ -47,6 +47,7 @@ body {
 		display: block;
 	}
 	.sidebar-nav .navbar li a {
+		font-family: Helvetica Neue;
 		padding-top: 12px;
 		padding-bottom: 12px;
 	}
@@ -61,7 +62,7 @@ body {
 #menu-outer {
 	height: 84px;
 	width: 100%;
-	background: black;
+	background: white;
 	position: fixed;
 	bottom: 0;
 }
@@ -87,13 +88,39 @@ ul#horizontal-list {
 ul#horizontal-list li, ul#horizontal-list a {
 	display: inline;
 	float: left;
-	color: grey;
+	color: white;
 }
 
 ul#horizontal-list a:hover {
 	text-decoration: none;
 	color: white;
 }
+
+.navbar-inverse {
+    background-color: #377bb5;
+    border-color: #377bb5;
+}
+
+.navbar-inverse .navbar-brand {
+    color: white;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
+}
+
+.panel{
+
+	background-color: #white
+}
+.panel-header {
+	font-family: Helvetica Neue;
+}
+.list-group-item-heading{
+	font-family: Helvetica Neue;
+}
+
+
 </style>
 <script>
 	$(document).ready(function() {
@@ -141,8 +168,8 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">

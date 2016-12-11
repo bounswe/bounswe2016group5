@@ -18,7 +18,7 @@
 
 <style>
 body {
-	background-color: lightgrey;
+	background-color: #f5f5f5;
 }
 
 @media ( min-width : 768px) {
@@ -38,6 +38,7 @@ body {
 		display: block;
 	}
 	.sidebar-nav .navbar li a {
+		font-family: Helvetica Neue;
 		padding-top: 12px;
 		padding-bottom: 12px;
 	}
@@ -52,7 +53,7 @@ body {
 #menu-outer {
 	height: 84px;
 	width: 100%;
-	background: black;
+	background: white;
 	position: fixed;
 	bottom: 0;
 }
@@ -78,7 +79,7 @@ ul#horizontal-list {
 ul#horizontal-list li, ul#horizontal-list a {
 	display: inline;
 	float: left;
-	color: grey;
+	color: white;
 }
 
 ul#horizontal-list a:hover {
@@ -86,23 +87,31 @@ ul#horizontal-list a:hover {
 	color: white;
 }
 
-.open-topic {
-	width: 100%;
-	heigth: 100%;
+.navbar-inverse {
+    background-color: #377bb5;
+    border-color: #377bb5;
 }
 
-.open-topic button {
-	float: right;
+.navbar-inverse .navbar-brand {
+    color: white;
 }
 
-.topic-header {
-	width: 100%;
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
 }
 
-.topic-body {
-	with: 100%;
-	margin: 2px 2px 2px 2px;
+.panel{
+
+	background-color: #white
 }
+.panel-header {
+	font-family: Helvetica Neue;
+}
+.list-group-item-heading{
+	font-family: Helvetica Neue;
+}
+
+
 </style>
 
 </head>
@@ -122,8 +131,8 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">
@@ -166,8 +175,8 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-3 pull">
@@ -217,8 +226,8 @@ ul#horizontal-list a:hover {
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
 								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
-								<li><a href="followed-topics.jsp"><span
-										class="glyphicon glyphicon-star-empty"></span> Followed Topics</a></li>
+								<li><a href="FollowingTopicsServlet"><span
+										class="glyphicon glyphicon-star-empty"></span> Following Topics</a></li>
 								<li><a href="user-topics.jsp"><span
 										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>
@@ -269,7 +278,7 @@ ul#horizontal-list a:hover {
 					</div>
 
 					<div class="form-group">
-						<button class="btn btn-default" name="f" value="add-question">Add
+						<button class="btn btn-default" name="f" value="add-question" style="margin:20px 20px 20px 0">Add
 							Question</button>
 					</div>
 				</form>
@@ -288,6 +297,7 @@ ul#horizontal-list a:hover {
 							value="<%=request.getAttribute("quiz-name")%>" <%}%>>
 					</div>
 					<!-- Quiz Name End -->
+					<h3>Please, select the correct answers for each question.</h3>
 					<%
 						if (request.getAttribute("questions") != null) {
 
@@ -299,7 +309,8 @@ ul#horizontal-list a:hover {
 										JSONObject quest = (JSONObject) questions.get(j);
 										String question = quest.getString("text");
 					%>
-					<p><%=question%></p>
+					<h4 style="color:#377bb5; margin:20px 0 20px 20px;">Question <%=j+1%>: <%=question%></h4>
+					<!-- <p><%=question%></p>  -->
 					<%
 						JSONArray options = quest.getJSONArray("choices");
 
@@ -307,10 +318,15 @@ ul#horizontal-list a:hover {
 											for (int i = 0; i < options.length(); i++) {
 												String option = (String) options.get(i);
 					%>
-					<div class="checkbox">
+					
+					<label for="q<%=j%>answer<%=i%>" style=" margin:0 0 0 20px;"><%=option%>
+						<input type="checkbox" name="q<%=j%>answer<%=i%>" id="q<%=j%>answer<%=i%>" value="" class="badgebox">
+						
+					</label>
+					<!--  <div class="checkbox">
 						<label><input type="checkbox" name="q<%=j%>answer<%=i%>"
-							value=""><%=option%></label>
-					</div>
+							value=""></label>
+					</div>-->
 					<%
 						}
 										}
@@ -321,7 +337,7 @@ ul#horizontal-list a:hover {
 							}
 					%>
 					<div class="form-group">
-						<button class="btn btn-default" name="f" value="add-quiz">Add
+						<button class="btn btn-default" name="f" value="add-quiz" style="margin:20px 20px 20px 0">Add
 							Quiz</button>
 					</div>
 				</form>
