@@ -113,6 +113,39 @@ ul#horizontal-list a:hover {
 
 
 </style>
+<script>
+	$(document).ready(function() {
+
+		$('#add-question').validate({ // initialize the plugin
+			rules :{
+				question : {
+					required : true
+
+				},
+				option1 : {
+					required : true
+
+				},
+				option2 : {
+					required : true
+
+				},
+			}
+		});
+		
+		
+		$('#add-quiz').validate({ // initialize the plugin
+			rules :{
+				quiz-name : {
+					required : true
+
+				},
+				
+			}
+		});
+
+	});
+</script>
 
 </head>
 <body>
@@ -256,25 +289,27 @@ ul#horizontal-list a:hover {
 						request.setAttribute("tid",request.getAttribute("tid"));
 					}
 				%>
-				<form action="QuizServlet" method="POST">
+				<div class="row">
+				<div class="col-sm-6" style="border-right: 1px solid #cccccc ;">
+				<form action="QuizServlet" method="POST" id="add-question">
 					<div class="form-group">
 						<label for="question">Question: </label>
-						<textarea name="question" id="question" class="form-control"></textarea>
+						<textarea name="question" id="question" class="form-control" style="width:90%; margin:0 20px 20px 0"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="option1">Option1: </label>
-						<textarea name="option1" id="option1" class="form-control"></textarea>
+						<textarea name="option1" id="option1" class="form-control" style="width:90%; margin:0 20px 20px 0"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="option2">Option2: </label>
-						<textarea name="option2" id="option2" class="form-control"></textarea>
+						<textarea name="option2" id="option2" class="form-control" style="width:90%; margin:0 20px 20px 0"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="option3">Option3: </label>
-						<textarea name="option3" id="option3" class="form-control"></textarea>
+						<textarea name="option3" id="option3" class="form-control" style="width:90%; margin:0 20px 20px 0"></textarea>
 					</div>
 
 					<div class="form-group">
@@ -282,22 +317,24 @@ ul#horizontal-list a:hover {
 							Question</button>
 					</div>
 				</form>
-
+				</div>
+				
 
 				<!-- Question Form Finish -->
 
 				<!-- Show the Quiz Start -->
-
-				<form action="QuizServlet" method="POST">
+				<div class="col-sm-6">
+				<form action="QuizServlet" method="POST" id="add-quiz">
 					<!-- Quiz Name Start -->
 					<div class="form-group">
-						<label for="quiz-name">Quiz Name</label> <input
+						<label for="quiz-name" style="margin:0 0 5px 20px">Quiz Name:</label> <input
 							class="form-control" name="quiz-name" id="quiz-name" type="text"
 							<%if (request.getAttribute("quiz-name") != null) {%>
-							value="<%=request.getAttribute("quiz-name")%>" <%}%>>
+							value="<%=request.getAttribute("quiz-name")%>" <%}%>
+							style="width:90%; margin:0 20px 20px 20px">
 					</div>
 					<!-- Quiz Name End -->
-					<h3>Please, select the correct answers for each question.</h3>
+					<h4 style="margin:0 0 5px 20px">Please, select the correct answers for each question.</h4>
 					<%
 						if (request.getAttribute("questions") != null) {
 
@@ -336,11 +373,15 @@ ul#horizontal-list a:hover {
 								}
 							}
 					%>
-					<div class="form-group">
+					<div class="form-group" style="margin:0 0 5px 20px">
 						<button class="btn btn-default" name="f" value="add-quiz" style="margin:20px 20px 20px 0">Add
 							Quiz</button>
 					</div>
 				</form>
+				</div>
+				
+				
+				</div>
 				<!-- Show the Quiz Finish -->
 
 				<!-- Quiz add result start-->
