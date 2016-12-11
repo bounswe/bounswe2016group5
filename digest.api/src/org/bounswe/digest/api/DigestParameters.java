@@ -25,7 +25,8 @@ public class DigestParameters {
 	public static final String GET_SUBSCRIBED_TOPICS = "get_subscribed_topics";
 	public static final String GET_TOPICS_WITH_TAG = "get_topics_with_tag";
 	public static final String GET_TAG_SUGGESTIONS = "get_tag_suggestions";
-
+	public static final String GET_TAG_ENTITIES = "get_tag_entities";
+	
 	public static final String HEADER = "header";
 	// public static final String TYPE = "type";
 	public static final String IMAGE = "image";

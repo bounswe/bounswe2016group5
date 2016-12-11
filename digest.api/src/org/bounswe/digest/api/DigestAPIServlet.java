@@ -176,36 +176,13 @@ public class DigestAPIServlet extends HttpServlet {
 		} else if (f.equals(DigestParameters.GET_TAG_SUGGESTIONS)){ 
 			String queryText = req.getParameter(DigestParameters.BODY);
 			CalaisAPI httpClientPost = new CalaisAPI();
-			httpClientPost.input = queryText;
-			httpClientPost.client = new HttpClient();
-			httpClientPost.client.getParams().setParameter("http.useragent", "Calais Rest Client");
-			httpClientPost.run();
-			JSONObject jsonObj = new JSONObject(httpClientPost.getOutput());
-	        Iterator<String> i = jsonObj.keys();
-	        JSONArray ja = new JSONArray();
-	        JSONObject jo = new JSONObject();
-			while(i.hasNext()) {
-				String key = (String)i.next();
-				if(key != null) {
-					JSONObject item = (JSONObject)jsonObj.get(key);
-					if (item.has("_typeGroup")) {
-						String typeGroup = item.getString("_typeGroup");
-						if(typeGroup != null && typeGroup.equals("entities")) {
-							String name = item.getString("name");
-							Double relevance = item.getDouble("relevance");
-							jo.put(name, relevance);
-						}
-						if(typeGroup != null && typeGroup.equals("socialTag")) {
-							String name = item.getString("name");
-							Double relevance = item.getDouble("importance");
-							jo.put(name, relevance);
-						}
-					}
-	        	}
-				ja.put(jo);
-	       	}
 			Gson gson = new Gson();
-			resp.getWriter().append(gson.toJson(ja));
+			resp.getWriter().append(gson.toJson(httpClientPost.extractTags(queryText)));
+		} else if (f.equals(DigestParameters.GET_TAG_ENTITIES)){
+			String queryText = req.getParameter(DigestParameters.TAG);
+			ConceptNetAPI httpClientPost = new ConceptNetAPI();
+			Gson gson = new Gson();
+			resp.getWriter().append(gson.toJson(httpClientPost.extractEntities(queryText)));
 		}
 			else {
 			resp.getWriter().append("Welcome to Digest API");

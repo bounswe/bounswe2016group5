@@ -26,8 +26,7 @@ public class ConceptNetAPI {
     private static ArrayList<Edge> edges = new ArrayList<Edge>();
     
     public static void main(String[] args){
-    	ConceptNetQuery("erdogan");
-    	System.out.println("Query : wolverine");
+    	ConceptNetQuery("python");
     	for(int i=0; i<edges.size(); i++){
     		System.out.println(edges.get(i).getRelationString());
     		System.out.println(edges.get(i).getRelationWeight() + "\n");
@@ -102,6 +101,42 @@ public class ConceptNetAPI {
             }
         }
         return input;
+    }
+    
+    public JSONArray extractEntities(String in)   {
+    	ArrayList<String> entities = new ArrayList<String>();
+        input = "/c/en/" + in;
+        try {
+            String qStr = CONCEPTNET_URI + input + "?limit=1000";
+            com.mashape.unirest.http.HttpResponse<JsonNode> jb = Unirest.get(qStr)
+    				.header("accept", "application/json")
+    				.asJson();
+
+    		JSONObject obj = jb.getBody().getObject();
+    		// Each JSONArray element contains data on one edge of the many edges returned.
+    		JSONArray resultArray = obj.getJSONArray("edges");
+    		int count = 0;
+    		for (int i = 0; i < resultArray.length(); i++) {
+    			JSONObject result = resultArray.getJSONObject(i);
+    			if(result.getJSONObject("rel").getString("label").equals("IsA") && count < 5
+    					&& !result.getJSONObject("end").getString("label").equals(in)
+    					&& result.getJSONObject("start").getString("label").toLowerCase().equals(in)){
+    				String label = result.getJSONObject("end").getString("label");
+    				if(label.startsWith("a ")) entities.add(result.getJSONObject("end").getString("label").substring(2));
+    				else entities.add(result.getJSONObject("end").getString("label"));
+    				count++;
+    			}
+    		}
+    		JSONArray result = new JSONArray(entities);
+    		return result;
+        } catch (UnirestException e) {
+            System.out.println("UnirestException: Can't retrieve message for: " + in);
+            return null;
+        } catch (JSONException e) {
+            System.out.println("JSONException: Can't retrieve message for: " + in);
+            return null;
+        }
+ 
     }
 }
 

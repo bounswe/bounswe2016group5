@@ -7,6 +7,7 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -77,17 +78,16 @@ public class CalaisAPI {
         method.setRequestEntity(new StringRequestEntity(query));
         doRequest(query, method);
     }
- 
-    public void getEntitySuggestions(String query) throws UnirestException {
-        CalaisAPI httpClientPost = new CalaisAPI();
-        httpClientPost.input = "Boðaziçi University consistently ranks highest in Turkey, having the most number of applicants via the YGS-LYS Turkish university entrance examinations. This allows Boðaziçi University to attract many of the highest scoring students; as well as having the most preferred applied science, education, engineering, and social science programs in Turkey. Boðaziçi University is the only Turkish university among first 200 universities worldwide according to the Times Higher Education World University Rankings of 2013-2014. Boðaziçi University also provides a liberal educational atmosphere and a program of extracurricular activities and sports.";
-        httpClientPost.output = "";
-        httpClientPost.client = new HttpClient();
-        httpClientPost.client.getParams().setParameter("http.useragent", "Calais Rest Client");
-        httpClientPost.run();
-        System.out.println("What common traits do wolves, dogs, werewolfves share? What WOlverine shares with them and Spiderman? Stuck between being a superhero and being a member of animal kingdom, let's solve the mystery of Wolverine.");
-        JSONObject jsonObj = new JSONObject(output);
+    
+    public JSONArray extractTags(String queryText){
+		input = queryText;
+		client = new HttpClient();
+		client.getParams().setParameter("http.useragent", "Calais Rest Client");
+		run();
+		JSONObject jsonObj = new JSONObject(getOutput());
         Iterator<String> i = jsonObj.keys();
+        JSONArray ja = new JSONArray();
+        JSONObject jo = new JSONObject();
 		while(i.hasNext()) {
 			String key = (String)i.next();
 			if(key != null) {
@@ -97,17 +97,17 @@ public class CalaisAPI {
 					if(typeGroup != null && typeGroup.equals("entities")) {
 						String name = item.getString("name");
 						Double relevance = item.getDouble("relevance");
-						System.out.println(name + " " + relevance);
-						//int count = item.getJSONArray("instances").length();
+						jo.put(name, relevance);
 					}
 					if(typeGroup != null && typeGroup.equals("socialTag")) {
 						String name = item.getString("name");
 						Double relevance = item.getDouble("importance");
-						System.out.println(name + " " + relevance);
-						//int count = item.getJSONArray("instances").length();
+						jo.put(name, relevance);
 					}
 				}
         	}
+			ja.put(jo);
        	}
+		return ja;
     }
 }
