@@ -20,7 +20,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
 body {
-	background-color: lightgrey;
+	background-color: #f5f5f5;
 }
 
 @media ( min-width : 768px) {
@@ -40,6 +40,7 @@ body {
 		display: block;
 	}
 	.sidebar-nav .navbar li a {
+		font-family: Helvetica Neue;
 		padding-top: 12px;
 		padding-bottom: 12px;
 	}
@@ -54,7 +55,7 @@ body {
 #menu-outer {
 	height: 84px;
 	width: 100%;
-	background: black;
+	background: white;
 	position: fixed;
 	bottom: 0;
 }
@@ -80,7 +81,7 @@ ul#horizontal-list {
 ul#horizontal-list li, ul#horizontal-list a {
 	display: inline;
 	float: left;
-	color: grey;
+	color: white;
 }
 
 ul#horizontal-list a:hover {
@@ -92,6 +93,31 @@ ul#horizontal-list a:hover {
 	background-color: white;
 	border: 1px solid grey;
 }
+
+.navbar-inverse {
+    background-color: #377bb5;
+    border-color: #377bb5;
+}
+
+.navbar-inverse .navbar-brand {
+    color: white;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
+}
+
+.panel{
+
+	background-color: #white
+}
+.panel-header {
+	font-family: Helvetica Neue;
+}
+.list-group-item-heading{
+	font-family: Helvetica Neue;
+}
+
 </style>
 
 <script>
@@ -138,16 +164,16 @@ ul#horizontal-list a:hover {
 		if (sessionID == null||sessionID == "") {
 	%>
 
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse"  >
 		<div class="container-fluid">
-			<div class="navbar-header">
+			<div class="navbar-header" >
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
 					data-target="#myNavbar">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">
@@ -304,8 +330,8 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-3 pull">
@@ -357,8 +383,8 @@ ul#horizontal-list a:hover {
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
 								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
-								<li><a href="followed-topics.jsp"><span
-										class="glyphicon glyphicon-star-empty"></span> Followed Topics</a></li>
+								<li><a href="FollowingTopicsServlet"><span
+										class="glyphicon glyphicon-star-empty"></span> Following Topics</a></li>
 								<li><a href="user-topics.jsp"><span
 										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>

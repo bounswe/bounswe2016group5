@@ -18,7 +18,7 @@
 
 <style>
 body {
-	background-color: lightgrey;
+	background-color: #f5f5f5;
 }
 
 @media ( min-width : 768px) {
@@ -38,6 +38,7 @@ body {
 		display: block;
 	}
 	.sidebar-nav .navbar li a {
+		font-family: Helvetica Neue;
 		padding-top: 12px;
 		padding-bottom: 12px;
 	}
@@ -52,7 +53,7 @@ body {
 #menu-outer {
 	height: 84px;
 	width: 100%;
-	background: black;
+	background: white;
 	position: fixed;
 	bottom: 0;
 }
@@ -78,7 +79,7 @@ ul#horizontal-list {
 ul#horizontal-list li, ul#horizontal-list a {
 	display: inline;
 	float: left;
-	color: grey;
+	color: white;
 }
 
 ul#horizontal-list a:hover {
@@ -86,24 +87,65 @@ ul#horizontal-list a:hover {
 	color: white;
 }
 
-.open-topic {
-	width: 100%;
-	heigth: 100%;
+.navbar-inverse {
+    background-color: #377bb5;
+    border-color: #377bb5;
 }
 
-.open-topic button {
-	float: right;
+.navbar-inverse .navbar-brand {
+    color: white;
 }
 
-.topic-header {
-	width: 100%;
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
 }
 
-.topic-body {
-	with: 100%;
-	margin: 2px 2px 2px 2px;
+.panel{
+
+	background-color: #white
 }
+.panel-header {
+	font-family: Helvetica Neue;
+}
+.list-group-item-heading{
+	font-family: Helvetica Neue;
+}
+
+
 </style>
+<script>
+	$(document).ready(function() {
+
+		$('#add-question').validate({ // initialize the plugin
+			rules :{
+				question : {
+					required : true
+
+				},
+				option1 : {
+					required : true
+
+				},
+				option2 : {
+					required : true
+
+				},
+			}
+		});
+		
+		
+		$('#add-quiz').validate({ // initialize the plugin
+			rules :{
+				quiz-name : {
+					required : true
+
+				},
+				
+			}
+		});
+
+	});
+</script>
 
 </head>
 <body>
@@ -122,8 +164,8 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">
@@ -166,8 +208,8 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img
-						alt="digest-icon" src="dig-icon.png"></span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-3 pull">
@@ -217,8 +259,8 @@ ul#horizontal-list a:hover {
 										class="glyphicon glyphicon-home"></span> Homepage</a></li>
 								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
-								<li><a href="followed-topics.jsp"><span
-										class="glyphicon glyphicon-star-empty"></span> Followed Topics</a></li>
+								<li><a href="FollowingTopicsServlet"><span
+										class="glyphicon glyphicon-star-empty"></span> Following Topics</a></li>
 								<li><a href="user-topics.jsp"><span
 										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>
@@ -247,47 +289,52 @@ ul#horizontal-list a:hover {
 						request.setAttribute("tid",request.getAttribute("tid"));
 					}
 				%>
-				<form action="QuizServlet" method="POST">
+				<div class="row">
+				<div class="col-sm-6" style="border-right: 1px solid #cccccc ;">
+				<form action="QuizServlet" method="POST" id="add-question">
 					<div class="form-group">
 						<label for="question">Question: </label>
-						<textarea name="question" id="question" class="form-control"></textarea>
+						<textarea name="question" id="question" class="form-control" style="width:90%; margin:0 20px 20px 0"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="option1">Option1: </label>
-						<textarea name="option1" id="option1" class="form-control"></textarea>
+						<textarea name="option1" id="option1" class="form-control" style="width:90%; margin:0 20px 20px 0"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="option2">Option2: </label>
-						<textarea name="option2" id="option2" class="form-control"></textarea>
+						<textarea name="option2" id="option2" class="form-control" style="width:90%; margin:0 20px 20px 0"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="option3">Option3: </label>
-						<textarea name="option3" id="option3" class="form-control"></textarea>
+						<textarea name="option3" id="option3" class="form-control" style="width:90%; margin:0 20px 20px 0"></textarea>
 					</div>
 
 					<div class="form-group">
-						<button class="btn btn-default" name="f" value="add-question">Add
+						<button class="btn btn-default" name="f" value="add-question" style="margin:20px 20px 20px 0">Add
 							Question</button>
 					</div>
 				</form>
-
+				</div>
+				
 
 				<!-- Question Form Finish -->
 
 				<!-- Show the Quiz Start -->
-
-				<form action="QuizServlet" method="POST">
+				<div class="col-sm-6">
+				<form action="QuizServlet" method="POST" id="add-quiz">
 					<!-- Quiz Name Start -->
 					<div class="form-group">
-						<label for="quiz-name">Quiz Name</label> <input
+						<label for="quiz-name" style="margin:0 0 5px 20px">Quiz Name:</label> <input
 							class="form-control" name="quiz-name" id="quiz-name" type="text"
 							<%if (request.getAttribute("quiz-name") != null) {%>
-							value="<%=request.getAttribute("quiz-name")%>" <%}%>>
+							value="<%=request.getAttribute("quiz-name")%>" <%}%>
+							style="width:90%; margin:0 20px 20px 20px">
 					</div>
 					<!-- Quiz Name End -->
+					<h4 style="margin:0 0 5px 20px">Please, select the correct answers for each question.</h4>
 					<%
 						if (request.getAttribute("questions") != null) {
 
@@ -299,7 +346,8 @@ ul#horizontal-list a:hover {
 										JSONObject quest = (JSONObject) questions.get(j);
 										String question = quest.getString("text");
 					%>
-					<p><%=question%></p>
+					<h4 style="color:#377bb5; margin:20px 0 20px 20px;">Question <%=j+1%>: <%=question%></h4>
+					<!-- <p><%=question%></p>  -->
 					<%
 						JSONArray options = quest.getJSONArray("choices");
 
@@ -307,10 +355,15 @@ ul#horizontal-list a:hover {
 											for (int i = 0; i < options.length(); i++) {
 												String option = (String) options.get(i);
 					%>
-					<div class="checkbox">
+					
+					<label for="q<%=j%>answer<%=i%>" style=" margin:0 0 0 20px;"><%=option%>
+						<input type="checkbox" name="q<%=j%>answer<%=i%>" id="q<%=j%>answer<%=i%>" value="" class="badgebox">
+						
+					</label>
+					<!--  <div class="checkbox">
 						<label><input type="checkbox" name="q<%=j%>answer<%=i%>"
-							value=""><%=option%></label>
-					</div>
+							value=""></label>
+					</div>-->
 					<%
 						}
 										}
@@ -320,11 +373,15 @@ ul#horizontal-list a:hover {
 								}
 							}
 					%>
-					<div class="form-group">
-						<button class="btn btn-default" name="f" value="add-quiz">Add
+					<div class="form-group" style="margin:0 0 5px 20px">
+						<button class="btn btn-default" name="f" value="add-quiz" style="margin:20px 20px 20px 0">Add
 							Quiz</button>
 					</div>
 				</form>
+				</div>
+				
+				
+				</div>
 				<!-- Show the Quiz Finish -->
 
 				<!-- Quiz add result start-->
