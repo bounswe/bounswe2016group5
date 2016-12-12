@@ -78,6 +78,7 @@
 					required : true
 			}
 		});
+		
 	});
 </script>
 </head>
@@ -94,8 +95,9 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
-						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35
+						style="margin: 0 0 0 10px"> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">
@@ -137,8 +139,9 @@
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
-						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img
+						alt="digest-icon" src="img/logo.jpg" height=35 width=35
+						style="margin: 0 0 0 10px"> </span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-3 pull">
@@ -190,7 +193,8 @@
 								<li><a href="UserProfileServlet"><span
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
 								<li><a href="FollowingTopicsServlet"><span
-										class="glyphicon glyphicon-star-empty"></span> Following Topics</a></li>
+										class="glyphicon glyphicon-star-empty"></span> Following
+										Topics</a></li>
 								<li><a href="user-topics.jsp"><span
 										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>
@@ -246,17 +250,18 @@
 					</div>
 				</form>
 				<%
-					}else if(subscribed == 1){
-					
-				%>		
+					} else if (subscribed == 1) {
+				%>
 				<div class="col-sm-5 pull-right">
-					<div class="text"> Progress:</div>
-					 <div class="progress">
-                      <div data-percentage="0%" style="width: 50%;" class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-				</div>										
-				<%		
-				}
+					<div class="text">Progress:</div>
+					<div class="progress">
+						<div data-percentage="0%" style="width: 50%;"
+							class="progress-bar progress-bar-primary" role="progressbar"
+							aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+				</div>
+				<%
+					}
 				%>
 				<%
 					if (owner == (Integer) session.getAttribute("id")) {
@@ -306,214 +311,274 @@
 						<div class="tab-content">
 							<!-- comments begin -->
 							<div id="comments" class="tab-pane fade in active">
-								<div class="panel panel-default"
-									style="height: 500px; overflow-y: auto;">
-									<div class="row">
-										<div class="col-sm-10 col-sm-offset-1"
-											style="margin: 25px 5px 25px 25px;">
-											<ul class="media-list">
-												<%
-													if (request.getAttribute("comments") != null) {
-
-														JSONArray comments = (JSONArray) request.getAttribute("comments");
-
-														for (Object comment : comments) {
-
-															JSONObject com = (JSONObject) comment;
-
-															if (com.getInt("ucid") == -1) {
-
-																int id = com.getInt("id");
-																int uid = com.getInt("uid");
-
-																String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
-																		+ uid;
-																URL jsonpage = new URL(url);
-																HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
-
-																String username = "";
-																if (urlcon.getResponseCode() == 200) {
-																	BufferedReader buffread = new BufferedReader(
-																			new InputStreamReader(urlcon.getInputStream()));
-																	String recv = "";
-																	String recvbuff = "";
-																	while ((recv = buffread.readLine()) != null)
-																		recvbuff += recv;
-																	buffread.close();
-
-																	username = recvbuff;
-
-																}
-												%>
-												<li class="media">
-													<div class="media-body">
-														<div class="well well-lg">
-															<p class="media-heading text-uppercase reviews"><%=username%></p>
-															<p class="media-comment"><%=com.get("body")%></p>
-															<a class="btn btn-info btn-circle" data-toggle="collapse"
-																href="#addcomment<%=id%>" id="reply"><span
-																class="glyphicon glyphicon-share-alt"></span> Reply</a> <a
-																class="btn btn-warning btn-circle "
-																data-toggle="collapse" href="#reply1<%=id%>"><span
-																class="glyphicon glyphicon-comment"></span> Comments</a>
-														</div>
-													</div>
-													<div class="collapse col-sm-9 pull-right "
-														id="reply1<%=id%>">
-														<ul class="media-list">
-															<%
-																for (Object commentOfcomments : comments) {
-
-																				JSONObject comOfcoms = (JSONObject) commentOfcomments;
-
-																				if (comOfcoms.getInt("ucid") == com.getInt("id")) {
-																					int lid = comOfcoms.getInt("id");
-																					int luid = comOfcoms.getInt("uid");
-
-																					String lurl = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
-																							+ luid;
-																					URL ljsonpage = new URL(lurl);
-																					HttpURLConnection lurlcon = (HttpURLConnection) ljsonpage.openConnection();
-
-																					String lusername = "";
-																					if (lurlcon.getResponseCode() == 200) {
-																						BufferedReader buffread = new BufferedReader(
-																								new InputStreamReader(lurlcon.getInputStream()));
-																						String recv = "";
-																						String recvbuff = "";
-																						while ((recv = buffread.readLine()) != null)
-																							recvbuff += recv;
-																						buffread.close();
-
-																						lusername = recvbuff;
-
-																					}
-															%>
-															<li class="media media-replied"><a class="pull-left"
-																href="#"> <img class="media-object img-circle"
-																	alt="profile">
-															</a>
-																<div class="media-body">
-																	<div class="well well-lg">
-																		<h4 class="media-heading text-uppercase reviews">
-																			<span class="glyphicon glyphicon-share-alt"></span>
-																			<%=lusername%>
-																		</h4>
-																		<p class="media-comment"><%=comOfcoms.getString("body")%></p>
-																	</div>
-																</div></li>
-															<%
-																}
-																			}
-															%>
-														</ul>
-													</div>
-												</li>
-												<%if(session.getAttribute("id") != null){ %>
-												<div class="collapse row col-sm-9 pull-right "
-													id="addcomment<%=id%>">
-													<div class="row">
-														<div class="widget-area no-padding blank">
-															<div class="status-upload">
-																<form class="form-horizontal" id="add_comment_form"
-																	action="AddCommentServlet" method="POST">
-																	<div class="form">
-																		<textarea placeholder="Reply message here" name="body"></textarea>
-																		<label><%=session.getAttribute("username")%></label> <input
-																			type="hidden" name="uid"
-																			value=<%=session.getAttribute("id")%>> <input
-																			type="hidden" name="ucid" value="<%=id%>"> <input
-																			type="hidden" name="tid" value="<%=tid%>">
-																		<button type="submit" class="btn btn-success green">
-																			<i class="fa fa-share"></i> Share
-																		</button>
-																	</div>
-																</form>
-															</div>
-														</div>
-													</div>
-												</div>
-												
-												<%}
-													}
-														}
-													}
-												%>
-											</ul>
-										</div>
-									</div>
-									<%if(session.getAttribute("id") != null){ %>
-									<div class="container">
+									<div class="panel panel-default"
+										style="height: 500px; overflow-y: auto;">
 										<div class="row">
-											<div class="col-sm-8">
-												<div class="widget-area no-padding blank">
-													<div class="status-upload">
-													
-														<form class="form-horizontal" id="add_comment_form"
-															action="AddCommentServlet" method="POST">
-															<div class="form">
-																<textarea placeholder="Comment here" name="body"></textarea>
-																<label><%=session.getAttribute("username")%></label> <input
-																	type="hidden" name="uid"
-																	value=<%=session.getAttribute("id")%>> <input
-																	type="hidden" name="ucid" value="-1"> <input
-																	type="hidden" name="tid" value=<%=tid%>>
-																<button type="submit" class="btn btn-success green">
-																	<i class="fa fa-share"></i> Share
-																</button>
+											<div class="col-sm-10 col-sm-offset-1"
+												style="margin: 25px 5px 25px 25px;">
+												<ul class="media-list">
+													<%
+														if (request.getAttribute("comments") != null) {
+
+															JSONArray comments = (JSONArray) request.getAttribute("comments");
+
+															for (Object comment : comments) {
+
+																JSONObject com = (JSONObject) comment;
+
+																if (com.getInt("ucid") == -1) {
+
+																	int id = com.getInt("id");
+																	int uid = com.getInt("uid");
+																	//get comment rate
+
+																	String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
+																			+ uid;
+																	URL jsonpage = new URL(url);
+																	HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
+
+																	String username = "";
+																	if (urlcon.getResponseCode() == 200) {
+																		BufferedReader buffread = new BufferedReader(
+																				new InputStreamReader(urlcon.getInputStream()));
+																		String recv = "";
+																		String recvbuff = "";
+																		while ((recv = buffread.readLine()) != null)
+																			recvbuff += recv;
+																		buffread.close();
+
+																		username = recvbuff;
+
+																	}
+													%>
+													<li class="media">
+															<div class="media-body">
+																<div class="well well-lg">
+																	<div class="row">
+																		<div class="col-sm-4">
+																			<p class="media-heading text-uppercase reviews"><%=username%></p>
+																			<p class="media-comment"><%=com.get("body")%></p>
+																		</div>
+																		<div class="col-sm-4 pull-right">
+																			<span class="comment-rate" style="margin: 0 10px 0 0">
+																				30</span>
+																			<form class="form-horizontal" id="up_comment_form"
+																		action="RateCommentServlet" method="POST" style="display: inline;">	
+																			<input type="hidden" name="crate"
+																				value="30">
+																			<input type="hidden" name="cid"
+																				value="30">
+																			<input
+																				type="hidden" name="tid" value="<%=tid%>">
+																				<input
+																				type="hidden" name="f" value="up">
+																			<button type="submit" id="upButton"
+																				class="btn btn-success glyphicon glyphicon-thumbs-up"
+																				data-loading-text=" ... "></button>
+																				</form>
+																				<form class="form-horizontal" id="down_comment_form"
+																		action="RateCommentServlet" method="POST" style="display: inline;">	
+																			<input type="hidden" name="crate"
+																				value="30">
+																			<input type="hidden" name="cid"
+																				value="30">
+																			<input
+																				type="hidden" name="downButton" value="<%=tid%>">
+																			<input
+																				type="hidden" name="f" value="down">
+																			<button type="submit" id="btnDown"
+																				class="btn btn-success glyphicon glyphicon-thumbs-down"
+																				data-loading-text=" ... "></button>
+																				</form>
+																		</div>
+																	</div>
+
+																	<a class="btn btn-info btn-circle"
+																		data-toggle="collapse" href="#addcomment<%=id%>"
+																		id="reply"><span
+																		class="glyphicon glyphicon-share-alt"></span> Reply</a> <a
+																		class="btn btn-warning btn-circle "
+																		data-toggle="collapse" href="#reply1<%=id%>"><span
+																		class="glyphicon glyphicon-comment"></span> Comments</a>
+																</div>
 															</div>
-														</form>
+														
+														<div class="collapse col-sm-9 pull-right "
+															id="reply1<%=id%>">
+															<ul class="media-list">
+																<%
+																	for (Object commentOfcomments : comments) {
+
+																					JSONObject comOfcoms = (JSONObject) commentOfcomments;
+
+																					if (comOfcoms.getInt("ucid") == com.getInt("id")) {
+																						int lid = comOfcoms.getInt("id");
+																						int luid = comOfcoms.getInt("uid");
+
+																						String lurl = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
+																								+ luid;
+																						URL ljsonpage = new URL(lurl);
+																						HttpURLConnection lurlcon = (HttpURLConnection) ljsonpage.openConnection();
+
+																						String lusername = "";
+																						if (lurlcon.getResponseCode() == 200) {
+																							BufferedReader buffread = new BufferedReader(
+																									new InputStreamReader(lurlcon.getInputStream()));
+																							String recv = "";
+																							String recvbuff = "";
+																							while ((recv = buffread.readLine()) != null)
+																								recvbuff += recv;
+																							buffread.close();
+
+																							lusername = recvbuff;
+
+																						}
+																%>
+																<li class="media media-replied"><a
+																	class="pull-left" href="#"> <img
+																		class="media-object img-circle" alt="profile">
+																</a>
+																	<div class="media-body">
+																		<div class="well well-lg">
+																			<h4 class="media-heading text-uppercase reviews">
+																				<span class="glyphicon glyphicon-share-alt"></span>
+																				<%=lusername%>
+																			</h4>
+																			<p class="media-comment"><%=comOfcoms.getString("body")%></p>
+																		</div>
+																	</div></li>
+																<%
+																	}
+																				}
+																%>
+															</ul>
+														</div>
+													</li>
+													<%
+														if (session.getAttribute("id") != null) {
+													%>
+													<div class="collapse row col-sm-9 pull-right "
+														id="addcomment<%=id%>">
+														<div class="row">
+															<div class="widget-area no-padding blank">
+																<div class="status-upload">
+																	<form class="form-horizontal" id="add_comment_form"
+																		action="AddCommentServlet" method="POST">
+																		<div class="form">
+																			<textarea placeholder="Reply message here"
+																				name="body"></textarea>
+																			<label><%=session.getAttribute("username")%></label>
+																			<input type="hidden" name="uid"
+																				value=<%=session.getAttribute("id")%>> <input
+																				type="hidden" name="ucid" value="<%=id%>"> <input
+																				type="hidden" name="tid" value="<%=tid%>">
+																			<button type="submit" class="btn btn-success green">
+																				<i class="fa fa-share"></i> Share
+																			</button>
+																		</div>
+																	</form>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<%
+														}
+																}
+															}
+														}
+													%>
+												</ul>
+											</div>
+										</div>
+										<%
+											if (session.getAttribute("id") != null) {
+										%>
+										<div class="container">
+											<div class="row">
+												<div class="col-sm-8">
+													<div class="widget-area no-padding blank">
+														<div class="status-upload">
+
+															<form class="form-horizontal" id="add_comment_form"
+																action="AddCommentServlet" method="POST">
+																<div class="form">
+																	<textarea placeholder="Comment here" name="body"></textarea>
+																	<label><%=session.getAttribute("username")%></label> <input
+																		type="hidden" name="uid"
+																		value=<%=session.getAttribute("id")%>> <input
+																		type="hidden" name="ucid" value="-1"> <input
+																		type="hidden" name="tid" value=<%=tid%>>
+																	<button type="submit" class="btn btn-success green">
+																		<i class="fa fa-share"></i> Share
+																	</button>
+																</div>
+															</form>
+														</div>
 													</div>
 												</div>
-											</div>
 
+											</div>
 										</div>
+										<%
+											}
+										%>
 									</div>
-									<%} %>
-								</div>
 							</div>
 							<div id="materials" class="tab-pane fade">
 								<div class="panel panel-default"
 									style="height: 500px; overflow-y: auto;">
 									<%
-										if (request.getAttribute("media") != null) {
-												JSONArray media = (JSONArray) request.getAttribute("media");
-												int mcount = 0;
-												for (Object mediaUrl : media) {
-													mcount++;
+										if (subscribed == 0 && owner != (Integer)session.getAttribute("id")) {
+											
+											
 									%>
-								
+									<h4 style="margin:20px 20px 20px 20px">You need to be subscribed to see the materials. </h4>
+									<% 
+										}
+										else
+										{
+									%>
+									
+									
+									<%
+										if (request.getAttribute("media") != null) {
+											JSONArray media = (JSONArray) request.getAttribute("media");
+											int mcount = 0;
+											for (Object mediaUrl : media) {
+												mcount++;
+									%>
+
 									<h3 align="center">
 										<%
-										String url = mediaUrl.toString();
-										if(url.matches(".*\\byoutube\\b.*")){
-											url = "https://www.youtube.com/embed/"+ url.substring(url.indexOf("v=")+2);
+											String url = mediaUrl.toString();
+													if (url.matches(".*\\byoutube\\b.*")) {
+														url = "https://www.youtube.com/embed/" + url.substring(url.indexOf("v=") + 2);
 										%>
-										<label>Material <%=mcount %>: </label>
-										<iframe width="420" height="315"
-											src=<%=url %>>
-										</iframe>
-										<% 
-										}
-										else if(url.matches("([^\\s]+(\\.(?i)(jpg|png|gif))$)")){
+										<label>Material <%=mcount%>:
+										</label>
+										<iframe width="420" height="315" src=<%=url%>> </iframe>
+										<%
+											} else if (url.matches("([^\\s]+(\\.(?i)(jpg|png|gif))$)")) {
 										%>
-										<label>Material <%=mcount %>: </label>
-										<img src=<%=url %>  style="width:420px;">
-										<% 
-										}else{
+										<label>Material <%=mcount%>:
+										</label> <img src=<%=url%> style="width: 420px;">
+										<%
+											} else {
 										%>
-										<label>Material <%=mcount %>: </label>
-										<a href=<%=url%> name="url" id="url"><%=mediaUrl.toString()%></a>
-										<% 	
-										}
+										<label>Material <%=mcount%>:
+										</label> <a href=<%=url%> name="url" id="url"><%=mediaUrl.toString()%></a>
+										<%
+											}
 										%>
-										
-										
+
+
 									</h3>
 									<%
 										}
-											}
-											if (owner == (Integer) session.getAttribute("id")) {
+										}
+										}
+										if (owner == (Integer) session.getAttribute("id")) {
 									%>
 									<form class="form-horizontal" id="add_media_form"
 										action="AddMediaServlet" method="POST">
@@ -532,64 +597,83 @@
 									%>
 								</div>
 							</div>
-							
+
 							<div id="quiz" class="tab-pane fade">
-							<form class="form-horizontal" id="submit_quiz_form"
-										action="SubmitQuizServlet" method="POST">
-								<div class="panel panel-default"
-									style="height: 500px; overflow-y: auto; ">
-									<%
-										if (request.getAttribute("quizzes") != null) {
+								<form class="form-horizontal" id="submit_quiz_form"
+									action="SubmitQuizServlet" method="POST">
+									<div class="panel panel-default"
+										style="height: 500px; overflow-y: auto;">
+										<%
+										if (subscribed == 0 && owner != (Integer)session.getAttribute("id")) {
+											
+												
+										%>
+										<h4 style="margin:20px 20px 20px 20px">You need to be subscribed to see the quizzes. </h4>
+										<% 
+											}
+											else
+											{
+										%>
+										
+										<%
+											if (request.getAttribute("quizzes") != null) {
 
-											JSONArray quizzes = (JSONArray) request.getAttribute("quizzes");
+												JSONArray quizzes = (JSONArray) request.getAttribute("quizzes");
 
-											for (Object quiz : quizzes) {
-												JSONObject qu = (JSONObject) quiz;
-												String quizName = qu.getString("name");
-												JSONArray questions = qu.getJSONArray("questions");
-												int len = questions.length();
-									%>
-									<div class="quiz-1">
-									<h3 style=" margin:20px 0 20px 20px;">Quiz: <%=quizName%></h3>
-									<%
-										for (int j = 0; j < len; j++) {
+												for (Object quiz : quizzes) {
+													JSONObject qu = (JSONObject) quiz;
+													String quizName = qu.getString("name");
+													JSONArray questions = qu.getJSONArray("questions");
+													int len = questions.length();
+										%>
+										<div class="quiz-1">
+											<h3 style="margin: 20px 0 20px 20px;">
+												Quiz:
+												<%=quizName%></h3>
+											<%
+												for (int j = 0; j < len; j++) {
 
-													JSONObject ques = questions.getJSONObject(j);
-													String question = ques.getString("text");
-									%>
-									<h4 style="color:#377bb5; margin:20px 0 20px 20px;"><%=j + 1 + ") " + question%></h4>
-									<%
-										JSONArray options = ques.getJSONArray("choices");
+															JSONObject ques = questions.getJSONObject(j);
+															String question = ques.getString("text");
+											%>
+											<h4 style="color: #377bb5; margin: 20px 0 20px 20px;"><%=j + 1 + ") " + question%></h4>
+											<%
+												JSONArray options = ques.getJSONArray("choices");
 
-													if (options != null) {
-														for (int i = 0; i < options.length(); i++) {
-															String option = (String) options.get(i);
-									%>
-									<label for="quizName&<%=j%>&<%=i%>" class="btn btn-primary" style=" margin:0 0 0 20px;"><%=option%>
-										<input type="checkbox" name="quizName&<%=j%>&<%=i%>" value="<%=i%>" id="quizName&<%=j%>&<%=i%>" class="badgebox">
-										<span class="badge">&check;
-										</span>
-									</label>
-									<!--  <div class="checkbox">
+															if (options != null) {
+																for (int i = 0; i < options.length(); i++) {
+																	String option = (String) options.get(i);
+											%>
+											<label for="quizName&<%=j%>&<%=i%>" class="btn btn-primary"
+												style="margin: 0 0 0 20px;"><%=option%> <input
+												type="checkbox" name="quizName&<%=j%>&<%=i%>" value="<%=i%>"
+												id="quizName&<%=j%>&<%=i%>" class="badgebox"> <span
+												class="badge">&check; </span> </label>
+											<!--  <div class="checkbox">
 										<label><input type="checkbox"
 											name="q<%=j%>answer<%=i%>" value=""><%=option%></label>
 									</div>-->
-									<%
-										}
-													}
+											
+											<%
+												}
+															}
+														}
+												%>
+												<div class="widget-area no-padding blank">
+											<input type="hidden" name="tid" value=<%=tid%>>
+											<button type="submit" class="btn btn-success"
+												style="margin: 20px 20px 20px 20px;">Submit Quiz</button>
+											<!--  submit -->
+										</div>
+										<% 	
+												
+												}
 												}
 											}
-										}
-									%>
+											%>
+										</div>
 									</div>
-									<div class="widget-area no-padding blank">
-									<input type="hidden" name="tid" value=<%=tid%>>
-									<button type="submit" class="btn btn-success"
-										style="margin: 30px 30px 30px 30px;">Submit Quiz</button>
-									<!--  submit -->
-									</div>
-								</div>
-							</form>
+								</form>
 							</div>
 						</div>
 					</div>
