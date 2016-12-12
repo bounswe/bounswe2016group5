@@ -14,6 +14,9 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script
+	src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js"
+	type="text/javascript"></script>
+<script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
 body {
@@ -84,6 +87,11 @@ ul#horizontal-list a:hover {
 	text-decoration: none;
 	color: white;
 }
+#show-data ul li {
+	color: black;
+	background-color: white;
+	border: 1px solid grey;
+}
 </style>
 
 <script>
@@ -96,7 +104,30 @@ ul#horizontal-list a:hover {
 				},
 			}
 		});
+		
+		$('#search').keyup(function () {
+			var searchField = $('#search').val();
+			var regex = new RegExp(searchField,"i");
+			var showData = $('#show-data');
 
+			$.ajax({url:'SearchServlet?f=get_topics_of_user&ruid='+searchField,
+					dataType: 'json',
+					success: function(data){
+						
+					showData.empty();
+					var content = '';
+					$.each(data,function(key,val){					
+	       				content  += '<a class="list-group-item" href="ViewTopicServlet?topic_id='+val.id+'">' + val.header + '</a>';
+				
+					});
+	        		
+					var list = $('<div class="list-group" />').html(content);
+	        		showData.append(list);
+
+				}
+			});
+
+		});
 	});
 </script>
 
@@ -120,17 +151,18 @@ ul#horizontal-list a:hover {
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">
-					<form action="_search" method="POST" class="navbar-form"
+					<form action="SearchServlet" method="POST" class="navbar-form"
 						role="search">
 						<div class="input-group col-sm-12">
 							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="srch-term">
+								name="search" id="search">
 							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
+								<button class="btn btn-default" type="submit" name="f" value="search">
 									<i class="glyphicon glyphicon-search"></i>
 								</button>
 							</div>
 						</div>
+						<div id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
@@ -145,7 +177,6 @@ ul#horizontal-list a:hover {
 			</div>
 		</div>
 	</nav>
-
 
 	<div class="col-sm-10 col-sm-offset-1">
 				<form class="form-horizontal" id="view_topic_form"
@@ -282,13 +313,14 @@ ul#horizontal-list a:hover {
 						role="search">
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="srch-term">
+								name="search" id="search">
 							<div class="input-group-btn">
 								<button class="btn btn-default" type="submit">
 									<i class="glyphicon glyphicon-search"></i>
 								</button>
-							</div>
+							</div>							
 						</div>
+						<div id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">

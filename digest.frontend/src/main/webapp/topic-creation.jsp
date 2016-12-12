@@ -6,7 +6,7 @@
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("session") == null) {
-		response.sendRedirect("MainServlet"); 
+		response.sendRedirect("MainServlet");
 	}
 %>
 <!DOCTYPE html>
@@ -30,6 +30,7 @@
 body {
 	background-color: lightgrey;
 }
+
 @media ( min-width : 768px) {
 	.sidebar-nav {
 		padding: 12px;
@@ -57,6 +58,7 @@ body {
 		overflow-y: auto;
 	}
 }
+
 #menu-outer {
 	height: 84px;
 	width: 100%;
@@ -64,40 +66,49 @@ body {
 	position: fixed;
 	bottom: 0;
 }
+
 #content {
 	position: relative;
 	width: 100%;
 	overflow: auto;
 	margin-bottom: 84px;
 }
+
 #form-aligned {
 	border: 1px solid white;
 	padding: 10px;
 }
+
 ul#horizontal-list {
 	min-width: 696px;
 	list-style: none;
 	padding-top: 20px;
 }
+
 ul#horizontal-list li, ul#horizontal-list a {
 	display: inline;
 	float: left;
 	color: grey;
 }
+
 ul#horizontal-list a:hover {
 	text-decoration: none;
 	color: white;
 }
+
 .open-topic {
 	width: 100%;
 	heigth: 100%;
 }
+
 .open-topic button {
 	float: right;
 }
+
 .topic-header {
 	width: 100%;
 }
+
 .topic-body {
 	with: 100%;
 	margin: 2px 2px 2px 2px;
@@ -121,7 +132,34 @@ ul#horizontal-list a:hover {
 				},
 				status : {
 					required : true
-				},
+				}
+			}
+		});
+
+		$('INPUT[type="file"]').change(function() {
+			var ext = this.value.match(/\.(.+)$/)[1];
+			switch (ext) {
+			case 'jpg':
+			case 'jpeg':
+			case 'png':
+			case 'gif':
+				$('#uploadButton').attr('disabled', false);
+				break;
+			default:
+				alert('This is not an allowed file type.');
+				this.value = '';
+			}
+		});
+
+		$('#upload-form').validate({
+			rules : {
+				image : {
+					required : true
+				}
+			},
+
+			messages : {
+				image : "A valid image file must be selected."
 			}
 		});
 	});
@@ -137,7 +175,7 @@ ul#horizontal-list a:hover {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="MainServlet" >DIGest <span><img
+				<a class="navbar-brand" href="MainServlet">DIGest <span><img
 						alt="digest-icon" src="img/logo.jpg" height=35 width=42></span></a>
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
@@ -212,19 +250,38 @@ ul#horizontal-list a:hover {
 			<div class="col-sm-9">
 				<h1>Open a new topic</h1>
 				<div class="open-topic col-sm-12">
-					<!--<form method="POST" class="form-horzontal" id="upload_image_form"
-						action="CreateTopicServlet" enctype="multipart/form-data">
-						  <div class="row col-sm-12">
+
+					<form method="post" class="form-horzontal"
+						action="CreateTopicServlet" enctype="multipart/form-data"
+						id="upload-form">
+						<div class="row col-sm-12">
 							<div class="form-group">
-								<label class="control-label" for="img-url">Image:</label> 
-								<input type="file" class="form-control" name="image" id="image">
+								<label class="control-label" for="image">Image
+									(.jpg,.jpeg,.gif and .png are valid):</label> <input type="file"
+									class="form-control" name="image" id="image"
+									accept=".jpg,.jpeg,.gif,.png">
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-primary" name="f"
-									value="upload_image">Upload</button>
+								<button type="submit" class="btn btn-primary" id="uploadButton">Upload</button>
 							</div>
 						</div>
-					</form>-->
+					</form>
+
+					<form method="post" class="form-horizontal"
+						action="CreateTopicServlet">
+						<div class="row col-sm-12">
+							<div class="form-group">
+								<label class="control-label" for="image-url">Image Url:</label>
+								<input type="text" class="form-control" name="image-url"
+									id="image-url">
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary" name="f" value="upload_via_url">Upload</button>
+							</div>
+						</div>
+
+					</form>
+
 					<form class="form-horizontal" id="create_topic_form"
 						action="CreateTopicServlet" method="POST">
 						<div class="form-group">
@@ -244,12 +301,14 @@ ul#horizontal-list a:hover {
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-sm-2" for="admins">Owner:</label>
+										<label class="control-label col-sm-2" for="owner">Owner:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="owner"
-												id="admins" value="<%=session.getAttribute("id")%>">
+												id="owner" disabled="disabled"
+												value="<%=session.getAttribute("first_name") + " " + session.getAttribute("last_name")%>">
 										</div>
 									</div>
+
 								</div>
 							</div>
 							<div class="row col-sm-6">
@@ -257,10 +316,13 @@ ul#horizontal-list a:hover {
 									<label class="control-label" for="topic-img">Topic
 										Image:</label> <img id="topic-img"
 										style="display: block; width: 150px; height: 150px;"
-										alt="topic image" src="topic.png"
-										class="img-responsive center-block"></img>
-									<input type="text" class="form-control" name="image"
-												id="image">
+										alt="topic image"
+										src="<%if (session.getAttribute("image") != null) {%><%=session.getAttribute("image")%>
+
+<%}%>"
+										class="img-responsive center-block"></img> <input
+										type="hidden" class="form-control" name="image" id="image"
+										value="<%if (session.getAttribute("image") != null) {%><%=session.getAttribute("image")%><%}%>">
 								</div>
 							</div>
 
@@ -282,6 +344,12 @@ ul#horizontal-list a:hover {
 							</div>
 						</div>
 					</form>
+					<%
+						if (request.getAttribute("error") != null) {
+					%><p><%=request.getAttribute("error")%></p>
+					<%
+						}
+					%>
 				</div>
 			</div>
 		</div>
