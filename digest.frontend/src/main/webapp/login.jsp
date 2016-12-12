@@ -26,103 +26,8 @@
 	type="text/javascript"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<style>
-body {
-	background-color: #f5f5f5;
-}
-
-@media ( min-width : 768px) {
-	.sidebar-nav {
-		padding: 12px;
-	}
-	.sidebar-nav .navbar .navbar-collapse {
-		padding: 0;
-		max-height: none;
-	}
-	.sidebar-nav .navbar ul {
-		float: none;
-		display: block;
-	}
-	.sidebar-nav .navbar li {
-		float: none;
-		display: block;
-	}
-	.sidebar-nav .navbar li a {
-		font-family: Helvetica Neue;
-		padding-top: 12px;
-		padding-bottom: 12px;
-	}
-	.sidebar-nav .navbar .panel {
-		padding-left: 12px;
-		padding-write: 12px;
-		height: 200px;
-		overflow-y: auto;
-	}
-}
-
-#menu-outer {
-	height: 84px;
-	width: 100%;
-	background: white;
-	position: fixed;
-	bottom: 0;
-}
-
-#content {
-	position: relative;
-	width: 100%;
-	overflow: auto;
-	margin-bottom: 84px;
-}
-
-#form-aligned {
-	border: 1px solid white;
-	padding: 10px;
-}
-
-ul#horizontal-list {
-	min-width: 696px;
-	list-style: none;
-	padding-top: 20px;
-}
-
-ul#horizontal-list li, ul#horizontal-list a {
-	display: inline;
-	float: left;
-	color: white;
-}
-
-ul#horizontal-list a:hover {
-	text-decoration: none;
-	color: white;
-}
-
-.navbar-inverse {
-    background-color: #377bb5;
-    border-color: #377bb5;
-}
-
-.navbar-inverse .navbar-brand {
-    color: white;
-}
-
-.navbar-inverse .navbar-nav > li > a {
-    color: white;
-}
-
-.panel{
-
-	background-color: #white
-}
-.panel-header {
-	font-family: Helvetica Neue;
-}
-.list-group-item-heading{
-	font-family: Helvetica Neue;
-}
-
-
-</style>
+<link rel="stylesheet" href="css/site.css">
+<script src="js/site.js"></script>
 <script>
 	$(document).ready(function() {
 
@@ -159,13 +64,14 @@ ul#horizontal-list a:hover {
 						role="search">
 						<div class="input-group col-sm-12">
 							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="srch-term">
+								name="searchterm" id="search">
 							<div class="input-group-btn">
 								<button class="btn btn-default" type="submit">
 									<i class="glyphicon glyphicon-search"></i>
 								</button>
 							</div>
 						</div>
+						<div id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
