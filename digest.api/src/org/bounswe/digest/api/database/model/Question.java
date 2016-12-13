@@ -2,7 +2,7 @@ package org.bounswe.digest.api.database.model;
 
 import java.util.ArrayList;
 
-public class Question {
+public class Question extends Model {
 
 	private String text;
 	private ArrayList<String> choices;

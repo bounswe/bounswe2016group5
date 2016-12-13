@@ -182,6 +182,7 @@ public class TopicJDBC {
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
+	
 	public static String getRecentTopics(int count) {
 		//will be timestamp
 		String query = "SELECT * FROM digest.topic ORDER BY id DESC LIMIT ?";
@@ -387,8 +388,11 @@ public class TopicJDBC {
 		return result;
 	}
 	
-	
 	public static String getTopic(int tid) {
+		return getTopicObject(tid).printable();
+	}
+	
+	protected static Topic getTopicObject(int tid) {
 		String query = "SELECT * FROM digest.topic WHERE topic.id=?";
 		Connection connection;
 		try {
@@ -396,7 +400,7 @@ public class TopicJDBC {
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			return "";
+			return null;
 		}
 		PreparedStatement statement = null;
 		Topic result=null;
@@ -445,8 +449,7 @@ public class TopicJDBC {
 			result.setQuizzes(QuizJDBC.getQuizArrayOfTopic(tid));
 			result.setMedia(getMediaArray(tid));
 		}
-		
-		return result.printable();
+		return result;
 	}
 	public static int addSubscriberToTopic(int tid, int uid){
 		Connection connection;

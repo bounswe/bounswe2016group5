@@ -16,7 +16,7 @@ public class CommentJDBC {
 		 * 
 		 * @param body comment body
 		 * @param uid user id
-		 * @param upperCommentId: Id of the upper comment, -1 if there is no upper comment
+		 * @param upperCommentId Id of the upper comment, -1 if there is no upper comment
 		 * @param tid topic id
 		 * @return
 		 */

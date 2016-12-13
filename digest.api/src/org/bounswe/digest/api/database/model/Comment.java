@@ -3,7 +3,7 @@ package org.bounswe.digest.api.database.model;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public class Comment {
+public class Comment extends Model {
 	private int id;
 	private int uid;
 	private int ucid;
