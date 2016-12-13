@@ -380,10 +380,12 @@
 																		}
 														%>
 														<li class="media">
-															<div class="media-body">
-																<div class="well well-lg">
+															<div class="media-body " >
+																<div class="well well-lg" >
+																
 																	<div class="row">
 																		<div class="col-sm-4">
+																		
 																			<p class="media-heading text-uppercase reviews"><%=username%></p>
 																			<p class="media-comment"><%=com.get("body")%></p>
 																		</div>
@@ -398,7 +400,7 @@
 																				<input type="hidden" name="tid" value="<%=tid%>">
 																				<input type="hidden" name="f" value="up">
 																				<button type="submit" id="upButton"
-																					class="btn btn-success glyphicon glyphicon-thumbs-up"
+																					class="btn btn-info glyphicon glyphicon-thumbs-up"
 																					data-loading-text=" ... "></button>
 																			</form>
 																			<form class="form-horizontal" id="down_comment_form"
@@ -410,9 +412,46 @@
 																					value="<%=tid%>"> <input type="hidden"
 																					name="f" value="down">
 																				<button type="submit" id="btnDown"
-																					class="btn btn-success glyphicon glyphicon-thumbs-down"
-																					data-loading-text=" ... "></button>
+																					class="btn btn-info glyphicon glyphicon-thumbs-down"
+																					data-loading-text=" ... "
+																					style="margin: 10px 10px 10px 10px"></button>
 																			</form>
+																			<%
+																			if (session.getAttribute("session") != null) {
+																				if ( owner == (Integer) session.getAttribute("id")) { //and not instructive already
+																			%>
+																			<form class="form-horizontal" id="instructive_form"
+																				action="InstructiveCommentServlet" method="POST">
+																				<input type="hidden" name="cid" value="30">
+																				<input type="hidden" name="tid" value="<%=tid%>"> 
+																				<%
+																				/*
+																				if(comment is instructive){
+																					<input type="hidden" name="f" value="unmark"> 
+																					<button type="submit" id="btnDown"
+																							class="btn btn-danger "
+																							data-loading-text=" ... "
+																							style="margin: 10px 10px 10px 10px">Mark as Normal</button>
+																				}else{
+																					<input type="hidden" name="f" value="mark"> 
+																					<button type="submit" id="btnDown"
+																							class="btn btn-danger "
+																							data-loading-text=" ... "
+																							style="margin: 10px 10px 10px 10px">Mark as Instructive</button>
+																				}
+																				*/	
+																				%>
+																				
+																			</form>
+																			<%
+																			}
+																				else { //else if the comment is instructive
+																			%>
+																			<span class="label label-danger pull-right" style="margin:5px 15px 0 0; ">Instructive</span>
+																			<%
+																			}
+																			}
+																			%>
 																		</div>
 																	</div>
 
