@@ -103,8 +103,9 @@
 				success: function(data){
 					var content = '';
 					tagSelection.empty();
-					$.each(data,function(key,val){
-						content += '<a class="list-group-item" href="CreateTopicServlet?f=add_tag&tag='+val.tag+'">'+' '+ val.tag + ' ' + '</a>';
+					var items = data.myArrayList;
+					$.each(items,function(key,val){		
+						content += '<a class="list-group-item" href="CreateTopicServlet?f=add_tag&tag='+$('#tags').val()+'&desc='+val+'">'+$('#tags').val()+'('+ val + ')' + '</a>';
 					});
 					var list = $('<div class="list-group" />').html(content);
 					tagSelection.append(list);
@@ -112,14 +113,37 @@
 			});
 		});
 		
+		$('#get_suggestions').on('click',function get_suggestions(){
+			var body = $('#body').val();
+			var showRes = $('#show-suggested-tags');
+			
+			$.ajax({
+				url: 'CreateTopicServlet?f=get_suggested_tags',
+				data:{
+					body: body
+				},		
+				dataType: 'json',
+				success: function(data){
+					console.log(data);
+					var content = '';
+					showRes.empty();
+					var items = data.myArrayList;
+					$.each(items,function(key,val){	
+						var map = val.map;
+						$.each(map,function(key,val){
+							content += '<a class="list-group-item" href="CreateTopicServlet?f=add_tag&tag='+key+'&desc=">'+key + '</a>';
+						});
+					});
+					var list = $('<div class="list-group" />').html(content);
+					showRes.append(list);
+				}
+			});
+			
+		});
+		
 	});
 	
-	function addTag(tag){
-		var tags = $('#show-tags');
-		
-		var elt = $('<p />').html(tag);
-		tags.append(elt);
-	}
+
 	
 </script>
 
@@ -312,6 +336,12 @@
 
 							</div>
 						</div>
+						<div id="show-suggested-tags"></div>
+						<div class="form-group">
+							<div class="col-xs-9 col-xs-offset-3">
+								<button class="btn btn-primary" id="get_suggestions">Get Suggested Tags</button>
+							</div>
+						</div>						
 						<div class="form-group">
 							<div class="col-xs-9 col-xs-offset-3">
 								<button type="submit" class="btn btn-primary" name="f"

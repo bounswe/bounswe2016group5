@@ -164,34 +164,49 @@ public class CreateTopicServlet extends HttpServlet {
 			}
 		} else if (f != null && f.contentEquals("get_tags")) {
 			if (request.getParameter("tag") != null && !request.getParameter("tag").contentEquals("")) {
-				JSONArray arr = new JSONArray();
-				JSONObject obj = new JSONObject();
+				String tag = request.getParameter("tag");
+				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_entities&tag="
+						+ tag;
 				
-				obj.put("tag", "atakan");
-				obj.put("desc", "animal desc");
+				URL jsonPage = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 				
-				JSONObject obj2 = new JSONObject();
+				String line = "";
+				String content = "";
 				
-				obj2.put("tag", "human");
-				obj2.put("desc", "human desc");
+				while((line = reader.readLine()) != null){
+					content += line;
+				}
 				
-				arr.put(obj);
-				arr.put(obj2);
+				reader.close();
 				
-				response.getWriter().write(arr.toString());
+				response.getWriter().write(content);
 			}
 		} else if(f!=null && f.contentEquals("add_tag")){
 			if(session.getAttribute("tags") == null){
 				ArrayList<String> tags = new ArrayList<String>();
 				if(request.getParameter("tag") != null){
-					tags.add(request.getParameter("tag"));
+					if(request.getParameter("desc")!=null){
+						String desc = request.getParameter("desc");
+						if(!desc.contentEquals(""))
+							tags.add(request.getParameter("tag")+"("+desc+")");
+						else
+							tags.add(request.getParameter("tag"));
+					}
 				}
 				session.setAttribute("tags", tags);
 				
 			}else{
 				ArrayList<String> tags = (ArrayList<String>) session.getAttribute("tags");
 				if(request.getParameter("tag") != null){
-					tags.add(request.getParameter("tag"));
+					if(request.getParameter("desc")!=null){
+						String desc = request.getParameter("desc");
+						if(!desc.contentEquals(""))
+							tags.add(request.getParameter("tag")+"("+desc+")");
+						else
+							tags.add(request.getParameter("tag"));
+					}
 				}
 				session.setAttribute("tags", tags);
 				
@@ -207,6 +222,28 @@ public class CreateTopicServlet extends HttpServlet {
 			session.setAttribute("tags", tags);
 			response.sendRedirect("topic-creation.jsp#show-tags");
 			
+		} else if(f!=null && f.contentEquals("get_suggested_tags")){
+			System.out.println(request.getParameter("body"));
+			String body = request.getParameter("body");
+			if(body!=null && !body.contentEquals("")){
+				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_suggestions&body="
+						+ body;
+				
+				URL jsonPage = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				
+				String line = "";
+				String content = "";
+				
+				while((line = reader.readLine()) != null){
+					content += line;
+				}
+				
+				reader.close();
+				
+				response.getWriter().write(content);
+			}
 		}
 
 		if (ServletFileUpload.isMultipartContent(request)) {

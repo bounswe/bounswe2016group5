@@ -52,11 +52,11 @@ public class SearchServlet extends HttpServlet {
 				System.out.println(searchTerm);
 			}
 
-		} else if (f.contentEquals("get_topics_of_user")) {
-			if (request.getParameter("ruid") != null && !request.getParameter("ruid").contentEquals("")) {
-				String ruid = request.getParameter("ruid");
-				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid="
-						+ ruid;
+		} else if (f.contentEquals("search_with_tag")) {
+			if (request.getParameter("tag") != null && !request.getParameter("tag").contentEquals("")) {
+				String tag = request.getParameter("tag");
+				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_with_tag&tag="
+						+ tag;
 				
 				URL jsonPage = new URL(url);
 				HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();

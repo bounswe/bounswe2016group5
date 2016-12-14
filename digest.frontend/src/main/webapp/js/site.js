@@ -12,7 +12,7 @@
 			var searchField = $('#search').val();
 			var showData = $('#show-data');
 
-			$.ajax({url:'SearchServlet?f=get_topics_of_user&ruid='+searchField,
+			$.ajax({url:'SearchServlet?f=search_with_tag&tag='+searchField,
 					dataType: 'json',
 					success: function(data){
 						
