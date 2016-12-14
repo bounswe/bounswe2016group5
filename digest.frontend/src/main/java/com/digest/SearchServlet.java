@@ -53,7 +53,7 @@ public class SearchServlet extends HttpServlet {
 			}
 
 		} else if (f.contentEquals("get_topics_of_user")) {
-			if (request.getParameter("ruid") != null) {
+			if (request.getParameter("ruid") != null && !request.getParameter("ruid").contentEquals("")) {
 				String ruid = request.getParameter("ruid");
 				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_of_user&ruid="
 						+ ruid;

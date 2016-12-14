@@ -1,6 +1,8 @@
 package com.digest;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -10,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -36,6 +39,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
@@ -130,21 +134,75 @@ public class CreateTopicServlet extends HttpServlet {
 					res.append(inputLine);
 				}
 				in.close();
-				session.removeAttribute("image");
+
+				if (session.getAttribute("image") != null) {
+					session.removeAttribute("image");
+
+				}
+
 				session.setAttribute("topic_id", Integer.parseInt(res.toString()));
 				response.sendRedirect("ViewTopicServlet");
 
 			} else {
+				if (session.getAttribute("image") != null) {
+					session.removeAttribute("image");
+				}
+
 				String errMsg = "Unexpected Error occured!!";
 				request.setAttribute("error", errMsg);
 				request.getRequestDispatcher("topic-creation.jsp").forward(request, response);
 			}
-		} else if (f.contentEquals("upload_via_url")) {
-			
-			if(request.getParameter("image-url")!=null&&!request.getParameter("image-url").contentEquals("")){
+		} else if (f != null && f.contentEquals("upload_via_url")) {
+
+			if (request.getParameter("image-url") != null && !request.getParameter("image-url").contentEquals("")) {
 				session.setAttribute("image", request.getParameter("image-url"));
 				response.sendRedirect("topic-creation.jsp");
 			}
+		} else if (f != null && f.contentEquals("get_tags")) {
+			if (request.getParameter("tag") != null && !request.getParameter("tag").contentEquals("")) {
+				JSONArray arr = new JSONArray();
+				JSONObject obj = new JSONObject();
+				
+				obj.put("tag", "atakan");
+				obj.put("desc", "animal desc");
+				
+				JSONObject obj2 = new JSONObject();
+				
+				obj2.put("tag", "human");
+				obj2.put("desc", "human desc");
+				
+				arr.put(obj);
+				arr.put(obj2);
+				
+				response.getWriter().write(arr.toString());
+			}
+		} else if(f!=null && f.contentEquals("add_tag")){
+			if(session.getAttribute("tags") == null){
+				ArrayList<String> tags = new ArrayList<String>();
+				if(request.getParameter("tag") != null){
+					tags.add(request.getParameter("tag"));
+				}
+				session.setAttribute("tags", tags);
+				
+			}else{
+				ArrayList<String> tags = (ArrayList<String>) session.getAttribute("tags");
+				if(request.getParameter("tag") != null){
+					tags.add(request.getParameter("tag"));
+				}
+				session.setAttribute("tags", tags);
+				
+			}
+			
+			response.sendRedirect(("topic-creation.jsp"));
+		} else if(f!=null && f.contentEquals("remove_tag")){
+			ArrayList<String> tags = (ArrayList<String>) session.getAttribute("tags");
+			if(request.getParameter("tag_index") != null){
+				int index = Integer.parseInt(request.getParameter("tag_index"));
+				tags.remove(index);
+			}
+			session.setAttribute("tags", tags);
+			response.sendRedirect("topic-creation.jsp");
+			
 		}
 
 		if (ServletFileUpload.isMultipartContent(request)) {
@@ -166,13 +224,14 @@ public class CreateTopicServlet extends HttpServlet {
 			upload.setFileSizeMax(MAX_FILE_SIZE);
 			upload.setSizeMax(MAX_REQUEST_SIZE);
 
-			String uuidValue = "";
-			if (session.getAttribute("image-id") != null) {
-				uuidValue = (String) session.getAttribute("image-id");
-			} else {
-				Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
-				uuidValue = session.getId() + "" + timeStamp.getTime();
+			if (session.getAttribute("image") != null) {
+				String imageURL = (String) session.getAttribute("image");
+				removeImage(imageURL);
 			}
+
+			Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
+			String uuidValue = session.getId() + "" + timeStamp.getTime();
+
 			FileItem itemFile = null;
 
 			try {
@@ -210,7 +269,6 @@ public class CreateTopicServlet extends HttpServlet {
 						System.out.println("File upload done");
 
 						session.setAttribute("image", "https://s3.amazonaws.com/suzanuskudarli/" + keyName);
-						session.setAttribute("image-id", uuidValue);
 						response.sendRedirect("topic-creation.jsp");
 
 					} catch (AmazonServiceException ase) {
@@ -233,6 +291,37 @@ public class CreateTopicServlet extends HttpServlet {
 				request.getRequestDispatcher("topic-creation.jsp").forward(request, response);
 			}
 
+		}
+
+	}
+
+	protected void removeImage(String imageURL) {
+		String bucketName = "suzanuskudarli";
+		String keyName = "";
+
+		Pattern pattern = Pattern.compile("https://s3.amazonaws.com/suzanuskudarli/(.*)$");
+		Matcher matcher = pattern.matcher(imageURL);
+
+		if (matcher.find()) {
+			keyName = matcher.group(1);
+
+			AWSCredentials credentials = new BasicAWSCredentials("AKIAIOUSAJ6QDUPDWJEQ",
+					"maGgxZxscQaFL37zxM80YMBh7yc9yiiHiY4p6Kxj");
+			AmazonS3 s3Client = new AmazonS3Client(credentials);
+
+			try {
+				s3Client.deleteObject(new DeleteObjectRequest(bucketName, keyName));
+			} catch (AmazonServiceException ase) {
+				System.out.println("Caught an AmazonServiceException.");
+				System.out.println("Error Message:    " + ase.getMessage());
+				System.out.println("HTTP Status Code: " + ase.getStatusCode());
+				System.out.println("AWS Error Code:   " + ase.getErrorCode());
+				System.out.println("Error Type:       " + ase.getErrorType());
+				System.out.println("Request ID:       " + ase.getRequestId());
+			} catch (AmazonClientException ace) {
+				System.out.println("Caught an AmazonClientException.");
+				System.out.println("Error Message: " + ace.getMessage());
+			}
 		}
 
 	}

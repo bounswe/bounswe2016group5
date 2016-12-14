@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@page import="java.io.*"%>
 <%@page import="java.net.*"%>
-<%@page import="java.util.Enumeration"%>
+<%@page import="java.util.*"%>
 <%
 	session = request.getSession(false);
 	if (session.getAttribute("session") == null) {
@@ -29,7 +29,9 @@
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js"></script>
 <script>
+	
 	$(document).ready(function() {
+		
 		$('#create_topic_form').validate({ // initialize the plugin
 			rules : {
 				header : {
@@ -76,7 +78,49 @@
 				image : "A valid image file must be selected."
 			}
 		});
+		
+		$('#url-image-upload').validate({
+			rules : {
+				'image-url' : {
+					required : true
+				}
+			},
+			
+			messages: {
+				'image-url' : 'A URL must be written.'
+			}
+			
+			
+		});
+		
+		$('#tags').keyup(function(){
+			var tag = $('#tags').val();
+			var tagSelection = $('#tag-selections');
+			
+			$.ajax({
+				url: 'CreateTopicServlet?f=get_tags&tag='+tag,
+				dataType: 'json',
+				success: function(data){
+					var content = '';
+					tagSelection.empty();
+					$.each(data,function(key,val){
+						content += '<a class="list-group-item" href="CreateTopicServlet?f=add_tag&tag='+val.tag+'">'+' '+ val.tag + ' ' + '</a>';
+					});
+					var list = $('<div class="list-group" />').html(content);
+					tagSelection.append(list);
+				}
+			});
+		});
+		
 	});
+	
+	function addTag(tag){
+		var tags = $('#show-tags');
+		
+		var elt = $('<p />').html(tag);
+		tags.append(elt);
+	}
+	
 </script>
 
 </head>
@@ -185,7 +229,7 @@
 					</form>
 
 					<form method="post" class="form-horizontal"
-						action="CreateTopicServlet">
+						action="CreateTopicServlet" id="url-image-upload">
 						<div class="row col-sm-12">
 							<div class="form-group">
 								<label class="control-label" for="image-url">Image Url:</label>
@@ -211,12 +255,26 @@
 												id="header">
 										</div>
 									</div>
+									<div id="show-tags">
+										<%
+											if(session.getAttribute("tags") != null){
+												ArrayList<String> tags = (ArrayList<String>) session.getAttribute("tags");
+												
+												for(int i=0; i<tags.size() ;i++){
+													%>
+													<a class="btn btn-primary" href="CreateTopicServlet?f=remove_tag&tag_index=<%=i%>"><span class="glyphicon glyphicon-remove"></span><%=tags.get(i) %></a>
+													<%
+												}
+											}
+										%>
+									</div>
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="tags">Tags:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="tags" id="tags">
 										</div>
 									</div>
+									<div id="tag-selections"></div>
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="owner">Owner:</label>
 										<div class="col-sm-10">

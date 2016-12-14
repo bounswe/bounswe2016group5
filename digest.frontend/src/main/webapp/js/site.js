@@ -10,7 +10,6 @@
 		
 		$('#search').keyup(function () {
 			var searchField = $('#search').val();
-			var regex = new RegExp(searchField,"i");
 			var showData = $('#show-data');
 
 			$.ajax({url:'SearchServlet?f=get_topics_of_user&ruid='+searchField,
