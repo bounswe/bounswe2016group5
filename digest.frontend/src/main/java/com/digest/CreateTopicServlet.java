@@ -139,6 +139,10 @@ public class CreateTopicServlet extends HttpServlet {
 					session.removeAttribute("image");
 
 				}
+				
+				if(session.getAttribute("tags")!=null){
+					session.removeAttribute("tags");
+				}
 
 				session.setAttribute("topic_id", Integer.parseInt(res.toString()));
 				response.sendRedirect("ViewTopicServlet");
@@ -193,7 +197,7 @@ public class CreateTopicServlet extends HttpServlet {
 				
 			}
 			
-			response.sendRedirect(("topic-creation.jsp"));
+			response.sendRedirect(("topic-creation.jsp#show-tags"));
 		} else if(f!=null && f.contentEquals("remove_tag")){
 			ArrayList<String> tags = (ArrayList<String>) session.getAttribute("tags");
 			if(request.getParameter("tag_index") != null){
@@ -201,7 +205,7 @@ public class CreateTopicServlet extends HttpServlet {
 				tags.remove(index);
 			}
 			session.setAttribute("tags", tags);
-			response.sendRedirect("topic-creation.jsp");
+			response.sendRedirect("topic-creation.jsp#show-tags");
 			
 		}
 
