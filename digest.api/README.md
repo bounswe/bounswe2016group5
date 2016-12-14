@@ -6,7 +6,70 @@
 	The all transactions by api are database.model objects in the project as JSON format.
 ## Current API Path
 	digest.us-east-1.elasticbeanstalk.com/digest.api 
-	
+
+## Add Channel
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=add_channel
+		uid=<user_id> // owner of the channel
+		name=<channel_name> 
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_channel&uid=8&name=cmpe
+		
+
+## Get Channel
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=add_channel
+		cid=<channel_id> // channel id
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channel&cid=8
+		
+## Add Topic To Channel
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=add_topic_to_channel
+		cid=<channel_id> // channel id
+		tid=<topic_id> //topic id
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_topic_to_channel&cid=8&tid=24
+
+## Get Topics From Channel
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_topics_from_channel
+		cid=<channel_id> // channel id
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid=8
+
 ## Login
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
@@ -137,7 +200,40 @@
 		hakkimizda hayirlisi olsun
 	Example:	
 		<API_PATH>/?f=get_comment&tid=<TOPICID>
-	
+		
+## Rate Comment
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=rate_comment
+		uid=<user_id> // user who rates
+		cid=<comment_id> 
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=rate_comment&uid=8&cid=75
+
+		
+## Unrate Comment
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=unrate_comment
+		uid=<user_id> // user who rates
+		cid=<comment_id> 
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=unrate_comment&uid=8&cid=75
+
 
 ## Get topic
 	URL:
