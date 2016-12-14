@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.bounswe.digest.api.database.ChannelJDBC;
 import org.bounswe.digest.api.database.CommentJDBC;
 import org.bounswe.digest.api.database.ConnectionPool;
 import org.bounswe.digest.api.database.QuizJDBC;
@@ -183,10 +184,33 @@ public class DigestAPIServlet extends HttpServlet {
 			ConceptNetAPI httpClientPost = new ConceptNetAPI();
 			Gson gson = new Gson();
 			resp.getWriter().append(gson.toJson(httpClientPost.extractEntities(queryText)));
-		}
-			else {
+		}else if(f.equals(DigestParameters.ADD_CHANNEL)){
+			int uid=Integer.parseInt(req.getParameter(DigestParameters.UID));
+			String name=req.getParameter(DigestParameters.NAME);
+			ChannelJDBC.addChannel(uid, name);
+		}else if(f.equals(DigestParameters.RATE_COMMENT)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			CommentJDBC.rateComment(uid, cid);
+		}else if(f.equals(DigestParameters.UNRATE_COMMENT)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			CommentJDBC.unrateComment(uid, cid);
+		}else if(f.equals(DigestParameters.ADD_TOPIC_TO_CHANNEL)){
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			ChannelJDBC.addTopicToChannel(tid, cid);
+		}else if(f.equals(DigestParameters.GET_CHANNEL)){
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			ChannelJDBC.getChannel(cid);
+		}else if(f.equals(DigestParameters.GET_TOPICS_FROM_CHANNEL)){
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			ChannelJDBC.getTopicsOfChannel(cid);
+		}else {
 			resp.getWriter().append("Welcome to Digest API");
 		}
+			
+		
 		// doPost(req, resp);
 	}
 
@@ -212,7 +236,6 @@ public class DigestAPIServlet extends HttpServlet {
 			Gson gson = new Gson();
 			Topic topic = gson.fromJson(bufferedReader, Topic.class);
 			int tid = TopicJDBC.createTopic(topic);
-			// TODO add tags
 			if (tid != -1) {
 				resp.setStatus(200);
 				resp.getWriter().append("" + tid);

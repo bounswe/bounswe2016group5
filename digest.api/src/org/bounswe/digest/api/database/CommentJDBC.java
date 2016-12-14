@@ -103,8 +103,6 @@ public class CommentJDBC {
 				statement = connection.prepareStatement(query);
 				statement.setInt(1,tid);
 				resultSet=statement.executeQuery();
-				//public Topic(int id, String header, String type, String image, String url, String body, 
-				//int owner, int status,ArrayList<TopicManager> topicManagers, ArrayList<TopicTag> tags)
 				while(resultSet.next()){
 					result.add(new Comment(resultSet.getInt(1),resultSet.getString(2),resultSet.getInt(3),
 							resultSet.getInt(4),resultSet.getInt(5), resultSet.getInt(6), resultSet.getTimestamp(7)));
@@ -141,14 +139,36 @@ public class CommentJDBC {
 		 * @return 0 if successful
 		 */
 		public static int rateComment(int uid,int cid) {
-			int result=addRateComment(uid, cid);
+			int result=removeUnrateComment(uid,cid);
 			if(result==0){
-				result=updateRate(cid);
+				result=updateRate(cid,true);
+				return 0;
+			}
+			result=addRateComment(uid, cid);
+			if(result==0){
+				result=updateRate(cid,true);
+			}
+			return result;
+		}
+		/**
+		 * Downvote Comment
+		 * @param uid user id
+		 * @param cid comment id
+		 * @return 0 if successful
+		 */
+		public static int unrateComment(int uid,int cid) {
+			int result=removeRateComment(uid, cid);
+			if(result==0 ){
+				result=updateRate(cid,false);
+			}
+			result=addUnrateComment(uid,cid);
+			if(result==0 ){
+				result=updateRate(cid,false);
 			}
 			return result;
 		}
 		
-		private static int updateRate(int cid){
+		private static int addUnrateComment(int uid, int cid) {
 			Connection connection;
 			try {
 				connection = ConnectionPool.getConnection();
@@ -160,7 +180,154 @@ public class CommentJDBC {
 			PreparedStatement statement = null;
 			int result = 0;
 			// what is the default value of rate?
-			String query = "UPDATE comment SET rate=rate+1 WHERE id=?";
+			String query = "INSERT INTO unrate_comment (uid,cid) VALUES (?, ?)";
+			try {
+				connection.setAutoCommit(false);
+				statement = connection.prepareStatement(query);
+				statement.setInt(1, uid);
+				statement.setInt(2, cid);
+				statement.executeUpdate();
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					
+				}
+				
+			}finally {
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						result = -1;
+						e.printStackTrace();
+					}
+				}
+				try {
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			ConnectionPool.close(connection);
+			return result;
+		}
+		private static int removeRateComment(int uid, int cid) {
+			Connection connection;
+			try {
+				connection = ConnectionPool.getConnection();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return -1;
+			}
+			PreparedStatement statement = null;
+			int result = 0;
+			// what is the default value of rate?
+			String query = "DELETE FROM rate_comment WHERE uid=? and cid=?";
+			try {
+				connection.setAutoCommit(false);
+				statement = connection.prepareStatement(query);
+				statement.setInt(1, uid);
+				statement.setInt(2, cid);
+				statement.executeUpdate();
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					
+				}
+				
+			}finally {
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						result = -1;
+						e.printStackTrace();
+					}
+				}
+				try {
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			ConnectionPool.close(connection);
+			return result;
+		}
+		private static int removeUnrateComment(int uid, int cid) {
+			Connection connection;
+			try {
+				connection = ConnectionPool.getConnection();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return -1;
+			}
+			PreparedStatement statement = null;
+			int result = 0;
+			// what is the default value of rate?
+			String query = "DELETE FROM unrate_comment WHERE uid=? and cid=?";
+			try {
+				connection.setAutoCommit(false);
+				statement = connection.prepareStatement(query);
+				statement.setInt(1, uid);
+				statement.setInt(2, cid);
+				statement.executeUpdate();
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					
+				}
+				
+			}finally {
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						result = -1;
+						e.printStackTrace();
+					}
+				}
+				try {
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			ConnectionPool.close(connection);
+			return result;
+		}
+		private static int updateRate(int cid,boolean up){
+			Connection connection;
+			try {
+				connection = ConnectionPool.getConnection();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return -1;
+			}
+			PreparedStatement statement = null;
+			int result = 0;
+			// what is the default value of rate?
+			String query = "UPDATE comment SET rate=rate" +(up ? "+1" :"-1" ) + " WHERE id=?";
 			try {
 				connection.setAutoCommit(false);
 				statement = connection.prepareStatement(query);
@@ -246,6 +413,5 @@ public class CommentJDBC {
 			ConnectionPool.close(connection);
 			return result;
 		}
-		
 
 }
