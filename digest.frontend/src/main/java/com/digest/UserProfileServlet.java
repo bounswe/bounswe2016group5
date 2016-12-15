@@ -146,6 +146,7 @@ public class UserProfileServlet extends HttpServlet {
 			request.setAttribute("err", "Unexpected error occured!!");
 			request.getRequestDispatcher("/profile.jsp").forward(request, response);
 		}
+
 		
 		
 	}

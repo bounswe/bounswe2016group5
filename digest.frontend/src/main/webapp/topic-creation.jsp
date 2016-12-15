@@ -141,6 +141,26 @@
 			
 		});
 		
+		$('#channel').keyup(function(){
+			var tag = $('#channel').val();
+			var tagSelection = $('#channels');
+			
+			$.ajax({
+				url: 'ChannelServlet?f=get_channels&uid='+'<%=session.getAttribute("id")%>',
+				dataType: 'json',
+				success: function(data){
+					var content = '';
+					tagSelection.empty();
+					var items = data.myArrayList;
+					$.each(items,function(key,val){		
+						content += '<a class="list-group-item" href="CreateTopicServlet?f=add_tag&tag='+$('#tags').val()+'&desc='+val+'">'+$('#tags').val()+'('+ val + ')' + '</a>';
+					});
+					var list = $('<div class="list-group" />').html(content);
+					tagSelection.append(list);
+				}
+			});
+		});		
+		
 	});
 	
 
@@ -170,9 +190,9 @@
 							<input type="text" class="form-control" placeholder="Search"
 								name="searchterm" id="search">
 							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
+								<a id="search-link" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
-								</button>
+								</a>
 							</div>
 						</div>
 						<div id="show-data"></div>
@@ -305,6 +325,13 @@
 											<input type="text" class="form-control" name="owner"
 												id="owner" disabled="disabled"
 												value="<%=session.getAttribute("first_name") + " " + session.getAttribute("last_name")%>">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-2" for="channel">Channel:</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" name="channel"
+												id="channel">
 										</div>
 									</div>
 

@@ -25,6 +25,37 @@
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js"></script>
 
+<script>
+$(document).ready(function(){
+	
+	$.getJSON('ChannelServlet?f=get_topics&cid=1',function(data){
+			var topics = $('#topics');
+			var content = '';
+			
+			$.each(data,function(key,val){
+				
+					content = '<td>'+val.header+'</td>'
+				          + '<td>atakanguney</td>'
+				          + '<td>60%</td>'
+				          + '<td>' 
+				          +	'<button name="topic_id"  value="64" type="submit">'+val.id+'</button></td>';
+				
+					topics.append($('<tr />').html(content));
+			});
+			
+			
+		});
+	
+	$('#show-add-topic-form').on('click',function(){
+		if($('#add-topic-form').css('display') == 'none')
+			$('#add-topic-form').show();
+		else
+			$('#add-topic-form').hide();
+	});	
+	
+	
+});
+</script>
 </head>
 <body>
 	<%
@@ -50,9 +81,9 @@
 							<input type="text" class="form-control" placeholder="Search"
 								name="searchterm" id="search">
 							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
+								<a id="search-link" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
-								</button>
+								</a>
 							</div>
 						</div>
 						<div id="show-data"></div>
@@ -91,11 +122,11 @@
 						role="search">
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="srch-term">
+								name="searchterm" id="search">
 							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
+								<a id="search-link" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
-								</button>
+								</a>
 							</div>
 						</div>
 					</form>
@@ -177,9 +208,9 @@
 			          <th></th>
 			        </tr>
 			      </thead>
-			      <tbody>
+			      <tbody id="topics">
 			        <tr >
-			          <td>Why Fenerbahce is one of the biggest sports club in Turkey?</a></td>
+			          <td>Why Fenerbahce is one of the biggest sports club in Turkey?</td>
 			          <td>atakanguney</td>
 			          <td>60%</td>
 			          <td> 
@@ -196,6 +227,20 @@
 			    </table>
 			</div>
 			</form>
+			<div id="topics2"></div>
+				<button class="btn btn-primary" id="show-add-topic-form">Add Topic</button>
+				<div id="add-topic-form" style="display: none;">
+					<form class="form" action="ChannelServlet?cid=2" method="post">
+						<div class="form-group">
+							<label for="channel-name">Name:</label>
+							<input type="text" id="channel-name" name="tid" class="form-control">
+						</div>
+						<div class="form-group">
+							<button type="submit" name="f" value="add_topic_to_channel" class="btn btn-primary">Add</button>
+						</div>
+						
+					</form>
+				</div>
 			</div>
 		</div>
 

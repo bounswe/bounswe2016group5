@@ -30,4 +30,10 @@
 			});
 
 		});
+		
+		$('#search-link').on('click',function(){
+			$('#search-link').attr({
+				"href": "search.jsp?search_field=" + $('#search').val()
+			});			
+		});
 	});

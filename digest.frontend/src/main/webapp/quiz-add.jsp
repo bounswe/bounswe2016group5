@@ -2,6 +2,12 @@
 	pageEncoding="UTF-8"%>
 <%@page import="java.util.*"%>
 <%@page import="org.json.*"%>
+<%
+	session = request.getSession(false);
+	if (session.getAttribute("session") == null) {
+		response.sendRedirect("MainServlet");
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,58 +60,6 @@
 
 </head>
 <body>
-	<%
-		session = request.getSession();
-		Object sessionID = session.getAttribute("session");
-
-		if (sessionID == null) {
-	%>
-
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#myNavbar">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="MainServlet">DIGest <span><img 
-						alt="digest-icon" src="img/logo.jpg" height=35 width=35 style="margin:0 0 0 10px "> </span></a>
-			</div>
-			<div class=" collapse navbar-collapse" id="myNavbar">
-				<div class="col-sm-6 pull">
-					<form action="_search" method="POST" class="navbar-form"
-						role="search">
-						<div class="input-group col-sm-12">
-							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="search">
-							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
-									<i class="glyphicon glyphicon-search"></i>
-								</button>
-							</div>
-						</div>
-						<div id="show-data"></div>
-					</form>
-				</div>
-				<ul class="nav navbar-nav navbar-right">
-
-					<li><a href="signup.jsp"><span
-							class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-
-					<li><a href="login.jsp"><span
-							class="glyphicon glyphicon-log-in"></span> Login</a></li>
-
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<h1>You have to be signed up and login to the system to create a
-		topic!!!</h1>
-	<%
-		} else {
-	%>
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -123,11 +77,11 @@
 						role="search">
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="srch-term">
+								name="searchterm" id="search">
 							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
+								<a id="search-link" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
-								</button>
+								</a>
 							</div>
 						</div>
 					</form>
@@ -307,10 +261,6 @@
 		</div>
 	</div>
 
-
-	<%
-		}
-	%>
 
 
 	<footer id="menu-outer">

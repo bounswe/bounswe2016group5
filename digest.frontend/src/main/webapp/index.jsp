@@ -21,6 +21,8 @@
 
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js"></script>
+<script>
+</script>
 </head>
 <body>
 	<%
@@ -47,9 +49,9 @@
 							<input type="text" class="form-control" placeholder="Search"
 								name="search" id="search">
 							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit" name="f" value="search">
+								<a id="search-link" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
-								</button>
+								</a>
 							</div>
 						</div>
 						<div id="show-data"></div>
@@ -205,9 +207,9 @@
 							<input type="text" class="form-control" placeholder="Search"
 								name="search" id="search">
 							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
+								<a id="search-link" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
-								</button>
+								</a>
 							</div>							
 						</div>
 						<div id="show-data"></div>

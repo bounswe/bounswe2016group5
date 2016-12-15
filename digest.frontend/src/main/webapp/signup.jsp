@@ -84,9 +84,9 @@
 							<input type="text" class="form-control" placeholder="Search"
 								name="searchterm" id="search">
 							<div class="input-group-btn">
-								<button class="btn btn-default" type="submit">
+								<a id="search-link" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
-								</button>
+								</a>
 							</div>
 						</div>
 						<div id="show-data"></div>
