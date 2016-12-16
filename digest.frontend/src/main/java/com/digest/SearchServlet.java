@@ -52,7 +52,7 @@ public class SearchServlet extends HttpServlet {
 				System.out.println(searchTerm);
 			}
 
-		} else if (f.contentEquals("search_with_tag")) {
+		} else if (f!=null && f.contentEquals("search_with_tag")) {
 			if (request.getParameter("tag") != null && !request.getParameter("tag").contentEquals("")) {
 				String tag = request.getParameter("tag");
 				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_with_tag&tag="
@@ -74,6 +74,16 @@ public class SearchServlet extends HttpServlet {
 				response.getWriter().write(content);
 			}
 
+		}else if(f!=null && f.contentEquals("advanced_search")){
+			String header = request.getParameter("header");
+			String tag = request.getParameter("tag");
+			String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			
+			String url="http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=advanced_search&tag="+tag+"&header="+header;
+			
+			System.out.println(header + " " +tag +" "+fromDate+" "+toDate);
+		
 		}
 
 	}

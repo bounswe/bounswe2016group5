@@ -17,6 +17,9 @@
 	type="text/javascript"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js"></script>
 <script>
@@ -41,6 +44,47 @@ $(document).ready(function(){
 	
 		}
 	});
+	
+	$('#advanced-search-btn').on('click',function(){
+			$.ajax({url:'SearchServlet?f=advanced_search',
+					dataType: 'json',
+					data:{
+						header: $('#header').val(),
+						tag: $('#tag').val(),
+						from_date: $('#from_date').val(),
+						to_date: $('#to_date').val()
+					},
+					success: function(data){
+						
+						showData.empty();
+						var content = '';
+						$.each(data,function(key,val){					
+								content  += '<a class="list-group-item" href="ViewTopicServlet?topic_id='+val.id+'">' + val.header + '</a>';
+					
+						});
+					
+					var list = $('<div class="list-group" />').html(content);
+					showData.append(list);
+			
+				}
+			});
+	});
+    var from_date_input=$('input[name="from_date"]'); //our date input has the name "from_date"
+    var options={
+      format: 'dd/mm/yyyy',
+      todayHighlight: true,
+      autoclose: true,
+    };
+    from_date_input.datepicker(options);
+    
+    var to_date_input=$('input[name="to_date"]'); //our date input has the name "to_date"
+    var options={
+      format: 'dd/mm/yyyy',
+      todayHighlight: true,
+      autoclose: true,
+    };
+    to_date_input.datepicker(options);
+  
 });
 </script>
 </head>
@@ -182,7 +226,34 @@ $(document).ready(function(){
 				}
 			%>
 			<div class="col-sm-9">
-				<div id="show-data"><p><%=request.getParameter("search_field")%></p></div>
+				<div class="container" id="advanced-search">
+					<form class="form-horizontal" id="advanced-search-form">
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="header">Header:</label>
+							<div class="col-sm-10"><input class="form-control" type="text" name="header" id="header"></div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="tag">Tag:</label>
+							<div class="col-sm-10"><input class="form-control" type="text" name="tag" id="tag"></div>
+						</div>
+						
+						<div class="form-group">
+					        <label class="col-sm-2 control-label" for="from_date">From:</label>
+					        <div class="col-sm-10"><input class="form-control" id="from_date" name="from_date" placeholder="DD/MM/YYY" type="text" readonly/></div>
+						</div>
+	
+						<div class="form-group">
+					        <label class="col-sm-2 control-label" for="to_date">To:</label>
+					        <div class="col-sm-10"><input class="form-control" id="to_date" name="to_date" placeholder="DD/MM/YYY" type="text" readonly/></div>
+						</div>
+											
+						<div class="form-group" style="text-align: center">
+							<a class="btn btn-primary" id="advanced-search-btn">Advanced Search</a>									
+						</div>
+					</form>
+				</div>
+				<div class="container" id="show-data"></div>
 			</div>
 		</div>	
 
