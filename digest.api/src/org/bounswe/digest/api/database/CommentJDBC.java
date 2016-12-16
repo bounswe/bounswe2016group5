@@ -11,6 +11,14 @@ import org.bounswe.digest.api.database.model.Comment;
 import com.google.gson.Gson;
 
 public class CommentJDBC {
+		/**
+		 * Flag indicating whether the comment is question or not.
+		 */
+	    public static final int QUESTION = 1;
+	    /**
+	     * Flag indicating whether the comment is instructive or not.
+	     */
+		public static final int INSTRUCTIVE = 2;
 		/** 
 		 * Adds comment to database
 		 * 
@@ -20,7 +28,7 @@ public class CommentJDBC {
 		 * @param tid topic id
 		 * @return
 		 */
-		public static int addComment(String body, int uid,  int upperCommentId, int tid) {
+		public static int addComment(String body, int uid,  int upperCommentId, int tid, int type) {
 			Connection connection;
 			try {
 				connection = ConnectionPool.getConnection();
@@ -32,7 +40,7 @@ public class CommentJDBC {
 			PreparedStatement statement = null;
 			int result = 0;
 			// what is the default value of rate?
-			String query = "INSERT INTO comment (body, uid, ucid, rate, tid) VALUES (?, ?, ?, 0, ?)";
+			String query = "INSERT INTO comment (body, uid, ucid, rate, tid, type) VALUES (?, ?, ?, 0, ?, ?)";
 			try {
 				connection.setAutoCommit(false);
 				statement = connection.prepareStatement(query);
@@ -40,6 +48,7 @@ public class CommentJDBC {
 				statement.setInt(2, uid);
 				statement.setInt(3, upperCommentId);
 				statement.setInt(4, tid);
+				statement.setInt(5, type);
 				statement.executeUpdate();
 			} catch (SQLException e) {
 				result = -1;
@@ -86,7 +95,7 @@ public class CommentJDBC {
 		 * @return ArrayList of Comments
 		 */
 		protected static ArrayList<Comment> getCommentsArrayOfTopic(int tid){
-			String query="SELECT id, body, uid, tid, ucid, rate, timestamp FROM comment WHERE comment.tid=(?)";
+			String query="SELECT id, body, uid, tid, ucid, rate, type, timestamp FROM comment WHERE comment.tid=(?)";
 			Connection connection;
 			try {
 				connection = ConnectionPool.getConnection();
@@ -105,7 +114,7 @@ public class CommentJDBC {
 				resultSet=statement.executeQuery();
 				while(resultSet.next()){
 					result.add(new Comment(resultSet.getInt(1),resultSet.getString(2),resultSet.getInt(3),
-							resultSet.getInt(4),resultSet.getInt(5), resultSet.getInt(6), resultSet.getTimestamp(7)));
+							resultSet.getInt(4),resultSet.getInt(5), resultSet.getInt(6), resultSet.getInt(7), resultSet.getTimestamp(8)));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -413,5 +422,62 @@ public class CommentJDBC {
 			ConnectionPool.close(connection);
 			return result;
 		}
+		/**
+		 * Updates comment type as question or instructive
+		 * @param cid Comment id
+		 * @param type Type number
+		 * @return
+		 */
+		public static int updateType(int cid, int type){
+			Connection connection;
+			try {
+				connection = ConnectionPool.getConnection();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return -1;
+			}
+			PreparedStatement statement = null;
+			int result = 0;
+			// what is the default value of rate?
+			String query = "UPDATE comment SET type= ? WHERE id=?";
+			try {
+				connection.setAutoCommit(false);
+				statement = connection.prepareStatement(query);
+				statement.setInt(1, type);
+				statement.setInt(2, cid);
+				statement.executeUpdate();
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					
+				}
+				
+			}finally {
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						result = -1;
+						e.printStackTrace();
+					}
+				}
+				try {
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			ConnectionPool.close(connection);
+			return result;
+		}
+		
+		
 
 }

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.httpclient.HttpClient;
+//import org.apache.commons.httpclient.HttpClient;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.bounswe.digest.api.database.ChannelJDBC;
 import org.bounswe.digest.api.database.CommentJDBC;
@@ -109,7 +109,8 @@ public class DigestAPIServlet extends HttpServlet {
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			int ucid = Integer.parseInt(req.getParameter(DigestParameters.UCID));
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			if (CommentJDBC.addComment(body, uid, ucid, tid) == 0) {
+			int type = Integer.parseInt(req.getParameter(DigestParameters.TYPE));
+			if (CommentJDBC.addComment(body, uid, ucid, tid, type) == 0) {
 				resp.setStatus(200);
 			} else {
 				resp.setStatus(400);
@@ -206,6 +207,12 @@ public class DigestAPIServlet extends HttpServlet {
 		}else if(f.equals(DigestParameters.GET_TOPICS_FROM_CHANNEL)){
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			ChannelJDBC.getTopicsOfChannel(cid);
+		}else if(f.equals(DigestParameters.MARK_COMMENT_AS_QUESTION)){
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			CommentJDBC.updateType(cid, CommentJDBC.QUESTION);
+		}else if(f.equals(DigestParameters.MARK_COMMENT_AS_INSTRUCTIVE)){
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			CommentJDBC.updateType(cid, CommentJDBC.INSTRUCTIVE);
 		}else {
 			resp.getWriter().append("Welcome to Digest API");
 		}

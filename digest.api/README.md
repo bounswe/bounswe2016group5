@@ -178,12 +178,13 @@
 		uid=<user_id> // owner of the comment
 		ucid=<upper_comment_id> // -1 there are no upper comments
 		tid=<topic_id>
+		type=<type_id>(0 for nothing, 1 for question, 2 for instructive. See Comment class)
 	Succes response:
 		status:200
 	Error response:
 		hakkimizda hayirlisi olsun
 	Example:
-		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_comment&body=MAASALLAH%20OGLUM&uid=9&ucid=-1&tid=8
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_comment&body=MAASALLAH%20OGLUM&uid=9&ucid=-1&tid=8&type=1
 
 ## Get Comments of Topic
 	URL:
@@ -270,7 +271,35 @@
 ## Get Topics With Tag
 	<API_PATH>?f=get_topics_with_tag&tag=<TAG>
 	It will return not topic but topicpreview, which holds less information about the topic.
-
+## Mark Topic as Question
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=mark_comment_as_question
+		cid=Comment ID
+	Succes response:
+		status:200
+	Error response:
+		Nothing.
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=mark_comment_as_question&cid=8
+		
+## Mark Topic as Instructive;
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=mark_comment_as_instructive
+		cid=Comment ID
+	Succes response:
+		status:200
+	Error response:
+		Nothing.
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=mark_comment_as_instructive&cid=8
 
 # Deployment Information
 ## Requirements
