@@ -27,6 +27,7 @@ import digest.digestandroid.api.APIHandler;
  */
 public class RegisteredHomeProfileFragment extends Fragment {
 
+    private boolean isVisible;
     protected View rootView;
 
     public RecyclerView profileRecyclerView;
@@ -47,10 +48,36 @@ public class RegisteredHomeProfileFragment extends Fragment {
         profileRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        profileRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
+        if(isVisible) {
 
+            profileRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (CacheTopiclist.getInstance().getUserTopics() == null) {
+                        APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(), ((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Profile", profileRecyclerView));
+
+                    } else {
+                        ((ViewRegisteredHomeActivity) getActivity()).loadTopics(profileRecyclerView, CacheTopiclist.getInstance().getUserTopics());
+
+                    }
+
+                }
+            });
+        }
+        return rootView;
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isVisible = isVisibleToUser;
+        if (isVisibleToUser) {
+            Log.d("TT","Yes - profile.");
+            CacheTopiclist.getInstance().setCurrentFragment("Profile");
+            ViewRegisteredHomeActivity.viewPager.setCurrentItem(3);
+            if(profileRecyclerView != null){
                 if(CacheTopiclist.getInstance().getUserTopics() == null){
                     APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Profile",profileRecyclerView));
 
@@ -60,18 +87,6 @@ public class RegisteredHomeProfileFragment extends Fragment {
                 }
 
             }
-        });
-        return rootView;
-    }
-
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            Log.d("TT","Yes - profile.");
-            CacheTopiclist.getInstance().setCurrentFragment("Profile");
-            ViewRegisteredHomeActivity.viewPager.setCurrentItem(3);
             // load data here
         }else{
 

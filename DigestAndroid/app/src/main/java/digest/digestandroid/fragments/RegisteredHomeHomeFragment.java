@@ -39,6 +39,7 @@ import digest.digestandroid.api.GsonRequest;
 
 public class RegisteredHomeHomeFragment extends Fragment {
 
+    private boolean isVisible;
     protected View rootView;
 
     public RecyclerView homeRecyclerView;
@@ -60,20 +61,22 @@ public class RegisteredHomeHomeFragment extends Fragment {
         homeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        homeRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
+        if(isVisible) {
+            homeRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
 
-                // TODO Do not show recent topics. Show recommended settings.
-                if(CacheTopiclist.getInstance().getRecentTopics() == null){
-                    APIHandler.getInstance().getRecentTopics(15,((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Home",homeRecyclerView));
+                    // TODO Do not show recent topics. Show recommended settings.
+                    if (CacheTopiclist.getInstance().getRecentTopics() == null) {
+                        APIHandler.getInstance().getRecentTopics(15, ((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Home", homeRecyclerView));
 
-                }else{
-                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(homeRecyclerView,CacheTopiclist.getInstance().getRecentTopics());
+                    } else {
+                        ((ViewRegisteredHomeActivity) getActivity()).loadTopics(homeRecyclerView, CacheTopiclist.getInstance().getRecentTopics());
 
+                    }
                 }
-            }
-        });
+            });
+        }
         return rootView;
     }
 
@@ -81,10 +84,20 @@ public class RegisteredHomeHomeFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        isVisible = isVisibleToUser;
         if (isVisibleToUser) {
             Log.d("TT","Yes - home.");
             CacheTopiclist.getInstance().setCurrentFragment("Home");
             ViewRegisteredHomeActivity.viewPager.setCurrentItem(0);
+            if(homeRecyclerView != null) {
+                if (CacheTopiclist.getInstance().getRecentTopics() == null) {
+                    APIHandler.getInstance().getRecentTopics(15, ((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Home", homeRecyclerView));
+
+                } else {
+                    ((ViewRegisteredHomeActivity) getActivity()).loadTopics(homeRecyclerView, CacheTopiclist.getInstance().getRecentTopics());
+
+                }
+            }
             // load data here
         }else{
 

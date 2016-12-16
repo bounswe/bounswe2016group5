@@ -26,6 +26,7 @@ import digest.digestandroid.api.APIHandler;
  * create an instance of this fragment.
  */
 public class RegisteredHomeFollowedFragment extends Fragment {
+    private boolean isVisible;
     protected View rootView;
 
     public RecyclerView followedRecyclerView;
@@ -47,21 +48,24 @@ public class RegisteredHomeFollowedFragment extends Fragment {
 
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        followedRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
+        if(isVisible) {
+
+            followedRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
 
 
-            if(CacheTopiclist.getInstance().getFollowedTopics() == null){
-                APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Followed",followedRecyclerView));
+                    if (CacheTopiclist.getInstance().getFollowedTopics() == null) {
+                        APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(), ((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Followed", followedRecyclerView));
 
-            }else{
-                ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
+                    } else {
+                        ((ViewRegisteredHomeActivity) getActivity()).loadTopics(followedRecyclerView, CacheTopiclist.getInstance().getFollowedTopics());
 
-            }
+                    }
 
-            }
-        });
+                }
+            });
+        }
         return rootView;
     }
 
@@ -69,10 +73,20 @@ public class RegisteredHomeFollowedFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        isVisible = isVisibleToUser;
         if (isVisibleToUser) {
             CacheTopiclist.getInstance().setCurrentFragment("Followed");
             ViewRegisteredHomeActivity.viewPager.setCurrentItem(2);
             Log.d("TT","Yes - followed.");
+            if(followedRecyclerView != null){
+                if(CacheTopiclist.getInstance().getFollowedTopics() == null){
+                    APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Followed",followedRecyclerView));
+
+                }else{
+                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
+
+                }
+            }
             // load data here
         }else{
 

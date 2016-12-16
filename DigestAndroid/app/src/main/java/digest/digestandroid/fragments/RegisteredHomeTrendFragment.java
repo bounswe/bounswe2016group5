@@ -31,6 +31,8 @@ import digest.digestandroid.api.APIHandler;
  * create an instance of this fragment.
  */
 public class RegisteredHomeTrendFragment extends Fragment {
+
+    private boolean isVisible;
     protected View rootView;
 
     public RecyclerView trendingRecyclerView;
@@ -52,19 +54,22 @@ public class RegisteredHomeTrendFragment extends Fragment {
         trendingRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
-        trendingRecyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                if(CacheTopiclist.getInstance().getTrendingTopics() == null){
-                    APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Trending",trendingRecyclerView));
+        if(isVisible) {
 
-                }else{
-                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(trendingRecyclerView,CacheTopiclist.getInstance().getTrendingTopics());
+            trendingRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (CacheTopiclist.getInstance().getTrendingTopics() == null) {
+                        APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(), ((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Trending", trendingRecyclerView));
+
+                    } else {
+                        ((ViewRegisteredHomeActivity) getActivity()).loadTopics(trendingRecyclerView, CacheTopiclist.getInstance().getTrendingTopics());
+
+                    }
 
                 }
-
-            }
-        });
+            });
+        }
         return rootView;
     }
 
@@ -72,10 +77,20 @@ public class RegisteredHomeTrendFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        isVisible = isVisibleToUser;
         if (isVisibleToUser) {
             Log.d("TT","Yes - trend.");
             CacheTopiclist.getInstance().setCurrentFragment("Trending");
             ViewRegisteredHomeActivity.viewPager.setCurrentItem(1);
+            if(trendingRecyclerView != null) {
+                if (CacheTopiclist.getInstance().getTrendingTopics() == null) {
+                    APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Trending",trendingRecyclerView));
+
+                } else {
+                    ((ViewRegisteredHomeActivity)getActivity()).loadTopics(trendingRecyclerView,CacheTopiclist.getInstance().getTrendingTopics());
+
+                }
+            }
             // load data here
         }else{
 

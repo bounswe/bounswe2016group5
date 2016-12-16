@@ -255,7 +255,6 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     }
 
     public void loadTopics(RecyclerView currentRecyclerView,final ArrayList<Topic> currentTopicList){
-        Log.d("TT","9");
         RecyclerView.Adapter homeAdapter = new HomeAdapter(currentTopicList);
         currentRecyclerView.setAdapter(homeAdapter);
 
@@ -280,7 +279,6 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         });
     }
     public static ArrayList<Topic> serializeTopicsFromJson(String resp){
-        Log.d("TT","10");
 
         final ArrayList<Topic> resultArrayList = new ArrayList<>();
 
