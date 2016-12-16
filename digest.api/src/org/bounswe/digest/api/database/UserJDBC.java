@@ -19,7 +19,14 @@ public class UserJDBC {
 	 * @return
 	 */
 	public static String login(String username, String password) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
 		Model user = null;
 		PreparedStatement statement = null;
 		ResultSet results = null;
@@ -75,6 +82,71 @@ public class UserJDBC {
 		ConnectionPool.close(connection);
 		return user.printable();
 	}
+	/**
+	 * 
+	 * @param uid
+	 * @param session
+	 * @return
+	 */
+	public static boolean isSessionValid(int uid, String session) {
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return false;
+		}
+		PreparedStatement statement = null;
+		ResultSet results = null;
+		boolean result = false;
+		String query = "SELECT * " + "FROM digest.user_session "
+				+ "WHERE session.uid = ? AND session.sid = ?";
+
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, uid);
+			statement.setString(2, session);
+			results = statement.executeQuery();
+			if (results != null && results.next()) {
+				result = true;
+			} else {
+				result = false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if (connection != null) {
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					
+				}
+			}
+
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+	}
+	
+	
 
 	/**
 	 * 
@@ -82,7 +154,14 @@ public class UserJDBC {
 	 * @return
 	 */
 	private static int writeSessionInformation(User user) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		};
 		PreparedStatement statement = null;
 		int result = 0;
 		String query = "INSERT INTO user_session (uid, sid, duration) VALUES (?, ?, ?)";
@@ -141,7 +220,14 @@ public class UserJDBC {
 	 */
 	public static int register(String username, String password, String email, String first_name, String last_name, int status,
 			Role role) {
-		Connection connection = ConnectionPool.getConnection();
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
 		PreparedStatement statement = null;
 		int result = 0;
 		String query = "INSERT INTO user (username, password, email, first_name, last_name, status, rid) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -187,6 +273,59 @@ public class UserJDBC {
 		}
 		ConnectionPool.close(connection);
 		return result;
+	}
+	
+	public static String getUserName(int uid){
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
+		String user = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
+		String query = "SELECT username from digest.user where user.id=?";
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, uid);
+			results = statement.executeQuery();
+			if (results.next()) {
+				user=(results.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if (connection != null) {
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+					//user = new Error("database_error", "An error occured in the database");
+				}
+			}
+
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return user;
 	}
 
 }

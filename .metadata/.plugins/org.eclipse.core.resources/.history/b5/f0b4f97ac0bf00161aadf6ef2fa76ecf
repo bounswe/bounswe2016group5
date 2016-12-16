@@ -1,0 +1,77 @@
+package org.bounswe.digest.semantic;
+
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
+
+public class WikidataAPI {
+
+	private static final String CONCEPTNET_URI = "http://api.conceptnet.io";
+    private static final String NBR_TO_RETRIEVE = "1000";
+
+    // Strings identifying properties in the JSON string.
+    private static final String EDGES = "edges";
+
+    // The item searched on.
+    private static String input;
+   
+    // Data on the response for a ConceptNet lookup.
+    private static ArrayList<Edge> edges = new ArrayList<Edge>();
+    
+    public static void main(String[] args){
+    	ConceptNetQuery("python");
+    }
+    
+    public static void ConceptNetQuery(String in)   {
+        input = "/c/en/" + in;
+        try {
+            String qStr = CONCEPTNET_URI + input + "?limit=" + NBR_TO_RETRIEVE;
+            com.mashape.unirest.http.HttpResponse<JsonNode> jb = Unirest.get(qStr)
+    				.header("accept", "application/json")
+    				.asJson();
+
+    		JSONObject obj = jb.getBody().getObject();
+    		// Each JSONArray element contains data on one edge of the many edges returned.
+    		JSONArray resultArray = obj.getJSONArray(EDGES);
+
+    		if(resultArray.length() == 0){
+    			for (int i = 0; i < resultArray.length(); i++) {
+    				JSONObject result = resultArray.getJSONObject(i);
+    				
+    					if(result.getJSONObject("rel").getString("label")=="IsA"){
+    						System.out.println(result.getString("surfaceText"));
+    					}
+    					System.out.println(result.getString("surfaceText"));
+    			}
+    		}
+        } catch (UnirestException e) {
+            System.out.println("UnirestException: Can't retrieve message for: " + in);
+        } catch (JSONException e) {
+            System.out.println("JSONException: Can't retrieve message for: " + in);
+        }
+        
+        doInsertionSort(edges);
+    }
+    
+    public static ArrayList<Edge> doInsertionSort(ArrayList<Edge> input){
+        
+        Edge temp;
+        for (int i = 1; i < input.size(); i++) {
+            for(int j = i ; j > 0 ; j--){
+                if(input.get(j).getRelationWeight() > input.get(j-1).getRelationWeight()){
+                    temp = input.get(j);
+                    input.set(j, input.get(j-1));
+                    input.set(j-1, temp);
+                }
+            }
+        }
+        return input;
+    }
+}
