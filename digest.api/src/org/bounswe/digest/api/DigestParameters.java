@@ -34,6 +34,7 @@ public class DigestParameters {
 	public static final String GET_TOPICS_FROM_CHANNEL = "get_topics_from_channel";
 	public static final String MARK_COMMENT_AS_QUESTION = "mark_comment_as_question";
 	public static final String MARK_COMMENT_AS_INSTRUCTIVE = "mark_comment_as_instructive";
+	public static final String GET_TRENDING_TOPICS = "get_trending_topics";
 	public static final String HEADER = "header";
 	// public static final String TYPE = "type";
 	public static final String IMAGE = "image";

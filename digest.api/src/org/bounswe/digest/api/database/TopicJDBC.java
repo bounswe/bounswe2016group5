@@ -603,5 +603,59 @@ public class TopicJDBC {
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
+	/**
+	 * Gives the trending topics
+	 * @return JSON object of trending topics array list as <TopicPreview>
+	 */
+	public static String getTrendingTopics() {
+		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic ORDER BY timestamp DESC";
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
+		PreparedStatement statement = null;
+		ArrayList<TopicPreview> result = new ArrayList<TopicPreview>();
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			resultSet = statement.executeQuery();
+			
+			/*public TopicPreview(int id, String header, String image, int owner, int status,
+					 Timestamp timestamp) */
+			while (resultSet.next()) {
+				result.add(new TopicPreview(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getInt(4), resultSet.getInt(5), resultSet.getTimestamp(6)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		Gson gson = new Gson();
+		return gson.toJson(result);
+	}
+	
 
 }

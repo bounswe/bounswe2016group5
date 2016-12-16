@@ -286,7 +286,7 @@
 	Example:
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=mark_comment_as_question&cid=8
 		
-## Mark Topic as Instructive;
+## Mark Topic as Instructive
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
 	Method:
@@ -300,6 +300,20 @@
 		Nothing.
 	Example:
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=mark_comment_as_instructive&cid=8
+		
+## Get Trending Topics
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_trending_topics
+	Succes response:
+		status:200
+	Error response:
+		Nothing.
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_trending_topics
 
 # Deployment Information
 ## Requirements
