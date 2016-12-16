@@ -138,10 +138,10 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
     private void defineViewPager(ViewPager viewPager) {
         ViewRegisteredHomeActivity.HomePagerAdapter adapter = new ViewRegisteredHomeActivity.HomePagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new RegisteredHomeHomeFragment(), "Home");
-        adapter.addFragment(new RegisteredHomeTrendFragment(), "Trending");
-        adapter.addFragment(new RegisteredHomeFollowedFragment(), "Followed");
-        adapter.addFragment(new RegisteredHomeProfileFragment(), "Profile");
+        adapter.addFragment(new RegisteredHomeHomeFragment(), "HOME");
+        adapter.addFragment(new RegisteredHomeTrendFragment(), "TRENDING");
+        adapter.addFragment(new RegisteredHomeFollowedFragment(), "FOLLOWED");
+        adapter.addFragment(new RegisteredHomeProfileFragment(), "PROFILE");
         viewPager.setAdapter(adapter);
     }
 

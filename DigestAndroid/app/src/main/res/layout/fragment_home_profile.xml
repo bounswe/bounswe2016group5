@@ -1,13 +1,139 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="digest.digestandroid.fragments.RegisteredHomeProfileFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/profile_recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:background="#00994d">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="#00994d">
+
+                <ImageView
+                    android:id="@+id/profile_user_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="#00994d"
+                    android:src="@drawable/default_profile_photo"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:paddingTop="22dp"
+                android:paddingLeft="40dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profile_user_info_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:text="Username"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="#004d4d"/>
+                <TextView
+                    android:id="@+id/profile_user_info_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:textSize="11sp"
+                    android:textColor="#396060"/>
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:id="@+id/profile_user_info_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:text="Email"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="#004d4d" />
+                <TextView
+                    android:id="@+id/profile_user_info_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:textSize="11sp"
+                    android:textColor="#396060" />
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:id="@+id/profile_user_info_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:text="First name"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="#004d4d" />
+                <TextView
+                    android:id="@+id/profile_user_info_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:textSize="11sp"
+                    android:textColor="#396060" />
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:id="@+id/profile_user_info_7"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:text="Last name"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="#004d4d" />
+                <TextView
+                    android:id="@+id/profile_user_info_8"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:textSize="11sp"
+                    android:textColor="#396060" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="#000000"/>
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/profile_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"/>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
+</ScrollView>

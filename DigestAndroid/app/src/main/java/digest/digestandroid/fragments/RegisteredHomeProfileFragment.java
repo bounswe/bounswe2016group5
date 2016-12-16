@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import digest.digestandroid.Cache;
 import digest.digestandroid.CacheTopiclist;
@@ -41,6 +42,11 @@ public class RegisteredHomeProfileFragment extends Fragment {
 
         Log.d("TT","On createview is passed - profile.");
         rootView = inflater.inflate(R.layout.fragment_home_profile, container, false);
+
+        ((TextView)(rootView.findViewById(R.id.profile_user_info_2))).setText(" "+Cache.getInstance().getUser().getUsername());
+        ((TextView)(rootView.findViewById(R.id.profile_user_info_4))).setText(" "+Cache.getInstance().getUser().getEmail());
+        ((TextView)(rootView.findViewById(R.id.profile_user_info_6))).setText(" "+Cache.getInstance().getUser().getFirst_name());
+        ((TextView)(rootView.findViewById(R.id.profile_user_info_8))).setText(" "+Cache.getInstance().getUser().getLast_name());
 
         profileRecyclerView = (RecyclerView) rootView.findViewById(R.id.profile_recycler_view);
         profileLayoutManager = new LinearLayoutManager(getActivity());
