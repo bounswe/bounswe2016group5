@@ -79,6 +79,10 @@
         android:name=".AddChannelActivity"
         android:label="Add Channel"
         android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
+            android:name=".AdvancedSearchActivity"
+            android:label="Advanced Search"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
 
 
 

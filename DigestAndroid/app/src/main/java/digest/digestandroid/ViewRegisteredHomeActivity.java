@@ -116,7 +116,9 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         advancedSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(), AdvancedSearchActivity.class);
+                intent.putExtra("previous", "home");
+                startActivity(intent);
             }
         });
 

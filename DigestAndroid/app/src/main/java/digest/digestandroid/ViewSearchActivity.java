@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
@@ -37,7 +38,8 @@ public class ViewSearchActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private SearchView searchView;
-    private RecyclerView searchRecyclerView;
+    private ImageView advancedSearchView;
+    public static RecyclerView searchRecyclerView;
     private RecyclerView.LayoutManager searchLayoutManager;
 
 
@@ -121,6 +123,16 @@ public class ViewSearchActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        advancedSearchView = (ImageView) findViewById(R.id.advanced_search_button_insearch);
+        advancedSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AdvancedSearchActivity.class);
+                intent.putExtra("previous", "search");
+                startActivity(intent);
+            }
+        });
 
     }
 
