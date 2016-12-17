@@ -158,14 +158,21 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
             case R.id.action_create_topic:
-                Intent intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
+                intent = new Intent(getApplicationContext(), CreateTopicFragmentsActivity.class);
                 startActivity(intent);
+                return true;
+
+            case R.id.action_add_channel:
+                intent = new Intent(getApplicationContext(), AddChannelActivity.class);
+                startActivity(intent);
+
                 return true;
 
             case R.id.action_refresh:

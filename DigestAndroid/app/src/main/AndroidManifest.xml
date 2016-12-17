@@ -75,6 +75,10 @@
             android:name=".AddQuestionActivity"
             android:label="Add Question"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
+        android:name=".AddChannelActivity"
+        android:label="Add Channel"
+        android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
 
 
 

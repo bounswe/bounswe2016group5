@@ -212,7 +212,35 @@ public class APIHandler extends Application{
     }
 
 
+    //f=add_channel
+    //uid=<user_id> // owner of the channel
+    //name=<channel_name>
 
+    public void addChannel(User user, String channelName, Response.Listener<String> successListener) {
+
+
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=add_channel&uid=" + user.getId() + "&name=" + channelName ,
+                successListener, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Failed", "Channel is not added");
+            }
+        }){
+            @Override
+            protected Response<String> parseNetworkResponse (NetworkResponse response){
+                String responseString = "";
+                if (response != null) {
+                    responseString = String.valueOf(response.statusCode);
+                    // can get more details such as response.headers
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+            }
+        };
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+
+    }
 
     public void getTrendingTopics(User user, Response.Listener<String> trendingTopLis) {
         Log.d("FFSS","We entered getting topics");

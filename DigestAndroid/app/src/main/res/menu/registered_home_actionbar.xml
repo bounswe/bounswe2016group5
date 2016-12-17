@@ -7,6 +7,11 @@
         android:title="Create topic"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_add_channel"
+        android:icon="@drawable/add_channel_logo"
+        android:title="Add channel"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_refresh"
         android:icon="@drawable/refresh"
         android:title="Refresh"
