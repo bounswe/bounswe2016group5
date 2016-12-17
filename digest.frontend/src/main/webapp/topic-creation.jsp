@@ -141,25 +141,24 @@
 			
 		});
 		
-		$('#channel').keyup(function(){
-			var tag = $('#channel').val();
-			var tagSelection = $('#channels');
-			
-			$.ajax({
-				url: 'ChannelServlet?f=get_channels&uid='+'<%=session.getAttribute("id")%>',
-				dataType: 'json',
-				success: function(data){
-					var content = '';
-					tagSelection.empty();
-					var items = data.myArrayList;
-					$.each(items,function(key,val){		
-						content += '<a class="list-group-item" href="CreateTopicServlet?f=add_tag&tag='+$('#tags').val()+'&desc='+val+'">'+$('#tags').val()+'('+ val + ')' + '</a>';
-					});
-					var list = $('<div class="list-group" />').html(content);
-					tagSelection.append(list);
-				}
-			});
-		});		
+		var userChannels = $('#user_channels');
+		
+		$.ajax({
+			url: 'ChannelServlet?f=get_user_channels&uid='+'<%=session.getAttribute("id")%>',
+			dataType: 'json',
+			success: function(data){
+				var content = '';
+				$.each(data,function(key,val){		
+					content += '<p class="list-group-item" id="add_channel">'+ val.header + '</p>';
+				});
+				var list = $('<div class="list-group col-sm-5" />').html(content);
+				userChannels.append(list);
+			}
+		});	
+		
+		$('#add_channel').on('click',function(){
+			$('#channel').text($('#add_channel'));
+		});
 		
 	});
 	
@@ -328,13 +327,13 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-sm-2" for="channel">Channel:</label>
-										<div class="col-sm-10">
+										<label class="control-label col-sm-3" for="channel">Channel:</label>
+										<div class="col-sm-9">
 											<input type="text" class="form-control" name="channel"
 												id="channel">
 										</div>
 									</div>
-
+									<div class="container" id="user_channels"></div>
 								</div>
 							</div>
 							<div class="row col-sm-6">

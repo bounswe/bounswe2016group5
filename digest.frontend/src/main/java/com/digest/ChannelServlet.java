@@ -115,7 +115,10 @@ public class ChannelServlet extends HttpServlet {
 				
 			}
 			
-			
+		} else if(f!=null && f.contentEquals("get_user_channels")){
+			response.getWriter().write("["
+					+ "{\"id\":32,\"header\":\"my header\"}"
+					+ "]");
 		}
 	}
 
