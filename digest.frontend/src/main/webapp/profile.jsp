@@ -31,18 +31,6 @@
 
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js"></script>
-<script>
-$(document).ready(function(){
-	
-	$('#show-add-channel-form').on('click',function(){
-		if($('#add-channel-form').css('display') == 'none')
-			$('#add-channel-form').show();
-		else
-			$('#add-channel-form').hide();
-	});	
-});
-
-</script>
 </head>
 <body>
 	<nav class="navbar navbar-inverse">
@@ -237,19 +225,6 @@ $(document).ready(function(){
 							</div>
 						</div>
 					</form>
-					<button class="btn btn-primary" id="show-add-channel-form">Add Channel</button>
-					<div id="add-channel-form" style="display: none;">
-						<form class="form" action="ChannelServlet" method="post">
-							<div class="form-group">
-								<label for="channel-name">Name:</label>
-								<input type="text" id="channel-name" name="channel-name" class="form-control">
-							</div>
-							<div class="form-group">
-								<button type="submit" name="f" value="add_channel" class="btn btn-primary">Add</button>
-							</div>
-							
-						</form>
-					</div>
 				</div>
 			</div>
 		</div>

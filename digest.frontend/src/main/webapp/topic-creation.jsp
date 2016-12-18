@@ -43,6 +43,9 @@
 				owner : {
 					required : true
 				},
+				channel : {
+					required : true
+				},
 				image : {
 					required : false
 				},
@@ -97,20 +100,29 @@
 			var tag = $('#tags').val();
 			var tagSelection = $('#tag-selections');
 			
-			$.ajax({
-				url: 'CreateTopicServlet?f=get_tags&tag='+tag,
-				dataType: 'json',
-				success: function(data){
-					var content = '';
-					tagSelection.empty();
-					var items = data.myArrayList;
-					$.each(items,function(key,val){		
-						content += '<a class="list-group-item" href="CreateTopicServlet?f=add_tag&tag='+$('#tags').val()+'&desc='+val+'">'+$('#tags').val()+'('+ val + ')' + '</a>';
-					});
-					var list = $('<div class="list-group" />').html(content);
-					tagSelection.append(list);
-				}
-			});
+			if(tag=='')
+				tagSelection.hide();
+			else{
+				$.ajax({
+					url: 'CreateTopicServlet?f=get_tags&tag='+tag,
+					dataType: 'json',
+					success: function(data){
+						var content = '';
+						tagSelection.empty();
+						var items = data.myArrayList;
+						$.each(items,function(key,val){		
+							content = '<a class="list-group-item">'+$('#tags').val()+'('+ val + ')' + '</a>';
+							tagSelection.append(content);
+						});
+					}
+				});
+				tagSelection.show();
+			}
+		});
+		
+		$('#tag-selections').on('click','a',function(){
+			var content = '<a class="add-tag btn btn-primary"><span class="glyphicon glyphicon-remove"></span>'+$(this).text()+'</a>';
+			$('#show-tags').append(content);
 		});
 		
 		$('#get_suggestions').on('click',function get_suggestions(){
@@ -131,33 +143,89 @@
 					$.each(items,function(key,val){	
 						var map = val.map;
 						$.each(map,function(key,val){
-							content += '<a class="list-group-item" href="CreateTopicServlet?f=add_tag&tag='+key+'&desc=">'+key + '</a>';
+							content = '<a class="list-group-item">'+key + '</a>';
+							showRes.append(content);
 						});
 					});
-					var list = $('<div class="list-group" />').html(content);
-					showRes.append(list);
 				}
 			});
 			
 		});
 		
-		var userChannels = $('#user_channels');
+		$('#show-suggested-tags').on('click','a',function(){
+			var content = '<a class="add-tag btn btn-primary"><span class="glyphicon glyphicon-remove"></span>'+$(this).text()+'</a>';
+			$('#show-tags').append(content);
+		});
 		
-		$.ajax({
-			url: 'ChannelServlet?f=get_user_channels&uid='+'<%=session.getAttribute("id")%>',
-			dataType: 'json',
-			success: function(data){
-				var content = '';
-				$.each(data,function(key,val){		
-					content += '<p class="list-group-item" id="add_channel">'+ val.header + '</p>';
-				});
-				var list = $('<div class="list-group col-sm-5" />').html(content);
-				userChannels.append(list);
+		$('#show-tags').on('click','a',function(){
+			$(this).remove();
+		});
+		
+		$('#show-added-tags').on('click',function(){
+			var tags=[];
+			$('.add-tag').each(function(i){
+				tags.push($(this).text());
+			});
+			
+			var jsonArr = JSON.stringify(tags);
+			alert(jsonArr);
+		});
+		$('#show-my-channels').on('click',function(){
+			
+			var userChannels = $('#user-channels');
+			
+			if(userChannels.css('display') == 'none'){
+				
+				$.ajax({
+					url: 'ChannelServlet?f=get_user_channels',
+					dataType: 'json',
+					success: function(data){
+						userChannels.empty();
+						var content = '';
+						$.each(data,function(key,val){		
+							content = '<a class="list-group-item" id="add_channel">'+ val.header + '</a>';
+							userChannels.append(content);
+						});
+						
+					}
+				});		
+				
+				userChannels.show();
+				
+			}else{
+				userChannels.hide();
 			}
-		});	
+		});		
 		
-		$('#add_channel').on('click',function(){
-			$('#channel').text($('#add_channel'));
+		$('#user-channels').on('click','a',function(event){
+			$('#channel').val($(this).text());
+		});
+		
+		$('#show-add-channel-form').on('click',function(){
+			if($('#add-channel-form').css('display') == 'none')
+				$('#add-channel-form').show();
+			else
+				$('#add-channel-form').hide();
+		});
+		
+		$('#add-channel').on('click',function(){
+			$.post('ChannelServlet',{
+				f: 'add_channel',
+				channel_name: $('#channel-name').val()
+			},function(data,status){
+				$('#channel-name').val('');
+			});
+		});
+		
+		$('#create_topic_form').on('submit',function(){
+			var tags=[];
+			$('.add-tag').each(function(i){
+				tags.push($('.add-tag').text());
+			});
+			
+			var jsonArr = JSON.stringify(tags);
+
+			$(this).append('<textarea name="tags">'+jsonArr+'</textarea>');
 		});
 		
 	});
@@ -298,25 +366,14 @@
 												id="header">
 										</div>
 									</div>
-									<div id="show-tags">
-										<%
-											if(session.getAttribute("tags") != null){
-												ArrayList<String> tags = (ArrayList<String>) session.getAttribute("tags");
-												
-												for(int i=0; i<tags.size() ;i++){
-													%>
-													<a class="btn btn-primary" href="CreateTopicServlet?f=remove_tag&tag_index=<%=i%>"><span class="glyphicon glyphicon-remove"></span><%=tags.get(i) %></a>
-													<%
-												}
-											}
-										%>
-									</div>
+									<div id="show-tags"></div>
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="tags">Tags:</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control" name="tags" id="tags">
+											<input type="text" class="form-control" id="tags">
 										</div>
 									</div>
+									<a id="show-added-tags" class="btn btn-primary">Show added Tags</a>
 									<div id="tag-selections"></div>
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="owner">Owner:</label>
@@ -330,10 +387,31 @@
 										<label class="control-label col-sm-3" for="channel">Channel:</label>
 										<div class="col-sm-9">
 											<input type="text" class="form-control" name="channel"
-												id="channel">
+												id="channel" readonly>
 										</div>
 									</div>
-									<div class="container" id="user_channels"></div>
+									
+									<a class="btn btn-primary" id="show-my-channels">Show My Channels</a>
+									<div class="container">
+										<div class="list-group col-sm-5" id="user-channels" style="display: none;"></div>
+									</div>
+									
+									<a class="btn btn-primary" id="show-add-channel-form">Add Channel</a>
+									<div class="container">									
+										<div class="col-sm-5" id="add-channel-form" style="display: none;">
+										
+												<div class="form-group">
+													<label for="channel-name">Name:</label>
+													<input type="text" id="channel-name" class="form-control">
+												</div>
+												<div class="form-group">
+													<a class="btn btn-primary" id="add-channel">Add</a>
+												</div>
+												
+										</div>
+									
+									</div>
+									
 								</div>
 							</div>
 							<div class="row col-sm-6">
@@ -365,7 +443,7 @@
 						<div id="show-suggested-tags"></div>
 						<div class="form-group">
 							<div class="col-xs-9 col-xs-offset-3">
-								<button class="btn btn-primary" id="get_suggestions">Get Suggested Tags</button>
+								<a class="btn btn-primary" id="get_suggestions">Get Suggested Tags</a>
 							</div>
 						</div>						
 						<div class="form-group">

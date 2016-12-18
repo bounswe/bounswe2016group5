@@ -44,23 +44,25 @@ public class ChannelServlet extends HttpServlet {
 		
 		if(f!=null && f.contentEquals("add_channel")){
 			
-			String name = request.getParameter("channel-name");
+			String name = request.getParameter("channel_name");
+			name = name.replaceAll(" ", "%20");
 			
 			if(session.getAttribute("id")!=null){
 				String add_channel_url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_channel&name="
 						+ name + "&uid="+session.getAttribute("id");
 				
+				System.out.println(add_channel_url);
 				URL jsonPage = new URL(add_channel_url);
 				HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
 				
 				if(con.getResponseCode()!=200){
 					String err = "Unexpected error occured!!";
 					request.setAttribute("error", err);
-					request.getRequestDispatcher("UserProfileServlet").forward(request, response);
-				}else{
-					response.sendRedirect("UserProfileServlet");
+					request.getRequestDispatcher("topic-creation.jsp").forward(request, response);
 				}
-			}			
+				
+			}
+			
 		}else if(f!=null && f.contentEquals("get_topics")){
 			if(request.getParameter("cid")!=null){
 				String cid = request.getParameter("cid");
@@ -84,6 +86,8 @@ public class ChannelServlet extends HttpServlet {
 					
 					response.getWriter().write("[{\""
 							+ "id\":32,\"header\":\"header111asdc\"},{\"id\":43,\"header\":\"body2345\"}]");
+					response.getWriter().flush();
+					response.getWriter().close();
 				}
 			}
 		}else if(f!=null && f.contentEquals("add_topic_to_channel")){
@@ -116,9 +120,10 @@ public class ChannelServlet extends HttpServlet {
 			}
 			
 		} else if(f!=null && f.contentEquals("get_user_channels")){
-			response.getWriter().write("["
-					+ "{\"id\":32,\"header\":\"my header\"}"
-					+ "]");
+			response.getWriter().write("[{\"id\":23,\"header\":\"atakan\"},{\"id\":5,\"header\":\"husnenaz\"}]");
+			response.getWriter().flush();
+			response.getWriter().close();
+			
 		}
 	}
 

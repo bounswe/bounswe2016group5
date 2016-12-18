@@ -104,17 +104,22 @@ public class CreateTopicServlet extends HttpServlet {
 					topic.put(attr, value);
 				} else if (attr.contentEquals("tags")) {
 					String tagsString = request.getParameter(attr);
-					String[] tagsArray = tagsString.split(",");
+					System.out.println(tagsString);
+					JSONArray tagsArr = new JSONArray(tagsString);
+					//String[] tagsArray = tagsString.split(",");
 
-					for (String tagString : tagsArray) {
+					for (Object tagString : tagsArr) {
 						JSONObject tag = new JSONObject();
-						tag.put("tag", tagString);
+						tag.put("tag", tagString.toString());
 						tags.put(tag);
 					}
 
 					topic.put("tags", tags);
 				}
 			}
+			String tagsString = request.getParameter("tags");
+			System.out.println(tagsString);			
+			
 			System.out.println(topic.toString());
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
@@ -212,7 +217,6 @@ public class CreateTopicServlet extends HttpServlet {
 				
 			}
 			
-			response.sendRedirect(("topic-creation.jsp#show-tags"));
 		} else if(f!=null && f.contentEquals("remove_tag")){
 			ArrayList<String> tags = (ArrayList<String>) session.getAttribute("tags");
 			if(request.getParameter("tag_index") != null){
