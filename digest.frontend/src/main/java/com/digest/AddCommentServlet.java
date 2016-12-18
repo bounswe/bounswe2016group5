@@ -51,24 +51,26 @@ public class AddCommentServlet extends HttpServlet {
 		StringBuffer bf = new StringBuffer();
 		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_comment&");
 		Enumeration<String> names = request.getParameterNames();
-		
+		int type = 0; //normal comment
 		while (names.hasMoreElements()) {
 			String attr = names.nextElement();
 			String value = request.getParameter(attr);
+			System.out.println(attr + " " + value);
 			if(attr.contentEquals("body")){
 				value = value.replaceAll(" ", "%20");
 			}
+			if(attr.contentEquals("mark_ques") || attr.contentEquals("mark_reply"))
+				type = 1; //question
 			bf.append(attr + "=" + value);
 			if (names.hasMoreElements())
 				bf.append("&");
 		}
+		bf.append("&type="+type);
 		String url = bf.toString();
-		System.out.println(url);
 		URL connpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) connpage.openConnection();
 		
 		int responseCode = urlcon.getResponseCode();
-		System.out.println("response " + responseCode);
 		if (responseCode == 200 ) {
 			int tid = -1;
 			if(request.getParameter("tid")!=null){
