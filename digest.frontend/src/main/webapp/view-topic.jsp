@@ -236,7 +236,6 @@
 						String image = (String) request.getAttribute("image");
 						String body = (String) request.getAttribute("body");
 						int subscribed = (Integer) request.getAttribute("subscribed");
-						System.out.println("hello seyma");
 					%>
 					<div class="col-sm-12">
 						<h1><%=header%></h1>
@@ -248,9 +247,7 @@
 					<%
 						if (session.getAttribute("session") != null) {
 							if (session.getAttribute("id") != null) {
-								System.out.println("hello seyma2");
 								if (owner != (Integer) session.getAttribute("id") && subscribed == 0) {
-									System.out.println("hello seyma3");
 					%>
 					<form class="form-horizontal" id="add_subscriber_form"
 						action="SubscribeServlet" method="POST">
@@ -264,7 +261,6 @@
 					</form>
 					<%
 						} else if (subscribed == 1) {
-									System.out.println("hello seyma4");
 					%>
 					<div class="col-sm-5 pull-right">
 						<div class="text">Progress:</div>
@@ -356,9 +352,10 @@
 
 																	if (com.getInt("ucid") == -1) {
 
-																		int id = com.getInt("id");
+																		int cid = com.getInt("id");
 																		int uid = com.getInt("uid");
-																		//get comment rate
+																		int rate = com.getInt("rate");
+																		int type = com.getInt("type");
 
 																		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_username&uid="
 																				+ uid;
@@ -381,7 +378,18 @@
 														%>
 														<li class="media">
 															<div class="media-body " >
-																<div class="well well-lg" >
+																<div class="well well-lg" 
+																<% if(type == 2){
+																	%>
+																	>
+																<% 	
+																}else{
+																	%>
+																	>
+																<% 
+																}
+																%>
+
 																
 																	<div class="row">
 																		<div class="col-sm-4">
@@ -391,38 +399,38 @@
 																		</div>
 																		<div class="col-sm-4 pull-right">
 																			<span class="comment-rate" style="margin: 0 10px 0 0">
-																				30</span>
+																				<%=rate %></span>
 																			<form class="form-horizontal" id="up_comment_form"
 																				action="RateCommentServlet" method="POST"
 																				style="display: inline;">
-																				<input type="hidden" name="crate" value="30">
-																				<input type="hidden" name="cid" value="30">
-																				<input type="hidden" name="tid" value="<%=tid%>">
+																				<input type="hidden" name="cid" value="<%=cid%>">
+																				<input type="hidden" name="uid" value="<%=uid%>">
 																				<input type="hidden" name="f" value="up">
+																				<input type="hidden" name="tid" value="<%=tid%>">
 																				<button type="submit" id="upButton"
 																					class="btn btn-info glyphicon glyphicon-thumbs-up"
-																					data-loading-text=" ... "></button>
+																					data-loading-text=" ... "
+																					style="margin: 10px 0 0 0"></button>
 																			</form>
 																			<form class="form-horizontal" id="down_comment_form"
 																				action="RateCommentServlet" method="POST"
 																				style="display: inline;">
-																				<input type="hidden" name="crate" value="30">
-																				<input type="hidden" name="cid" value="30">
-																				<input type="hidden" name="downButton"
-																					value="<%=tid%>"> <input type="hidden"
-																					name="f" value="down">
-																				<button type="submit" id="btnDown"
+																				<input type="hidden" name="cid" value="<%=cid%>">
+																				<input type="hidden" name="uid" value="<%=uid%>">
+																				<input type="hidden" name="f" value="down">
+																				<input type="hidden" name="tid" value="<%=tid%>">
+																				<button type="submit" id="downButton"
 																					class="btn btn-info glyphicon glyphicon-thumbs-down"
 																					data-loading-text=" ... "
-																					style="margin: 10px 10px 10px 10px"></button>
+																					style="margin: 10px 10px 0 10px"></button>
 																			</form>
 																			<%
 																			if (session.getAttribute("session") != null) {
-																				if ( owner == (Integer) session.getAttribute("id")) { //and not instructive already
+																				if ( owner == (Integer) session.getAttribute("id") && type == 0 ) { //and not instructive already
 																			%>
 																			<form class="form-horizontal" id="instructive_form"
 																				action="InstructiveCommentServlet" method="POST">
-																				<input type="hidden" name="cid" value="30">
+																				<input type="hidden" name="cid" value="<%=cid%>">
 																				<input type="hidden" name="tid" value="<%=tid%>"> 
 																				<%
 																				/*
@@ -433,22 +441,31 @@
 																							data-loading-text=" ... "
 																							style="margin: 10px 10px 10px 10px">Mark as Normal</button>
 																				}else{
+
 																					<input type="hidden" name="f" value="mark"> 
+																					*/
+																				%>
 																					<button type="submit" id="btnDown"
 																							class="btn btn-danger "
 																							data-loading-text=" ... "
-																							style="margin: 10px 10px 10px 10px">Mark as Instructive</button>
-																				}
-																				*/	
+																							style="margin: 20px 30px 10px 10px">Mark as Instructive</button>
+																				
+																				<% 
+																				/*}
+																				*/
 																				%>
 																				
 																			</form>
 																			<%
 																			}
-																				else { //else if the comment is instructive
+																				else if(type == 2) { //else if the comment is instructive
 																			%>
-																			<span class="label label-danger pull-right" style="margin:5px 15px 0 0; ">Instructive</span>
+																			<h3><span class = "label label-danger" >Instructive</span></h3>
 																			<%
+																			}else if( owner == (Integer) session.getAttribute("id") && type == 1){
+																				%>
+																				<h3><span class = "label label-danger" >Question</span></h3>
+																				<%
 																			}
 																			}
 																			%>
@@ -456,17 +473,17 @@
 																	</div>
 
 																	<a class="btn btn-info btn-circle"
-																		data-toggle="collapse" href="#addcomment<%=id%>"
+																		data-toggle="collapse" href="#addcomment<%=cid%>"
 																		id="reply"><span
 																		class="glyphicon glyphicon-share-alt"></span> Reply</a> <a
 																		class="btn btn-warning btn-circle "
-																		data-toggle="collapse" href="#reply1<%=id%>"><span
+																		data-toggle="collapse" href="#reply1<%=cid%>"><span
 																		class="glyphicon glyphicon-comment"></span> Comments</a>
 																</div>
 															</div>
 
 															<div class="collapse col-sm-9 pull-right "
-																id="reply1<%=id%>">
+																id="reply1<%=cid%>">
 																<ul class="media-list">
 																	<%
 																		for (Object commentOfcomments : comments) {
@@ -520,7 +537,7 @@
 															if (session.getAttribute("id") != null) {
 														%>
 														<div class="collapse row col-sm-9 pull-right "
-															id="addcomment<%=id%>">
+															id="addcomment<%=cid%>">
 															<div class="row">
 																<div class="widget-area no-padding blank">
 																	<div class="status-upload">
@@ -529,13 +546,19 @@
 																			<div class="form">
 																				<textarea placeholder="Reply message here"
 																					name="body"></textarea>
-																				<label><%=session.getAttribute("username")%></label>
-																				<input type="hidden" name="uid"
-																					value=<%=session.getAttribute("id")%>> <input
-																					type="hidden" name="ucid" value="<%=id%>">
+																				<label style="margin:10px 10px 10px 10px"><%=session.getAttribute("username")%></label>
+																				<input type="hidden" name="uid" value=<%=session.getAttribute("id")%>> 
+																				<input type="hidden" name="ucid" value="<%=cid%>">
 																				<input type="hidden" name="tid" value="<%=tid%>">
-																				<button type="submit" class="btn btn-success green">
-																					<i class="fa fa-share"></i> Share
+																				<label for="mark_reply" class="btn btn-success"
+																					style="margin: 10px 0 10px 300px;">Mark as a Question <input
+																					type="checkbox" name="mark_reply"
+																					value="1" id="mark_reply"
+																					class="badgebox"> <span class="badge">&check;
+																				</span> </label>
+																				<button type="submit" class="btn btn-success green"
+																					style="margin:10px 10px 10px 10px">
+																					<i class="fa fa-share" ></i> Share
 																				</button>
 																			</div>
 																		</form>
@@ -566,12 +589,19 @@
 																	action="AddCommentServlet" method="POST">
 																	<div class="form">
 																		<textarea placeholder="Comment here" name="body"></textarea>
-																		<label><%=session.getAttribute("username")%></label> <input
+																		<label style="margin:10px 10px 10px 10px"><%=session.getAttribute("username")%></label> <input
 																			type="hidden" name="uid"
 																			value=<%=session.getAttribute("id")%>> <input
 																			type="hidden" name="ucid" value="-1"> <input
 																			type="hidden" name="tid" value=<%=tid%>>
-																		<button type="submit" class="btn btn-success green">
+																		<label for="mark_ques" class="btn btn-success"
+																			style="margin: 10px 0 10px 300px;">Mark as a Question <input
+																			type="checkbox" name="mark_ques"
+																			value="1" id="mark_ques"
+																			class="badgebox"> <span class="badge">&check;
+																		</span> </label>
+																		<button type="submit" class="btn btn-success green"
+																		style="margin:10px 10px 10px 10px">
 																			<i class="fa fa-share"></i> Share
 																		</button>
 																	</div>
