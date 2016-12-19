@@ -61,12 +61,6 @@
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
-							Messages</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
-							Settings</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-th-list"></span>
-							Notifications</a></li>
 					<li><a href="LogoutServlet"><span
 							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 				</ul>
@@ -95,8 +89,6 @@
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
 								<li class="active"><a href="FollowingTopicsServlet"><span
 										class="glyphicon glyphicon-star-empty"></span> Following Topics</a></li>
-								<li><a href="user-topics.jsp"><span
-										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
@@ -172,13 +164,10 @@
 
 
 	<footer id="menu-outer">
-		<div class="col-sm-offset-2 col-sm-10">
+		<div class="col-sm-offset-4 col-sm-4">
 			<ul id="horizontal-list">
-				<li class="col-sm-2"><a href="#">About</a></li>
-				<li class="col-sm-2"><a href="#">Terms</a></li>
-				<li class="col-sm-2"><a href="#">Developers</a></li>
-				<li class="col-sm-2"><a href="#">Feedback</a></li>
-				<li class="col-sm-2"><a href="#">Privacy</a></li>
+				<li class="col-sm-2"><a href="about.jsp">About</a></li>
+				<li class="col-sm-2"><a href="contact.jsp">Contact Us</a></li>
 			</ul>
 		</div>
 	</footer>

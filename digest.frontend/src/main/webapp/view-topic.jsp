@@ -106,8 +106,8 @@
 							<input type="text" class="form-control" placeholder="Search"
 								name="searchterm" id="search">
 							<div class="input-group-btn">
-								<a id="search-link" class="btn btn-default">
-									<i class="glyphicon glyphicon-search"></i>
+								<a id="search-link" class="btn btn-default"> <i
+									class="glyphicon glyphicon-search"></i>
 								</a>
 							</div>
 						</div>
@@ -150,8 +150,8 @@
 							<input type="text" class="form-control" placeholder="Search"
 								name="searchterm" id="search">
 							<div class="input-group-btn">
-								<a id="search-link" class="btn btn-default">
-									<i class="glyphicon glyphicon-search"></i>
+								<a id="search-link" class="btn btn-default"> <i
+									class="glyphicon glyphicon-search"></i>
 								</a>
 							</div>
 						</div>
@@ -159,12 +159,6 @@
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
-							Messages</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
-							Settings</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-th-list"></span>
-							Notifications</a></li>
 					<li><a href="LogoutServlet"><span
 							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 				</ul>
@@ -194,8 +188,6 @@
 								<li><a href="FollowingTopicsServlet"><span
 										class="glyphicon glyphicon-star-empty"></span> Following
 										Topics</a></li>
-								<li><a href="user-topics.jsp"><span
-										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
@@ -378,49 +370,52 @@
 																		}
 														%>
 														<li class="media">
-															<div class="media-body " >
-																<div class="well well-lg" >
+															<div class="media-body ">
+																<div class="well well-lg">
 																	<div class="row">
 																		<div class="col-sm-4">
 																			<p class="media-heading text-uppercase reviews"><%=username%></p>
 																			<p class="media-comment"><%=com.get("body")%></p>
 																		</div>
 																		<div class="col-sm-4 pull-right">
-																			<span class= "comment-rate" id="<%=cid%>-rate" style="margin: 0 10px 0 0">
-																				<%=rate %></span>
-																			<button type="button" 
-																					value="<%=cid %>&<%=uid%>"
-																					class="upButton btn btn-info glyphicon glyphicon-thumbs-up"
-																					data-loading-text=" ... "
-																					style="margin: 10px 0 0 0"></button>
-																			<button type="button"
-																					value="<%=cid %>&<%=uid%>"
-																					class="downButton btn btn-info glyphicon glyphicon-thumbs-down"
-																					data-loading-text=" ... "
-																					style="margin: 10px 10px 0 10px"></button>
-																					
+																			<span class="comment-rate" id="<%=cid%>-rate"
+																				style="margin: 0 10px 0 0"> <%=rate %></span>
+																			<button type="button" value="<%=cid %>&<%=uid%>"
+																				class="upButton btn btn-info glyphicon glyphicon-thumbs-up"
+																				data-loading-text=" ... " style="margin: 10px 0 0 0"></button>
+																			<button type="button" value="<%=cid %>&<%=uid%>"
+																				class="downButton btn btn-info glyphicon glyphicon-thumbs-down"
+																				data-loading-text=" ... "
+																				style="margin: 10px 10px 0 10px"></button>
+
 																			<form class="form-horizontal" id="instructive_form"
 																				action="InstructiveCommentServlet" method="POST">
 																				<input type="hidden" name="cid" value="<%=cid%>">
-																				<input type="hidden" name="tid" value="<%=tid%>"> 
+																				<input type="hidden" name="tid" value="<%=tid%>">
 																				<%
 																				if (session.getAttribute("session") != null) {
 																					if ( owner == (Integer) session.getAttribute("id") && type == 0 ) { //and not instructive already
 																				%>
-																					<button type="submit" id="insButton"
-																							class="btn btn-danger "
-																							data-loading-text=" ... "
-																							style="margin: 20px 30px 10px 10px">Mark as Instructive</button>
+																				<button type="submit" id="insButton"
+																					class="btn btn-danger " data-loading-text=" ... "
+																					style="margin: 20px 30px 10px 10px">Mark
+																					as Instructive</button>
 																			</form>
-																			
-																			<h3><span class = "label label-danger" >
+
+
+
 																			<%
 																			}
 																			else if(type == 2) { 
-																			%>Instructive</span></h3>
+																			%>
+																			<h3>
+																				<span class="label label-danger">Instructive</span>
+																			</h3>
 																			<%
 																			}else{
-																			%>Question
+																			%><h3>
+																				<span class="label label-danger">Question</span>
+																			</h3>
 																			<%
 																			}
 																			}
@@ -492,7 +487,8 @@
 														<%
 															if (session.getAttribute("id") != null) {
 														%>
-														<div class="collapse row col-sm-9 pull-right" id="addcomment<%=cid%>">
+														<div class="collapse row col-sm-9 pull-right"
+															id="addcomment<%=cid%>">
 															<div class="row">
 																<div class="widget-area no-padding blank">
 																	<div class="status-upload">
@@ -501,19 +497,20 @@
 																			<div class="form">
 																				<textarea placeholder="Reply message here"
 																					name="body"></textarea>
-																				<label style="margin:10px 10px 10px 10px"><%=session.getAttribute("username")%></label>
-																				<input type="hidden" name="uid" value=<%=session.getAttribute("id")%>> 
-																				<input type="hidden" name="ucid" value="<%=cid%>">
+																				<label style="margin: 10px 10px 10px 10px"><%=session.getAttribute("username")%></label>
+																				<input type="hidden" name="uid"
+																					value=<%=session.getAttribute("id")%>> <input
+																					type="hidden" name="ucid" value="<%=cid%>">
 																				<input type="hidden" name="tid" value="<%=tid%>">
 																				<label for="mark_reply" class="btn btn-success"
-																					style="margin: 10px 0 10px 300px;">Mark as a Question <input
-																					type="checkbox" name="mark_reply"
-																					value="1" id="mark_reply"
-																					class="badgebox"> <span class="badge">&check;
-																				</span> </label>
+																					style="margin: 10px 0 10px 300px;">Mark as
+																					a Question <input type="checkbox" name="mark_reply"
+																					value="1" id="mark_reply" class="badgebox">
+																					<span class="badge">&check; </span>
+																				</label>
 																				<button type="submit" class="btn btn-success green"
-																					style="margin:10px 10px 10px 10px">
-																					<i class="fa fa-share" ></i> Share
+																					style="margin: 10px 10px 10px 10px">
+																					<i class="fa fa-share"></i> Share
 																				</button>
 																			</div>
 																		</form>
@@ -544,19 +541,19 @@
 																	action="AddCommentServlet" method="POST">
 																	<div class="form">
 																		<textarea placeholder="Comment here" name="body"></textarea>
-																		<label style="margin:10px 10px 10px 10px"><%=session.getAttribute("username")%></label> <input
-																			type="hidden" name="uid"
+																		<label style="margin: 10px 10px 10px 10px"><%=session.getAttribute("username")%></label>
+																		<input type="hidden" name="uid"
 																			value=<%=session.getAttribute("id")%>> <input
 																			type="hidden" name="ucid" value="-1"> <input
-																			type="hidden" name="tid" value=<%=tid%>>
-																		<label for="mark_ques" class="btn btn-success"
-																			style="margin: 10px 0 10px 300px;">Mark as a Question <input
-																			type="checkbox" name="mark_ques"
-																			value="1" id="mark_ques"
-																			class="badgebox"> <span class="badge">&check;
-																		</span> </label>
+																			type="hidden" name="tid" value=<%=tid%>> <label
+																			for="mark_ques" class="btn btn-success"
+																			style="margin: 10px 0 10px 300px;">Mark as a
+																			Question <input type="checkbox" name="mark_ques"
+																			value="1" id="mark_ques" class="badgebox"> <span
+																			class="badge">&check; </span>
+																		</label>
 																		<button type="submit" class="btn btn-success green"
-																		style="margin:10px 10px 10px 10px">
+																			style="margin: 10px 10px 10px 10px">
 																			<i class="fa fa-share"></i> Share
 																		</button>
 																	</div>
@@ -731,18 +728,15 @@
 
 
 
-			</div>
-			</div>
-			<footer id="menu-outer">
-				<div class="col-sm-offset-2 col-sm-10">
-					<ul id="horizontal-list">
-						<li class="col-sm-2"><a href="#">About</a></li>
-						<li class="col-sm-2"><a href="#">Terms</a></li>
-						<li class="col-sm-2"><a href="#">Developers</a></li>
-						<li class="col-sm-2"><a href="#">Feedback</a></li>
-						<li class="col-sm-2"><a href="#">Privacy</a></li>
-					</ul>
-				</div>
-			</footer>
+		</div>
+	</div>
+	<footer id="menu-outer">
+		<div class="col-sm-offset-4 col-sm-4">
+			<ul id="horizontal-list">
+				<li class="col-sm-2"><a href="about.jsp">About</a></li>
+				<li class="col-sm-2"><a href="contact.jsp">Contact Us</a></li>
+			</ul>
+		</div>
+	</footer>
 </body>
 </html>

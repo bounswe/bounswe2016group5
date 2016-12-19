@@ -192,13 +192,10 @@
 		</div>
 	</div>
 	<footer id="menu-outer">
-		<div class="col-sm-offset-2 col-sm-10">
+		<div class="col-sm-offset-4 col-sm-4">
 			<ul id="horizontal-list">
-				<li class="col-sm-2"><a href="#">About</a></li>
-				<li class="col-sm-2"><a href="#">Terms</a></li>
-				<li class="col-sm-2"><a href="#">Developers</a></li>
-				<li class="col-sm-2"><a href="#">Feedback</a></li>
-				<li class="col-sm-2"><a href="#">Privacy</a></li>
+				<li class="col-sm-2"><a href="about.jsp">About</a></li>
+				<li class="col-sm-2"><a href="contact.jsp">Contact Us</a></li>
 			</ul>
 		</div>
 	</footer>

@@ -214,12 +214,6 @@
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="messages.jsp"><span
-							class="glyphicon glyphicon-envelope"></span> Messages</a></li>
-					<li><a href="settings.jsp"><span
-							class="glyphicon glyphicon-cog"></span> Settings</a></li>
-					<li><a href="notifications.jsp"><span
-							class="glyphicon glyphicon-th-list"></span> Notifications</a></li>
 					<li><a href="LogoutServlet"><span
 							class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 				</ul>
@@ -249,8 +243,6 @@
 										class="glyphicon glyphicon-user"></span> Profile</a></li>
 								<li><a href="FollowingTopicsServlet"><span
 										class="glyphicon glyphicon-star-empty"></span> Following Topics</a></li>
-								<li><a href="user-topics.jsp"><span
-										class="glyphicon glyphicon-upload"></span> My Topics</a></li>
 							</ul>
 
 							<div class="panel panel-default">
@@ -308,42 +300,46 @@
 							</div>
 						</div>
 					</div>
-					<% 
-						@SuppressWarnings("unchecked")
-						ArrayList<Integer> interestTopicIds = (ArrayList<Integer>) request.getAttribute("interestTopicIds");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> interestTopicHeaders = (HashMap<Integer,String>) request.getAttribute("interestTopicHeaders");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> interestTopicImages = (HashMap<Integer,String>) request.getAttribute("interestTopicImages");
-						%>
+					
 					<div class="row form-group" style="height: 33%; padding: 15px;">
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Might
-							Interest</h4>
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Trending</h4>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
-							<div class="panel-body" id="user-topics" class="list-group">
-								<% 
-								if(interestTopicIds != null)
-									for(int topicId : interestTopicIds  ) {
-							%>
+							<%
+								if (request.getAttribute("trendingTopics") != null) {
+
+									JSONArray topicArray = (JSONArray) request.getAttribute("trendingTopics");
+							%><div class="panel-body" id="user-topics" class="list-group">
+
+								<%
+									for (Object top : topicArray) {
+											JSONObject topic = (JSONObject) top;
+								%>
+
 								<div class="topic-view col-xs-4 col-lg-4"
 									style="padding: 9px 9px 0px 9px;">
 									<div class="thumbnail">
-										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
-											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
-											src=<%=interestTopicImages.get(topicId) %> alt="" />
+										<input type="image" class="group list-group-image"
+											style="display: block; margin: 0 auto;" height="100"
+											width="100" name="topic_id" id="topic_id"
+											value=<%=topic.get("id")%> src="<%=topic.get("image")%>" alt="" />
 										<div class="caption">
 											<h4 class="group inner list-group-item-heading"
-												align="center"><%=interestTopicHeaders.get(topicId) %></h4>
+												align="center"><%=topic.get("header")%></h4>
 										</div>
 									</div>
 								</div>
-								<% 		
-								} 
-							%>
+
+								<%
+									}
+									}
+								%>
+
 							</div>
 						</div>
 					</div>
+					
+					
 					<div class="row form-group" style="height: 33%; padding: 15px;">
 						<% 
 						@SuppressWarnings("unchecked")
@@ -353,7 +349,7 @@
 						@SuppressWarnings("unchecked")
 						HashMap<Integer,String> recentTopicImages = (HashMap<Integer,String>) request.getAttribute("recentTopicImages");
 						%>
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Popular</h4>
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Might Interest</h4>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
 							<div class="panel-body" id="user-topics" class="list-group">
@@ -391,13 +387,10 @@
 	%>
 
 	<footer id="menu-outer">
-		<div class="col-sm-offset-2 col-sm-10">
+		<div class="col-sm-offset-4 col-sm-4">
 			<ul id="horizontal-list">
-				<li class="col-sm-2"><a href="#">About</a></li>
-				<li class="col-sm-2"><a href="#">Terms</a></li>
-				<li class="col-sm-2"><a href="#">Developers</a></li>
-				<li class="col-sm-2"><a href="#">Feedback</a></li>
-				<li class="col-sm-2"><a href="#">Privacy</a></li>
+				<li class="col-sm-2"><a href="about.jsp">About</a></li>
+				<li class="col-sm-2"><a href="contact.jsp">Contact Us</a></li>
 			</ul>
 		</div>
 	</footer>
