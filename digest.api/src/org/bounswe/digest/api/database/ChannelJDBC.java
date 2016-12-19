@@ -213,6 +213,61 @@ public class ChannelJDBC {
 		return result;
 	}
 	
+	public static String getSubscribedChannels(int uid){
+		String query = "SELECT topic_subscribe.tid FROM topic_subscribe WHERE uid = ?";
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return "";
+		}
+		PreparedStatement statement = null;
+		ArrayList<Integer> topics = new ArrayList<Integer>();
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, uid);
+			resultSet = statement.executeQuery();
+			
+			//public Topic(int id, String header, String image, String body, int owner, int status,
+					//ArrayList<TopicTag> tags, ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments, Timestamp timestamp) {
+			while (resultSet.next()) {
+				topics.add(resultSet.getInt(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		ArrayList<Channel> result=new ArrayList<>();
+		for(int i=0; i<topics.size(); i++){
+			result.add(getChannelObjectOfTopic(topics.get(i)));
+		}
+		Gson gson = new Gson();
+		return gson.toJson(result);
+	}
+	
 	public static String getTopicsOfChannel(int cid){
 		ArrayList<Topic> topics=new ArrayList<Topic>();
 		String query = "SELECT tid from channel_topic "
@@ -261,9 +316,12 @@ public class ChannelJDBC {
 		Gson gson = new Gson();
 		return gson.toJson(topics);
 	}
-	
-	public static String getChannelsOfTopic(int tid){
-		ArrayList<Channel> channels=new ArrayList<Channel>();
+	public static String getChannelOfTopic(int tid){
+		Gson gson= new Gson();
+		return gson.toJson(getChannelObjectOfTopic(tid));
+	}
+	public static Channel getChannelObjectOfTopic(int tid){
+		Channel channel=null;
 		String query = "SELECT cid from channel_topic "
 				+ 	"WHERE channel_topic.tid=?";
 		Connection connection;
@@ -271,7 +329,7 @@ public class ChannelJDBC {
 			connection = ConnectionPool.getConnection();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-			return "";
+			return null;
 		}
 		PreparedStatement statement = null;
 		ResultSet resultSet;
@@ -280,8 +338,8 @@ public class ChannelJDBC {
 			statement = connection.prepareStatement(query);
 			statement.setInt(1,tid);
 			resultSet=statement.executeQuery();
-			while(resultSet.next()){
-				channels.add(getChannelObject(resultSet.getInt(1)));
+			if(resultSet.next()){
+				channel=(getChannelObject(resultSet.getInt(1)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -306,8 +364,7 @@ public class ChannelJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
-		Gson gson = new Gson();
-		return gson.toJson(channels);
+		return (channel);
 	}
 
 }

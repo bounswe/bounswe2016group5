@@ -25,6 +25,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.bounswe.digest.api.database.ChannelJDBC;
 import org.bounswe.digest.api.database.CommentJDBC;
 import org.bounswe.digest.api.database.ConnectionPool;
+import org.bounswe.digest.api.database.ProgressJDBC;
 import org.bounswe.digest.api.database.QuizJDBC;
 import org.bounswe.digest.api.database.TopicJDBC;
 import org.bounswe.digest.api.database.UserJDBC;
@@ -216,6 +217,18 @@ public class DigestAPIServlet extends HttpServlet {
 		}else if(f.equals(DigestParameters.MARK_COMMENT_AS_INSTRUCTIVE)){
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			CommentJDBC.updateType(cid, CommentJDBC.INSTRUCTIVE);
+		}else if(f.equals(DigestParameters.ADD_PROGRESS)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			ProgressJDBC.addProgres(uid, tid);
+		}else if(f.equals(DigestParameters.GET_PROGRESS_TOPIC)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			ProgressJDBC.getProgressOnTopic(tid, uid);
+		}else if(f.equals(DigestParameters.GET_PROGRESS_CHANNEL)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			ProgressJDBC.getProgressOnChannel(cid, uid);
 		}else if(f.equals(DigestParameters.GET_TRENDING_TOPICS)){
 
 			resp.getWriter().append(TopicJDBC.getTrendingTopics());
