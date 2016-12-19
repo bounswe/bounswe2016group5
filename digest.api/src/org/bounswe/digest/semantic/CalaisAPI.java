@@ -13,6 +13,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import java.io.*;
+import java.text.Normalizer;
 import java.util.Iterator;
  
 public class CalaisAPI {
@@ -79,7 +80,13 @@ public class CalaisAPI {
         doRequest(query, method);
     }
     
+    /**
+     * Extracts entities with respect to given text.
+     * @param queryText
+     * @return JSONArray : JSONObject : JSONArray | {"label":["labels"]}
+     */
     public JSONArray extractTags(String queryText){
+    	ConceptNetAPI httpClientPost = new ConceptNetAPI();
 		input = queryText;
 		client = new HttpClient();
 		client.getParams().setParameter("http.useragent", "Calais Rest Client");
@@ -87,6 +94,7 @@ public class CalaisAPI {
 		JSONObject jsonObj = new JSONObject(getOutput());
         Iterator<String> i = jsonObj.keys();
         JSONArray ja = new JSONArray();
+        JSONArray cnet = new JSONArray();
         JSONObject jo = new JSONObject();
 		while(i.hasNext()) {
 			String key = (String)i.next();
@@ -94,19 +102,28 @@ public class CalaisAPI {
 				JSONObject item = (JSONObject)jsonObj.get(key);
 				if (item.has("_typeGroup")) {
 					String typeGroup = item.getString("_typeGroup");
-					if(typeGroup != null && typeGroup.equals("entities")) {
+					/*if(typeGroup != null && typeGroup.equals("entities")) {
 						String name = item.getString("name");
 						Double relevance = item.getDouble("relevance");
 						jo.put(name, relevance);
-					}
+						ja.put(jo);
+						jo = new JSONObject();
+					}*/
 					if(typeGroup != null && typeGroup.equals("socialTag")) {
 						String name = item.getString("name");
+						name = name.replaceAll(" ", "_").toLowerCase();
+						name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("\\p{Mn}", "");
+				    	if(name.contains("ý")) name = name.replaceAll("ý", "i");
 						Double relevance = item.getDouble("importance");
-						jo.put(name, relevance);
+						cnet = httpClientPost.extractEntities(name);
+						if(cnet.length()!=0){
+							jo.put(name, cnet);
+							ja.put(jo);
+							jo = new JSONObject();
+						}
 					}
 				}
         	}
-			ja.put(jo);
        	}
 		return ja;
     }
