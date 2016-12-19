@@ -52,36 +52,14 @@ public class RateCommentServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Enumeration<String> names = request.getParameterNames();
-		int uid = -1;
-		int cid = -1;
-		int tid = -1;
-		String f = "unrate_comment"; //unrate
-		while (names.hasMoreElements()) {
-			String attr = names.nextElement();
-			String value = request.getParameter(attr);
-			if(attr.equals("uid"))
-				uid = Integer.parseInt(value);
-			if(attr.equals("cid"))
-				cid = Integer.parseInt(value);
-			if(attr.equals("f") && value.equals("up"))
-				f = "rate_comment"; //rate		
-			if(attr.equals("tid"))
-				tid = Integer.parseInt(value);
-		}
-		
+		int uid = Integer.parseInt(request.getParameter("uid"));
+		int cid = Integer.parseInt(request.getParameter("cid"));
+		String f = request.getParameter("f");
 		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f="+ f+"&uid="+uid+"&cid="+cid;
+		
 		URL connpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) connpage.openConnection();
 		int responseCode = urlcon.getResponseCode();
-		if (responseCode == 200) {
-			request.setAttribute("topic_id", tid);
-			request.getRequestDispatcher("ViewTopicServlet").forward(request, response);
-		}else if (responseCode == 400) {
-			HttpSession session = request.getSession(true);
-			String errMsg = "Unexpected Error occured!!";
-			request.setAttribute("topic_id", tid);
-			request.getRequestDispatcher("ViewTopicServlet").forward(request, response);
-		}
-
+		System.out.println(responseCode);
 	}
 }
