@@ -54,12 +54,16 @@ public class TopicJDBC {
 			ArrayList<TopicTag> tags = topic.getTags();
 			for (TopicTag tag : tags) {
 				PreparedStatement tagStatement = null;
+				int tagID = getTagID(tag.getTag());
+				if(tagID != -1){
+					 tagID = createTag(tag.getTag());	
+				}
 				String tagQuery = "INSERT INTO topic_tag (tid,tag) VALUES (?,?)";
 				try {
 					connection.setAutoCommit(false);
 					tagStatement = connection.prepareStatement(tagQuery);
 					tagStatement.setInt(1, tid);
-					tagStatement.setString(2, tag.getTag());
+					tagStatement.setInt(2, tagID);
 					tagStatement.executeUpdate();
 					
 				} catch (SQLException e) {
@@ -553,7 +557,7 @@ public class TopicJDBC {
 		return gson.toJson(result);
 	}
 	public static String getTopicsWithTag(String tag) {
-		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, topic_tag WHERE topic_tag.tag LIKE ? AND topic.id = topic_tag.tid";
+		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, topic_tag, tag WHERE tag.tag LIKE ? AND topic_tag.tag = tag.id AND topic.id = topic_tag.tid";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -656,6 +660,117 @@ public class TopicJDBC {
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
+	/**
+	 * Returns tag id
+	 * @param tag
+	 * @return
+	 */
+	private static int getTagID(String tag){
+		String query = "SELECT * FROM tag WHERE tag LIKE ?";
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
+		PreparedStatement statement = null;
+		int result= -1;
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setString(1, tag);
+			resultSet = statement.executeQuery();
+			
+			// public Topic(int id, String header, String type, String image,
+			// String url, String body,
+			// int owner, int status,ArrayList<TopicManager> topicManagers,
+			// ArrayList<TopicTag> tags)
+			if (resultSet.next()) {
+				result = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+		
+		
+		
+	}
+	private static int createTag(String tag){
+		
+
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
+		PreparedStatement statement = null;
+		int result= -1;
+		ResultSet resultSet;
+		
+		String tagQuery = "INSERT INTO tag (tag) VALUES (?)";
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(tagQuery);
+			statement.setString(1, tag);
+			statement.executeUpdate();
+			
+		} catch (SQLException e) {
+			result = -1;
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+
+			}
+
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
+	
 	
 
 }
