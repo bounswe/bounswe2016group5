@@ -207,6 +207,9 @@ public class DigestAPIServlet extends HttpServlet {
 		}else if(f.equals(DigestParameters.GET_TOPICS_FROM_CHANNEL)){
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			resp.getWriter().append(ChannelJDBC.getTopicsOfChannel(cid));
+		}else if(f.equals(DigestParameters.GET_CHANNELS_OF_USER)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			resp.getWriter().append(ChannelJDBC.getChannelsOfUser(uid));
 		}else if(f.equals(DigestParameters.MARK_COMMENT_AS_QUESTION)){
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			CommentJDBC.updateType(cid, CommentJDBC.QUESTION);

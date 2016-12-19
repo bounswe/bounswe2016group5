@@ -74,7 +74,7 @@ public class ChannelJDBC {
 		}
 		PreparedStatement statement = null;
 		int result = 0;
-		String query = "INSERT INTO channel_topic(uid, cid) VALUES (?, ?)";
+		String query = "INSERT INTO channel_topic(tid, cid) VALUES (?, ?)";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
@@ -115,6 +115,57 @@ public class ChannelJDBC {
 	public static String getChannel(int cid){
 		return getChannelObject(cid).printable();
 	}
+	public static String getChannelsOfUser(int uid){
+		Gson gson = new Gson();
+		return gson.toJson(getChannelArrayOfUser(uid));
+	}
+	protected static ArrayList<Channel> getChannelArrayOfUser(int uid){
+		String query = "SELECT * FROM digest.channel WHERE channel.uid=?";
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return null;
+		}
+		PreparedStatement statement = null;
+		ArrayList<Channel> result=new ArrayList<Channel>();
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, uid);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				result.add(new Channel(resultSet.getInt(1), resultSet.getInt(2), 
+						resultSet.getString(3),resultSet.getInt(4)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+
+	}
 	
 	protected static Channel getChannelObject(int cid){
 		String query = "SELECT * FROM digest.channel WHERE channel.id=?";
@@ -122,7 +173,6 @@ public class ChannelJDBC {
 		try {
 			connection = ConnectionPool.getConnection();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return null;
 		}

@@ -31,6 +31,7 @@ public class DigestParameters {
 	public static final String UNRATE_COMMENT = "unrate_comment";
 	public static final String ADD_TOPIC_TO_CHANNEL ="add_topic_to_channel";
 	public static final String GET_CHANNEL = "get_channel";
+	public static final String GET_CHANNELS_OF_USER = "get_channels_of_user";
 	public static final String GET_TOPICS_FROM_CHANNEL = "get_topics_from_channel";
 	public static final String MARK_COMMENT_AS_QUESTION = "mark_comment_as_question";
 	public static final String MARK_COMMENT_AS_INSTRUCTIVE = "mark_comment_as_instructive";
