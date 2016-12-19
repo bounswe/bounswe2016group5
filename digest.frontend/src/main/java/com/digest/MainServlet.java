@@ -62,13 +62,42 @@ public class MainServlet extends HttpServlet {
 			
 			if(topicArray != null){
 				request.setAttribute("recentTopics", topicArray);
-				request.getRequestDispatcher("/index.jsp").forward(request, response);
 			}
+			
 
 		} catch (JSONException ex) {
 			request.setAttribute("err", "Unexpected error occured!!");
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
+		
+		recv = "";
+		recvbuff = "";
+		
+		String url2 = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_trending_topics";
+		System.out.println(url2);
+		URL jsonpage2 = new URL(url2);
+		HttpURLConnection urlcon2 = (HttpURLConnection) jsonpage2.openConnection();
+		BufferedReader buffread2 = new BufferedReader(new InputStreamReader(urlcon2.getInputStream()));
+
+		while ((recv = buffread2.readLine()) != null)
+			recvbuff += recv;
+		buffread2.close();
+		System.out.println(recvbuff);
+		try {
+			JSONArray topicArray = new JSONArray(recvbuff);
+			
+			if(topicArray != null){
+				request.setAttribute("trendingTopics", topicArray);
+				request.getRequestDispatcher("/index.jsp").forward(request, response);
+			}
+			
+
+		} catch (JSONException ex) {
+			request.setAttribute("err", "Unexpected error occured!!");
+			request.getRequestDispatcher("/index.jsp").forward(request, response);
+		}
+		
+		
 		
 	}	
 }
