@@ -56,6 +56,56 @@ public class ProgressJDBC {
 		return result;
 	}
 	
+	public static int setProgressTopic(int tid,int uid,int val){
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return -1;
+		}
+		PreparedStatement statement = null;
+		int result = 0;
+		String query = "UPDARE progress prog=? WHERE tid=? and uid=? ";
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, val);
+			statement.setInt(2, tid);
+			statement.setInt(3, uid);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			result = -1;
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+				
+			}
+			
+		}finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+	}
+	
 	public static int getProgressOnTopic(int tid,int uid){
 		String query = "SELECT prog FROM digest.progress WHERE progress.tid=? and progress.uid=?";
 		Connection connection;
@@ -147,6 +197,6 @@ public class ProgressJDBC {
 				e.printStackTrace();
 			}
 		}
-		return result;
+		return result/ChannelJDBC.getNumberOfTopics(cid);
 	}
 }

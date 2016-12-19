@@ -268,6 +268,54 @@ public class ChannelJDBC {
 		return gson.toJson(result);
 	}
 	
+	public static int getNumberOfTopics(int cid){
+		String query = "SELECT COUNT(tid) from channel_topic "
+				+ 	"WHERE channel_topic.cid=?";
+		Connection connection;
+		int result=0;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return 0;
+		}
+		PreparedStatement statement = null;
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1,cid);
+			resultSet=statement.executeQuery();
+			while(resultSet.next()){
+				result=(resultSet.getInt(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();	
+			}
+		}finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		ConnectionPool.close(connection);
+		return result;
+	}
+	
 	public static String getTopicsOfChannel(int cid){
 		ArrayList<Topic> topics=new ArrayList<Topic>();
 		String query = "SELECT tid from channel_topic "

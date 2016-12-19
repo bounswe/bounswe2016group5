@@ -36,6 +36,7 @@ public class DigestParameters {
 	public static final String MARK_COMMENT_AS_QUESTION = "mark_comment_as_question";
 	public static final String MARK_COMMENT_AS_INSTRUCTIVE = "mark_comment_as_instructive";
 	public static final String GET_TRENDING_TOPICS = "get_trending_topics";
+	public static final String GET_SUBSCRIBED_CHANNELS = "get_subscribed_channels";
 	
 	public static final String GET_PROGRESS_TOPIC = "get_progress_topic";
 	public static final String GET_PROGRESS_CHANNEL = "get_progress_channel";

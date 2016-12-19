@@ -224,13 +224,15 @@ public class DigestAPIServlet extends HttpServlet {
 		}else if(f.equals(DigestParameters.GET_PROGRESS_TOPIC)){
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			ProgressJDBC.getProgressOnTopic(tid, uid);
+			//resp.getWriter().append(ProgressJDBC.getProgressOnTopic(tid, uid));
 		}else if(f.equals(DigestParameters.GET_PROGRESS_CHANNEL)){
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
-			ProgressJDBC.getProgressOnChannel(cid, uid);
+			//resp.getWriter().append(ProgressJDBC.getProgressOnChannel(cid, uid));
+		}else if(f.equals(DigestParameters.GET_SUBSCRIBED_CHANNELS)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			resp.getWriter().append(ChannelJDBC.getSubscribedChannels(uid));
 		}else if(f.equals(DigestParameters.GET_TRENDING_TOPICS)){
-
 			resp.getWriter().append(TopicJDBC.getTrendingTopics());
 		}
 		
