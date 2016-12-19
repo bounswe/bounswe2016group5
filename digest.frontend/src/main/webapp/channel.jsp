@@ -73,6 +73,10 @@ $(document).ready(function(){
 		success: function(data){
 			var progress = data;
 			$('#progress').text(progress);
+			$('#progress').attr({
+				'style': 'width:'+progress+'%',
+				'areavaluenow': +progress
+			});
 		}
 	});
 	
@@ -226,8 +230,8 @@ $(document).ready(function(){
 			<div class="col-sm-9">
 				<h2 id="channel-header" align="center"></h2>
 				<div id="progress-block" class="progress" style="display: none;">
-				  <div id="progress" class="progress-bar" role="progressbar" aria-valuenow="70"
-				  aria-valuemin="0" aria-valuemax="100" style="width:70%">
+				  <div id="progress" class="progress-bar" role="progressbar"
+				  aria-valuemin="0" aria-valuemax="100" >
 				 </div>
 				</div>
 			<div class=" well " >

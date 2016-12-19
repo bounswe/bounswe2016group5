@@ -162,7 +162,7 @@ public class ChannelServlet extends HttpServlet {
 			
 			System.out.println("User: "+uid+", Channel: "+cid);
 			
-			response.getWriter().write("65");
+			response.getWriter().write("75");
 			response.getWriter().flush();
 		} else if(f!=null && f.contentEquals("get_subscribed_channels")){
 			String uid = request.getParameter("uid");
