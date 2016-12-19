@@ -4,7 +4,7 @@
 			rules : {
 				topic_id : {
 					required : true
-				},
+				}
 			}
 		});
 		
@@ -36,4 +36,6 @@
 				"href": "search.jsp?search_field=" + $('#search').val()
 			});			
 		});
+
+		
 	});

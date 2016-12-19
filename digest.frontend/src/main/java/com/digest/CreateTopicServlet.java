@@ -80,7 +80,32 @@ public class CreateTopicServlet extends HttpServlet {
 		String f = request.getParameter("f");
 
 		if (f != null && f.contentEquals("create_topic")) {
-			String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=create_topic";
+			JSONObject topic = new JSONObject();
+			JSONArray tags = new JSONArray();
+			
+			Enumeration<String> names = request.getParameterNames();
+			while (names.hasMoreElements()) {
+				String attr = names.nextElement();
+				if (!(attr.contentEquals("f") || attr.contentEquals("tags"))) {
+					String value = request.getParameter(attr);
+					topic.put(attr, value);
+				} else if (attr.contentEquals("tags")) {
+					String tagsString = request.getParameter(attr);
+					System.out.println(tagsString);
+					JSONArray tagsArr = new JSONArray(tagsString);
+					
+					for (Object tagString : tagsArr) {
+						JSONObject tag = new JSONObject();
+						tag.put("tag", tagString.toString());
+						tags.put(tag);
+					}
+
+					topic.put("tags", tags);
+				}
+			}
+			System.out.println(topic.toString());
+			
+		/*	String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=create_topic";
 			URL connpage = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) connpage.openConnection();
 
@@ -160,7 +185,7 @@ public class CreateTopicServlet extends HttpServlet {
 				String errMsg = "Unexpected Error occured!!";
 				request.setAttribute("error", errMsg);
 				request.getRequestDispatcher("topic-creation.jsp").forward(request, response);
-			}
+			}*/
 		} else if (f != null && f.contentEquals("upload_via_url")) {
 
 			if (request.getParameter("image-url") != null && !request.getParameter("image-url").contentEquals("")) {

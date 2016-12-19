@@ -67,7 +67,9 @@ public class ChannelServlet extends HttpServlet {
 			if(request.getParameter("cid")!=null){
 				String cid = request.getParameter("cid");
 				
-				if(cid!=null && !cid.contentEquals("")){
+				System.out.println("Function: "+f+", Channel id: "+cid);
+				
+				/*if(cid!=null && !cid.contentEquals("")){
 					String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid="
 							+ cid;
 					
@@ -88,7 +90,12 @@ public class ChannelServlet extends HttpServlet {
 							+ "id\":32,\"header\":\"header111asdc\"},{\"id\":43,\"header\":\"body2345\"}]");
 					response.getWriter().flush();
 					response.getWriter().close();
-				}
+				}*/
+				
+				response.getWriter().write("[{\""
+						+ "id\":102,\"header\":\"header111asdc\"},{\"id\":103,\"header\":\"body2345\"}]");
+				response.getWriter().flush();
+				response.getWriter().close();
 			}
 		}else if(f!=null && f.contentEquals("add_topic_to_channel")){
 			String cid = request.getParameter("cid");
@@ -124,6 +131,46 @@ public class ChannelServlet extends HttpServlet {
 			response.getWriter().flush();
 			response.getWriter().close();
 			
+		} else if(f!=null && f.contentEquals("get_channel")){
+			String cid = request.getParameter("cid");
+			System.out.println(cid);
+			if(cid!=null && !cid.contentEquals("")){
+				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channel&cid=" + cid;
+				System.out.println(url);
+				
+				URL jsonPage = new URL(url);
+				HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
+			
+				BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				
+				String line = "";
+				String content = "";
+				
+				while((line = reader.readLine()) != null){
+					content += line;
+				}
+				
+				reader.close();
+				
+				response.getWriter().write(content);
+				response.getWriter().flush();
+				response.getWriter().close();
+			}
+		} else if(f!=null && f.contentEquals("get_progress")){
+			String cid = request.getParameter("cid");
+			String uid = request.getParameter("uid");
+			
+			System.out.println("User: "+uid+", Channel: "+cid);
+			
+			response.getWriter().write("65");
+			response.getWriter().flush();
+		} else if(f!=null && f.contentEquals("get_subscribed_channels")){
+			String uid = request.getParameter("uid");
+			System.out.println("User: "+uid);
+			
+			response.getWriter().write("[{"
+					+ "'id': 17,'name':'channel 58'},{'id':16,'name':'my channel'}]");
+			response.getWriter().flush();
 		}
 	}
 

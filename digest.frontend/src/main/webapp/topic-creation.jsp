@@ -161,15 +161,6 @@
 			$(this).remove();
 		});
 		
-		$('#show-added-tags').on('click',function(){
-			var tags=[];
-			$('.add-tag').each(function(i){
-				tags.push($(this).text());
-			});
-			
-			var jsonArr = JSON.stringify(tags);
-			alert(jsonArr);
-		});
 		$('#show-my-channels').on('click',function(){
 			
 			var userChannels = $('#user-channels');
@@ -220,12 +211,12 @@
 		$('#create_topic_form').on('submit',function(){
 			var tags=[];
 			$('.add-tag').each(function(i){
-				tags.push($('.add-tag').text());
+				tags.push($(this).text());
 			});
 			
 			var jsonArr = JSON.stringify(tags);
 
-			$(this).append('<textarea name="tags">'+jsonArr+'</textarea>');
+			$(this).append('<textarea name="tags" style="display: none;">'+jsonArr+'</textarea>');
 		});
 		
 	});
@@ -373,7 +364,6 @@
 											<input type="text" class="form-control" id="tags">
 										</div>
 									</div>
-									<a id="show-added-tags" class="btn btn-primary">Show added Tags</a>
 									<div id="tag-selections"></div>
 									<div class="form-group">
 										<label class="control-label col-sm-2" for="owner">Owner:</label>

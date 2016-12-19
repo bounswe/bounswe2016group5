@@ -22,29 +22,64 @@
 	type="text/javascript"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js"></script>
 
 <script>
 $(document).ready(function(){
 	
-	$.getJSON('ChannelServlet?f=get_topics&cid=1',function(data){
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return results[1] || 0;
+	    }
+	}
+	
+	$.getJSON('ChannelServlet?f=get_channel&cid='+$.urlParam('cid'),function(data){
+		var channelName = data.name;
+		$('#channel-header').text(channelName);
+	});
+	
+	$.getJSON('ChannelServlet?f=get_topics&cid='+$.urlParam('cid'),function(data){
 			var topics = $('#topics');
 			var content = '';
 			
 			$.each(data,function(key,val){
 				
 					content = '<td>'+val.header+'</td>'
-				          + '<td>atakanguney</td>'
 				          + '<td>60%</td>'
 				          + '<td>' 
-				          +	'<button name="topic_id"  value="64" type="submit">'+val.id+'</button></td>';
+				          +	'<a class="btn btn-primary" href="ViewTopicServlet?topic_id='+val.id+'">View Topic</a></td>';
 				
 					topics.append($('<tr />').html(content));
 			});
 			
 			
 		});
+	
+	<%if(session.getAttribute("id")!=null){%>
+	
+	$.ajax({
+		url: 'ChannelServlet',
+		data: {
+			f: 'get_progress',
+			cid: $.urlParam('cid'),
+			uid: <%=session.getAttribute("id")%>
+		},
+		success: function(data){
+			var progress = data;
+			$('#progress').text(progress);
+		}
+	});
+	
+	$('#progress-block').show();
+	
+	<%}%>
+	
 	
 	$('#show-add-topic-form').on('click',function(){
 		if($('#add-topic-form').css('display') == 'none')
@@ -118,15 +153,15 @@ $(document).ready(function(){
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-3 pull">
-					<form action="_search" method="POST" class="navbar-form"
+					<form action="search.jsp" method="POST" class="navbar-form"
 						role="search">
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="Search"
-								name="searchterm" id="search">
+								name="search_field" id="search">
 							<div class="input-group-btn">
-								<a id="search-link" class="btn btn-default">
+								<button type="submit" id="search-link" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
-								</a>
+								</button>
 							</div>
 						</div>
 					</form>
@@ -171,7 +206,7 @@ $(document).ready(function(){
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>
-								<div class="panel-body">Channels and some links</div>
+								<div class="panel-body" id="sidebar-channels">Channels and some links</div>
 
 							</div>
 							<div class="panel panel-default"
@@ -189,44 +224,26 @@ $(document).ready(function(){
 				}
 			%>
 			<div class="col-sm-9">
-				<h2 align="center">Channel Name</h2>
-				<div class="progress">
-				  <div class="progress-bar" role="progressbar" aria-valuenow="70"
+				<h2 id="channel-header" align="center"></h2>
+				<div id="progress-block" class="progress" style="display: none;">
+				  <div id="progress" class="progress-bar" role="progressbar" aria-valuenow="70"
 				  aria-valuemin="0" aria-valuemax="100" style="width:70%">
-				    70%
 				 </div>
-			</div>
-			<form class="form-horizontal" id="view_topic_form"
-						action="ViewTopicServlet" method="POST">
+				</div>
 			<div class=" well " >
 			    <table class="table">
 			      <thead>
 			        <tr>
 			          <th>Topic Name</th>
-			          <th>Owner</th>
 			          <th>Progress</th>
 			          <th></th>
 			        </tr>
 			      </thead>
 			      <tbody id="topics">
-			        <tr >
-			          <td>Why Fenerbahce is one of the biggest sports club in Turkey?</td>
-			          <td>atakanguney</td>
-			          <td>60%</td>
-			          <td> 
-			          		<button name="topic_id"  value="64" type="submit">View Topic</button></td> <!-- value should be corresponding topicID  -->
-			        </tr>
-			        <tr>
-			          <td>Why girls like Instagram?</td>
-			          <td>seyma7</td>
-			          <td>70%</td>
-			          <td> 
-			          		<button name="topic_id"  value="75" type="submit">View Topic</button></td>
-			        </tr>
 			      </tbody>
 			    </table>
 			</div>
-			</form>
+			
 			<div id="topics2"></div>
 				<button class="btn btn-primary" id="show-add-topic-form">Add Topic</button>
 				<div id="add-topic-form" style="display: none;">
