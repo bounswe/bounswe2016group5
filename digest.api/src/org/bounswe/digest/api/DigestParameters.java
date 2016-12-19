@@ -26,6 +26,7 @@ public class DigestParameters {
 	public static final String GET_TOPICS_WITH_TAG = "get_topics_with_tag";
 	public static final String GET_TAG_SUGGESTIONS = "get_tag_suggestions";
 	public static final String GET_TAG_ENTITIES = "get_tag_entities";
+	public static final String GET_RELATED_ENTITIES = "get_related_entities";
 	public static final String ADD_CHANNEL = "add_channel";
 	public static final String RATE_COMMENT = "rate_comment";
 	public static final String UNRATE_COMMENT = "unrate_comment";

@@ -959,3 +959,15 @@
 2016-12-19 17:02:33,272 [Worker-451] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
 2016-12-19 17:02:33,273 [Worker-451] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
 2016-12-19 17:02:33,277 [Worker-451] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-19 17:11:45,158 [Worker-450] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-19 17:11:45,175 [Worker-450] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-19 17:11:45,182 [Worker-450] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-19 17:11:45,189 [Worker-450] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-19 17:13:54,040 [Worker-455] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-19 17:13:54,047 [Worker-455] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-19 17:13:54,047 [Worker-455] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-19 17:13:54,054 [Worker-455] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
+2016-12-19 17:14:34,453 [Worker-455] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-19 17:14:34,464 [Worker-455] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\main\resources
+2016-12-19 17:14:34,471 [Worker-455] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (Cp1254 actually) to copy filtered resources, i.e. build is platform dependent!
+2016-12-19 17:14:34,477 [Worker-455] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\mbugc\Desktop\digest\bounswe2016group5\digest.api\src\test\resources
