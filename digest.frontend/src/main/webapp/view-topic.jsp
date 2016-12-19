@@ -27,14 +27,6 @@
 <script src="js/site.js"></script>
 <script>
 	$(document).ready(function() {
-
-		$('#view_topic_form').validate({
-			rules : {
-				topic_id : {
-					required : true
-				},
-			}
-		});
 		$('#add_comment_form').validate({
 			rules : {
 				topic_id : {
@@ -48,12 +40,6 @@
 				},
 			}
 		});
-		$('#add_quiz_form').validate({ 
-			rules : {
-				tid : {
-					required : true
-			}
-		});
         $('#add_media_form').validate({ 
 			rules : {
 				tid : {
@@ -63,21 +49,34 @@
 					required : true
 				},
 			}
-			
+		});
 		
-		});
-		$('#add_subscriber_form').validate({ 
-			rules : {
-				tid : {
-					required : true
-			}
-		});
-		$('#submit_quiz_form').validate({ 
-			rules : {
-				tid : {
-					required : true
-			}
-		});
+		$('.upButton').click(function(){
+			var cid = $(this).val().split('&')[0];
+			var uid = $(this).val().split('&')[1];
+		    var count =  parseInt(document.getElementById(cid+"-rate").textContent);
+		    var count = count + 1 ;
+		    document.getElementById(cid+"-rate").textContent = count;
+		    
+		    $.post( "RateCommentServlet", { cid: cid, uid: uid, f:"rate_comment" },function( data ) {
+		    		
+		    });
+		    
+		    
+		 });
+		$('.downButton').click(function(){
+			
+			var cid = $(this).val().split('&')[0];
+			var uid = $(this).val().split('&')[1];
+		    var count =  parseInt(document.getElementById(cid+"-rate").textContent);
+		    var count = count -1 ;
+		    document.getElementById(cid+"-rate").textContent = count;
+		    
+		    $.post( "RateCommentServlet", { cid: cid, uid: uid, f:"unrate_comment" },function( data ) {
+	    		
+		    });
+		    
+		  });
 		
 	});
 </script>
@@ -354,6 +353,8 @@
 
 																		int cid = com.getInt("id");
 																		int uid = com.getInt("uid");
+
+																		System.out.println(uid);
 																		int rate = com.getInt("rate");
 																		int type = com.getInt("type");
 
@@ -378,94 +379,49 @@
 														%>
 														<li class="media">
 															<div class="media-body " >
-																<div class="well well-lg" 
-																<% if(type == 2){
-																	%>
-																	>
-																<% 	
-																}else{
-																	%>
-																	>
-																<% 
-																}
-																%>
-
-																
+																<div class="well well-lg" >
 																	<div class="row">
 																		<div class="col-sm-4">
-																		
 																			<p class="media-heading text-uppercase reviews"><%=username%></p>
 																			<p class="media-comment"><%=com.get("body")%></p>
 																		</div>
 																		<div class="col-sm-4 pull-right">
-																			<span class="comment-rate" style="margin: 0 10px 0 0">
+																			<span class= "comment-rate" id="<%=cid%>-rate" style="margin: 0 10px 0 0">
 																				<%=rate %></span>
-																			<form class="form-horizontal" id="up_comment_form"
-																				action="RateCommentServlet" method="POST"
-																				style="display: inline;">
-																				<input type="hidden" name="cid" value="<%=cid%>">
-																				<input type="hidden" name="uid" value="<%=uid%>">
-																				<input type="hidden" name="f" value="up">
-																				<input type="hidden" name="tid" value="<%=tid%>">
-																				<button type="submit" id="upButton"
-																					class="btn btn-info glyphicon glyphicon-thumbs-up"
+																			<button type="button" 
+																					value="<%=cid %>&<%=uid%>"
+																					class="upButton btn btn-info glyphicon glyphicon-thumbs-up"
 																					data-loading-text=" ... "
 																					style="margin: 10px 0 0 0"></button>
-																			</form>
-																			<form class="form-horizontal" id="down_comment_form"
-																				action="RateCommentServlet" method="POST"
-																				style="display: inline;">
-																				<input type="hidden" name="cid" value="<%=cid%>">
-																				<input type="hidden" name="uid" value="<%=uid%>">
-																				<input type="hidden" name="f" value="down">
-																				<input type="hidden" name="tid" value="<%=tid%>">
-																				<button type="submit" id="downButton"
-																					class="btn btn-info glyphicon glyphicon-thumbs-down"
+																			<button type="button"
+																					value="<%=cid %>&<%=uid%>"
+																					class="downButton btn btn-info glyphicon glyphicon-thumbs-down"
 																					data-loading-text=" ... "
 																					style="margin: 10px 10px 0 10px"></button>
-																			</form>
-																			<%
-																			if (session.getAttribute("session") != null) {
-																				if ( owner == (Integer) session.getAttribute("id") && type == 0 ) { //and not instructive already
-																			%>
+																					
 																			<form class="form-horizontal" id="instructive_form"
 																				action="InstructiveCommentServlet" method="POST">
 																				<input type="hidden" name="cid" value="<%=cid%>">
 																				<input type="hidden" name="tid" value="<%=tid%>"> 
 																				<%
-																				/*
-																				if(comment is instructive){
-																					<input type="hidden" name="f" value="unmark"> 
-																					<button type="submit" id="btnDown"
-																							class="btn btn-danger "
-																							data-loading-text=" ... "
-																							style="margin: 10px 10px 10px 10px">Mark as Normal</button>
-																				}else{
-
-																					<input type="hidden" name="f" value="mark"> 
-																					*/
+																				if (session.getAttribute("session") != null) {
+																					if ( owner == (Integer) session.getAttribute("id") && type == 0 ) { //and not instructive already
 																				%>
-																					<button type="submit" id="btnDown"
+																					<button type="submit" id="insButton"
 																							class="btn btn-danger "
 																							data-loading-text=" ... "
 																							style="margin: 20px 30px 10px 10px">Mark as Instructive</button>
-																				
-																				<% 
-																				/*}
-																				*/
-																				%>
-																				
 																			</form>
+																			
+																			<h3><span class = "label label-danger" >
 																			<%
 																			}
-																				else if(type == 2) { //else if the comment is instructive
-																			%>
-																			<h3><span class = "label label-danger" >Instructive</span></h3>
+																			else if(type == 2) { 
+																			%>Instructive</span></h3>
 																			<%
-																			}else if( owner == (Integer) session.getAttribute("id") && type == 1){
-																				%>
-																				<h3><span class = "label label-danger" >Question</span></h3>
-																				<%
+																			}else{
+																			%>Question
+																			<%
 																			}
 																			}
 																			%>
@@ -536,8 +492,7 @@
 														<%
 															if (session.getAttribute("id") != null) {
 														%>
-														<div class="collapse row col-sm-9 pull-right "
-															id="addcomment<%=cid%>">
+														<div class="collapse row col-sm-9 pull-right" id="addcomment<%=cid%>">
 															<div class="row">
 																<div class="widget-area no-padding blank">
 																	<div class="status-upload">
@@ -776,6 +731,8 @@
 
 
 
+			</div>
+			</div>
 			<footer id="menu-outer">
 				<div class="col-sm-offset-2 col-sm-10">
 					<ul id="horizontal-list">
