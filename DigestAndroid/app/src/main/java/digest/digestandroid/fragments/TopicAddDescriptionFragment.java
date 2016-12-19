@@ -14,8 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.android.volley.Cache;
 import com.android.volley.toolbox.ImageLoader;
@@ -30,6 +33,8 @@ import digest.digestandroid.Models.TopicTag;
 import digest.digestandroid.Models.User;
 import digest.digestandroid.R;
 import digest.digestandroid.api.VolleySingleton;
+
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +61,10 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
     EditText etTitle;
     EditText etBody;
     EditText etTags;
+
+    private ArrayList<String> channel_list = new ArrayList<String>();
+    private ArrayAdapter<String> list_adapter;
+    MaterialBetterSpinner spinnerChannel;
 
     private Topic mtopic;
     private View rootView;
@@ -106,6 +115,28 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         etTitle = (EditText) rootView.findViewById(R.id.topic_create_title);
         etBody = (EditText) rootView.findViewById(R.id.topic_create_body);
         etTags = (EditText) rootView.findViewById(R.id.topic_create_tags);
+
+        spinnerChannel = (MaterialBetterSpinner) rootView.findViewById(R.id.topic_spinner_channel);
+
+        spinnerChannel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                     @Override
+                                                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                         // TODO: 19.12.2016   setChosenChannel --> parent.getItemAtPosition(position).toString();
+                                                     }
+
+                                                     @Override
+                                                     public void onNothingSelected(AdapterView<?> parent) {
+
+                                                     }
+                                                 });
+
+        channel_list.add("samting1");
+        channel_list.add("samting2");
+        // TODO: 19.12.2016  channel_list = digest.digestandroid.Cache.getInstance().getChannels();
+        // TODO: 19.12.2016 Then submit channel of the topic to backend
+        list_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, channel_list);
+        list_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerChannel.setAdapter(list_adapter);
 
         return rootView;
 
