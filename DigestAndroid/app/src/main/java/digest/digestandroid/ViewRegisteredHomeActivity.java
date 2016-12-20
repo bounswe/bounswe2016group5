@@ -125,15 +125,41 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         });
 
         //--------------------------  ABOVE IS TOOLBAR  ------------------------------------
-        //--------------------------  BELOW IS RECYCLERVIEW  -------------------------------------------
 
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager_home);
-        defineViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs_home);
-        tabLayout.setupWithViewPager(viewPager);
-        loadViewPager();
+
+
+
+        Response.Listener<String> startHomePageResponseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                // SET CHANNEL LIST IN THE RESPONSE
+
+                final ArrayList<Channel> channelList = serializeChannelsFromJson(response);
+                Cache.getInstance().setUserChannels(channelList);
+
+                //--------------------------  BELOW IS RECYCLERVIEW  -------------------------------------------
+                viewPager = (ViewPager) findViewById(R.id.viewpager_home);
+                defineViewPager(viewPager);
+
+                tabLayout = (TabLayout) findViewById(R.id.tabs_home);
+                tabLayout.setupWithViewPager(viewPager);
+                loadViewPager();
+
+                Log.d("Heyyo",""+Cache.getInstance().getUserChannels());
+
+
+            }
+        };
+
+        // GET USER CHANNELS BEFORE LOADING HOME PAGE TABS
+
+
+        APIHandler.getInstance().getChannelsOfUser(Cache.getInstance().getUser(), startHomePageResponseListener);
+
+
 
     }
 

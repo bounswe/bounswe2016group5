@@ -1,5 +1,8 @@
 package digest.digestandroid;
 
+import java.util.ArrayList;
+
+import digest.digestandroid.Models.Channel;
 import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
@@ -26,6 +29,8 @@ public class Cache {
     String topicCreator; // username of topic creator
 
     QuizQuestion question; //
+
+    ArrayList<Channel> userChannels;
 
 
     public static Cache getInstance() {
@@ -84,4 +89,13 @@ public class Cache {
         this.material = material;
         newMaterial = 1;
     }
+
+    public ArrayList<Channel> getUserChannels() {
+        return userChannels;
+    }
+
+    public void setUserChannels(ArrayList<Channel> userChannels) {
+        this.userChannels = new ArrayList<Channel>(userChannels);
+    }
+
 }
