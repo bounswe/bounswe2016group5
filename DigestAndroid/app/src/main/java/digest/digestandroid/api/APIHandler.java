@@ -35,6 +35,7 @@ import java.util.Map;
 
 import digest.digestandroid.Cache;
 import digest.digestandroid.CacheTopiclist;
+import digest.digestandroid.Models.Channel;
 import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
@@ -242,11 +243,52 @@ public class APIHandler extends Application{
 
     }
 
+    public void getChannelsOfSubscribedTopics(User user,Response.Listener<String> successListener){
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_subscribed_channels&uid=" + user.getId() ,
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {Log.d("Failed", "Channel list from subscribed topics did not arrive");}
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+    public void getChannelsOfUser(User user, Response.Listener<String> successListener){
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_channels_of_user&uid=" + user.getId() ,
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {Log.d("Failed", "Channel can not return topics");}
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+    //  http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid=8
+    public void getTopicsFromChannel(int channelId, Response.Listener<String> successListener) {
+
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_topics_from_channel&cid=" + channelId ,
+                successListener,
+                new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {Log.d("Failed", "Channel can not return topics");}
+        });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+
+    }
+
+
+    //http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_trending_topics
     public void getTrendingTopics(User user, Response.Listener<String> trendingTopLis) {
         Log.d("FFSS","We entered getting topics");
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 // TODO change the api for trending topics !!!!!!!!!!!!!!!!!!!!!!!!!! ------------------ Change api when it comes !!!!!!!!!!!!!!!!!!!!!!!
-                mainURL + "/?f=get_topics_of_user&ruid=" + user.getId(),
+                mainURL + "/?f=get_trending_topics",
                 trendingTopLis,
                 new Response.ErrorListener() {
                     @Override

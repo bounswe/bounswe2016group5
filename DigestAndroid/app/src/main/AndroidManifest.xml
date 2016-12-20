@@ -16,10 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ViewTopicActivity"
+            android:name=".LoginActivity"
             android:exported="true"
-            android:label="@string/view_topic_label"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/AppTheme.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,9 +26,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".ViewTopicActivity"
             android:exported="true"
-            android:theme="@style/AppTheme.Dark">
+            android:label="@string/view_topic_label"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -76,13 +76,17 @@
             android:label="Add Question"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
-        android:name=".AddChannelActivity"
-        android:label="Add Channel"
-        android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+            android:name=".AddChannelActivity"
+            android:label="Add Channel"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
             android:name=".AdvancedSearchActivity"
             android:label="Advanced Search"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
+            android:name=".ViewChannelTopicsActivity"
+            android:label="Channel"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"  />
 
 
 

@@ -1,8 +1,7 @@
 package digest.digestandroid;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -33,6 +32,7 @@ import org.json.JSONTokener;
 import java.util.ArrayList;
 import java.util.List;
 
+import digest.digestandroid.Models.Channel;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.api.APIHandler;
 import digest.digestandroid.fragments.RegisteredHomeFollowedFragment;
@@ -55,6 +55,8 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     private static RegisteredHomeTrendFragment homeTrendFragment ;
     private static RegisteredHomeFollowedFragment homeFollowedFragment;
     private static RegisteredHomeProfileFragment homeProfileFragment;
+
+
 
     //--------------------------  ABOVE IS FIELD VARIABLES  -------------------------------------------
     //--------------------------  BELOW IS OVERRIDE-CREATE FUNCTIONS  ---------------------------------
@@ -123,15 +125,41 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         });
 
         //--------------------------  ABOVE IS TOOLBAR  ------------------------------------
-        //--------------------------  BELOW IS RECYCLERVIEW  -------------------------------------------
 
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager_home);
-        defineViewPager(viewPager);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs_home);
-        tabLayout.setupWithViewPager(viewPager);
-        loadViewPager();
+
+
+
+        Response.Listener<String> startHomePageResponseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                // SET CHANNEL LIST IN THE RESPONSE
+
+                final ArrayList<Channel> channelList = serializeChannelsFromJson(response);
+                Cache.getInstance().setUserChannels(channelList);
+
+                //--------------------------  BELOW IS RECYCLERVIEW  -------------------------------------------
+                viewPager = (ViewPager) findViewById(R.id.viewpager_home);
+                defineViewPager(viewPager);
+
+                tabLayout = (TabLayout) findViewById(R.id.tabs_home);
+                tabLayout.setupWithViewPager(viewPager);
+                loadViewPager();
+
+                Log.d("Heyyo",""+Cache.getInstance().getUserChannels());
+
+
+            }
+        };
+
+        // GET USER CHANNELS BEFORE LOADING HOME PAGE TABS
+
+
+        APIHandler.getInstance().getChannelsOfUser(Cache.getInstance().getUser(), startHomePageResponseListener);
+
+
 
     }
 
@@ -187,8 +215,10 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeTrendFragment.trendingRecyclerView));
                 }else if(currentFragment.equals("Followed")){
                     APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeFollowedFragment.followedRecyclerView));
+                    APIHandler.getInstance().getChannelsOfSubscribedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment+"2",homeFollowedFragment.followedChannelsRecyclerView));
                 }else if(currentFragment.equals("Profile")){
                     APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeProfileFragment.profileRecyclerView));
+                    APIHandler.getInstance().getChannelsOfUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment+"2",homeProfileFragment.profileChannelsRecyclerView));
                 }else{
                     Log.d("HEEY","This fragment name is not expected !!! ");
                 }
@@ -249,11 +279,29 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     }
 
 
-                }else if(currentFragment.equals("Profile")){
+                }else if(currentFragment.equals("Profile")) {
                     final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
-                    Log.d("AA",""+arrayList.toString());
                     CacheTopiclist.getInstance().setUserTopics(arrayList);
-                    loadTopics(currentRecyclerView,arrayList);
+                    loadTopics(currentRecyclerView, arrayList);
+
+                }else if(currentFragment.equals("Profile2")){
+
+                    Log.d("Hey"," "+Cache.getInstance().getUser().getId()+" Profile2");
+                    final ArrayList<Channel> channelList = serializeChannelsFromJson(response);
+                    CacheTopiclist.getInstance().setUserChannels(channelList);
+
+                    Log.d("Hey",""+channelList.toString());
+                    loadChannels(currentRecyclerView, channelList);
+
+                }else if(currentFragment.equals("Followed2")){
+
+                    Log.d("Hey"," What happened, where are channels? Followed2 ");
+                    final ArrayList<Channel> channelList = serializeChannelsFromJson(response);
+
+                    CacheTopiclist.getInstance().setFollowedChannels(channelList);
+
+                    Log.d("Hey",""+channelList.toString());
+                    loadChannels(currentRecyclerView, channelList);
 
 
                 }else{
@@ -306,6 +354,60 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         return resultArrayList;
     }
 
+    public void loadChannels(RecyclerView currentRecyclerView,final ArrayList<Channel> currentChannelList){
+        RecyclerView.Adapter channelAdapter = new ChannelAdapter(currentChannelList);
+        currentRecyclerView.setAdapter(channelAdapter);
+
+
+
+        Log.d("In load channels",""+currentRecyclerView.toString());
+        ((ChannelAdapter) channelAdapter).setOnItemClickListener(new ChannelAdapter.ChannelClickListener() {
+            @Override
+            public void onItemClick(int pos, View v) {
+                Log.d("" + pos, v.toString());
+
+                int clickedChannelId = currentChannelList.get(pos).getId();
+                final String theChannelName = currentChannelList.get(pos).getName();
+
+
+                Response.Listener<String> getChannelsListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Success", response.toString());
+
+                        final ArrayList<Topic> arrayList = serializeTopicsFromJson(response);
+                        CacheTopiclist.getInstance().setChannelTopics(arrayList);
+
+                        Intent intent = new Intent(getApplicationContext(), ViewChannelTopicsActivity.class);
+                        intent.putExtra("cname", theChannelName);
+                        startActivity(intent);
+                    }
+                };
+                APIHandler.getInstance().getTopicsFromChannel(clickedChannelId, getChannelsListener);
+            }
+        });
+    }
+    public static ArrayList<Channel> serializeChannelsFromJson(String resp){
+        final ArrayList<Channel> resultArrayList = new ArrayList<>();
+
+        Log.d("aa",""+resp);
+
+        try {
+            JSONArray obj = (JSONArray) new JSONTokener(resp).nextValue();
+            int channelNumber = obj.length();
+            for (int i = 0; i < channelNumber; i++) {
+                if( !( ((obj.get(i)).toString()).equals("null"))) {
+                    Log.d("---aa"+channelNumber,"a"+((obj.get(i)).toString())+"a");
+                    JSONObject tempObj = (JSONObject) obj.get(i);
+                    Channel tempCh = (new Gson()).fromJson(tempObj.toString(), Channel.class);
+                    resultArrayList.add(tempCh);
+                }
+            }
+        } catch (JSONException e) {}
+
+
+        return resultArrayList;
+    }
 
     //--------------------------  ABOVE IS LISTENER FUNCTIONS  ------------------------------------------
     //--------------------------  BELOW IS ADAPTER CLASS  ------------------------------------------

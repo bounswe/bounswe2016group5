@@ -30,6 +30,9 @@ public class RegisteredHomeFollowedFragment extends Fragment {
     protected View rootView;
 
     public RecyclerView followedRecyclerView;
+    public RecyclerView followedChannelsRecyclerView;
+    private RecyclerView.ItemAnimator followedItemAnimator;
+
     private RecyclerView.LayoutManager followedLayoutManager;
 
     public RegisteredHomeFollowedFragment() {}
@@ -42,10 +45,16 @@ public class RegisteredHomeFollowedFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_home_followed, container, false);
 
         followedRecyclerView = (RecyclerView) rootView.findViewById(R.id.followed_recycler_view);
-        followedLayoutManager = new LinearLayoutManager(getActivity());
-        followedRecyclerView.setLayoutManager(followedLayoutManager);
-        followedRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        followedChannelsRecyclerView = (RecyclerView) rootView.findViewById(R.id.followed_channel_recycler_view);
 
+
+        followedItemAnimator = new DefaultItemAnimator();
+
+        followedRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        followedRecyclerView.setItemAnimator(followedItemAnimator);
+
+        followedChannelsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        followedChannelsRecyclerView.setItemAnimator(followedItemAnimator);
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
         if(isVisible) {
@@ -57,9 +66,11 @@ public class RegisteredHomeFollowedFragment extends Fragment {
 
                     if (CacheTopiclist.getInstance().getFollowedTopics() == null) {
                         APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(), ((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Followed", followedRecyclerView));
+                        APIHandler.getInstance().getChannelsOfSubscribedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Followed2",followedChannelsRecyclerView));
 
                     } else {
                         ((ViewRegisteredHomeActivity) getActivity()).loadTopics(followedRecyclerView, CacheTopiclist.getInstance().getFollowedTopics());
+                        ((ViewRegisteredHomeActivity) getActivity()).loadChannels(followedChannelsRecyclerView, CacheTopiclist.getInstance().getFollowedChannels());
 
                     }
 
@@ -81,9 +92,11 @@ public class RegisteredHomeFollowedFragment extends Fragment {
             if(followedRecyclerView != null){
                 if(CacheTopiclist.getInstance().getFollowedTopics() == null){
                     APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Followed",followedRecyclerView));
+                    APIHandler.getInstance().getChannelsOfSubscribedTopics(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Followed2",followedChannelsRecyclerView));
 
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
+                    ((ViewRegisteredHomeActivity) getActivity()).loadChannels(followedChannelsRecyclerView, CacheTopiclist.getInstance().getFollowedChannels());
 
                 }
             }

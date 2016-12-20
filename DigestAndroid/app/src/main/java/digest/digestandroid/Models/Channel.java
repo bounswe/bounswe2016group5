@@ -8,52 +8,55 @@ import java.util.ArrayList;
 
 public class Channel {
 
-    private ArrayList<Topic> channelTopics;
-    private String channelName;
-    private int channelId;
-    private int userId;
+    private int id;
+    private int uid;
+    private String name;
+    private int status;
 
 
-    public ArrayList<Topic> getChannelTopics() {
-        return channelTopics;
+    public Channel(){}
+    public Channel( int theId , int theuserid , String thename,int thestatus){ status = thestatus; name =thename; id =theId; uid =theuserid;}
+
+    public String getName() {
+        return name;
     }
 
-    public void setChannelTopics(ArrayList<Topic> channelTopics) {
-        this.channelTopics = channelTopics;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getChannelName() {
-        return channelName;
+    public int getId() {
+        return id;
     }
 
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getChannelId() {
-        return channelId;
+    public int getUid() {
+        return uid;
     }
 
-    public void setChannelId(int channelId) {
-        this.channelId = channelId;
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
-    public int getUserId() {
-        return userId;
+
+    public int getStatus() {
+        return status;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setStatus(int status) {
+        this.status = status;
     }
-
 
     @Override
     public String toString() {
         return "Channel{" +
-                "topics=" + channelTopics +
-                ", id='" + channelId + '\'' +
-                ", userid='" + userId + '\'' +
-                ", name=" + channelName +
+                ", id='" + id + '\'' +
+                ", uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
+                ", status=" + status +
                 '}';
     }
 
