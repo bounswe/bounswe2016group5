@@ -74,7 +74,7 @@ public class RegisteredHomeProfileFragment extends Fragment {
                         APIHandler.getInstance().getChannelsOfUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Profile2",profileChannelsRecyclerView));
                     } else {
                         ((ViewRegisteredHomeActivity) getActivity()).loadTopics(profileRecyclerView, CacheTopiclist.getInstance().getUserTopics());
-                        ((ViewRegisteredHomeActivity)getActivity()).loadChannels(profileChannelsRecyclerView,CacheTopiclist.getInstance().getUserChannels());
+                        ((ViewRegisteredHomeActivity)getActivity()).loadChannels(profileChannelsRecyclerView,CacheTopiclist.getInstance().getUserChannels(),false);
                     }
 
                 }
@@ -99,7 +99,7 @@ public class RegisteredHomeProfileFragment extends Fragment {
 
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(profileRecyclerView,CacheTopiclist.getInstance().getUserTopics());
-                    ((ViewRegisteredHomeActivity)getActivity()).loadChannels(profileChannelsRecyclerView,CacheTopiclist.getInstance().getUserChannels());
+                    ((ViewRegisteredHomeActivity)getActivity()).loadChannels(profileChannelsRecyclerView,CacheTopiclist.getInstance().getUserChannels(),false);
 
                 }
 

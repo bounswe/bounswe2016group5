@@ -262,6 +262,19 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
 
+    public void getProgressOfChannel(int channelId, User user, Response.Listener<String> successListener){
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                // TODO waiting for backend api.
+                mainURL + "/?f=get_subscribed_channels&uid=" + user.getId() ,
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {Log.d("Failed", "Progress did not arrive");}
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
     //  http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid=8
     public void getTopicsFromChannel(int channelId, Response.Listener<String> successListener) {
 

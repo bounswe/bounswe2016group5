@@ -291,7 +291,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     CacheTopiclist.getInstance().setUserChannels(channelList);
 
                     Log.d("Hey",""+channelList.toString());
-                    loadChannels(currentRecyclerView, channelList);
+                    loadChannels(currentRecyclerView, channelList,false);
 
                 }else if(currentFragment.equals("Followed2")){
 
@@ -301,7 +301,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     CacheTopiclist.getInstance().setFollowedChannels(channelList);
 
                     Log.d("Hey",""+channelList.toString());
-                    loadChannels(currentRecyclerView, channelList);
+                    loadChannels(currentRecyclerView, channelList,true);
 
 
                 }else{
@@ -354,8 +354,8 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         return resultArrayList;
     }
 
-    public void loadChannels(RecyclerView currentRecyclerView,final ArrayList<Channel> currentChannelList){
-        RecyclerView.Adapter channelAdapter = new ChannelAdapter(currentChannelList);
+    public void loadChannels(RecyclerView currentRecyclerView,final ArrayList<Channel> currentChannelList, boolean tmpProgrsVisiblty){
+        RecyclerView.Adapter channelAdapter = new ChannelAdapter(currentChannelList,tmpProgrsVisiblty);
         currentRecyclerView.setAdapter(channelAdapter);
 
 
