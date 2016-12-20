@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.android.volley.Response;
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -86,6 +87,7 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
 
 
+
     }
 
     //Next Fragment in view pager
@@ -102,17 +104,30 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
     //Sends topic request for created topic
     public void createTopicRequest(View view) {
 
+        // channel id
+        int cid = 0;
+
         //topic.setOwner(currentUser.getId());
         topic.setOwner(currentUser.getId());
 
         TopicAddDescriptionFragment topicAddDescriptionFragment = (TopicAddDescriptionFragment)((myViewPagerAdapter)viewPager.getAdapter()).getItem(0);
-        topicAddDescriptionFragment.fillInfo(topic);
+        cid = topicAddDescriptionFragment.fillInfo(topic);
         TopicAddMaterialFragment topicAddMaterialFragment = (TopicAddMaterialFragment) ((myViewPagerAdapter)viewPager.getAdapter()).getItem(1);
         topicAddMaterialFragment.fillMaterial(topic);
         TopicAddQuizFragment topicAddQuizFragment = (TopicAddQuizFragment) ((myViewPagerAdapter)viewPager.getAdapter()).getItem(2);
         topicAddQuizFragment.fillQuiz(topic);
 
-        APIHandler.getInstance().createTopic("top", topic);
+
+        Response.Listener<String> successListener =  new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("VOLLEY", response);
+                // TODO: 20.12.2016 addDescription dan gelen cid ve bu responsetan gelen tid ile channel i topic ile bagdastir. addTopicToChannel (int cid, int tid) 
+            }
+        };
+
+
+        APIHandler.getInstance().createTopic("top", topic, successListener);
 
         //Back to dashboard, since home redirects to create topic, is finishing this activity enough?
         Intent intent = new Intent(getBaseContext(), ViewRegisteredHomeActivity.class);
