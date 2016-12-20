@@ -180,6 +180,7 @@ public class DigestAPIServlet extends HttpServlet {
 			}
 		} else if (f.equals(DigestParameters.GET_TAG_SUGGESTIONS)){ 
 			String queryText = req.getParameter(DigestParameters.BODY);
+			queryText.replaceAll("_", " ");
 			CalaisAPI httpClientPost = new CalaisAPI();
 			Gson gson = new Gson();
 			resp.getWriter().append(gson.toJson(httpClientPost.extractTags(queryText)));
@@ -188,6 +189,11 @@ public class DigestAPIServlet extends HttpServlet {
 			ConceptNetAPI httpClientPost = new ConceptNetAPI();
 			Gson gson = new Gson();
 			resp.getWriter().append(gson.toJson(httpClientPost.extractEntities(queryText)));
+		}else if (f.equals(DigestParameters.GET_RELATED_ENTITIES)){
+			String queryText = req.getParameter(DigestParameters.TAG);
+			ConceptNetAPI httpClientPost = new ConceptNetAPI();
+			Gson gson = new Gson();
+			resp.getWriter().append(gson.toJson(httpClientPost.getRelatedEntities(queryText)));
 		}else if(f.equals(DigestParameters.ADD_CHANNEL)){
 			int uid=Integer.parseInt(req.getParameter(DigestParameters.UID));
 			String name=req.getParameter(DigestParameters.NAME);
