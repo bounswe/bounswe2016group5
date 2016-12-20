@@ -65,7 +65,7 @@
 		
 ## Get Related Entities
 	Explanation : 
-		Send entity to retrieve at most 10 entities, which will be related to sent entity in descending order.
+		Send entity to retrieve at most 10 entities, which will be related to sent entity in descending order of relation weight.
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
 	Method:
@@ -80,7 +80,7 @@
 	Example:
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_related_entities&tag=computer_science
 		
-		result will be : [{"weight":0.542,"label":"informatics"},{"weight":0.533,"label":"alan turing"},{"weight":0.531,"label":"decompiler"},{"weight":0.507,"label":"terminal emulation"},{"weight":0.478,"label":"artificial intelligence"},{"weight":0.475,"label":"computability"},{"weight":0.474,"label":"undecidable"},{"weight":0.468,"label":"compilable"},{"weight":0.466,"label":"decidability"},{"weight":0.465,"label":"compsci"}]
+		result will be : ["informatics","alan turing","decompiler","terminal emulation","artificial intelligence","computability","undecidable","compilable","decidability","compsci"]
 
 		
 ## Get Channel
