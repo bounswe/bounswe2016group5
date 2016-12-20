@@ -153,7 +153,9 @@ public class DigestAPIServlet extends HttpServlet {
 			String tag = req.getParameter(DigestParameters.TAG);
 
 			// if (UserJDBC.isSessionValid(uid, session)) {
-			resp.getWriter().append(TopicJDBC.getTopicsWithTag(tag));
+			ArrayList<TopicPreview> topics = TopicJDBC.getTopicsWithTag(tag);
+			Gson gson = new Gson();
+			resp.getWriter().append(gson.toJson(topics));
 			// } else {
 				// resp.getWriter().append(invalidSession());
 
@@ -234,6 +236,14 @@ public class DigestAPIServlet extends HttpServlet {
 			resp.getWriter().append(ChannelJDBC.getSubscribedChannels(uid));
 		}else if(f.equals(DigestParameters.GET_TRENDING_TOPICS)){
 			resp.getWriter().append(TopicJDBC.getTrendingTopics());
+		}else if(f.equals(DigestParameters.SEARCH_TOPICS)){
+			String text = req.getParameter(DigestParameters.TEXT);
+			resp.getWriter().append(TopicJDBC.getTopicWithString(text));
+		} else if (f.equals("test")){
+			TopicJDBC.createTag("computer");
+			//ConceptNetAPI httpClientPost = new ConceptNetAPI();
+			//Gson gson = new Gson();
+			//resp.getWriter().append(gson.toJson(httpClientPost.extractEntities("computer").getString(0)));
 		}
 		
 		else {

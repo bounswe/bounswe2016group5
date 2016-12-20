@@ -41,6 +41,7 @@ public class DigestParameters {
 	public static final String GET_PROGRESS_TOPIC = "get_progress_topic";
 	public static final String GET_PROGRESS_CHANNEL = "get_progress_channel";
 	public static final String ADD_PROGRESS = "add_progress";
+	public static final String SEARCH_TOPICS = "search_topics";
 	
 	public static final String HEADER = "header";
 	// public static final String TYPE = "type";
@@ -52,6 +53,7 @@ public class DigestParameters {
 	public static final String TAG = "tag";
 	public static final String NAME = "name";
 	public static final String TYPE = "type";
+	public static final String TEXT = "text";
 
 	public static final String UID = "uid";
 	public static final String RUID = "ruid";
