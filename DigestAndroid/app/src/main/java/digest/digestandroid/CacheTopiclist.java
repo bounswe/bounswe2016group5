@@ -21,17 +21,17 @@ public class CacheTopiclist {
     }
 
 
-    ArrayList<Topic> recentTopics = new ArrayList<Topic>();
-    ArrayList<Topic> userTopics = new ArrayList<Topic>();
-    ArrayList<Topic> followedTopics = new ArrayList<Topic>();
-    ArrayList<Topic> trendingTopics = new ArrayList<Topic>();
-    ArrayList<Topic> tagTopics = new ArrayList<Topic>();
+    ArrayList<Topic> recentTopics ;
+    ArrayList<Topic> userTopics;
+    ArrayList<Topic> followedTopics ;
+    ArrayList<Topic> trendingTopics ;
+    ArrayList<Topic> tagTopics ;
 
-    ArrayList<Topic> channelTopics = new ArrayList<Topic>();
-    ArrayList<Channel> userChannels = new ArrayList<Channel>();
+    ArrayList<Topic> channelTopics ;
+    ArrayList<Channel> userChannels ;
 
 
-    ArrayList<Channel> followedChannels = new ArrayList<Channel>();
+    ArrayList<Channel> followedChannels;
 
     String currentFragment;
 

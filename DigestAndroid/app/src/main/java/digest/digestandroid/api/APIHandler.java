@@ -263,6 +263,27 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
 
+    // ?f=add_subscriber&uid=<USER_ID>&tid=<TOPIC_ID>
+    public void subscribeTheTopic(User user, int tid){
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=add_subscriber&uid="+user.getId()+"&tid="+tid,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Result","Topic is subscribed");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Channel can not return topics");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+    // MAY NOT BE NEEDED AT ALL
     public void getProgressOfChannel(int channelId, User user, Response.Listener<String> successListener){
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 // TODO waiting for backend api.
