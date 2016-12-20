@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import digest.digestandroid.Models.Channel;
 import digest.digestandroid.Models.Topic;
 
 
@@ -25,6 +26,12 @@ public class CacheTopiclist {
     ArrayList<Topic> followedTopics;
     ArrayList<Topic> trendingTopics;
     ArrayList<Topic> tagTopics;
+
+    ArrayList<Topic> channelTopics;
+    ArrayList<Channel> userChannels;
+
+
+    ArrayList<Channel> followedChannels;
 
     String currentFragment;
 
@@ -59,5 +66,29 @@ public class CacheTopiclist {
 
     public void setTagTopics(ArrayList<Topic> x) {tagTopics = new ArrayList<Topic>(x);}
 
+
+    public ArrayList<Channel> getUserChannels() {
+        return userChannels;
+    }
+
+    public void setUserChannels(ArrayList<Channel> userChannels) {
+        this.userChannels = new ArrayList<Channel>(userChannels);
+    }
+
+    public ArrayList<Topic> getChannelTopics() {
+        return channelTopics;
+    }
+
+    public void setChannelTopics(ArrayList<Topic> channelTopics) {
+        this.channelTopics =  new ArrayList<Topic>(channelTopics);
+    }
+
+    public ArrayList<Channel> getFollowedChannels() {
+        return followedChannels;
+    }
+
+    public void setFollowedChannels(ArrayList<Channel> followedChannels) {
+        this.followedChannels = followedChannels;
+    }
 
 }

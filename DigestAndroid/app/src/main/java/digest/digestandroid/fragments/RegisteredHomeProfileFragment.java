@@ -32,7 +32,8 @@ public class RegisteredHomeProfileFragment extends Fragment {
     protected View rootView;
 
     public RecyclerView profileRecyclerView;
-    private RecyclerView.LayoutManager profileLayoutManager;
+    public RecyclerView profileChannelsRecyclerView;
+    private RecyclerView.ItemAnimator profileItemAnimator;
 
     public RegisteredHomeProfileFragment() {}
 
@@ -49,9 +50,17 @@ public class RegisteredHomeProfileFragment extends Fragment {
         ((TextView)(rootView.findViewById(R.id.profile_user_info_8))).setText(" "+Cache.getInstance().getUser().getLast_name());
 
         profileRecyclerView = (RecyclerView) rootView.findViewById(R.id.profile_recycler_view);
-        profileLayoutManager = new LinearLayoutManager(getActivity());
-        profileRecyclerView.setLayoutManager(profileLayoutManager);
-        profileRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        profileChannelsRecyclerView = (RecyclerView) rootView.findViewById(R.id.profile_channel_recycler_view);
+
+
+        profileItemAnimator = new DefaultItemAnimator();
+
+
+        profileRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        profileRecyclerView.setItemAnimator(profileItemAnimator);
+
+        profileChannelsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        profileChannelsRecyclerView.setItemAnimator(profileItemAnimator);
 
         // Be sure that current fragment is being updated properly and the query is sent when user opens the tab
         if(isVisible) {
@@ -62,10 +71,10 @@ public class RegisteredHomeProfileFragment extends Fragment {
 
                     if (CacheTopiclist.getInstance().getUserTopics() == null) {
                         APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(), ((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Profile", profileRecyclerView));
-
+                        APIHandler.getInstance().getChannelsOfUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Profile2",profileChannelsRecyclerView));
                     } else {
                         ((ViewRegisteredHomeActivity) getActivity()).loadTopics(profileRecyclerView, CacheTopiclist.getInstance().getUserTopics());
-
+                        ((ViewRegisteredHomeActivity)getActivity()).loadChannels(profileChannelsRecyclerView,CacheTopiclist.getInstance().getUserChannels());
                     }
 
                 }
@@ -86,9 +95,11 @@ public class RegisteredHomeProfileFragment extends Fragment {
             if(profileRecyclerView != null){
                 if(CacheTopiclist.getInstance().getUserTopics() == null){
                     APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity)getActivity()).topicListQueryListenerAndLoader("Profile",profileRecyclerView));
+                    APIHandler.getInstance().getChannelsOfUser(Cache.getInstance().getUser(),((ViewRegisteredHomeActivity) getActivity()).topicListQueryListenerAndLoader("Profile2",profileChannelsRecyclerView));
 
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(profileRecyclerView,CacheTopiclist.getInstance().getUserTopics());
+                    ((ViewRegisteredHomeActivity)getActivity()).loadChannels(profileChannelsRecyclerView,CacheTopiclist.getInstance().getUserChannels());
 
                 }
 
