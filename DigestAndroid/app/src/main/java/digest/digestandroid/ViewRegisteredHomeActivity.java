@@ -190,6 +190,14 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
+
+            case R.id.action_log_out:
+
+                intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+
+                return true;
             case R.id.action_settings:
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
