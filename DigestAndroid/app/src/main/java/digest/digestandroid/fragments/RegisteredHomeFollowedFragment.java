@@ -70,7 +70,7 @@ public class RegisteredHomeFollowedFragment extends Fragment {
 
                     } else {
                         ((ViewRegisteredHomeActivity) getActivity()).loadTopics(followedRecyclerView, CacheTopiclist.getInstance().getFollowedTopics());
-                        ((ViewRegisteredHomeActivity) getActivity()).loadChannels(followedChannelsRecyclerView, CacheTopiclist.getInstance().getFollowedChannels());
+                        ((ViewRegisteredHomeActivity) getActivity()).loadChannels(followedChannelsRecyclerView, CacheTopiclist.getInstance().getFollowedChannels(),true);
 
                     }
 
@@ -96,7 +96,7 @@ public class RegisteredHomeFollowedFragment extends Fragment {
 
                 }else{
                     ((ViewRegisteredHomeActivity)getActivity()).loadTopics(followedRecyclerView,CacheTopiclist.getInstance().getFollowedTopics());
-                    ((ViewRegisteredHomeActivity) getActivity()).loadChannels(followedChannelsRecyclerView, CacheTopiclist.getInstance().getFollowedChannels());
+                    ((ViewRegisteredHomeActivity) getActivity()).loadChannels(followedChannelsRecyclerView, CacheTopiclist.getInstance().getFollowedChannels(),true);
 
                 }
             }

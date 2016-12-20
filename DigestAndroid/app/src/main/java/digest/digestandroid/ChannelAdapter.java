@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -25,15 +26,16 @@ public class ChannelAdapter extends RecyclerView
     private static String LOG_TAG = "ChannelAdapter";
     private ArrayList<Channel> channelDataset;
     private static ChannelAdapter.ChannelClickListener channelClickListener;
+    private boolean progressVisibility;
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textView1;
-        TextView textView2;
+        ProgressBar progressBar1;
 
         public DataObjectHolder(View itemView){
             super(itemView);
             textView1 = (TextView) itemView.findViewById(R.id.channel_text_view1);
-            textView2 = (TextView) itemView.findViewById(R.id.channel_text_view2);
+            progressBar1 = (ProgressBar) itemView.findViewById(R.id.progressBar1);
             itemView.setOnClickListener(this);
         }
 
@@ -46,8 +48,9 @@ public class ChannelAdapter extends RecyclerView
     public void setOnItemClickListener(ChannelAdapter.ChannelClickListener channelClickListener){
         this.channelClickListener = channelClickListener;
     }
-    public ChannelAdapter(ArrayList<Channel> channelDataset){
+    public ChannelAdapter(ArrayList<Channel> channelDataset, boolean tempProgressVisibility){
         this.channelDataset = channelDataset;
+        progressVisibility = tempProgressVisibility;
         Log.d("In channel adapter",""+channelDataset.size());
         Log.d("In channel adapter",""+channelDataset);
     }
@@ -64,7 +67,11 @@ public class ChannelAdapter extends RecyclerView
     public void onBindViewHolder(ChannelAdapter.DataObjectHolder holder, int position){
 
         holder.textView1.setText(channelDataset.get(position).getName());
-        holder.textView2.setText(""+channelDataset.get(position).getId());
+        if(progressVisibility){
+            holder.progressBar1.setProgress(channelDataset.get(position).getId());
+        }else{
+            holder.progressBar1.setVisibility(View.INVISIBLE);
+        }
 
     }
 
