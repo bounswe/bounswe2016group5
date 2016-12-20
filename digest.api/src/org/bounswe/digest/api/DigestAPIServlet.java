@@ -177,6 +177,7 @@ public class DigestAPIServlet extends HttpServlet {
 			}
 		} else if (f.equals(DigestParameters.GET_TAG_SUGGESTIONS)){ 
 			String queryText = req.getParameter(DigestParameters.BODY);
+			queryText.replaceAll("_", " ");
 			CalaisAPI httpClientPost = new CalaisAPI();
 			Gson gson = new Gson();
 			resp.getWriter().append(gson.toJson(httpClientPost.extractTags(queryText)));

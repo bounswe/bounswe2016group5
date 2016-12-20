@@ -148,7 +148,7 @@ public class ConceptNetAPI {
         input = "/c/en/" + in;
         in = in.replaceAll("_", " ");
         try {
-            String qStr = "http://api.conceptnet.io/related" + input + "?filter=/c/en&limit=100";
+            String qStr = "http://api.conceptnet.io/related" + input + "?filter=/c/en&limit=11";
             com.mashape.unirest.http.HttpResponse<JsonNode> jb = Unirest.get(qStr)
     				.header("accept", "application/json")
     				.asJson();
@@ -158,10 +158,7 @@ public class ConceptNetAPI {
     		JSONArray resultArray = obj.getJSONArray("related");
     		for(int i=1; i<resultArray.length(); i++){
     			JSONObject result = resultArray.getJSONObject(i);
-    			JSONObject object = new JSONObject();
-    			object.put("label", result.getString("@id").substring(6).replaceAll("_", " "));
-    			object.put("weight", result.getDouble("weight"));
-    			arr.put(object);
+    			arr.put(result.getString("@id").substring(6).replaceAll("_", " "));
     		}
         }catch(Exception e){
         	
