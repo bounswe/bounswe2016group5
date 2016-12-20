@@ -145,6 +145,11 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
 
                 return true;
 
+            case R.id.action_subscribe_topic:
+                APIHandler.getInstance().subscribeTheTopic(Cache.getInstance().getUser(), Cache.getInstance().getTopic().getId());
+
+                return true;
+
             default:
 
                 return super.onOptionsItemSelected(item);
