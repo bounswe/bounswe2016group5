@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -16,22 +18,22 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 
 
 public class ConnectionPool {
-	private static final String DRIVER = "jdbc.driver.classname";
-	private static final String URL = "jdbc.url";
-	private static final String USERNAME = "jdbc.username";
-	private static final String PASSWORD = "jdbc.password";
-	private static BasicDataSource dataSource;
-    private final Logger logger = LogManager.getLogger(ConnectionPool.class);
-	/*
-	private static Logger logger;
-	
-	public ConnectionPool(){
-		logger = Logger.getLogger(ConnectionPool.class);
-	    BasicConfigurator.configure();
+	private static final BasicDataSource dataSource = new BasicDataSource();
+
+	static {
+		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		dataSource.setUrl("jdbc:mysql://digest-db.c7pdwrhsbu6p.us-east-1.rds.amazonaws.com:3306/digest");
+		dataSource.setUsername("digest");
+		dataSource.setPassword("digEST352451.");
+		dataSource.setInitialSize(8);
+		dataSource.setMaxTotal(15);
 	}
-	*/
+
+	public static Connection getConnection() throws SQLException {
+		return dataSource.getConnection();
+	}
 	
-	public static Connection getConnection(){
+	/*public static Connection getConnection() throws SQLException{
 		String url = "";
 		String username = "";
 		String password="";
@@ -42,15 +44,10 @@ public class ConnectionPool {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try {
-			return DriverManager.getConnection(url, username, password);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+		return DriverManager.getConnection(url, username, password);
 		
-	}
+		
+	}*/
 	/*
 	public static Connection getConnection() {
 		Connection conn = null;
@@ -98,15 +95,34 @@ public class ConnectionPool {
 
 	}
 */
-	public static void close(Connection connection) {
-		// TODO fix
+	
+	public static void close(Connection con,PreparedStatement statement,ResultSet resultSet){
 		try {
-			connection.close();
+			resultSet.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		close(con,statement);
 	}
-
+	
+	public static void close(Connection con,PreparedStatement statement){
+		try {
+			statement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		close(con);
+	}
+	
+	
+	public static void close(Connection con) {
+		try {
+			if(con!=null) con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
 }

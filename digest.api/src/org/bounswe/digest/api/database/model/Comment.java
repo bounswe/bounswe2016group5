@@ -1,34 +1,28 @@
 package org.bounswe.digest.api.database.model;
 
-public class Comment {
+import java.sql.Date;
+import java.sql.Timestamp;
+
+public class Comment extends Model {
 	private int id;
 	private int uid;
-	private String username;
-	private String text;
+	private int ucid;
+	private int tid;
+	private String body;
 	private int rate;
-	
-	public Comment(int id,int uid,String username,String text,int rate){
-		this.id=id;
-		this.setUid(uid);
-		this.setText(text);
-		this.setUsername(username);
-		this.rate=rate;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
+	private int type;
+	private Timestamp timestamp;
+	// private String username; maybe we can use.
+	public Comment(int id, String body, int uid, int tid, int ucid, int rate, int type, Timestamp timestamp) {
+		this.id = id;
+		this.body = body;
+		this.uid = uid;
+		this.tid = tid;
+		this.ucid = ucid;
+		this.rate = rate;
+		this.type = type;
+		this.timestamp = timestamp;
+		
 	}
 
 	public int getUid() {
@@ -54,6 +48,14 @@ public class Comment {
 	public void setRate(int rate) {
 		this.rate = rate;
 	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 	
-	
+
 }
