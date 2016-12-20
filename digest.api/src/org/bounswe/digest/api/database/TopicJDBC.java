@@ -911,7 +911,13 @@ public class TopicJDBC {
 	}
 
 	private static ArrayList<TopicPreview> getRelatedTopicsWithTag(String text) {
-		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, tag, tag_entity WHERE tag_entity.entity LIKE ? AND tag.id = tag_entity.tid AND topic_tag.tag = tag.id AND topic.id = topic_tag.tid LIMIT 3";
+		ConceptNetAPI httpClientPost = new ConceptNetAPI();
+		JSONArray entities = httpClientPost.extractEntities(text);
+		if (entities.length() > 0) {
+			text = entities.getString(0);
+		}
+		//Do not take the tags label with text, but tags with this entity.
+		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, tag, tag_entity WHERE tag.tag NOT LIKE ? AND tag_entity.entity LIKE ? AND tag.tag.id = tag_entity.tid AND topic_tag.tag = tag.id AND topic.id = topic_tag.tid LIMIT 4";
 		Connection connection;
 		ArrayList<TopicPreview> result = new ArrayList<TopicPreview>();
 		try {
@@ -926,7 +932,8 @@ public class TopicJDBC {
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
-			statement.setString(1, "%" + text + "%");// regex for searching.
+			statement.setString(1,  text);
+			statement.setString(2, "%" + text + "%");// regex for searching.
 			resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				result.add(new TopicPreview(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),
