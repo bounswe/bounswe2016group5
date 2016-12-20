@@ -5,78 +5,103 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="digest.digestandroid.fragments.TopicAddDescriptionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.android.volley.toolbox.NetworkImageView
-            android:layout_width="match_parent"
-            android:layout_height="165dp"
-            android:id="@+id/topic_create_image_view" />
-
+        android:layout_height="wrap_content">
+    <!-- TODO: Update blank fragment layout -->
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context=".MainActivity" >
+            android:weightSum="1">
 
-
-            <Button
-                android:text="Upload Image"
+            <com.android.volley.toolbox.NetworkImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:id="@+id/button_image_upload"
-                android:background="@color/primary"
-                style="@style/Widget.AppCompat.Button.Colored" />
+                android:layout_height="165dp"
+                android:id="@+id/topic_create_image_view" />
 
-            <EditText
-                android:id="@+id/topic_create_title"
-                android:hint="@string/topic_Create_title"
-                android:inputType="text"
-                android:backgroundTint="@color/primary"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                 />
-
-            <EditText
-                android:id="@+id/topic_create_body"
-                android:hint="@string/topic_Create_body"
-                android:backgroundTint="@color/primary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                 />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context=".MainActivity" >
 
 
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                android:id="@+id/topic_spinner_channel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/topic_Create_channel"
-                android:textColorHint="#05ab9a"
-                app:met_floatingLabel="normal"
-                android:paddingLeft="3dp"
-                />
+
+                <Button
+                    android:text="Upload Image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/button_image_upload"
+                    android:background="@color/primary"
+                    style="@style/Widget.AppCompat.Button.Colored" />
 
 
-            <EditText
-                android:id="@+id/topic_create_tags"
-                android:hint="@string/topic_Create_tags"
-                android:backgroundTint="@color/primary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                    android:id="@+id/topic_spinner_channel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/topic_Create_channel"
+                    android:textColorHint="#05ab9a"
+                    app:met_floatingLabel="normal"
+                    android:paddingLeft="3dp"
+                    />
+
+                <EditText
+                    android:id="@+id/topic_create_title"
+                    android:hint="@string/topic_Create_title"
+                    android:inputType="text"
+                    android:backgroundTint="@color/primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     />
+
+                <EditText
+                    android:id="@+id/topic_create_body"
+                    android:hint="@string/topic_Create_body"
+                    android:backgroundTint="@color/primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     />
+
+                <Button
+                    android:text="TagIT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/button_tagit"
+                    android:background="#00bfff"
+                    style="@style/Widget.AppCompat.Button.Colored" />
+
+                <ListView
+                    android:id="@+id/list_view_tagit"
+                    android:layout_height="150dp"
+                    android:layout_width="fill_parent"
+                    android:dividerHeight="2dp"
+                    />
+
+                <EditText
+                    android:id="@+id/topic_create_tags"
+                    android:hint="@string/topic_Create_tags"
+                    android:backgroundTint="@color/primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
 
 
-                />
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_material"
@@ -89,5 +114,5 @@
         android:src="@drawable/ic_next"
         app:backgroundTint="@color/primary" />
 
-
 </FrameLayout>
+

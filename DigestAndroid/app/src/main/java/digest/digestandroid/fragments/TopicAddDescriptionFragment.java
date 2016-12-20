@@ -1,8 +1,10 @@
 package digest.digestandroid.fragments;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -17,8 +19,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.toolbox.ImageLoader;
@@ -28,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import digest.digestandroid.Models.Tagit;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.TopicTag;
 import digest.digestandroid.Models.User;
@@ -66,6 +73,11 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
     private ArrayAdapter<String> list_adapter;
     MaterialBetterSpinner spinnerChannel;
 
+    private ArrayList<Tagit> tagitArrayList = new ArrayList<Tagit>();
+    private TagitAdapter tagitAdapter = null;
+    ListView listViewTagit;
+
+
     private Topic mtopic;
     private View rootView;
 
@@ -100,6 +112,8 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
+    int i = 10;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -137,6 +151,40 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         list_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, channel_list);
         list_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerChannel.setAdapter(list_adapter);
+
+
+        Tagit country = new Tagit("AFG","Afghanistan",false);
+        tagitArrayList.add(country);
+        country = new Tagit("ALB","Albania",true);
+        tagitArrayList.add(country);
+        country = new Tagit("DZA","Algeria",false);
+        tagitArrayList.add(country);
+        country = new Tagit("ASM","American Samoa",true);
+        tagitArrayList.add(country);
+        country = new Tagit("AND","Andorra",true);
+        tagitArrayList.add(country);
+        country = new Tagit("AGO","Angola",false);
+        tagitArrayList.add(country);
+        country = new Tagit("AIA","Anguilla",false);
+        tagitArrayList.add(country);
+
+
+        tagitAdapter = new TagitAdapter(getContext(), R.layout.tagit_checkbox, tagitArrayList);
+        listViewTagit = (ListView) rootView.findViewById(R.id.list_view_tagit);
+        listViewTagit.setAdapter(tagitAdapter);
+
+        listViewTagit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // When clicked, show a toast with the TextView text
+                Tagit tagit = (Tagit) parent.getItemAtPosition(position);
+                Toast.makeText(getContext(),
+                        "Clicked on Row: " + tagit.getName(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+
 
         return rootView;
 
@@ -183,6 +231,9 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
 
                 break;
+
+            case R.id.button_tagit:
+
         }
     }
 
@@ -208,6 +259,63 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         mtopic.setImage(url);
     }
 
+
+
+    private class TagitAdapter extends ArrayAdapter<Tagit> {
+
+        private ArrayList<Tagit> tagitList;
+
+        public TagitAdapter(Context context, int textViewResourceId,
+                               ArrayList<Tagit> tagitList) {
+
+            super(context, textViewResourceId, tagitList);
+            this.tagitList = new ArrayList<Tagit>();
+            this.tagitList.addAll(tagitList);
+        }
+
+        private class ViewHolder {
+            CheckBox tagName;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder holder = null;
+            Log.v("ConvertView", String.valueOf(position));
+
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.tagit_checkbox, parent, false);
+
+                holder = new ViewHolder();
+                holder.tagName = (CheckBox) convertView.findViewById(R.id.checkbox_tagit);
+                convertView.setTag(holder);
+
+                holder.tagName.setOnClickListener( new View.OnClickListener() {
+                    public void onClick(View v) {
+                        CheckBox cb = (CheckBox) v ;
+                        Tagit tagit = (Tagit) cb.getTag();
+                        Toast.makeText(getContext(),
+                                "Clicked on Checkbox: " + cb.getText() +
+                                        " is " + cb.isChecked(),
+                                Toast.LENGTH_LONG).show();
+                        tagit.setSelected(cb.isChecked());
+                    }
+                });
+            }
+            else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            Tagit tagit = tagitList.get(position);
+            holder.tagName.setText(tagit.getName());
+            holder.tagName.setChecked(tagit.isSelected());
+            holder.tagName.setTag(tagit);
+
+            return convertView;
+
+        }
+
+    }
 
     /*
     // TODO: Rename method, update argument and hook method into UI event
