@@ -306,6 +306,7 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     }
                 };
                 APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
+                // TODO: 19.12.2016 Get channels of user 
             }
         });
     }

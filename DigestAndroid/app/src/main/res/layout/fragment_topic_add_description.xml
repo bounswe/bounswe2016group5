@@ -53,6 +53,18 @@
                 android:layout_height="wrap_content"
                  />
 
+
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/topic_spinner_channel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/topic_Create_channel"
+                android:textColorHint="#05ab9a"
+                app:met_floatingLabel="normal"
+                android:paddingLeft="3dp"
+                />
+
+
             <EditText
                 android:id="@+id/topic_create_tags"
                 android:hint="@string/topic_Create_tags"
