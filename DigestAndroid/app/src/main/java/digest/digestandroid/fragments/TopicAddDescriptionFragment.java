@@ -287,6 +287,7 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
         private class ViewHolder {
             CheckBox tagName;
+            TextView tagEntity;
         }
 
         @Override
@@ -300,6 +301,7 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
                 holder = new ViewHolder();
                 holder.tagName = (CheckBox) convertView.findViewById(R.id.checkbox_tagit);
+                holder.tagEntity = (TextView) convertView.findViewById(R.id.text_view_entity);
                 convertView.setTag(holder);
 
                 holder.tagName.setOnClickListener( new View.OnClickListener() {
@@ -319,6 +321,7 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
             }
 
             Tagit tagit = tagitList.get(position);
+            holder.tagName.setText(" :" +  tagit.getEntity());
             holder.tagName.setText(tagit.getName());
             holder.tagName.setChecked(tagit.isSelected());
             holder.tagName.setTag(tagit);

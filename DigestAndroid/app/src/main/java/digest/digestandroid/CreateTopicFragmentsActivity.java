@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import digest.digestandroid.Models.Comment;
+import digest.digestandroid.Models.Tagit;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 import digest.digestandroid.api.APIHandler;
@@ -85,6 +86,16 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
         //Log.v("USERRRRRRRR", Cache.getInstance().getUser().toString());
 
+        Response.Listener<Tagit> successListener =  new Response.Listener<Tagit>() {
+            @Override
+            public void onResponse(Tagit response) {
+                Log.i("VOLLEY ENTITIIIESS", response.getMyArrayList().toString());
+                // TODO: 20.12.2016 addDescription dan gelen cid ve bu responsetan gelen tid ile channel i topic ile bagdastir. addTopicToChannel (int cid, int tid)
+            }
+        };
+
+        APIHandler.getInstance().getTagEntities("Python", successListener);
+
 
 
 
@@ -122,7 +133,7 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.i("VOLLEY", response);
-                // TODO: 20.12.2016 addDescription dan gelen cid ve bu responsetan gelen tid ile channel i topic ile bagdastir. addTopicToChannel (int cid, int tid) 
+                // TODO: 20.12.2016 addDescription dan gelen cid ve bu responsetan gelen tid ile channel i topic ile bagdastir. addTopicToChannel (int cid, int tid)
             }
         };
 

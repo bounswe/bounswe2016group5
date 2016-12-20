@@ -38,6 +38,7 @@ import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Channel;
 import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.QuizQuestion;
+import digest.digestandroid.Models.Tagit;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.TopicTag;
 import digest.digestandroid.Models.User;
@@ -460,6 +461,40 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
 
+    // http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_suggestions&body=some_text
+    // result will be : [{"artificial_intelligence":["computer science","computing","artificial"]},
+    // {"syntax":["linguistics","grammar","structure","system"]},{"grammar":["linguistics"]},
+    // {"cognitive_science":["science","cognitive psychology"]},{"information_science":["science","lysis"]}]
+    public void getTagSuggestions (String body, Response.Listener<String> successListener) {
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_tag_suggestions&body=" + body,
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+    // http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_entities&tag=computer_science
+    // result will be : {"myArrayList":["programming language","an animal","boa","spirit","prototype based language"]}
+    public void getTagEntities (String tag, Response.Listener<Tagit> successListener) {
+        GsonRequest<Tagit> myReq = new GsonRequest<Tagit>(Request.Method.GET,
+                mainURL + "/?f=get_tag_entities&tag=" + tag,
+                Tagit.class,
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
 
 
 
