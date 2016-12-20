@@ -9,7 +9,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="true"
+        >
     <!-- TODO: Update blank fragment layout -->
         <LinearLayout
             android:orientation="vertical"
@@ -82,12 +84,18 @@
                     android:background="#00bfff"
                     style="@style/Widget.AppCompat.Button.Colored" />
 
+
                 <ListView
                     android:id="@+id/list_view_tagit"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
                     android:dividerHeight="2dp"
+                    android:divider="@drawable/item_box"
+                    android:scrollbars="vertical"
+                    android:nestedScrollingEnabled="true"
                     />
+
+
 
                 <EditText
                     android:id="@+id/topic_create_tags"
@@ -101,6 +109,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
     <android.support.design.widget.FloatingActionButton

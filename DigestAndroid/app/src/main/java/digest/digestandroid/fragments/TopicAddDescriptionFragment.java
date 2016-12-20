@@ -34,11 +34,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Tagit;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.TopicTag;
 import digest.digestandroid.Models.User;
 import digest.digestandroid.R;
+import digest.digestandroid.api.APIHandler;
 import digest.digestandroid.api.VolleySingleton;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
@@ -72,10 +74,13 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
     private ArrayList<String> channel_list = new ArrayList<String>();
     private ArrayAdapter<String> list_adapter;
     MaterialBetterSpinner spinnerChannel;
+    int cid = 0;
 
     private ArrayList<Tagit> tagitArrayList = new ArrayList<Tagit>();
     private TagitAdapter tagitAdapter = null;
     ListView listViewTagit;
+
+
 
 
     private Topic mtopic;
@@ -113,7 +118,7 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         }
     }
 
-    int i = 10;
+    int i = 15;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -135,7 +140,7 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         spinnerChannel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                      @Override
                                                      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                         // TODO: 19.12.2016   setChosenChannel --> parent.getItemAtPosition(position).toString();
+                                                         cid = digest.digestandroid.Cache.getInstance().getUserChannels().get(position).getId();
                                                      }
 
                                                      @Override
@@ -144,8 +149,10 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                                                      }
                                                  });
 
-        channel_list.add("samting1");
-        channel_list.add("samting2");
+        for(int i = 0; i < digest.digestandroid.Cache.getInstance().getUserChannels().size() ; i++)
+            channel_list.add(digest.digestandroid.Cache.getInstance().getUserChannels().get(i).getName());
+
+
         // TODO: 19.12.2016  channel_list = digest.digestandroid.Cache.getInstance().getChannels();
         // TODO: 19.12.2016 Then submit channel of the topic to backend
         list_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, channel_list);
@@ -237,8 +244,11 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         }
     }
 
+
+
     //Sets topic title, body, image url and tag list
-    public void fillInfo(Topic topic){
+    // returns channel id
+    public int fillInfo(Topic topic){
         mtopic = topic;
         String mtitle = etTitle.getText().toString();
         String mbody = etBody.getText().toString();
@@ -257,6 +267,8 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         mtopic.setBody(mbody);
         mtopic.setTags(tags);
         mtopic.setImage(url);
+
+        return cid;
     }
 
 

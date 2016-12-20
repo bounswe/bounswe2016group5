@@ -169,18 +169,13 @@ public class APIHandler extends Application{
     }
 
 
-    public void createTopic(String tag, final Topic topic)  {
+    public void createTopic(String tag, final Topic topic, Response.Listener<String> successListener)  {
 
         //Gson gson = new Gson();
         final String jsonInString = new GsonBuilder().setExclusionStrategies().create().toJson(topic, Topic.class);
         Log.d("---Json in string",jsonInString);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL+"/?f=create_topic", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i("VOLLEY", response);
-            }
-        }, new Response.ErrorListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL+"/?f=create_topic", successListener, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VOLLEY", error.toString());
@@ -445,6 +440,25 @@ public class APIHandler extends Application{
     }
 
 
+    //http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_topic_to_channel&cid=8&tid=24
+    public void addTopicToChannel (int cid, int tid) {
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=add_topic_to_channel&cid=" + cid + "&tid=" + tid,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VOLLEY", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
 
 
 
