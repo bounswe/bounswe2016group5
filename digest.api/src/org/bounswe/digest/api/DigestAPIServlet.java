@@ -238,11 +238,16 @@ public class DigestAPIServlet extends HttpServlet {
 		}else if(f.equals(DigestParameters.GET_PROGRESS_TOPIC)){
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
-			//resp.getWriter().append(ProgressJDBC.getProgressOnTopic(tid, uid));
+			resp.getWriter().append(""+ProgressJDBC.getProgressOnTopic(tid, uid));
+		}else if(f.equals(DigestParameters.SET_PROGRESS)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			int val = Integer.parseInt(req.getParameter(DigestParameters.VAL));
+			ProgressJDBC.setProgressTopic(tid, uid, val);
 		}else if(f.equals(DigestParameters.GET_PROGRESS_CHANNEL)){
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
-			//resp.getWriter().append(ProgressJDBC.getProgressOnChannel(cid, uid));
+			resp.getWriter().append(""+ProgressJDBC.getProgressOnChannel(cid, uid));
 		}else if(f.equals(DigestParameters.GET_SUBSCRIBED_CHANNELS)){
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			resp.getWriter().append(ChannelJDBC.getSubscribedChannels(uid));
@@ -289,7 +294,7 @@ public class DigestAPIServlet extends HttpServlet {
 			Topic topic = gson.fromJson(bufferedReader, Topic.class);
 			int tid = TopicJDBC.createTopic(topic);
 			if (tid != -1) {
-				resp.setStatus(200);
+				//resp.setStatus(200);
 				resp.getWriter().append("" + tid);
 			} else {
 				resp.setStatus(400);

@@ -256,7 +256,7 @@ public class ChannelJDBC {
 				e.printStackTrace();
 			}
 		}
-		return result;
+		return result.printable();
 	
 	}
 	

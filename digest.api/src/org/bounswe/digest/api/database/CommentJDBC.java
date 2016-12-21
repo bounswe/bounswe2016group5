@@ -59,8 +59,7 @@ public class CommentJDBC {
 				} catch (SQLException excep) {
 					excep.printStackTrace();
 					
-				}
-				
+				}	
 			}finally {
 				if (statement != null) {
 					try {
@@ -477,7 +476,6 @@ public class CommentJDBC {
 			ConnectionPool.close(connection);
 			return result;
 		}
-		
-		
+				
 
 }
