@@ -214,7 +214,7 @@ public class ChannelJDBC {
 	}
 	
 	public static String getChannelTid(int tid){
-		String query = "SELECT * FROM digest.channel WHERE channel.tid=?";
+		String query = " (SELECT cid FROM channel_topic WHERE tid=? )";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();

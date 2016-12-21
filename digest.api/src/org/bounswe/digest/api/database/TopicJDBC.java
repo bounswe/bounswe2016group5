@@ -256,8 +256,8 @@ public class TopicJDBC {
 	}
 
 	private static ArrayList<TopicTag> getTagsOfTopic(int tid) {
-		String query = "SELECT * FROM digest.tag  WHERE tag.id=( SELECT tag FROM topic_tag "
-				+ "WHERE topic_tag.tid=? )";
+		String query = "SELECT tag.* FROM digest.tag,topic_tag  WHERE tag.id=topic_tag.tag "
+				+ "and topic_tag.tid=?";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -275,7 +275,7 @@ public class TopicJDBC {
 			statement.setInt(1, tid);
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				tags.add(new TopicTag(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3)));
+				tags.add(new TopicTag(resultSet.getInt(1), tid, resultSet.getString(3)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
