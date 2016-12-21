@@ -806,7 +806,7 @@ public class TopicJDBC {
 			return;
 		}
 		ConceptNetAPI httpClientPost = new ConceptNetAPI();
-		JSONArray entities = httpClientPost.extractEntities(tag);
+		JSONArray entities = httpClientPost.extractEntities(tag).getJSONArray("entities");
 		for (int i = 0; i < entities.length(); ++i) {
 			String entity = entities.getString(i);
 			PreparedStatement statement = null;
@@ -912,7 +912,7 @@ public class TopicJDBC {
 
 	private static ArrayList<TopicPreview> getRelatedTopicsWithTag(String text) {
 		ConceptNetAPI httpClientPost = new ConceptNetAPI();
-		JSONArray entities = httpClientPost.extractEntities(text);
+		JSONArray entities = httpClientPost.extractEntities(text).getJSONArray("entities");
 		if (entities.length() > 0) {
 			text = entities.getString(0);
 		}
