@@ -94,7 +94,6 @@ $(document).ready(function(){
 	
 	
 	
-	
 });
 </script>
 </head>
@@ -127,7 +126,11 @@ $(document).ready(function(){
 								</a>
 							</div>
 						</div>
-						<div id="show-data"></div>
+						<div style="
+							position:absolute;
+							z-index: 100 !important;
+							width:80%;
+						" id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
@@ -204,7 +207,7 @@ $(document).ready(function(){
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>
-								<div class="panel-body" id="sidebar-channels">Channels and some links</div>
+								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
 							<div class="panel panel-default"
