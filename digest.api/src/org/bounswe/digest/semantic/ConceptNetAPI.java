@@ -28,10 +28,12 @@ public class ConceptNetAPI {
     
     public static void main(String[] args){
     	
-    	JSONArray b = getRelatedEntities("computer_science");
+    	JSONObject b = getRelatedEntities("computer_science");
+    	System.out.println(b);
+    	b = extractEntities("python");
     	System.out.println(b);
     	CalaisAPI httpClientPost = new CalaisAPI();
-    	JSONArray a = httpClientPost.extractTags("ConceptNet is a semantic network based on the information in the OMCS database. ConceptNet is expressed as a directed graph whose nodes are concepts, and whose edges are assertions of common sense about these concepts. Concepts represent sets of closely related natural language phrases, which could be noun phrases, verb phrases, adjective phrases, or clauses. ConceptNet is created from the natural-language assertions in OMCS by matching them against patterns using a shallow parser. Assertions are expressed as relations between two concepts, selected from a limited set of possible relations. The various relations represent common sentence patterns found in the OMCS corpus, and in particular, every \"fill-in-the-blanks\" template used on the knowledge-collection Web site is associated with a particular relation.");
+    	JSONObject a = httpClientPost.extractTags("ConceptNet is a semantic network based on the information in the OMCS database. ConceptNet is expressed as a directed graph whose nodes are concepts, and whose edges are assertions of common sense about these concepts. Concepts represent sets of closely related natural language phrases, which could be noun phrases, verb phrases, adjective phrases, or clauses. ConceptNet is created from the natural-language assertions in OMCS by matching them against patterns using a shallow parser. Assertions are expressed as relations between two concepts, selected from a limited set of possible relations. The various relations represent common sentence patterns found in the OMCS corpus, and in particular, every \"fill-in-the-blanks\" template used on the knowledge-collection Web site is associated with a particular relation.");
     	System.out.println(a);
     }
     
@@ -40,8 +42,9 @@ public class ConceptNetAPI {
      * @param in
      * @return JSONArray
      */
-    public static JSONArray extractEntities(String in)   {
+    public static JSONObject extractEntities(String in)   {
     	ArrayList<String> entities = new ArrayList<String>();
+    	in = in.replaceAll(" ", "_").toLowerCase();
         input = "/c/en/" + in;
         in = in.replaceAll("_", " ");
         try {
@@ -127,7 +130,9 @@ public class ConceptNetAPI {
     			}
     		}
     		JSONArray initialResults = new JSONArray(finalList);
-    		return initialResults;
+    		JSONObject o = new JSONObject();
+    		o.put("entities", initialResults);
+    		return o;
         } catch (UnirestException e) {
             System.out.println("UnirestException: Can't retrieve message for: " + in);
             return null;
@@ -143,8 +148,9 @@ public class ConceptNetAPI {
      * @param in
      * @return JSONArray(JSONObject : {"weight","label")
      */
-    public static JSONArray getRelatedEntities(String in){
+    public static JSONObject getRelatedEntities(String in){
     	JSONArray arr = new JSONArray();
+    	in = in.replaceAll(" ", "_").toLowerCase();
         input = "/c/en/" + in;
         in = in.replaceAll("_", " ");
         try {
@@ -163,7 +169,9 @@ public class ConceptNetAPI {
         }catch(Exception e){
         	
         }
-    	return arr;
+        JSONObject o = new JSONObject();
+        o.put("relatedEntities", arr);
+    	return o;
     }
 }
     

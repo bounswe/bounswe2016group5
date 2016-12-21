@@ -85,7 +85,7 @@ public class CalaisAPI {
      * @param queryText
      * @return JSONArray : JSONObject : JSONArray | {"label":["labels"]}
      */
-    public JSONArray extractTags(String queryText){
+    public JSONObject extractTags(String queryText){
     	ConceptNetAPI httpClientPost = new ConceptNetAPI();
 		input = queryText;
 		client = new HttpClient();
@@ -115,7 +115,7 @@ public class CalaisAPI {
 						name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("\\p{Mn}", "");
 				    	if(name.contains("ý")) name = name.replaceAll("ý", "i");
 						Double relevance = item.getDouble("importance");
-						cnet = httpClientPost.extractEntities(name);
+						cnet = httpClientPost.extractEntities(name).getJSONArray("entities");
 						if(cnet.length()!=0){
 							jo.put(name, cnet);
 							ja.put(jo);
@@ -125,6 +125,8 @@ public class CalaisAPI {
 				}
         	}
        	}
-		return ja;
+		JSONObject o = new JSONObject();
+		o.put("suggestions", ja);
+		return o;
     }
 }

@@ -25,6 +25,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.bounswe.digest.api.database.ChannelJDBC;
 import org.bounswe.digest.api.database.CommentJDBC;
 import org.bounswe.digest.api.database.ConnectionPool;
+import org.bounswe.digest.api.database.ProgressJDBC;
 import org.bounswe.digest.api.database.QuizJDBC;
 import org.bounswe.digest.api.database.TopicJDBC;
 import org.bounswe.digest.api.database.UserJDBC;
@@ -152,7 +153,9 @@ public class DigestAPIServlet extends HttpServlet {
 			String tag = req.getParameter(DigestParameters.TAG);
 
 			// if (UserJDBC.isSessionValid(uid, session)) {
-			resp.getWriter().append(TopicJDBC.getTopicsWithTag(tag));
+			ArrayList<TopicPreview> topics = TopicJDBC.getTopicsWithTag(tag);
+			Gson gson = new Gson();
+			resp.getWriter().append(gson.toJson(topics));
 			// } else {
 				// resp.getWriter().append(invalidSession());
 
@@ -213,15 +216,40 @@ public class DigestAPIServlet extends HttpServlet {
 		}else if(f.equals(DigestParameters.GET_TOPICS_FROM_CHANNEL)){
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			resp.getWriter().append(ChannelJDBC.getTopicsOfChannel(cid));
+		}else if(f.equals(DigestParameters.GET_CHANNELS_OF_USER)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			resp.getWriter().append(ChannelJDBC.getChannelsOfUser(uid));
 		}else if(f.equals(DigestParameters.MARK_COMMENT_AS_QUESTION)){
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			CommentJDBC.updateType(cid, CommentJDBC.QUESTION);
 		}else if(f.equals(DigestParameters.MARK_COMMENT_AS_INSTRUCTIVE)){
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			CommentJDBC.updateType(cid, CommentJDBC.INSTRUCTIVE);
+		}else if(f.equals(DigestParameters.ADD_PROGRESS)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			ProgressJDBC.addProgres(uid, tid);
+		}else if(f.equals(DigestParameters.GET_PROGRESS_TOPIC)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+			//resp.getWriter().append(ProgressJDBC.getProgressOnTopic(tid, uid));
+		}else if(f.equals(DigestParameters.GET_PROGRESS_CHANNEL)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+			//resp.getWriter().append(ProgressJDBC.getProgressOnChannel(cid, uid));
+		}else if(f.equals(DigestParameters.GET_SUBSCRIBED_CHANNELS)){
+			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
+			resp.getWriter().append(ChannelJDBC.getSubscribedChannels(uid));
 		}else if(f.equals(DigestParameters.GET_TRENDING_TOPICS)){
-
 			resp.getWriter().append(TopicJDBC.getTrendingTopics());
+		}else if(f.equals(DigestParameters.SEARCH_TOPICS)){
+			String text = req.getParameter(DigestParameters.TEXT);
+			resp.getWriter().append(TopicJDBC.getTopicWithString(text));
+		} else if (f.equals("test")){
+			TopicJDBC.createTag("computer");
+			//ConceptNetAPI httpClientPost = new ConceptNetAPI();
+			//Gson gson = new Gson();
+			//resp.getWriter().append(gson.toJson(httpClientPost.extractEntities("computer").getString(0)));
 		}
 		
 		else {
