@@ -86,15 +86,27 @@ public class ViewChannelTopicsActivity extends AppCompatActivity{
             public void onItemClick(int pos, View v) {
                 Log.d("" + pos, v.toString());
 
-                int clickedTopicId = currentTopicList.get(pos).getId();
+                final int clickedTopicId = currentTopicList.get(pos).getId();
                 Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
                     @Override
                     public void onResponse(Topic response) {
                         Log.d("Success", response.toString());
                         Cache.getInstance().setTopic(response);
 
-                        Intent intent = new Intent(getApplicationContext(), ViewTopicActivity.class);
-                        startActivity(intent);
+                        Response.Listener<String> getRelatedTopicsListener = new Response.Listener<String>() {
+
+                            @Override
+                            public void onResponse(String response) {
+
+                                final ArrayList<Topic> arrayList = ViewRegisteredHomeActivity.serializeTopicsFromJson(response);
+                                CacheTopiclist.getInstance().setRelatedTopicsOfaTopic(arrayList);
+
+                                Intent intent = new Intent(getApplicationContext(), ViewTopicActivity.class);
+                                startActivity(intent);
+                            }
+                        };
+
+                        APIHandler.getInstance().getRelatedTopicsOfaTopic(clickedTopicId,getRelatedTopicsListener);
                     }
                 };
                 APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
