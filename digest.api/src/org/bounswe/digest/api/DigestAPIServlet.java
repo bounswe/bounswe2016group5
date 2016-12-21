@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
@@ -257,9 +258,12 @@ public class DigestAPIServlet extends HttpServlet {
 			String text = req.getParameter(DigestParameters.TEXT);
 			resp.getWriter().append(TopicJDBC.getTopicWithString(text));
 		} else if (f.equals("test")){
-			ConceptNetAPI httpClientPost = new ConceptNetAPI();
-			Gson gson = new Gson();
-			resp.getWriter().append(gson.toJson(ConceptNetAPI.extractEntities("computer").get("entities")));
+			ArrayList<TopicTag> tag = new ArrayList<TopicTag>();
+			tag.add(new TopicTag("test(exam)"));
+			tag.add(new TopicTag("apple(fruit)"));
+			Topic topic = new Topic(0, "header", "image", "body", 1, 0, tag, null, null, null, null);
+			 
+			System.out.println(TopicJDBC.createTopic(topic));
 		}
 		
 		else {

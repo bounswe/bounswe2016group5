@@ -7,6 +7,7 @@ import java.sql.SQLException;
 //import com.mysql.cj.api.jdbc.Statement;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -58,9 +59,9 @@ public class TopicJDBC {
 			ArrayList<TopicTag> tags = topic.getTags();
 			for (TopicTag tag : tags) {
 				PreparedStatement tagStatement = null;
-				int tagID = getTagID(tag.getTag());
+				int tagID = getTagID(tag.getTag(), tag.getEntity());
 				if (tagID == -1) {
-					tagID = createTag(tag.getTag());
+					tagID = createTag(tag.getFullTag());
 				}
 				String tagQuery = "INSERT INTO topic_tag (tid,tag) VALUES (?,?)";
 				try {
@@ -256,7 +257,7 @@ public class TopicJDBC {
 	}
 
 	private static ArrayList<TopicTag> getTagsOfTopic(int tid) {
-		String query = "SELECT * FROM digest.topic_tag  WHERE topic_tag.tid=?";
+		String query = "SELECT tag.tag, tag.entity FROM digest.topic_tag, digest.tag  WHERE topic_tag.tid=? AND tag.id = topic_tag.tag";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -273,8 +274,13 @@ public class TopicJDBC {
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, tid);
 			resultSet = statement.executeQuery();
+			
 			while (resultSet.next()) {
-				tags.add(new TopicTag(resultSet.getInt(1), resultSet.getInt(2)));
+				
+				String tag = resultSet.getString(1);
+				String entity = resultSet.getString(2);
+				
+				tags.add(new TopicTag(tag + "(" + entity + ")"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -687,10 +693,11 @@ public class TopicJDBC {
 	 * Returns tag id
 	 * 
 	 * @param tag
+	 * @param entity 
 	 * @return
 	 */
-	private static int getTagID(String tag) {
-		String query = "SELECT * FROM tag WHERE tag LIKE ?";
+	private static int getTagID(String tag, String entity) {
+		String query = "SELECT * FROM tag WHERE tag LIKE ? and entity LIKE ?";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -706,6 +713,7 @@ public class TopicJDBC {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
 			statement.setString(1, tag);
+			statement.setString(2, entity);
 			resultSet = statement.executeQuery();
 
 			// public Topic(int id, String header, String type, String image,
@@ -758,7 +766,7 @@ public class TopicJDBC {
 		int indexOfParanthesis = fullTag.indexOf('(');
 		String tag = fullTag.substring(0, indexOfParanthesis);
 		String entity = fullTag.substring(indexOfParanthesis).replace("(", "").replace(")", "");
-		String tagQuery = "INSERT INTO tag (tag, entity) VALUES (?)";
+		String tagQuery = "INSERT INTO tag (tag, entity) VALUES (?, ?)";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(tagQuery, Statement.RETURN_GENERATED_KEYS);
