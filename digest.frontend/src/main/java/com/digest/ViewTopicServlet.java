@@ -54,13 +54,13 @@ public class ViewTopicServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		int topicId = -1;
 		try {
-			topicId = (Integer) request.getAttribute("topic_id");
+			if (request.getParameter("topic_id") != null) {
+				topicId = Integer.parseInt(request.getParameter("topic_id"));
+			}else
+				topicId = (Integer) request.getAttribute("topic_id");
 		}
 
 		catch (NullPointerException e) {
-			if (request.getParameter("topic_id") != null) {
-				topicId = Integer.parseInt(request.getParameter("topic_id"));
-			}
 
 		}
 
@@ -74,6 +74,7 @@ public class ViewTopicServlet extends HttpServlet {
 		while ((recv = buffread.readLine()) != null)
 			recvbuff += recv;
 		buffread.close();
+		System.out.println(recvbuff);
 
 		try {
 			JSONObject obj = new JSONObject(recvbuff);
@@ -145,6 +146,18 @@ public class ViewTopicServlet extends HttpServlet {
 				}
 			}
 			request.setAttribute("subscribed", subscribed);
+			
+			if(subscribed == 1){
+				String progressURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_&tid="
+						+ topicId
+						+"&uid" + session.getAttribute("id");
+				URL progressURL = new URL(progressURLString);
+				HttpURLConnection progressCon = (HttpURLConnection) progressURL.openConnection();
+				System.out.println("prog " + progressCon.getResponseCode());
+				int progress = 70;
+				request.setAttribute("progress", progress);
+			}
+			
 
 			String commentURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_comments_of_topic&tid="
 					+ topicId;
