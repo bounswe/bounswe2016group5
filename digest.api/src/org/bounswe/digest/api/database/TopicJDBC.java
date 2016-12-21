@@ -179,13 +179,14 @@ public class TopicJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
+		/*
 		for (Topic t : result) {
 			int tid = t.getId();
 			t.setTags(getTagsOfTopic(tid));
 			t.setComments(CommentJDBC.getCommentsArrayOfTopic(tid));
 			t.setQuizzes(QuizJDBC.getQuizArrayOfTopic(tid));
 			t.setMedia(getMediaArray(tid));
-		}
+		}*/
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
@@ -243,19 +244,20 @@ public class TopicJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
-		for (Topic t : result) {
+		/*for (Topic t : result) {
 			int tid = t.getId();
 			t.setTags(getTagsOfTopic(tid));
 			t.setComments(CommentJDBC.getCommentsArrayOfTopic(tid));
 			t.setQuizzes(QuizJDBC.getQuizArrayOfTopic(tid));
 			t.setMedia(getMediaArray(tid));
-		}
+		}*/
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
 
 	private static ArrayList<TopicTag> getTagsOfTopic(int tid) {
-		String query = "SELECT * FROM digest.topic_tag  WHERE topic_tag.tid=?";
+		String query = "SELECT * FROM digest.tag  WHERE tag.id=( SELECT tag FROM topic_tag "
+				+ "WHERE topic_tag.tid=? )";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
