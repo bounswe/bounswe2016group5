@@ -168,6 +168,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
                 return true;
 
             case R.id.action_bar_quiz:
+                viewPager.setCurrentItem(3);
                 intent = new Intent(getApplicationContext(), AddQuestionActivity.class);
                 startActivityForResult(intent, 3); //activity request id 3
                 return true;
@@ -183,7 +184,8 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 3 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 3 && resultCode == Activity.RESULT_OK ) {
+
             TopicQuizFragment topicQuizFragment = (TopicQuizFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(3);
             topicQuizFragment.addQuestion();
         }

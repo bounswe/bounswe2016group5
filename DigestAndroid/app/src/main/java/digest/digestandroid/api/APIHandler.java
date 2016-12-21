@@ -37,6 +37,7 @@ import digest.digestandroid.Cache;
 import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Channel;
 import digest.digestandroid.Models.Comment;
+import digest.digestandroid.Models.Quiz;
 import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Tagit;
 import digest.digestandroid.Models.TagitResponse;
@@ -269,6 +270,22 @@ public class APIHandler extends Application{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Failed", "Channel can not return topics");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+    public void advancedSearchApi(String date1, String date2, boolean channel, boolean material, boolean quiz, int minComment, String searchText, Response.Listener<String> successListener){
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+
+                // TODO API IS NEEDED
+                mainURL + "/?f=get_topics_with_tag&tag=" + searchText,
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
                     }
                 });
 
@@ -524,5 +541,40 @@ public class APIHandler extends Application{
     }
 
 
+    public void addQuiz(String s, Quiz quiz, Response.Listener<String> successListener, Response.ErrorListener errorListener) {
 
+
+        final String jsonInString = new GsonBuilder().setExclusionStrategies().create().toJson(quiz, Quiz.class);
+
+
+        Log.d("---Json in string",jsonInString);
+        String myUrl = mainURL+"/?f=add_quiz&tid="+String.valueOf(Cache.getInstance().getTopic().getId());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, myUrl, successListener, errorListener) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json" ;
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+
+                Log.d("---Json in string",jsonInString);
+                return jsonInString == null ? null : jsonInString.getBytes();
+
+            }
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                String responseString = "";
+                if (response != null) {
+                    responseString = String.valueOf(response.statusCode);
+                    // can get more details such as response.headers
+                }
+                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+            }
+
+        };
+
+        VolleySingleton.getInstance().addToRequestQueue(stringRequest);
+    }
 }
