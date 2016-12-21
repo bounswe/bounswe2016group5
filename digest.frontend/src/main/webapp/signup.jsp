@@ -89,7 +89,11 @@
 								</a>
 							</div>
 						</div>
-						<div id="show-data"></div>
+						<div style="
+							position:absolute;
+							z-index: 100 !important;
+							width:80%;
+						" id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
