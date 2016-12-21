@@ -111,7 +111,7 @@
 						tagSelection.empty();
 						var items = data.myArrayList;
 						$.each(items,function(key,val){		
-							content = '<a class="list-group-item">'+$('#tags').val()+'('+ val + ')' + '</a>';
+							content = '<a class="list-group-item" style="width:80%;">'+$('#tags').val()+'('+ val + ')' + '</a>';
 							tagSelection.append(content);
 						});
 					}
@@ -121,7 +121,7 @@
 		});
 		
 		$('#tag-selections').on('click','a',function(){
-			var content = '<a class="add-tag btn btn-primary"><span class="glyphicon glyphicon-remove"></span>'+$(this).text()+'</a>';
+			var content = '<a class="add-tag btn btn-primary" ><span class="glyphicon glyphicon-remove"></span>'+$(this).text()+'</a>';
 			$('#show-tags').append(content);
 		});
 		
@@ -165,6 +165,7 @@
 			
 			var userChannels = $('#user-channels');
 			
+			
 			if(userChannels.css('display') == 'none'){
 				
 				$.ajax({
@@ -173,9 +174,12 @@
 					success: function(data){
 						userChannels.empty();
 						var content = '';
-						$.each(data,function(key,val){		
-							content = '<a class="list-group-item" id="add_channel">'+ val.header + '</a>';
-							userChannels.append(content);
+						$.each(data,function(key,val){	
+							if(val != null){
+								content = '<a class="list-group-item" id="user-channels">'+ val.name + '</a>';
+								
+								userChannels.append(content);
+							};
 						});
 						
 					}
@@ -190,6 +194,7 @@
 		
 		$('#user-channels').on('click','a',function(event){
 			$('#channel').val($(this).text());
+			document.getElementById('user-channels').style.display = 'none';
 		});
 		
 		$('#show-add-channel-form').on('click',function(){
@@ -205,6 +210,7 @@
 				channel_name: $('#channel-name').val()
 			},function(data,status){
 				$('#channel-name').val('');
+				document.getElementById('add-channel-form').style.display = 'none';
 			});
 		});
 		
@@ -253,7 +259,11 @@
 								</a>
 							</div>
 						</div>
-						<div id="show-data"></div>
+						<div style="
+							position:absolute;
+							z-index: 100 !important;
+							width:80%;
+						" id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
@@ -289,7 +299,7 @@
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>
-								<div class="panel-body">Channels and some links</div>
+								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
 							<div class="panel panel-default"
@@ -303,20 +313,39 @@
 				</div>
 			</div>
 			<div class="col-sm-9">
-				<h1>Open a new topic</h1>
-				<div class="open-topic col-sm-12">
+				<h1 style=" margin:20px 0 20px 0;">Create a new topic</h1>
+				<div class="open-topic col-sm-12 ">
 
-					<form method="post" class="form-horzontal"
+
+<div class="image_upload  row" style="border-bottom: 1px solid #cccccc ;">
+								<div class=" col-sm-3" style=" margin:0 20px 20px 0;">
+									<label class="control-label" for="topic-img">Topic
+										Image:</label> <img id="topic-img"
+										style="display: block; width: 150px; height: 150px;"
+										alt="topic image"
+										src="<%if (session.getAttribute("image") != null) {%><%=session.getAttribute("image")%>
+
+<%}%>"
+										class="img-responsive center-block"></img> <input
+										type="hidden" class="form-control" name="image" id="image"
+										value="<%if (session.getAttribute("image") != null) {%><%=session.getAttribute("image")%><%}%>">
+								</div>
+						
+						
+							
+					<div class="image_link col-sm-8">
+					
+						<form method="post" class="form-horzontal"
 						action="CreateTopicServlet" enctype="multipart/form-data"
 						id="upload-form">
-						<div class="row col-sm-12">
-							<div class="form-group">
+						<div class="row " >
+							<div class="form-group" style=" margin:0 0 20px 20px;">
 								<label class="control-label" for="image">Image
 									(.jpg,.jpeg,.gif and .png are valid):</label> <input type="file"
 									class="form-control" name="image" id="image"
 									accept=".jpg,.jpeg,.gif,.png">
 							</div>
-							<div class="form-group">
+							<div class="form-group" style=" margin:0 0 20px 20px;">
 								<button type="submit" class="btn btn-primary" id="uploadButton">Upload</button>
 							</div>
 						</div>
@@ -324,40 +353,44 @@
 
 					<form method="post" class="form-horizontal"
 						action="CreateTopicServlet" id="url-image-upload">
-						<div class="row col-sm-12">
-							<div class="form-group">
+						<div class="row ">
+							<div class="form-group" style=" margin:0 0 20px 20px;">
 								<label class="control-label" for="image-url">Image Url:</label>
 								<input type="text" class="form-control" name="image-url"
 									id="image-url">
 							</div>
-							<div class="form-group">
+							<div class="form-group" style="margin:0 0 20px 20px;">
 								<button type="submit" class="btn btn-primary" name="f" value="upload_via_url">Upload</button>
 							</div>
 						</div>
 
 					</form>
+					
+					</div>
+					</div>
+					
 
 					<form class="form-horizontal" id="create_topic_form"
 						action="CreateTopicServlet" method="POST">
-						<div class="form-group">
+						<div class="form-group col-sm-8">
 							<div class="topic-header">
-								<div class="row col-sm-6">
-									<div class="form-group">
-										<label class="control-label col-sm-2" for="header">Header:</label>
+								<div class="row " >
+									<div class="form-group" style="width:90%; margin:20px 20px 10px 0;">
+										<label class="control-label col-sm-2" for="header" >Header:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="header"
 												id="header">
 										</div>
 									</div>
 									<div id="show-tags"></div>
-									<div class="form-group">
+									<div class="form-group" style="width:90%; margin:20px 20px 10px 0;">
 										<label class="control-label col-sm-2" for="tags">Tags:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" id="tags">
 										</div>
 									</div>
 									<div id="tag-selections"></div>
-									<div class="form-group">
+									<div class="form-group" style="width:90%; margin:20px 20px 10px 0;">
 										<label class="control-label col-sm-2" for="owner">Owner:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="owner"
@@ -365,20 +398,20 @@
 												value="<%=session.getAttribute("first_name") + " " + session.getAttribute("last_name")%>">
 										</div>
 									</div>
-									<div class="form-group">
-										<label class="control-label col-sm-3" for="channel">Channel:</label>
+									<div class="form-group" style="width:90%; margin:20px 20px 10px 0;">
+										<label class="control-label col-sm-2" for="channel">Channel:</label>
 										<div class="col-sm-9">
 											<input type="text" class="form-control" name="channel"
 												id="channel" readonly>
 										</div>
 									</div>
 									
-									<a class="btn btn-primary" id="show-my-channels">Show My Channels</a>
+									<a class="btn btn-primary" id="show-my-channels" style=" margin:0 20px 20px 20px;">Show My Channels</a>
 									<div class="container">
 										<div class="list-group col-sm-5" id="user-channels" style="display: none;"></div>
 									</div>
 									
-									<a class="btn btn-primary" id="show-add-channel-form">Add Channel</a>
+									<a class="btn btn-primary" id="show-add-channel-form"  style=" margin:0 20px 20px 20px;">Add Channel</a>
 									<div class="container">									
 										<div class="col-sm-5" id="add-channel-form" style="display: none;">
 										
@@ -396,24 +429,14 @@
 									
 								</div>
 							</div>
-							<div class="row col-sm-6">
-								<div class="container col-sm-12">
-									<label class="control-label" for="topic-img">Topic
-										Image:</label> <img id="topic-img"
-										style="display: block; width: 150px; height: 150px;"
-										alt="topic image"
-										src="<%if (session.getAttribute("image") != null) {%><%=session.getAttribute("image")%>
-
-<%}%>"
-										class="img-responsive center-block"></img> <input
-										type="hidden" class="form-control" name="image" id="image"
-										value="<%if (session.getAttribute("image") != null) {%><%=session.getAttribute("image")%><%}%>">
-								</div>
-							</div>
+							
 
 						</div>
+						
+					
+						
 						<div class="form-group">
-							<div class="topic-body col-sm-12">
+							<div class="topic-body col-sm-10">
 								<div class="form-group">
 									<label class="control-label" for="body">Body:</label>
 									<textarea class="form-control" name="body" id="body" rows="15"></textarea>
@@ -422,16 +445,18 @@
 
 							</div>
 						</div>
-						<div id="show-suggested-tags"></div>
-						<div class="form-group">
-							<div class="col-xs-9 col-xs-offset-3">
-								<a class="btn btn-primary" id="get_suggestions">Get Suggested Tags</a>
-							</div>
-						</div>						
-						<div class="form-group">
-							<div class="col-xs-9 col-xs-offset-3">
-								<button type="submit" class="btn btn-primary" name="f"
-									value="create_topic">Create Topic</button>
+						<div class="buttons row">
+							<div id="show-suggested-tags"></div>
+							<div class="form-group col-sm-3">
+								<div class="col-xs-3">
+									<a class="btn btn-primary" id="get_suggestions" >Get Suggested Tags</a>
+								</div>
+							</div>						
+							<div class="form-group col-sm-3">
+								<div class="col-xs-3 col-xs-offset-3">
+									<button type="submit" class="btn btn-primary" name="f"
+										value="create_topic">Create Topic</button>
+								</div>
 							</div>
 						</div>
 					</form>
