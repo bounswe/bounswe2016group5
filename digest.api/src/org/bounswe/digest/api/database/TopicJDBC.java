@@ -203,13 +203,14 @@ public class TopicJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
+		/*
 		for (Topic t : result) {
 			int tid = t.getId();
 			t.setTags(getTagsOfTopic(tid));
 			t.setComments(CommentJDBC.getCommentsArrayOfTopic(tid));
 			t.setQuizzes(QuizJDBC.getQuizArrayOfTopic(tid));
 			t.setMedia(getMediaArray(tid));
-		}
+		}*/
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
@@ -275,13 +276,13 @@ public class TopicJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
-		for (Topic t : result) {
+		/*for (Topic t : result) {
 			int tid = t.getId();
 			t.setTags(getTagsOfTopic(tid));
 			t.setComments(CommentJDBC.getCommentsArrayOfTopic(tid));
 			t.setQuizzes(QuizJDBC.getQuizArrayOfTopic(tid));
 			t.setMedia(getMediaArray(tid));
-		}
+		}*/
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
@@ -318,6 +319,7 @@ public class TopicJDBC {
 				String entity = resultSet.getString(2);
 
 				tags.add(new TopicTag(tag + "(" + entity + ")"));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

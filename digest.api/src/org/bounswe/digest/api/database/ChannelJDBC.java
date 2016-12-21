@@ -265,6 +265,7 @@ public class ChannelJDBC {
 		}
 		return result;
 	}
+<<<<<<< HEAD
 
 	/**
 	 * Returns channel ID of a topic.
@@ -274,6 +275,10 @@ public class ChannelJDBC {
 	 * @return Channel ID of given topic.
 	 */
 	public static int getChannelTid(int tid) {
+=======
+	
+	public static String getChannelTid(int tid){
+>>>>>>> api
 		String query = " (SELECT cid FROM channel_topic WHERE tid=? )";
 		Connection connection;
 		try {
