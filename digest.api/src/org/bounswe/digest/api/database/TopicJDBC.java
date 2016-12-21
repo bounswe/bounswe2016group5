@@ -58,7 +58,7 @@ public class TopicJDBC {
 			for (TopicTag tag : tags) {
 				PreparedStatement tagStatement = null;
 				int tagID = getTagID(tag.getTag());
-				if (tagID != -1) {
+				if (tagID == -1) {
 					tagID = createTag(tag.getTag());
 				}
 				String tagQuery = "INSERT INTO topic_tag (tid,tag) VALUES (?,?)";
@@ -126,7 +126,7 @@ public class TopicJDBC {
 			}
 		}
 		ArrayList<String> media = topic.getMedia();
-		for (String item : media) {
+		if(media!=null)  for (String item : media) {
 			addMedia(tid, item);
 		}
 		ConnectionPool.close(connection);

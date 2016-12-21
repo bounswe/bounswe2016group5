@@ -211,11 +211,17 @@ public class DigestAPIServlet extends HttpServlet {
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			ChannelJDBC.addTopicToChannel(tid, cid);
 		}else if(f.equals(DigestParameters.GET_CHANNEL)){
-			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
-			resp.getWriter().append(ChannelJDBC.getChannel(cid));
+			if(!req.getParameter(DigestParameters.CID).equals(null) ){
+				int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+				resp.getWriter().append(ChannelJDBC.getChannel(cid));
+			}else{
+				int tid = Integer.parseInt(req.getParameter(DigestParameters.TID));
+				resp.getWriter().append(ChannelJDBC.getChannelTid(tid));
+			}
+			
 		}else if(f.equals(DigestParameters.GET_TOPICS_FROM_CHANNEL)){
-			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
-			resp.getWriter().append(ChannelJDBC.getTopicsOfChannel(cid));
+				int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
+				resp.getWriter().append(ChannelJDBC.getTopicsOfChannel(cid));			
 		}else if(f.equals(DigestParameters.GET_CHANNELS_OF_USER)){
 			int uid = Integer.parseInt(req.getParameter(DigestParameters.UID));
 			resp.getWriter().append(ChannelJDBC.getChannelsOfUser(uid));

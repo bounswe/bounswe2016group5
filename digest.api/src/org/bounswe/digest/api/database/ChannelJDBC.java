@@ -213,6 +213,53 @@ public class ChannelJDBC {
 		return result;
 	}
 	
+	public static String getChannelTid(int tid){
+		String query = "SELECT * FROM digest.channel WHERE channel.tid=?";
+		Connection connection;
+		try {
+			connection = ConnectionPool.getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+		PreparedStatement statement = null;
+		Channel result=null;
+		ResultSet resultSet;
+		try {
+			connection.setAutoCommit(false);
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, tid);
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				result = (new Channel(resultSet.getInt(1), resultSet.getInt(2), 
+						resultSet.getString(3),resultSet.getInt(4)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				System.err.print("Transaction is being rolled back");
+				connection.rollback();
+			} catch (SQLException excep) {
+				excep.printStackTrace();
+			}
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	
+	}
+	
 	public static String getSubscribedChannels(int uid){
 		String query = "SELECT topic_subscribe.tid FROM topic_subscribe WHERE uid = ?";
 		Connection connection;
