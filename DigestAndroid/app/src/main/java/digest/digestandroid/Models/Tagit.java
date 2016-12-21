@@ -19,6 +19,12 @@ public class Tagit {
         this.selected = selected;
     }
 
+    public Tagit(String name, boolean selected) {
+        super();
+        this.name = name;
+        this.selected = selected;
+    }
+
     public String getName() {
         return name;
     }
@@ -47,5 +53,12 @@ public class Tagit {
 
     public void setMyArrayList(ArrayList<String> myArrayList) {
         this.myArrayList = myArrayList;
+    }
+
+    @Override
+    public String toString() {
+        return "Tagit{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

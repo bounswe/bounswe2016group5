@@ -117,8 +117,12 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Description"
+                android:textColor="@color/black"
                 android:id="@+id/tDescription"
-                android:layout_alignParentTop="true"/>
+                android:layout_alignParentTop="true"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                />
 
 
 
@@ -137,8 +141,11 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Tags"
+                android:textColor="@color/oil"
                 android:id="@+id/tagsTitle"
                 android:textStyle="bold"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:layout_alignParentTop="true"/>
 
         </RelativeLayout>

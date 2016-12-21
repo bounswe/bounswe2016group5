@@ -35,12 +35,15 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import digest.digestandroid.AddCommentActivity;
 import digest.digestandroid.AddEntityActivity;
 import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Tagit;
+import digest.digestandroid.Models.TagitDescResponse;
 import digest.digestandroid.Models.TagitResponse;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.TopicTag;
@@ -153,9 +156,9 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                                                      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                                          Log.d("spinner", "secildi");
                                                          digest.digestandroid.Cache.getInstance().setCid(digest.digestandroid.Cache.getInstance().getUserChannels().get(position).getId());
-                                                         Toast.makeText(getContext(),
+                                                         /*Toast.makeText(getContext(),
                                                                  "Clicked on Rowwww: " + digest.digestandroid.Cache.getInstance().getCid(),
-                                                                 Toast.LENGTH_LONG).show();
+                                                                 Toast.LENGTH_LONG).show();*/
                                                      }
 
                                                      @Override
@@ -175,27 +178,10 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         spinnerChannel.setAdapter(list_adapter);
 
 
-        Tagit country = new Tagit("AFG","Afghanistan",false);
-        tagitArrayList.add(country);
-        country = new Tagit("ALB","Albania",true);
-        tagitArrayList.add(country);
-        country = new Tagit("DZA","Algeria",false);
-        tagitArrayList.add(country);
-        country = new Tagit("ASM","American Samoa",true);
-        tagitArrayList.add(country);
-        country = new Tagit("AND","Andorra",true);
-        tagitArrayList.add(country);
-        country = new Tagit("AGO","Angola",false);
-        tagitArrayList.add(country);
-        country = new Tagit("AIA","Anguilla",false);
-        tagitArrayList.add(country);
-
-
         tagitAdapter = new TagitAdapter(getContext(), R.layout.tagit_checkbox, tagitArrayList);
         listViewTagit = (ListView) rootView.findViewById(R.id.list_view_tagit);
         setListViewHeightBasedOnChildren(listViewTagit);
         listViewTagit.setAdapter(tagitAdapter);
-
 
 
         listViewTagit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -203,9 +189,9 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                                     int position, long id) {
                 // When clicked, show a toast with the TextView text
                 Tagit tagit = (Tagit) parent.getItemAtPosition(position);
-                Toast.makeText(getContext(),
+                /*Toast.makeText(getContext(),
                         "Clicked on Row: " + tagit.getName(),
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
             }
         });
 
@@ -254,20 +240,57 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                         dialog.cancel();
                     }
                 });
-
                 builder.show();
 
 
                 break;
 
             case R.id.button_tagit:
+                EditText body = (EditText) rootView.findViewById(R.id.topic_create_body);
+
+                tagitArrayList.clear();
+
+                Response.Listener<TagitDescResponse> successListener =  new Response.Listener<TagitDescResponse>() {
+                    @Override
+                    public void onResponse(TagitDescResponse response) {
+                        Set<String> keySet;
+
+
+                        for (int i = 0 ; i < response.getMap().getSuggestions().getMyArrayList().size(); i++) {
+                            keySet = response.getMap().getSuggestions().getMyArrayList().get(i).getMap().keySet();
+
+                            Iterator iter = keySet.iterator();
+                            String text = (String) iter.next();
+                            String name = "";
+
+                            for(int j = 0 ; j < response.getMap().getSuggestions().getMyArrayList().get(i).getMap().get(text).getMyArrayList().size() ; j++){
+                                name = "";
+                                name += text + "(" + response.getMap().getSuggestions().getMyArrayList().get(i).getMap().get(text).getMyArrayList().get(j) + ")";
+                                Tagit tagit = new Tagit(name, false);
+                                tagitArrayList.add(tagit);
+                            }
+
+                            Log.i("TAGGGING IT KEY " + i, text);
+                            Log.i("TAGGGING IT VALUES " + i, response.getMap().getSuggestions().getMyArrayList().get(i).getMap().get(text).getMyArrayList().toString());
+                        }
+
+                        Log.d("REPREPREPS: ", tagitArrayList.toString());
+
+                        tagitAdapter.notifyDataSetChanged();
+                    }
+                };
+
+
+                APIHandler.getInstance().getTagSuggestions(body.getText().toString(), successListener);
+
+
                 break;
 
             case R.id.button_get_entities:
                 EditText editText = (EditText) rootView.findViewById(R.id.topic_create_tags);
                 Log.i("VOLLEY ENTITIIIESS11", editText.getText().toString());
                 if(!editText.getText().toString().equals("")){
-                    Response.Listener<TagitResponse> successListener =  new Response.Listener<TagitResponse>() {
+                    Response.Listener<TagitResponse> successListener2 =  new Response.Listener<TagitResponse>() {
                         @Override
                         public void onResponse(TagitResponse response) {
                             Log.i("VOLLEY ENTITIIIESS", response.getMap().getEntities().getMyArrayList().toString());
@@ -278,7 +301,7 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                     };
 
                     digest.digestandroid.Cache.getInstance().setTag(editText.getText().toString());
-                    APIHandler.getInstance().getTagEntities(editText.getText().toString(), successListener);
+                    APIHandler.getInstance().getTagEntities(editText.getText().toString(), successListener2);
                 }
                 
                 break;
@@ -316,15 +339,18 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
             mtopic.getTags().add(tt);
         }
 
+        for(int i = 0 ; i < tagitArrayList.size() ; i++){
+            if (tagitArrayList.get(i).isSelected()){
+                TopicTag tt = new TopicTag(tagitArrayList.get(i).getName());
+                mtopic.getTags().add(tt);
+            }
+        }
+
 
         mtopic.setHeader(mtitle);
         mtopic.setBody(mbody);
         //mtopic.setTags(tags);
         mtopic.setImage(url);
-
-        // TODO: 21.12.2016 add tags to topic. add tags that are in listview which are created form description to the Cache.chosenTags
-
-
 
     }
 
@@ -369,13 +395,12 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                                ArrayList<Tagit> tagitList) {
 
             super(context, textViewResourceId, tagitList);
-            this.tagitList = new ArrayList<Tagit>();
-            this.tagitList.addAll(tagitList);
+            Log.d("NOTIFYYYY", "PLZZZZZ");
+            this.tagitList = tagitList;
         }
 
         private class ViewHolder {
             CheckBox tagName;
-            TextView tagEntity;
         }
 
         @Override
@@ -389,17 +414,16 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
                 holder = new ViewHolder();
                 holder.tagName = (CheckBox) convertView.findViewById(R.id.checkbox_tagit);
-                holder.tagEntity = (TextView) convertView.findViewById(R.id.text_view_entity);
                 convertView.setTag(holder);
 
                 holder.tagName.setOnClickListener( new View.OnClickListener() {
                     public void onClick(View v) {
                         CheckBox cb = (CheckBox) v ;
                         Tagit tagit = (Tagit) cb.getTag();
-                        Toast.makeText(getContext(),
+                        /*Toast.makeText(getContext(),
                                 "Clicked on Checkbox: " + cb.getText() +
                                         " is " + cb.isChecked(),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();*/
                         tagit.setSelected(cb.isChecked());
                     }
                 });
@@ -408,11 +432,12 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            Tagit tagit = tagitList.get(position);
-            holder.tagName.setText(" :" +  tagit.getEntity());
-            holder.tagName.setText(tagit.getName());
-            holder.tagName.setChecked(tagit.isSelected());
-            holder.tagName.setTag(tagit);
+            if(!tagitList.isEmpty()) {
+                Tagit tagit = tagitList.get(position);
+                holder.tagName.setText(tagit.getName());
+                holder.tagName.setChecked(tagit.isSelected());
+                holder.tagName.setTag(tagit);
+            }
 
             return convertView;
 

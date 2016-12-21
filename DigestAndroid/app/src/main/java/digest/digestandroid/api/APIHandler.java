@@ -40,6 +40,7 @@ import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.Quiz;
 import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Tagit;
+import digest.digestandroid.Models.TagitDescResponse;
 import digest.digestandroid.Models.TagitResponse;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.TopicTag;
@@ -509,14 +510,18 @@ public class APIHandler extends Application{
     // result will be : [{"artificial_intelligence":["computer science","computing","artificial"]},
     // {"syntax":["linguistics","grammar","structure","system"]},{"grammar":["linguistics"]},
     // {"cognitive_science":["science","cognitive psychology"]},{"information_science":["science","lysis"]}]
-    public void getTagSuggestions (String body, Response.Listener<String> successListener) {
-        StringRequest myReq = new StringRequest(Request.Method.GET,
-                mainURL + "/?f=get_tag_suggestions&body=" + body,
+    public void getTagSuggestions (String body, Response.Listener<TagitDescResponse> successListener) {
+        String descBody;
+        descBody = body.replace(" ", "%20");
+
+        GsonRequest<TagitDescResponse> myReq = new GsonRequest<TagitDescResponse>(Request.Method.GET,
+                mainURL + "/?f=get_tag_suggestions&body=" + descBody,
+                TagitDescResponse.class,
                 successListener,
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Failed", "Login Failed");
+                        Log.d("Failed", "getTagSuggestions Failed");
                     }
                 });
 

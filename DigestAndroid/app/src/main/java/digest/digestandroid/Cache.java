@@ -36,6 +36,9 @@ public class Cache {
 
     ArrayList<String> entityList;
     ArrayList<Tagit> chosenTags = new ArrayList<Tagit>();
+
+    //ArrayList<Tagit> selectBoxTags = new ArrayList<Tagit>();
+
     String tag;
     int newTag = 0;
 
@@ -144,4 +147,5 @@ public class Cache {
     public void setNewTag(int newTag) {
         this.newTag = newTag;
     }
+
 }
