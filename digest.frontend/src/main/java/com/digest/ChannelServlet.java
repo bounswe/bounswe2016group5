@@ -69,7 +69,7 @@ public class ChannelServlet extends HttpServlet {
 				
 				System.out.println("Function: "+f+", Channel id: "+cid);
 				
-				/*if(cid!=null && !cid.contentEquals("")){
+				if(cid!=null && !cid.contentEquals("")){
 					String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid="
 							+ cid;
 					
@@ -86,16 +86,11 @@ public class ChannelServlet extends HttpServlet {
 					
 					reader.close();
 					
-					response.getWriter().write("[{\""
-							+ "id\":32,\"header\":\"header111asdc\"},{\"id\":43,\"header\":\"body2345\"}]");
+					response.getWriter().write(content);
 					response.getWriter().flush();
 					response.getWriter().close();
-				}*/
+				}
 				
-				response.getWriter().write("[{\""
-						+ "id\":102,\"header\":\"header111asdc\"},{\"id\":103,\"header\":\"body2345\"}]");
-				response.getWriter().flush();
-				response.getWriter().close();
 			}
 		}else if(f!=null && f.contentEquals("add_topic_to_channel")){
 			String cid = request.getParameter("cid");
@@ -103,12 +98,9 @@ public class ChannelServlet extends HttpServlet {
 			if(cid!=null && !cid.contentEquals("")){
 				
 				String tid = request.getParameter("tid");
-				System.out.println(tid);
-				System.out.println(cid);
 				if(tid!=null && !tid.contentEquals("")){
 					String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_topic_to_channel&cid="
 							+ cid +"&tid=" + tid;
-					System.out.println(url);
 					
 					URL jsonPage = new URL(url);
 					HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
@@ -127,13 +119,29 @@ public class ChannelServlet extends HttpServlet {
 			}
 			
 		} else if(f!=null && f.contentEquals("get_user_channels")){
-			response.getWriter().write("[{\"id\":23,\"header\":\"atakan\"},{\"id\":5,\"header\":\"husnenaz\"}]");
+			String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channels_of_user&uid=" +session.getAttribute("id");
+	
+			
+			URL jsonPage = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
+		
+			BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			
+			String line = "";
+			String content = "";
+			
+			while((line = reader.readLine()) != null){
+				content += line;
+			}
+			reader.close();
+			
+			//String example = "[null,null,{\"id\":1,\"uid\":4,\"name\":\"animal\",\"status\":0},{\"id\":2,\"uid\":24,\"name\":\"animal2\",\"status\":0}]";
+			response.getWriter().write(content);
 			response.getWriter().flush();
 			response.getWriter().close();
 			
 		} else if(f!=null && f.contentEquals("get_channel")){
 			String cid = request.getParameter("cid");
-			System.out.println(cid);
 			if(cid!=null && !cid.contentEquals("")){
 				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channel&cid=" + cid;
 				System.out.println(url);
@@ -165,12 +173,27 @@ public class ChannelServlet extends HttpServlet {
 			response.getWriter().write("75");
 			response.getWriter().flush();
 		} else if(f!=null && f.contentEquals("get_subscribed_channels")){
-			String uid = request.getParameter("uid");
-			System.out.println("User: "+uid);
+			String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_subscribed_channels&uid=" +session.getAttribute("id");
+			System.out.println(url);
 			
-			response.getWriter().write("[{"
-					+ "'id': 17,'name':'channel 58'},{'id':16,'name':'my channel'}]");
+			URL jsonPage = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
+		
+			BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			
+			String line = "";
+			String content = "";
+			
+			while((line = reader.readLine()) != null){
+				content += line;
+			}
+			reader.close();
+			
+			//String example = "[null,null,{\"id\":1,\"uid\":4,\"name\":\"animal\",\"status\":0},{\"id\":2,\"uid\":24,\"name\":\"animal2\",\"status\":0},{\"id\":2,\"uid\":24,\"name\":\"animal2\",\"status\":0},{\"id\":2,\"uid\":24,\"name\":\"animal2\",\"status\":0},{\"id\":2,\"uid\":24,\"name\":\"animal2\",\"status\":0},{\"id\":2,\"uid\":24,\"name\":\"animal2\",\"status\":0}]";
+			//response.getWriter().write(example);
+			response.getWriter().write(content);
 			response.getWriter().flush();
+			response.getWriter().close();
 		}
 	}
 
