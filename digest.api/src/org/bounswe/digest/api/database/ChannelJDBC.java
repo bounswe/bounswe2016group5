@@ -7,14 +7,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.bounswe.digest.api.database.model.Channel;
-import org.bounswe.digest.api.database.model.Comment;
 import org.bounswe.digest.api.database.model.Topic;
 
 import com.google.gson.Gson;
 
+/**
+ * Handles database transactions about topic channels.
+ * 
+ * @author Kerim Gokarslan <kerim.gokarslan@boun.edu.tr>
+ * @author Ozan Bulut <ozan.bulut@boun.edu.tr>
+ *
+ */
 public class ChannelJDBC {
-
-	public static int addChannel(int uid,String name){
+	/**
+	 * Adds a new channel of a user.
+	 * 
+	 * @param uid
+	 *            User ID.
+	 * @param name
+	 *            Channel Name
+	 * @return The ID of created channel <code>-1</code> if an error occurred.
+	 */
+	public static int addChannel(int uid, String name) {
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -40,10 +54,10 @@ public class ChannelJDBC {
 				connection.rollback();
 			} catch (SQLException excep) {
 				excep.printStackTrace();
-				
+
 			}
-			
-		}finally {
+
+		} finally {
 			if (statement != null) {
 				try {
 					statement.close();
@@ -62,13 +76,17 @@ public class ChannelJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
+
 	/**
-	 * Adds topic to a channel
-	 * @param tid topic id
-	 * @param cid channel id
-	 * @return 0 in succes -1 in failure
+	 * Adds topic into to given channel.
+	 * 
+	 * @param tid
+	 *            Topic id
+	 * @param cid
+	 *            Channel id
+	 * @return <code>0</code> if succeed <code>-1</code> if an error occurred.
 	 */
-	public static int addTopicToChannel(int tid,int cid){
+	public static int addTopicToChannel(int tid, int cid) {
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -94,10 +112,10 @@ public class ChannelJDBC {
 				connection.rollback();
 			} catch (SQLException excep) {
 				excep.printStackTrace();
-				
+
 			}
-			
-		}finally {
+
+		} finally {
 			if (statement != null) {
 				try {
 					statement.close();
@@ -116,19 +134,38 @@ public class ChannelJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
+
 	/**
-	 * Returns Channel Object in JSON Format
-	 * @param cid channel id
-	 * @return Channel
+	 * Returns Channel Object in JSON Format.
+	 * 
+	 * @param cid
+	 *            Channel ID.
+	 * @return Channel object as JSON string.
 	 */
-	public static String getChannel(int cid){
+	public static String getChannel(int cid) {
 		return getChannelObject(cid).printable();
 	}
-	public static String getChannelsOfUser(int uid){
+
+	/**
+	 * Returns channels of users.
+	 * 
+	 * @param uid
+	 *            User ID.
+	 * @return List of channels IDs of the user.
+	 */
+	public static String getChannelsOfUser(int uid) {
 		Gson gson = new Gson();
 		return gson.toJson(getChannelArrayOfUser(uid));
 	}
-	protected static ArrayList<Channel> getChannelArrayOfUser(int uid){
+
+	/**
+	 * Returns channels of users as array.
+	 * 
+	 * @param uid
+	 *            User ID.
+	 * @return Array of channels IDs of the user.
+	 */
+	protected static ArrayList<Channel> getChannelArrayOfUser(int uid) {
 		String query = "SELECT * FROM digest.channel WHERE channel.uid=?";
 		Connection connection;
 		try {
@@ -139,7 +176,7 @@ public class ChannelJDBC {
 			return null;
 		}
 		PreparedStatement statement = null;
-		ArrayList<Channel> result=new ArrayList<Channel>();
+		ArrayList<Channel> result = new ArrayList<Channel>();
 		ResultSet resultSet;
 		try {
 			connection.setAutoCommit(false);
@@ -147,8 +184,8 @@ public class ChannelJDBC {
 			statement.setInt(1, uid);
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				result.add(new Channel(resultSet.getInt(1), resultSet.getInt(2), 
-						resultSet.getString(3),resultSet.getInt(4)));
+				result.add(new Channel(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3),
+						resultSet.getInt(4)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -175,8 +212,15 @@ public class ChannelJDBC {
 		return result;
 
 	}
-	
-	protected static Channel getChannelObject(int cid){
+
+	/**
+	 * Returns channel object with given id.
+	 * 
+	 * @param cid
+	 *            Channel ID.
+	 * @return Channel Object. <code>null</code> if an error occurred.
+	 */
+	protected static Channel getChannelObject(int cid) {
 		String query = "SELECT * FROM digest.channel WHERE channel.id=?";
 		Connection connection;
 		try {
@@ -186,7 +230,7 @@ public class ChannelJDBC {
 			return null;
 		}
 		PreparedStatement statement = null;
-		Channel result=null;
+		Channel result = null;
 		ResultSet resultSet;
 		try {
 			connection.setAutoCommit(false);
@@ -194,8 +238,8 @@ public class ChannelJDBC {
 			statement.setInt(1, cid);
 			resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				result = (new Channel(resultSet.getInt(1), resultSet.getInt(2), 
-						resultSet.getString(3),resultSet.getInt(4)));
+				result = (new Channel(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3),
+						resultSet.getInt(4)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -221,9 +265,16 @@ public class ChannelJDBC {
 		}
 		return result;
 	}
-	
-	public static int getChannelTid(int tid){
-		String query =  " (SELECT cid FROM channel_topic WHERE tid=? )";
+
+	/**
+	 * Returns channel ID of a topic.
+	 * 
+	 * @param tid
+	 *            Topic ID.
+	 * @return Channel ID of given topic.
+	 */
+	public static int getChannelTid(int tid) {
+		String query = " (SELECT cid FROM channel_topic WHERE tid=? )";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -231,7 +282,7 @@ public class ChannelJDBC {
 			e1.printStackTrace();
 			return -1;
 		}
-		int result=-1;
+		int result = -1;
 		PreparedStatement statement = null;
 		ResultSet resultSet;
 		try {
@@ -265,10 +316,17 @@ public class ChannelJDBC {
 			}
 		}
 		return result;
-	
+
 	}
-	
-	public static String getSubscribedChannels(int uid){
+
+	/**
+	 * Returns subscribed channels of an user.
+	 * 
+	 * @param uid
+	 *            User ID.
+	 * @return Subscribed channels of the user in JSON format.
+	 */
+	public static String getSubscribedChannels(int uid) {
 		String query = "SELECT topic_subscribe.tid FROM topic_subscribe WHERE uid = ?";
 		Connection connection;
 		try {
@@ -286,9 +344,12 @@ public class ChannelJDBC {
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, uid);
 			resultSet = statement.executeQuery();
-			
-			//public Topic(int id, String header, String image, String body, int owner, int status,
-					//ArrayList<TopicTag> tags, ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments, Timestamp timestamp) {
+
+			// public Topic(int id, String header, String image, String body,
+			// int owner, int status,
+			// ArrayList<TopicTag> tags, ArrayList<Quiz> quizzes,
+			// ArrayList<String> media, ArrayList<Comment> comments, Timestamp
+			// timestamp) {
 			while (resultSet.next()) {
 				topics.add(resultSet.getInt(1));
 			}
@@ -315,19 +376,25 @@ public class ChannelJDBC {
 			}
 		}
 		ConnectionPool.close(connection);
-		ArrayList<Channel> result=new ArrayList<>();
-		for(int i=0; i<topics.size(); i++){
+		ArrayList<Channel> result = new ArrayList<>();
+		for (int i = 0; i < topics.size(); i++) {
 			result.add(getChannelObjectOfTopic(topics.get(i)));
 		}
 		Gson gson = new Gson();
 		return gson.toJson(result);
 	}
-	
-	public static int getNumberOfTopics(int cid){
-		String query = "SELECT COUNT(tid) from channel_topic "
-				+ 	"WHERE channel_topic.cid=?";
+
+	/**
+	 * Returns the number of topics in a channel.
+	 * 
+	 * @param cid
+	 *            Channel ID.
+	 * @return The number of topics in a channel.
+	 */
+	public static int getNumberOfTopics(int cid) {
+		String query = "SELECT COUNT(tid) from channel_topic " + "WHERE channel_topic.cid=?";
 		Connection connection;
-		int result=0;
+		int result = 0;
 		try {
 			connection = ConnectionPool.getConnection();
 		} catch (SQLException e1) {
@@ -340,10 +407,10 @@ public class ChannelJDBC {
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
-			statement.setInt(1,cid);
-			resultSet=statement.executeQuery();
-			while(resultSet.next()){
-				result=(resultSet.getInt(1));
+			statement.setInt(1, cid);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				result = (resultSet.getInt(1));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -351,9 +418,9 @@ public class ChannelJDBC {
 				System.err.print("Transaction is being rolled back");
 				connection.rollback();
 			} catch (SQLException excep) {
-				excep.printStackTrace();	
+				excep.printStackTrace();
 			}
-		}finally {
+		} finally {
 			if (statement != null) {
 				try {
 					statement.close();
@@ -370,11 +437,17 @@ public class ChannelJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
-	
-	public static String getTopicsOfChannel(int cid){
-		ArrayList<Topic> topics=new ArrayList<Topic>();
-		String query = "SELECT tid from channel_topic "
-				+ 	"WHERE channel_topic.cid=?";
+
+	/**
+	 * Returns topics of a channel in JSON format.
+	 * 
+	 * @param cid
+	 *            Channel ID.
+	 * @return List of topics of the channel in JSON format.
+	 */
+	public static String getTopicsOfChannel(int cid) {
+		ArrayList<Topic> topics = new ArrayList<Topic>();
+		String query = "SELECT tid from channel_topic " + "WHERE channel_topic.cid=?";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -388,9 +461,9 @@ public class ChannelJDBC {
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
-			statement.setInt(1,cid);
-			resultSet=statement.executeQuery();
-			while(resultSet.next()){
+			statement.setInt(1, cid);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
 				topics.add(TopicJDBC.getTopicObject(resultSet.getInt(1)));
 			}
 		} catch (SQLException e) {
@@ -399,9 +472,9 @@ public class ChannelJDBC {
 				System.err.print("Transaction is being rolled back");
 				connection.rollback();
 			} catch (SQLException excep) {
-				excep.printStackTrace();	
+				excep.printStackTrace();
 			}
-		}finally {
+		} finally {
 			if (statement != null) {
 				try {
 					statement.close();
@@ -419,14 +492,29 @@ public class ChannelJDBC {
 		Gson gson = new Gson();
 		return gson.toJson(topics);
 	}
-	public static String getChannelOfTopic(int tid){
-		Gson gson= new Gson();
+
+	/**
+	 * Returns channel object of a given topic as JSON
+	 * 
+	 * @param tid
+	 *            Topic ID.
+	 * @return Channel object of the given topic as JSON
+	 */
+	public static String getChannelOfTopic(int tid) {
+		Gson gson = new Gson();
 		return gson.toJson(getChannelObjectOfTopic(tid));
 	}
-	public static Channel getChannelObjectOfTopic(int tid){
-		Channel channel=null;
-		String query = "SELECT cid from channel_topic "
-				+ 	"WHERE channel_topic.tid=?";
+
+	/**
+	 * Returns channel object of a given topic.
+	 * 
+	 * @param tid
+	 *            Topic ID.
+	 * @return Channel object of the given topic.
+	 */
+	public static Channel getChannelObjectOfTopic(int tid) {
+		Channel channel = null;
+		String query = "SELECT cid from channel_topic " + "WHERE channel_topic.tid=?";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -439,10 +527,10 @@ public class ChannelJDBC {
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
-			statement.setInt(1,tid);
-			resultSet=statement.executeQuery();
-			if(resultSet.next()){
-				channel=(getChannelObject(resultSet.getInt(1)));
+			statement.setInt(1, tid);
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				channel = (getChannelObject(resultSet.getInt(1)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -450,9 +538,9 @@ public class ChannelJDBC {
 				System.err.print("Transaction is being rolled back");
 				connection.rollback();
 			} catch (SQLException excep) {
-				excep.printStackTrace();	
+				excep.printStackTrace();
 			}
-		}finally {
+		} finally {
 			if (statement != null) {
 				try {
 					statement.close();

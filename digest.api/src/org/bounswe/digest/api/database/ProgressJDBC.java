@@ -5,9 +5,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Handles database transactions about progress.
+ * 
+ * @author Kerim Gokarslan <kerim.gokarslan@boun.edu.tr>
+ * @author Ozan Bulut <ozan.bulut@boun.edu.tr>
+ *
+ */
 public class ProgressJDBC {
-	
-	public static int addProgres(int uid,int tid){
+	/**
+	 * Adds a progress for a user with a topic.
+	 * 
+	 * @param uid
+	 *            User ID.
+	 * @param tid
+	 *            Topic ID.
+	 * @return <code>0</code> succeed <code>-1</code> otherwise.
+	 */
+	public static int addProgres(int uid, int tid) {
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -33,10 +48,10 @@ public class ProgressJDBC {
 				connection.rollback();
 			} catch (SQLException excep) {
 				excep.printStackTrace();
-				
+
 			}
-			
-		}finally {
+
+		} finally {
 			if (statement != null) {
 				try {
 					statement.close();
@@ -55,8 +70,19 @@ public class ProgressJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
-	
-	public static int setProgressTopic(int tid,int uid,int val){
+
+	/**
+	 * Sets the progress value of an user in a topic.
+	 * 
+	 * @param tid
+	 *            Topic ID.
+	 * @param uid
+	 *            User ID.
+	 * @param val
+	 *            Progress value.
+	 * @return <code>0</code> succeed <code>-1</code> otherwise.
+	 */
+	public static int setProgressTopic(int tid, int uid, int val) {
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -83,10 +109,10 @@ public class ProgressJDBC {
 				connection.rollback();
 			} catch (SQLException excep) {
 				excep.printStackTrace();
-				
+
 			}
-			
-		}finally {
+
+		} finally {
 			if (statement != null) {
 				try {
 					statement.close();
@@ -105,8 +131,17 @@ public class ProgressJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
-	
-	public static int getProgressOnTopic(int tid,int uid){
+
+	/**
+	 * Returns the progress value of an user in a topic.
+	 * 
+	 * @param tid
+	 *            Topic ID.
+	 * @param uid
+	 *            User ID.
+	 * @return Progress value.
+	 */
+	public static int getProgressOnTopic(int tid, int uid) {
 		String query = "SELECT prog FROM digest.progress WHERE progress.tid=? and progress.uid=?";
 		Connection connection;
 		try {
@@ -116,7 +151,7 @@ public class ProgressJDBC {
 			return 0;
 		}
 		PreparedStatement statement = null;
-		int result=0;
+		int result = 0;
 		ResultSet resultSet;
 		try {
 			connection.setAutoCommit(false);
@@ -151,8 +186,17 @@ public class ProgressJDBC {
 		}
 		return result;
 	}
-	
-	public static int getProgressOnChannel(int cid,int uid){
+
+	/**
+	 * Returns the progress status of an user in a channel.
+	 * 
+	 * @param cid
+	 *            Channel ID.
+	 * @param uid
+	 *            User ID.
+	 * @return Progress value.
+	 */
+	public static int getProgressOnChannel(int cid, int uid) {
 		String query = "SELECT prog FROM digest.progress WHERE"
 				+ " progress.uid=? and (SELECT tid FROM digest.channel_topic WHERE "
 				+ " channel_topic.cid=?  and progress.tid=channel_topic.tid)";
@@ -164,7 +208,7 @@ public class ProgressJDBC {
 			return 0;
 		}
 		PreparedStatement statement = null;
-		int result=0;
+		int result = 0;
 		ResultSet resultSet;
 		try {
 			connection.setAutoCommit(false);
@@ -197,6 +241,6 @@ public class ProgressJDBC {
 				e.printStackTrace();
 			}
 		}
-		return result/ChannelJDBC.getNumberOfTopics(cid);
+		return result / ChannelJDBC.getNumberOfTopics(cid);
 	}
 }

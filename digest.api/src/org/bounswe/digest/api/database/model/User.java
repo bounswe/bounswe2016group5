@@ -1,7 +1,11 @@
 package org.bounswe.digest.api.database.model;
 
 import java.util.Random;
-
+/**
+ * 
+ * @author mehmetalperuslu
+ *
+ */
 public class User extends Model {
 	private int id;
 	private String username;
