@@ -7,6 +7,7 @@ import java.sql.SQLException;
 //import com.mysql.cj.api.jdbc.Statement;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.bounswe.digest.api.DigestParameters;
@@ -853,7 +854,7 @@ public class TopicJDBC {
 	}*/
 
 	private static ArrayList<TopicPreview> searchTopicHeaders(String text) {
-		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic WHERE header LIKE ? LIMIT 3";
+		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic WHERE header LIKE ? LIMIT 10";
 		Connection connection;
 		ArrayList<TopicPreview> result = new ArrayList<TopicPreview>();
 		try {
@@ -902,15 +903,25 @@ public class TopicJDBC {
 	}
 
 	public static String getTopicWithString(String text) {
-		ArrayList<TopicPreview> result = searchTopicHeaders(text);
-		ArrayList<TopicPreview> topicsWithTag = getTopicsWithTag(text);
-		for (int i = 0; i < 3 && i < topicsWithTag.size(); ++i) {
-			result.add(topicsWithTag.get(i));
+		HashMap<Integer, TopicPreview> result = new HashMap<Integer, TopicPreview>();
+		ArrayList<TopicPreview> list = searchTopicHeaders(text);
+		for (int i = 0; i < list.size(); ++i) {
+			result.put(list.get(i).id, list.get(i));
 		}
-		ArrayList<TopicPreview> relatedTopics = getRelatedTopicsWithTag(text);
-		result.addAll(relatedTopics);
+		list = getTopicsWithTag(text);
+		for (int i = 0; i < list.size(); ++i) {
+			result.put(list.get(i).id, list.get(i));
+		}
+		list = getRelatedTopicsWithTag(text);
+		for (int i = 0; i < list.size(); ++i) {
+			result.put(list.get(i).id, list.get(i));
+		}
+		ArrayList<TopicPreview> finalResult = new ArrayList<TopicPreview>();
+		for(Integer i : result.keySet()){
+			finalResult.add(result.get(i));
+		}
 		Gson gson = new Gson();
-		return gson.toJson(result);
+		return gson.toJson(finalResult);
 
 	}
 
@@ -921,7 +932,7 @@ public class TopicJDBC {
 			text = entities.getString(0);
 		}
 		//Do not take the tags label with text, but tags with this entity.
-		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, tag, WHERE tag.entity LIKE ? AND tag.tag.id = tag_entity.tid AND topic_tag.tag = tag.id AND topic.id = topic_tag.tid LIMIT 4";
+		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, tag, topic_tag WHERE tag.entity LIKE ? AND topic_tag.tag = tag.id AND topic.id = topic_tag.tid LIMIT 10";
 		Connection connection;
 		ArrayList<TopicPreview> result = new ArrayList<TopicPreview>();
 		try {
