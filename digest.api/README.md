@@ -26,7 +26,8 @@
 
 ## Get Tag Suggestions
 	Explanation : 
-		Send body to retrieve suggested tags with their entities listed as a JSONArray.
+		Send body to retrieve suggested tags with their entities listed as a JSONArray in a JSONObject "suggestions".
+		In this JSONArray, you can pick JSONObject<tag>:[<entities>] format one by one.
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
 	Method:
@@ -42,11 +43,12 @@
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_suggestions&body=some_text
 		say some_text is : ConceptNet is a semantic network based on the information in the OMCS database. ConceptNet is expressed as a directed graph whose nodes are concepts, and whose edges are assertions of common sense about these concepts. Concepts represent sets of closely related natural language phrases, which could be noun phrases, verb phrases, adjective phrases, or clauses. ConceptNet is created from the natural-language assertions in OMCS by matching them against patterns using a shallow parser. Assertions are expressed as relations between two concepts, selected from a limited set of possible relations. The various relations represent common sentence patterns found in the OMCS corpus, and in particular, every \"fill-in-the-blanks\" template used on the knowledge-collection Web site is associated with a particular relation.
 		
-		result will be : [{"artificial_intelligence":["computer science","computing","artificial"]},{"syntax":["linguistics","grammar","structure","system"]},{"grammar":["linguistics"]},{"cognitive_science":["science","cognitive psychology"]},{"information_science":["science","lysis"]}]
+		result will be : {"suggestions":[{"artificial_intelligence":["computer science","computing","artificial"]},{"syntax":["linguistics","grammar","structure","system"]},{"grammar":["linguistics"]},{"cognitive_science":["science","cognitive psychology"]},{"information_science":["science","lysis"]}]}
 
 ## Get Tag Entities
 	Explanation : 
 		Send tag to retrieve at most 6 entities, which user must select one of them before it can tag.
+		Result format will be JSONObject "entities" : JSONArray [<entities>].
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
 	Method:
@@ -59,13 +61,14 @@
 	Error response:
 		hakkimizda hayirlisi olsun
 	Example:
-		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_entities&tag=computer_science
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_entities&tag=python
 		
-		result will be : ["science","computer","engineering","algorithm"]
+		result will be : {"entities":["programming language","snake","Greek mythology","animal","roller coaster","prototype based language"]}
 		
 ## Get Related Entities
 	Explanation : 
 		Send entity to retrieve at most 10 entities, which will be related to sent entity in descending order.
+		Result format will be JSONObject "relatedEntities" : JSONArray [<entities>].
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
 	Method:
@@ -80,7 +83,7 @@
 	Example:
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_related_entities&tag=computer_science
 		
-		result will be : [{"weight":0.542,"label":"informatics"},{"weight":0.533,"label":"alan turing"},{"weight":0.531,"label":"decompiler"},{"weight":0.507,"label":"terminal emulation"},{"weight":0.478,"label":"artificial intelligence"},{"weight":0.475,"label":"computability"},{"weight":0.474,"label":"undecidable"},{"weight":0.468,"label":"compilable"},{"weight":0.466,"label":"decidability"},{"weight":0.465,"label":"compsci"}]
+		result will be : {"relatedEntities":["informatics","alan turing","decompiler","terminal emulation","artificial intelligence","computability","undecidable","compilable","decidability","compsci"]}
 
 		
 ## Get Channel
