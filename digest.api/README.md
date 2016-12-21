@@ -85,8 +85,42 @@
 		
 		result will be : {"relatedEntities":["informatics","alan turing","decompiler","terminal emulation","artificial intelligence","computability","undecidable","compilable","decidability","compsci"]}
 
+
+
+## Set Progress
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=set_progress
+		tid=<channel_id> // topic id
+		uid=<user_id> //user id
+		val=<value_to_set>
+ 	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=set_progress&tid=88&uid=2&val=10
+
+
+## Search Topics
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=search_topics
+		text=<test-to-searched>
+ 	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=search_topics&text=digest
 		
-## Get Channel
+## Get Channel with Channel ID
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
 	Method:
@@ -100,6 +134,22 @@
 		hakkimizda hayirlisi olsun
 	Example:
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channel&cid=8
+		
+## Get Channel with Topic ID
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=add_channel
+		tid=<channel_id> // topic id
+	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channel&tid=8
+		
 		
 ## Add Topic To Channel
 	URL:
@@ -117,6 +167,72 @@
 	Example:
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_topic_to_channel&cid=8&tid=24
 
+## Add Progress to Topic
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=add_progress
+		tid=<channel_id> // topic id
+		uid=<user_id> //user id
+ 	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_progress&tid=88&uid=2
+
+
+## Get Progress on Topic
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_progress_topic
+		tid=<channel_id> // topic id
+		uid=<user_id> //user id
+ 	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_progress_channel&tid=88&uid=2
+
+## Get Subscribed Channels
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_subscribed_channels
+		cid=<channel_id> // channel id
+		uid=<user_id> //user id
+ 	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_subscribed_channels&cid=8&uid=2
+
+
+## Get Progress on Channel
+	URL:
+		digest.us-east-1.elasticbeanstalk.com/digest.api 
+	Method:
+		GET
+	Params:
+		f=get_progress_channel
+		cid=<channel_id> // channel id
+		uid=<user_id> //user id
+ 	Succes response:
+		status:200
+	Error response:
+		hakkimizda hayirlisi olsun
+	Example:
+		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_progress_channel&cid=8&uid=2
+
 ## Get Topics From Channel
 	URL:
 		digest.us-east-1.elasticbeanstalk.com/digest.api 
@@ -131,6 +247,7 @@
 		hakkimizda hayirlisi olsun
 	Example:
 		http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid=8
+
 
 ## Login
 	URL:
