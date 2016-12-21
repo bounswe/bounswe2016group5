@@ -42,6 +42,7 @@
 			</div>
 			<div class=" collapse navbar-collapse" id="myNavbar">
 				<div class="col-sm-6 pull">
+				
 					<form action="SearchServlet" method="POST" class="navbar-form"
 						role="search">
 						<div class="input-group col-sm-12">
@@ -53,8 +54,13 @@
 								</a>
 							</div>
 						</div>
-						<div id="show-data"></div>
+						
 					</form>
+					<div style="
+							position:absolute;
+							z-index: 100 !important;
+							width:80%;
+						" id="show-data"></div>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
 
@@ -173,7 +179,7 @@
 
 							<div class="panel panel-default">
 								<div class="panel-header">Channels</div>
-								<div class="panel-body">Channels and some links</div>
+								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
 							<div class="panel panel-default">
