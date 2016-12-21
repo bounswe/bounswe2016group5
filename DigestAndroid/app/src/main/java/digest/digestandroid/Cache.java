@@ -32,6 +32,7 @@ public class Cache {
     QuizQuestion question; //
 
     ArrayList<Channel> userChannels;
+    int cid;  // selected channel id
 
     ArrayList<String> entityList;
     ArrayList<Tagit> chosenTags = new ArrayList<Tagit>();
@@ -126,6 +127,21 @@ public class Cache {
 
     public void setTag(String tag) {
         this.tag = tag;
-        newTag = 1;
+    }
+
+    public int getCid() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
+
+    public int getNewTag() {
+        return newTag;
+    }
+
+    public void setNewTag(int newTag) {
+        this.newTag = newTag;
     }
 }

@@ -41,6 +41,7 @@ import digest.digestandroid.AddCommentActivity;
 import digest.digestandroid.AddEntityActivity;
 import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Tagit;
+import digest.digestandroid.Models.TagitResponse;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.TopicTag;
 import digest.digestandroid.Models.User;
@@ -78,15 +79,15 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
     private ArrayList<String> channel_list = new ArrayList<String>();
     private ArrayAdapter<String> list_adapter;
-    MaterialBetterSpinner spinnerChannel;
-    int cid = 0;
+    Spinner spinnerChannel;
 
     private ArrayList<Tagit> tagitArrayList = new ArrayList<Tagit>();
     private TagitAdapter tagitAdapter = null;
     ListView listViewTagit;
 
-
-
+    private ListView eListView;
+    private ArrayList<String> entities_list = new ArrayList<String>();
+    private ArrayAdapter<String> eList_adapter;
 
     private Topic mtopic;
     private View rootView;
@@ -145,12 +146,16 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         etBody = (EditText) rootView.findViewById(R.id.topic_create_body);
         etTags = (EditText) rootView.findViewById(R.id.topic_create_tags);
 
-        spinnerChannel = (MaterialBetterSpinner) rootView.findViewById(R.id.topic_spinner_channel);
+        spinnerChannel = (Spinner) rootView.findViewById(R.id.topic_spinner_channel);
 
         spinnerChannel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                      @Override
                                                      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                         cid = digest.digestandroid.Cache.getInstance().getUserChannels().get(position).getId();
+                                                         Log.d("spinner", "secildi");
+                                                         digest.digestandroid.Cache.getInstance().setCid(digest.digestandroid.Cache.getInstance().getUserChannels().get(position).getId());
+                                                         Toast.makeText(getContext(),
+                                                                 "Clicked on Rowwww: " + digest.digestandroid.Cache.getInstance().getCid(),
+                                                                 Toast.LENGTH_LONG).show();
                                                      }
 
                                                      @Override
@@ -204,6 +209,9 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
             }
         });
 
+        eListView = (ListView) rootView.findViewById(R.id.list_view_tagEntities);
+        eList_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, entities_list);
+        eListView.setAdapter(eList_adapter);
 
 
         return rootView;
@@ -257,13 +265,13 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
             case R.id.button_get_entities:
                 EditText editText = (EditText) rootView.findViewById(R.id.topic_create_tags);
-                Log.i("VOLLEY ENTITIIIESS", editText.getText().toString());
+                Log.i("VOLLEY ENTITIIIESS11", editText.getText().toString());
                 if(!editText.getText().toString().equals("")){
-                    Response.Listener<Tagit> successListener =  new Response.Listener<Tagit>() {
+                    Response.Listener<TagitResponse> successListener =  new Response.Listener<TagitResponse>() {
                         @Override
-                        public void onResponse(Tagit response) {
-                            Log.i("VOLLEY ENTITIIIESS", response.getMyArrayList().toString());
-                            digest.digestandroid.Cache.getInstance().setEntityList(response.getMyArrayList());
+                        public void onResponse(TagitResponse response) {
+                            Log.i("VOLLEY ENTITIIIESS", response.getMap().getEntities().getMyArrayList().toString());
+                            digest.digestandroid.Cache.getInstance().setEntityList(response.getMap().getEntities().getMyArrayList());
                             Intent intent = new Intent(getContext(), AddEntityActivity.class);
                             startActivity(intent);
                         }
@@ -281,7 +289,7 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
     //Sets topic title, body, image url and tag list
     // returns channel id
-    public int fillInfo(Topic topic){
+    public void fillInfo(Topic topic){
         mtopic = topic;
         String mtitle = etTitle.getText().toString();
         String mbody = etBody.getText().toString();
@@ -289,26 +297,46 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
         ArrayList<TopicTag> tags = new ArrayList<TopicTag>();
 
-        List<String> tagList = Arrays.asList(mtags.split(","));
+        /*List<String> tagList = Arrays.asList(mtags.split(","));
         for (String tg : tagList) {
             tags.add(new TopicTag(tg));
         }
 
         Log.d("tag", tagList.toString());
+        */
+
+        ArrayList<Tagit> mchosenTags = digest.digestandroid.Cache.getInstance().getChosenTags();
+
+        Log.d("tag", Integer.toString(mchosenTags.size()));
+        String tagg = "";
+        for(int i = 0 ; i < mchosenTags.size() ; i++){
+            tagg = "";
+            tagg += mchosenTags.get(i).getName() + "(" + mchosenTags.get(i).getEntity() + ")";
+            TopicTag tt = new TopicTag(tagg);
+            mtopic.getTags().add(tt);
+        }
+
 
         mtopic.setHeader(mtitle);
         mtopic.setBody(mbody);
-        mtopic.setTags(tags);
+        //mtopic.setTags(tags);
         mtopic.setImage(url);
 
-        // TODO: 21.12.2016 add tags to topic. add tags that are in listview which are created form description to the Cache.chosenTags 
+        // TODO: 21.12.2016 add tags to topic. add tags that are in listview which are created form description to the Cache.chosenTags
 
-        return cid;
+
+
     }
 
     public void addTag(){
         // TODO: 21.12.2016 add the last element of the chosenTags from cache to listview. I didnt create listview yet.
-        
+        Tagit tt = digest.digestandroid.Cache.getInstance().getChosenTags().get(digest.digestandroid.Cache.getInstance().getChosenTags().size()-1);
+
+        String text = tt.getName() + " (" + tt.getEntity() + ")";
+        if(!text.isEmpty()) {
+            entities_list.add(0, text);
+            eList_adapter.notifyDataSetChanged();
+        }
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {

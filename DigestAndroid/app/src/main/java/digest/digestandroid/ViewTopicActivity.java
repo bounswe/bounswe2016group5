@@ -114,6 +114,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
             Cache.getInstance().getComment().setTid(Cache.getInstance().getTopic().getId());
             Cache.getInstance().getComment().setUcid(-1);
             Cache.getInstance().getComment().setRate(0);
+            Cache.getInstance().getComment().setType(0);
 
             TopicCommentFragment topicCommentFragment = (TopicCommentFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(1);
             topicCommentFragment.addComment();

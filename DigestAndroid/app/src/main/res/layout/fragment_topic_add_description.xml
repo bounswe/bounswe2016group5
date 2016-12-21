@@ -46,13 +46,13 @@
                     style="@style/Widget.AppCompat.Button.Colored" />
 
 
-                <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                <Spinner
                     android:id="@+id/topic_spinner_channel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/topic_Create_channel"
                     android:textColorHint="#05ab9a"
-                    app:met_floatingLabel="normal"
+
                     android:paddingLeft="3dp"
                     />
 
@@ -89,7 +89,7 @@
                     android:id="@+id/list_view_tagit"
                     android:layout_height="150dp"
                     android:layout_width="fill_parent"
-                    android:dividerHeight="2dp"
+                    android:dividerHeight="1.5dp"
                     android:divider="@drawable/item_box"
                     android:scrollbars="vertical"
                     android:nestedScrollingEnabled="true"
@@ -116,6 +116,16 @@
                     android:id="@+id/button_get_entities"
                     android:background="#00bfff"
                     style="@style/Widget.AppCompat.Button.Colored" />
+
+                <ListView
+                    android:id="@+id/list_view_tagEntities"
+                    android:layout_height="150dp"
+                    android:layout_width="fill_parent"
+                    android:dividerHeight="1.5dp"
+                    android:divider="@drawable/item_box"
+                    android:scrollbars="vertical"
+                    android:nestedScrollingEnabled="true"
+                    />
 
 
             </LinearLayout>

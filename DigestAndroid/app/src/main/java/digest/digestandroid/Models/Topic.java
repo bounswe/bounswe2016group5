@@ -15,7 +15,7 @@ public class Topic {
     private int id;
     private String header;
     private String body;
-    private ArrayList<TopicTag> tags;
+    private ArrayList<TopicTag> tags = new ArrayList<TopicTag>();
     private String image;
     private int owner;
     private long rating;

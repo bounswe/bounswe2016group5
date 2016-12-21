@@ -14,6 +14,7 @@ public class Comment {
     //private String username;
     private String body;
     private int rate;
+    private int type;
     private Timestamp timestamp;
 
     public Comment() {
@@ -73,5 +74,13 @@ public class Comment {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

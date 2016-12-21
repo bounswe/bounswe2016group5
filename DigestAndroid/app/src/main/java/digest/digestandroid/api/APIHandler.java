@@ -39,6 +39,7 @@ import digest.digestandroid.Models.Channel;
 import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Tagit;
+import digest.digestandroid.Models.TagitResponse;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.TopicTag;
 import digest.digestandroid.Models.User;
@@ -179,7 +180,7 @@ public class APIHandler extends Application{
         StringRequest stringRequest = new StringRequest(Request.Method.POST, mainURL+"/?f=create_topic", successListener, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("VOLLEY", error.toString());
+                Log.e("Create_Topic_Error", error.toString());
             }
         }) {
             @Override
@@ -193,15 +194,6 @@ public class APIHandler extends Application{
                 Log.d("---Json in string",jsonInString);
                 return jsonInString == null ? null : jsonInString.getBytes();
 
-            }
-            @Override
-            protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                String responseString = "";
-                if (response != null) {
-                    responseString = String.valueOf(response.statusCode);
-                    // can get more details such as response.headers
-                }
-                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
             }
         };
 
@@ -414,7 +406,7 @@ public class APIHandler extends Application{
         Log.e("commentBody:", commentBody);
 
         StringRequest myReq = new StringRequest(Request.Method.GET,
-                mainURL + "/?f=add_comment&body=" + commentBody + "&uid=" + comment.getUid() + "&ucid=" + comment.getUcid() + "&tid=" + comment.getTid() ,
+                mainURL + "/?f=add_comment&body=" + commentBody + "&uid=" + comment.getUid() + "&ucid=" + comment.getUcid() + "&tid=" + comment.getTid() + "&type=" + comment.getType(),
                 successListener, failureListener){
                 @Override
                 protected Response<String> parseNetworkResponse (NetworkResponse response){
@@ -477,6 +469,7 @@ public class APIHandler extends Application{
 
     //http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_topic_to_channel&cid=8&tid=24
     public void addTopicToChannel (int cid, int tid) {
+        Log.d("channel-topic", "cid=" + cid + "-tid=" + tid);
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 mainURL + "/?f=add_topic_to_channel&cid=" + cid + "&tid=" + tid,
                 new Response.Listener<String>() {
@@ -515,10 +508,10 @@ public class APIHandler extends Application{
 
     // http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_entities&tag=computer_science
     // result will be : {"myArrayList":["programming language","an animal","boa","spirit","prototype based language"]}
-    public void getTagEntities (String tag, Response.Listener<Tagit> successListener) {
-        GsonRequest<Tagit> myReq = new GsonRequest<Tagit>(Request.Method.GET,
+    public void getTagEntities (String tag, Response.Listener<TagitResponse> successListener) {
+        GsonRequest<TagitResponse> myReq = new GsonRequest<TagitResponse>(Request.Method.GET,
                 mainURL + "/?f=get_tag_entities&tag=" + tag,
-                Tagit.class,
+                TagitResponse.class,
                 successListener,
                 new Response.ErrorListener() {
                     @Override
