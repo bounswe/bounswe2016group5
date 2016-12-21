@@ -211,7 +211,7 @@ public class DigestAPIServlet extends HttpServlet {
 			int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 			ChannelJDBC.addTopicToChannel(tid, cid);
 		}else if(f.equals(DigestParameters.GET_CHANNEL)){
-			if(!req.getParameter(DigestParameters.CID).equals(null) ){
+			if(req.getParameter(DigestParameters.CID) !=null ){
 				int cid = Integer.parseInt(req.getParameter(DigestParameters.CID));
 				resp.getWriter().append(ChannelJDBC.getChannel(cid));
 			}else{

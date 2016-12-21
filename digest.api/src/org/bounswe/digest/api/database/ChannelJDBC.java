@@ -214,7 +214,8 @@ public class ChannelJDBC {
 	}
 	
 	public static String getChannelTid(int tid){
-		String query = "SELECT * FROM digest.channel WHERE channel.tid=?";
+		String query = "SELECT * FROM digest.channel WHERE "+
+					   " id=(SELECT cid FROM channel_topic WHERE tid=? )";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -256,7 +257,8 @@ public class ChannelJDBC {
 				e.printStackTrace();
 			}
 		}
-		return result.printable();
+		Gson gson=new Gson();
+		return gson.toJson(gson);
 	
 	}
 	
