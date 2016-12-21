@@ -24,7 +24,21 @@ import org.bounswe.digest.api.database.model.TopicPreview;
 import com.google.gson.Gson;
 import com.mysql.cj.api.exceptions.StreamingNotifiable;
 
+/**
+ * Handles database transactions about topics.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class TopicJDBC {
+	/**
+	 * Creates topic with given topic object
+	 * 
+	 * @param topic
+	 *            Topic Object
+	 * @return Topic ID if succeed <code>-1</code> otherwise.
+	 */
 	public static int createTopic(Topic topic) {
 		int tid = -1;
 		Connection connection;
@@ -128,13 +142,21 @@ public class TopicJDBC {
 			}
 		}
 		ArrayList<String> media = topic.getMedia();
-		if(media!=null)  for (String item : media) {
-			addMedia(tid, item);
-		}
+		if (media != null)
+			for (String item : media) {
+				addMedia(tid, item);
+			}
 		ConnectionPool.close(connection);
 		return result;
 	}
 
+	/**
+	 * Returns topics of an user.
+	 * 
+	 * @param uid
+	 *            User ID.
+	 * @return Topics of user as JSON String.
+	 */
 	public static String getTopicsWithUser(int uid) {
 		String query = "SELECT * FROM digest.topic WHERE topic.owner=(?)";
 		Connection connection;
@@ -192,6 +214,14 @@ public class TopicJDBC {
 		return gson.toJson(result);
 	}
 
+	/**
+	 * Returns recent topics.
+	 * 
+	 * @param count
+	 *            The count of recent topics.
+	 * @return Recent topics as JSON string
+	 * 
+	 */
 	public static String getRecentTopics(int count) {
 		// will be timestamp
 		String query = "SELECT * FROM digest.topic ORDER BY id DESC LIMIT ?";
@@ -256,6 +286,13 @@ public class TopicJDBC {
 		return gson.toJson(result);
 	}
 
+	/**
+	 * Returns tags of a topic.
+	 * 
+	 * @param tid
+	 *            Topic ID.
+	 * @return
+	 */
 	private static ArrayList<TopicTag> getTagsOfTopic(int tid) {
 		String query = "SELECT tag.tag, tag.entity FROM digest.topic_tag, digest.tag  WHERE topic_tag.tid=? AND tag.id = topic_tag.tag";
 		Connection connection;
@@ -274,12 +311,12 @@ public class TopicJDBC {
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, tid);
 			resultSet = statement.executeQuery();
-			
+
 			while (resultSet.next()) {
-				
+
 				String tag = resultSet.getString(1);
 				String entity = resultSet.getString(2);
-				
+
 				tags.add(new TopicTag(tag + "(" + entity + ")"));
 			}
 		} catch (SQLException e) {
@@ -308,6 +345,12 @@ public class TopicJDBC {
 		return tags;
 	}
 
+	/**
+	 * Returns Media array of the topic.
+	 * 
+	 * @param tid
+	 * @return
+	 */
 	private static ArrayList<String> getMediaArray(int tid) {
 		String query = "SELECT url FROM digest.media WHERE tid=?";
 		Connection connection;
@@ -355,6 +398,13 @@ public class TopicJDBC {
 		return result;
 	}
 
+	/**
+	 * Adds media url into topic.
+	 * 
+	 * @param tid
+	 * @param url
+	 * @return <code>0</code> succeed <code>-1</code> otherwise.
+	 */
 	public static int addMedia(int tid, String url) {
 		Connection connection;
 		try {
@@ -405,6 +455,12 @@ public class TopicJDBC {
 		return result;
 	}
 
+	/**
+	 * Returns topic object as JSON.
+	 * 
+	 * @param tid
+	 * @return
+	 */
 	public static String getTopic(int tid) {
 		return getTopicObject(tid).printable();
 	}
@@ -468,7 +524,12 @@ public class TopicJDBC {
 		}
 		return result;
 	}
-
+	/**
+	 * Adds subscriber into topic.
+	 * @param tid
+	 * @param uid
+	 * @return
+	 */
 	public static int addSubscriberToTopic(int tid, int uid) {
 		Connection connection;
 		try {
@@ -693,7 +754,7 @@ public class TopicJDBC {
 	 * Returns tag id
 	 * 
 	 * @param tag
-	 * @param entity 
+	 * @param entity
 	 * @return
 	 */
 	private static int getTagID(String tag, String entity) {
@@ -803,63 +864,44 @@ public class TopicJDBC {
 				e.printStackTrace();
 			}
 		}
-		/*if (id != -1) {
-			createTagEntities(id, tag);
-		}*/
+		/*
+		 * if (id != -1) { createTagEntities(id, tag); }
+		 */
 		return id;
 	}
 
-	/*private static void createTagEntities(int id, String tag) {
-		Connection connection;
-		try {
-			connection = ConnectionPool.getConnection();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-		ConceptNetAPI httpClientPost = new ConceptNetAPI();
-		JSONArray entities = httpClientPost.extractEntities(tag).getJSONArray("entities");
-		for (int i = 0; i < entities.length(); ++i) {
-			String entity = entities.getString(i);
-			PreparedStatement statement = null;
-			String tagQuery = "INSERT INTO tag_entity (tid, entity) VALUES (?, ?)";
-			try {
-				connection.setAutoCommit(false);
-				statement = connection.prepareStatement(tagQuery);
-				statement.setInt(1, id);
-				statement.setString(2, entity);
-				statement.executeUpdate();
-
-			} catch (SQLException e) {
-
-				e.printStackTrace();
-				try {
-					System.err.print("Transaction is being rolled back");
-					connection.rollback();
-				} catch (SQLException excep) {
-					excep.printStackTrace();
-
-				}
-
-			} finally {
-				if (statement != null) {
-					try {
-						statement.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-				try {
-					connection.setAutoCommit(true);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-		}
-
-	}*/
+	/*
+	 * private static void createTagEntities(int id, String tag) { Connection
+	 * connection; try { connection = ConnectionPool.getConnection(); } catch
+	 * (SQLException e1) { // TODO Auto-generated catch block
+	 * e1.printStackTrace(); return; } ConceptNetAPI httpClientPost = new
+	 * ConceptNetAPI(); JSONArray entities =
+	 * httpClientPost.extractEntities(tag).getJSONArray("entities"); for (int i
+	 * = 0; i < entities.length(); ++i) { String entity = entities.getString(i);
+	 * PreparedStatement statement = null; String tagQuery =
+	 * "INSERT INTO tag_entity (tid, entity) VALUES (?, ?)"; try {
+	 * connection.setAutoCommit(false); statement =
+	 * connection.prepareStatement(tagQuery); statement.setInt(1, id);
+	 * statement.setString(2, entity); statement.executeUpdate();
+	 * 
+	 * } catch (SQLException e) {
+	 * 
+	 * e.printStackTrace(); try {
+	 * System.err.print("Transaction is being rolled back");
+	 * connection.rollback(); } catch (SQLException excep) {
+	 * excep.printStackTrace();
+	 * 
+	 * }
+	 * 
+	 * } finally { if (statement != null) { try { statement.close(); } catch
+	 * (SQLException e) { e.printStackTrace(); } } try {
+	 * connection.setAutoCommit(true); } catch (SQLException e) {
+	 * e.printStackTrace(); } }
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
 
 	private static ArrayList<TopicPreview> searchTopicHeaders(String text) {
 		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic WHERE header LIKE ? LIMIT 10";
@@ -925,7 +967,7 @@ public class TopicJDBC {
 			result.put(list.get(i).id, list.get(i));
 		}
 		ArrayList<TopicPreview> finalResult = new ArrayList<TopicPreview>();
-		for(Integer i : result.keySet()){
+		for (Integer i : result.keySet()) {
 			finalResult.add(result.get(i));
 		}
 		Gson gson = new Gson();
@@ -939,7 +981,7 @@ public class TopicJDBC {
 		if (entities.length() > 0) {
 			text = entities.getString(0);
 		}
-		//Do not take the tags label with text, but tags with this entity.
+		// Do not take the tags label with text, but tags with this entity.
 		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, tag, topic_tag WHERE tag.entity LIKE ? AND topic_tag.tag = tag.id AND topic.id = topic_tag.tid LIMIT 10";
 		Connection connection;
 		ArrayList<TopicPreview> result = new ArrayList<TopicPreview>();

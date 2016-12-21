@@ -41,8 +41,8 @@ import com.google.gson.Gson;
 /**
  * Handles HTTP requests.
  * 
- * @author Kerim Gokarslan <kerim.gokarslan@boun.edu.tr>
- * @author Ozan Bulut <ozan.bulut@boun.edu.tr>
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
  *
  */
 public class DigestAPIServlet extends HttpServlet {

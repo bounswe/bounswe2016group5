@@ -14,8 +14,8 @@ import com.google.gson.Gson;
 /**
  * Handles database transactions about topic channels.
  * 
- * @author Kerim Gokarslan <kerim.gokarslan@boun.edu.tr>
- * @author Ozan Bulut <ozan.bulut@boun.edu.tr>
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
  *
  */
 public class ChannelJDBC {

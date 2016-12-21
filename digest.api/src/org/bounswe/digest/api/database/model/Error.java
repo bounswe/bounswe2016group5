@@ -1,5 +1,11 @@
 package org.bounswe.digest.api.database.model;
-
+/**
+ * Error Object.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class Error extends Model{
 	private String errorName;
 	private String errorDescription;

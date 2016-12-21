@@ -1,5 +1,11 @@
 package org.bounswe.digest.api.database.model;
-
+/**
+ * Role object for user.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class Role extends Model {
 	public Role(int id, String name) {
 		this.id = id;

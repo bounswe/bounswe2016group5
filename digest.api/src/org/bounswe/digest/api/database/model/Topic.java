@@ -3,6 +3,13 @@ package org.bounswe.digest.api.database.model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+/**
+ * Topic object.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class Topic extends Model {
 	private int id;
 	private String header;
@@ -18,8 +25,8 @@ public class Topic extends Model {
 	private ArrayList<String> media;
 	private ArrayList<Comment> comments;
 
-	public Topic(int id, String header, String image, String body, int owner, int status,
-			ArrayList<TopicTag> tags, ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments, Timestamp timestamp) {
+	public Topic(int id, String header, String image, String body, int owner, int status, ArrayList<TopicTag> tags,
+			ArrayList<Quiz> quizzes, ArrayList<String> media, ArrayList<Comment> comments, Timestamp timestamp) {
 		this.id = id;
 		this.header = header;
 		this.image = image;
@@ -61,7 +68,6 @@ public class Topic extends Model {
 		this.image = image;
 	}
 
-	
 	public String getBody() {
 		return body;
 	}

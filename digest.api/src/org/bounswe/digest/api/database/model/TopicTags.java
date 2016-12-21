@@ -1,7 +1,14 @@
 package org.bounswe.digest.api.database.model;
 
 import java.util.ArrayList;
-
+/**
+ * @deprecated
+ * TopicTags Object, not used.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class TopicTags extends Model{
 	private ArrayList<Integer> ids;
 	private ArrayList<Integer> tids;

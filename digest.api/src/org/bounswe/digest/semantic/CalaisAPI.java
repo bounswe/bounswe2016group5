@@ -15,7 +15,11 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.*;
 import java.text.Normalizer;
 import java.util.Iterator;
- 
+/**
+ * CalaisAPI
+ * 
+ *
+ */
 public class CalaisAPI {
  
     private static final String CALAIS_URL = "https://api.thomsonreuters.com/permid/calais";
@@ -113,7 +117,7 @@ public class CalaisAPI {
 						String name = item.getString("name");
 						name = name.replaceAll(" ", "_").toLowerCase();
 						name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("\\p{Mn}", "");
-				    	if(name.contains("ý")) name = name.replaceAll("ý", "i");
+				    	if(name.contains("ï¿½")) name = name.replaceAll("ï¿½", "i");
 						Double relevance = item.getDouble("importance");
 						cnet = httpClientPost.extractEntities(name).getJSONArray("entities");
 						if(cnet.length()!=0){

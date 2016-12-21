@@ -2,8 +2,10 @@ package org.bounswe.digest.api.database.model;
 
 import java.util.Random;
 /**
+ * User Object.
  * 
- * @author mehmetalperuslu
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
  *
  */
 public class User extends Model {
@@ -16,7 +18,17 @@ public class User extends Model {
 	private int status;
 	private Role role;
 	private String session;
-
+	/**
+	 * Generates user object with given parameters.
+	 * @param id
+	 * @param username
+	 * @param password
+	 * @param email
+	 * @param first_name
+	 * @param last_name
+	 * @param status
+	 * @param role
+	 */
 	public User(int id, String username, String password, String email, String first_name, String last_name, int status,
 			Role role) {
 		this.setId(id);

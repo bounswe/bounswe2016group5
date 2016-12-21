@@ -8,8 +8,8 @@ import java.sql.SQLException;
 /**
  * Handles database transactions about progress.
  * 
- * @author Kerim Gokarslan <kerim.gokarslan@boun.edu.tr>
- * @author Ozan Bulut <ozan.bulut@boun.edu.tr>
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
  *
  */
 public class ProgressJDBC {
