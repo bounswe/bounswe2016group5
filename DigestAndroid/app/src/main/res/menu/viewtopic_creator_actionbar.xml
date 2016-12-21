@@ -13,6 +13,11 @@
         android:title="Add Material"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/action_bar_quiz"
+        android:title="Add Question"
+        app:showAsAction="ifRoom"/>
+
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"

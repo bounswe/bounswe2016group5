@@ -1,15 +1,33 @@
 package digest.digestandroid.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import digest.digestandroid.AddQuestionActivity;
+import digest.digestandroid.Cache;
+import digest.digestandroid.DividerItemDecoration;
+import digest.digestandroid.Models.Quiz;
+import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
+import digest.digestandroid.QuestionAdapter;
 import digest.digestandroid.R;
 
 
@@ -35,6 +53,10 @@ public class TopicQuizFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private List<QuizQuestion> questionList;
+    private RecyclerView recyclerView;
+    private QuestionAdapter mAdapter;
 
     public TopicQuizFragment() {
         // Required empty public constructor
@@ -71,7 +93,23 @@ public class TopicQuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_topic_quiz, container, false);
+        rootView = inflater.inflate(R.layout.fragment_topic_quiz, container, false);
+
+
+        questionList = new ArrayList<QuizQuestion>();
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.question_recycler_view2);
+        mAdapter = new QuestionAdapter(questionList);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.setAdapter(mAdapter);
+
+        prepareQuiz();
+
+
+        return rootView;
     }
 
     public void initializeInfo(Topic topic){
@@ -85,6 +123,52 @@ public class TopicQuizFragment extends Fragment {
     public void setTopicInfo(){
 
 
+    }
+
+    public void prepareQuiz() {
+
+        //If there is a quiz to view
+        if(Cache.getInstance().getTopic().getQuizzes().size()>0) {
+            Quiz quiz = Cache.getInstance().getTopic().getQuizzes().get(0); // Assumed there is only one quiz
+            for (QuizQuestion q : quiz.getQuestions()) {
+                questionList.add(q);
+            }
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    //Adds the question in the cache to the topic
+    public void addQuestion() {
+        QuizQuestion currentQuestion = Cache.getInstance().getQuestion();
+
+        if(Cache.getInstance().getQuestion()!=null) {
+            Log.d("CURRENT QUESTION", Cache.getInstance().getQuestion().getText());
+            questionList.add(currentQuestion);
+            mAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    public void solve() {
+        int nRightAnswers = mAdapter.matchAnswers();
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+        builder1.setMessage("Your score is: "+nRightAnswers+"/"+questionList.size());
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        questionList.clear();
+                        mAdapter.notifyDataSetChanged();
+                        for (int i=1; i<100; i++);
+                        prepareQuiz();
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
 

@@ -1,16 +1,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="digest.digestandroid.fragments.TopicQuizFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Quiz functionality is only available on Web for now"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/linL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:id="@+id/question_recycler_view2"
+                    android:layout_weight="0">
+
+
+                </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:id="@+id/button_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="SUBMIT"
+            android:onClick="solveQuiz"
+            android:background="@color/oil"
+            android:clickable="true"
+            android:layout_below="@id/linL"
+            android:textSize="15sp"
+            android:textColor="@color/white" />
+
 
 </RelativeLayout>

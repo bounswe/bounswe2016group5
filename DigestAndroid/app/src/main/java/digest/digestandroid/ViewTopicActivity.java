@@ -1,5 +1,6 @@
 package digest.digestandroid;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -20,6 +22,7 @@ import com.android.volley.VolleyError;
 import java.util.ArrayList;
 import java.util.List;
 
+import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.api.APIHandler;
 import digest.digestandroid.fragments.TopicCommentFragment;
@@ -150,12 +153,29 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
 
                 return true;
 
+            case R.id.action_bar_quiz:
+                intent = new Intent(getApplicationContext(), AddQuestionActivity.class);
+                startActivityForResult(intent, 3); //activity request id 3
+                return true;
+
             default:
 
                 return super.onOptionsItemSelected(item);
 
         }
     }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 3 && resultCode == Activity.RESULT_OK) {
+            TopicQuizFragment topicQuizFragment = (TopicQuizFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(3);
+            topicQuizFragment.addQuestion();
+        }
+
+    }
+
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -173,7 +193,10 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     public void onFragmentInteraction() {
     }
 
-
+    public void solveQuiz(View view) {
+        TopicQuizFragment topicQuizFragment = (TopicQuizFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(3);
+        topicQuizFragment.solve();
+    }
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter{
