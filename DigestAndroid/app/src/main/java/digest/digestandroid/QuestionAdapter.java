@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.content.DialogInterface;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import digest.digestandroid.Models.QuizQuestion;
@@ -25,7 +27,8 @@ import digest.digestandroid.Models.QuizQuestion;
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyViewHolder> {
 
     private List<QuizQuestion> questionList;
-    private List<Integer> answerList;
+    private ArrayList<Integer> answerList;
+
 
 
 
@@ -33,6 +36,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
 
         public TextView tw_question;
         public CheckBox choice_one, choice_two, choice_three;
+
 
         public MyViewHolder(View view) {
             super(view);
@@ -50,15 +54,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         }
 
 
-
-
-
     }
 
 
     public QuestionAdapter(List<QuizQuestion> questionList) {
         this.questionList = questionList;
         this.answerList = new ArrayList<Integer>();
+
     }
 
     @Override
@@ -66,6 +68,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.question_list_row, parent, false);
         return new QuestionAdapter.MyViewHolder(itemView);
+
     }
 
     @Override
@@ -89,7 +92,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b == true) {
                     Log.d("first one", "checked");
-                    answerList.add(position, 0);
+                    answerList.set(position, 0);
 
                 }
             }
@@ -99,7 +102,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b == true) {
-                    answerList.add(position, 1);
+                    answerList.set(position, 1);
+
                 }
             }
         });
@@ -108,10 +112,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b == true) {
-                    answerList.add(position, 2);
+                    answerList.set(position, 2);
                 }
             }
         });
+
+
+
 
         //Log.d("----CEVAPLAR", answerList.get(0).toString());
     }
@@ -121,8 +128,21 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         return questionList.size();
     }
 
+
+
+
     public List<Integer> getAnswerList(){
         return answerList;
+    }
+
+    public void updateAnswerList() {
+        this.answerList.add(-1);
+    }
+
+    public void setAnswerList() {
+        for (int i=0; i<questionList.size(); i++) {
+            answerList.add(-1);
+        }
     }
 
     public int matchAnswers(){
@@ -139,7 +159,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.MyView
         return nRightAnswers;
     }
 
-
+    public void clearBoxes(){
+        answerList.clear();
+    }
 
 
 

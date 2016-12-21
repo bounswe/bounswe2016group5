@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -106,6 +107,7 @@ public class TopicQuizFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
 
+
         prepareQuiz();
 
 
@@ -132,6 +134,7 @@ public class TopicQuizFragment extends Fragment {
             Quiz quiz = Cache.getInstance().getTopic().getQuizzes().get(0); // Assumed there is only one quiz
             for (QuizQuestion q : quiz.getQuestions()) {
                 questionList.add(q);
+                mAdapter.updateAnswerList();
             }
             mAdapter.notifyDataSetChanged();
         }
@@ -144,6 +147,7 @@ public class TopicQuizFragment extends Fragment {
         if(Cache.getInstance().getQuestion()!=null) {
             Log.d("CURRENT QUESTION", Cache.getInstance().getQuestion().getText());
             questionList.add(currentQuestion);
+
             mAdapter.notifyDataSetChanged();
         }
 
@@ -159,10 +163,14 @@ public class TopicQuizFragment extends Fragment {
                 "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        questionList.clear();
+                        /*questionList.clear();
                         mAdapter.notifyDataSetChanged();
-                        for (int i=1; i<100; i++);
-                        prepareQuiz();
+
+                        prepareQuiz();*/
+                        recyclerView.setAdapter(null);
+                        mAdapter = new QuestionAdapter(questionList);
+                        mAdapter.setAnswerList();
+                        recyclerView.setAdapter(mAdapter);
                         dialog.cancel();
                     }
                 });
