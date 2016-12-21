@@ -741,7 +741,7 @@ public class TopicJDBC {
 
 	}
 
-	public static int createTag(String tag) {
+	public static int createTag(String fullTag) {
 
 		Connection connection;
 		int id = -1;
@@ -754,11 +754,15 @@ public class TopicJDBC {
 		}
 		PreparedStatement statement = null;
 		ResultSet resultSet;
-		String tagQuery = "INSERT INTO tag (tag) VALUES (?)";
+		int indexOfParanthesis = fullTag.indexOf('(');
+		String tag = fullTag.substring(0, indexOfParanthesis);
+		String entity = fullTag.substring(indexOfParanthesis).replace("(", "").replace(")", "");
+		String tagQuery = "INSERT INTO tag (tag, entity) VALUES (?)";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(tagQuery, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, tag);
+			statement.setString(2, entity);
 			statement.executeUpdate();
 			resultSet = statement.getGeneratedKeys();
 			if (resultSet.next()) {
@@ -790,13 +794,13 @@ public class TopicJDBC {
 				e.printStackTrace();
 			}
 		}
-		if (id != -1) {
+		/*if (id != -1) {
 			createTagEntities(id, tag);
-		}
+		}*/
 		return id;
 	}
 
-	private static void createTagEntities(int id, String tag) {
+	/*private static void createTagEntities(int id, String tag) {
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -846,7 +850,7 @@ public class TopicJDBC {
 
 		}
 
-	}
+	}*/
 
 	private static ArrayList<TopicPreview> searchTopicHeaders(String text) {
 		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic WHERE header LIKE ? LIMIT 3";
@@ -917,7 +921,7 @@ public class TopicJDBC {
 			text = entities.getString(0);
 		}
 		//Do not take the tags label with text, but tags with this entity.
-		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, tag, tag_entity WHERE tag.tag NOT LIKE ? AND tag_entity.entity LIKE ? AND tag.tag.id = tag_entity.tid AND topic_tag.tag = tag.id AND topic.id = topic_tag.tid LIMIT 4";
+		String query = "SELECT topic.id, topic.header, topic.image, topic.owner, topic.status, topic.timestamp FROM topic, tag, WHERE tag.entity LIKE ? AND tag.tag.id = tag_entity.tid AND topic_tag.tag = tag.id AND topic.id = topic_tag.tid LIMIT 4";
 		Connection connection;
 		ArrayList<TopicPreview> result = new ArrayList<TopicPreview>();
 		try {
@@ -932,8 +936,7 @@ public class TopicJDBC {
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
-			statement.setString(1,  text);
-			statement.setString(2, "%" + text + "%");// regex for searching.
+			statement.setString(1, "%" + text + "%");// regex for searching.
 			resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				result.add(new TopicPreview(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3),

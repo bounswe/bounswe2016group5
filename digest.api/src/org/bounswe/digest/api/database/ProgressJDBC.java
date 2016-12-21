@@ -67,7 +67,7 @@ public class ProgressJDBC {
 		}
 		PreparedStatement statement = null;
 		int result = 0;
-		String query = "UPDARE progress prog=? WHERE tid=? and uid=? ";
+		String query = "UPDATE progress prog=? WHERE tid=? and uid=? ";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
@@ -124,8 +124,8 @@ public class ProgressJDBC {
 			statement.setInt(1, tid);
 			statement.setInt(2, uid);
 			resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				result = resultSet.getInt(1);
+			while (resultSet.next()) {
+				result += resultSet.getInt(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
