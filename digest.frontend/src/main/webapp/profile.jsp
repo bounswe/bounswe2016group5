@@ -32,6 +32,22 @@
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js"></script>
 </head>
+
+<script>
+$(document).ready(function() {
+	$.getJSON('ChannelServlet?f=get_user_channels',function(data){
+		var my_channels = $('#my_channels');
+		var content = '';
+		$.each(data,function(key,val){
+			if(val != null){
+				content = '<li class="list-group-item"><a href="channel.jsp?cid='+val.id+'">'+val.name+'</a></li>';
+				my_channels.append($('<ul class="list-group" />').html(content));
+			};
+				
+		});
+	});
+});
+</script>
 <body>
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
@@ -57,7 +73,11 @@
 								</a>
 							</div>
 						</div>
-						<div id="show-data"></div>
+						<div style="
+							position:absolute;
+							z-index: 100 !important;
+							width:80%;
+						" id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
@@ -93,8 +113,8 @@
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>
-								<div class="panel-body">Channels and some links</div>
-
+								<div class="panel-body" id="sub_channels">
+							</div>
 							</div>
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
@@ -173,47 +193,11 @@
 							</div>
 						</div>
 
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Following
-							Topics</h4>
-							<%
-								if (request.getAttribute("fol_topics") != null) {
-
-									JSONArray topicArray = (JSONArray) request.getAttribute("fol_topics");
-							%>
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px"> My Channels</h4>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
-							<div class="panel-body" id="following-topics" class="list-group">
-								<%
-									for (Object top : topicArray) {
-											JSONObject topic = (JSONObject) top;
-
-											String header = "";
-											try{
-												header = topic.get("header").toString(); 
-											}
-											catch(JSONException e){
-												
-											}
-								%>
+							<div class="panel-body" id="my_channels" class="list-group">
 								
-								<div class="topic-view col-xs-4 col-lg-4"
-									style="padding: 9px 9px 0px 9px;">
-									<div class="thumbnail">
-										<input type="image" class="group list-group-image"
-											style="display: block; margin: 0 auto;" height="100"
-											width="100" name="topic_id" id="topic_id" value=<%=topic.get("id")%>
-											src="<%=topic.get("image")%>" alt="" />
-										<div class="caption">
-											<h4 class="group inner list-group-item-heading"
-												align="center"><%=header %>
-												</h4>
-										</div>
-									</div>
-								</div>
-								<%
-									}
-								}
-								%>
 							</div>
 						</div>
 					</form>
