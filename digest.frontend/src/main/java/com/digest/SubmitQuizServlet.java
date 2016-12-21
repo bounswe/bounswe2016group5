@@ -62,6 +62,7 @@ public class SubmitQuizServlet extends HttpServlet {
 		while (names.hasMoreElements()) {
 			String attr = names.nextElement();
 			String value = request.getParameter(attr);
+			System.out.println(attr +  " "+ value);
 			if(attr.equals("tid"))
 				tid = Integer.parseInt(value);
 			else{
@@ -127,8 +128,15 @@ public class SubmitQuizServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		double progress = (double)correct/total - wrong*0.2;
-		System.out.println( progress);
+		double progress = 0;
+		if(total != 0)
+			progress = (double)correct/total - wrong*0.2;
+		System.out.println("progress " +  progress);
+		
+		String url2 = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_progress&tid="+tid+"&uid="+session.getAttribute("id");
+		System.out.print(url2);
+		URL jsonPage2 = new URL(url2);
+		//HttpURLConnection con2 = (HttpURLConnection) jsonPage2.openConnection();
 	}
 
 }
