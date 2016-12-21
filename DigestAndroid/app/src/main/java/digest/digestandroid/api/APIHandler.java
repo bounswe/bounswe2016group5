@@ -283,6 +283,22 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
 
+    public void advancedSearchApi(String date1, String date2, boolean channel, boolean material, boolean quiz, int minComment, String searchText, Response.Listener<String> successListener){
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+
+                // TODO API IS NEEDED
+                mainURL + "/?f=get_topics_with_tag&tag=" + searchText,
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Login Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
     public void getRelatedTopicsOfaTopic(int topicId,Response.Listener<String> successListener){
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 // TODO waiting for backend api.
