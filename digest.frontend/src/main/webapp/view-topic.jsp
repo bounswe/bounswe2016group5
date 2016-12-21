@@ -57,7 +57,6 @@
 		    var count =  parseInt(document.getElementById(cid+"-rate").textContent);
 		    var count = count + 1 ;
 		    document.getElementById(cid+"-rate").textContent = count;
-		    
 		    $.post( "RateCommentServlet", { cid: cid, uid: uid, f:"rate_comment" },function( data ) {
 		    		
 		    });
@@ -111,7 +110,11 @@
 								</a>
 							</div>
 						</div>
-						<div id="show-data"></div>
+						<div style="
+							position:absolute;
+							z-index: 100 !important;
+							width:80%;
+						" id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
@@ -155,7 +158,11 @@
 								</a>
 							</div>
 						</div>
-						<div id="show-data"></div>
+						<div style="
+							position:absolute;
+							z-index: 100 !important;
+							width:80%;
+						" id="show-data"></div>
 					</form>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
@@ -192,7 +199,7 @@
 							<div class="panel panel-default"
 								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>
-								<div class="panel-body">Channels and some links</div>
+								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
 							<div class="panel panel-default"
@@ -252,11 +259,12 @@
 					</form>
 					<%
 						} else if (subscribed == 1) {
+							int progress = (Integer) request.getAttribute("progress");
 					%>
 					<div class="col-sm-5 pull-right">
 						<div class="text">Progress:</div>
 						<div class="progress">
-							<div data-percentage="0%" style="width: 50%;"
+							<div data-percentage="0%" style="width: <%=progress %>%;"
 								class="progress-bar progress-bar-primary" role="progressbar"
 								aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
@@ -319,8 +327,7 @@
 									<li class="active"><a data-toggle="tab" href="#comments">Comments</a></li>
 									<li><a data-toggle="tab" href="#materials">Materials</a></li>
 									<li><a data-toggle="tab" href="#quiz">Quiz</a></li>
-									<li><a data-toggle="tab" href="#related-topics">Related
-											Topics</a></li>
+									<li><a data-toggle="tab" href="#related_topics">Related Topics</a></li>
 								</ul>
 
 								<div class="tab-content">
@@ -718,6 +725,27 @@
 												</div>
 											</div>
 										</form>
+									</div>
+									
+									<div id="related_topics" class="tab-pane fade">
+										<div class="panel panel-default"
+											style="height: 500px; overflow-y: auto;">
+											<%
+												if (session.getAttribute("session") != null) {
+													if (subscribed == 0 && owner != (Integer) session.getAttribute("id")) {
+											%>
+											<h4 style="margin: 20px 20px 20px 20px">You need to be
+												subscribed to see the materials.</h4>
+											<%
+												} else {
+											%>
+
+											
+											<%
+												}
+												}
+											%>
+										</div>
 									</div>
 								</div>
 							</div>
