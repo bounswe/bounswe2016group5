@@ -2,6 +2,7 @@ package digest.digestandroid;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -41,6 +42,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         question.setAnswers(answers);
 
         Cache.getInstance().setQuestion(question);
+        Log.d("Cache", Cache.getInstance().getQuestion().getText());
         setResult(RESULT_OK);
         finish();
 
