@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class TopicPreview extends Model {
-	private int id;
+	public int id;
 	private String header;
 	private String image;
 	private int owner;
