@@ -2,14 +2,11 @@ package org.bounswe.digest.api.database.model;
 
 public class TopicTag extends Model{
 	private int id;
-	private int tid;
-	private String tag;
+	private int tid;	
 	
-	
-	public TopicTag(int id, int tid, String tag) {
+	public TopicTag(int id, int tid) {
 		this.id = id;
 		this.tid = tid;
-		this.tag = tag;
 	}
 	public int getId() {
 		return id;
@@ -23,13 +20,5 @@ public class TopicTag extends Model{
 	public void setTid(int tid) {
 		this.tid = tid;
 	}
-	public String getTag() {
-		return tag;
-	}
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-	
-	
 	
 }

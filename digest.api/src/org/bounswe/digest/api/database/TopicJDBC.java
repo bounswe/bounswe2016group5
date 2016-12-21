@@ -274,7 +274,7 @@ public class TopicJDBC {
 			statement.setInt(1, tid);
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				tags.add(new TopicTag(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3)));
+				tags.add(new TopicTag(resultSet.getInt(1), resultSet.getInt(2)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
