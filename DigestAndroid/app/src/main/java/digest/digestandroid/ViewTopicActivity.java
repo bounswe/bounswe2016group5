@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -41,6 +42,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     private ViewPager viewPager;
     private RecyclerView recyclerView1;
 
+
     private Topic topic;
 
     @Override
@@ -49,6 +51,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         setContentView(R.layout.activity_view_topic);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -582,4 +582,44 @@ public class APIHandler extends Application{
 
         VolleySingleton.getInstance().addToRequestQueue(stringRequest);
     }
+
+    public void rateComment (int cid, int uid) {
+        Log.d("RATE", "--HERE");
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=rate_comment&cid=" + cid + "&uid=" + uid,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VOLLEY", "--"+response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Rate Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
+    public void unrateComment (int cid, int uid) {
+        Log.d("UNRATE", "--HERE");
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=unrate_comment&cid=" + cid + "&uid=" + uid,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("VOLLEY", "--"+response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Rate Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
 }

@@ -1,14 +1,17 @@
 package digest.digestandroid;
 
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Movie;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView body, owner, rate;
         public ImageButton rateButton;
+        public ImageView typeIcon;
 
         public MyViewHolder(View view) {
             super(view);
@@ -36,9 +40,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
             owner = (TextView) view.findViewById(R.id.comment_owner);
             rate = (TextView) view.findViewById(R.id.comment_rate);
             rateButton = (ImageButton) view.findViewById(R.id.thumbsUp);
-
+            typeIcon = (ImageView) view.findViewById(R.id.comment_type_icon);
             itemView.setOnClickListener(this);
             rateButton.setOnClickListener(this);
+
         }
 
         @Override
@@ -83,6 +88,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         }
         else
             holder.owner.setTextColor(Color.BLACK);
+
+        if(comment.getType()==1) {
+            holder.typeIcon.setBackgroundResource(R.drawable.ic_question);
+        } else if (comment.getType()==2) {
+            holder.typeIcon.setBackgroundResource(R.drawable.ic_instructive);
+        } else {
+            //holder.typeIcon.setBackgroundResource(R.drawable.ic_instructive);
+            holder.typeIcon.setVisibility(View.INVISIBLE);
+        }
 
     }
 

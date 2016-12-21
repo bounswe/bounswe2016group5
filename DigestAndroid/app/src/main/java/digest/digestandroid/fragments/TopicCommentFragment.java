@@ -1,12 +1,14 @@
 package digest.digestandroid.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -118,7 +120,45 @@ public class TopicCommentFragment extends Fragment {
         mAdapter.setOnItemClickListener(new CommentAdapter.CommentClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                CommentUser cu = commentList.get(position);
+                final CommentUser cu = commentList.get(position);
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(v.getContext());
+
+                builder1.setCancelable(true);
+                builder1.setMessage("Like it?");
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.d("IDLER",cu.getId()+""+cu.getBody() );
+                                APIHandler.getInstance().rateComment(cu.getId(), Cache.getInstance().getUser().getId());
+
+                                /*recyclerView.setAdapter(null);
+                                mAdapter = new CommentAdapter(commentList);
+                                recyclerView.setAdapter(mAdapter);
+                                mAdapter.notifyDataSetChanged();*/
+                                commentList.clear();
+                                prepareCommentData();
+                                mAdapter.notifyDataSetChanged();
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                APIHandler.getInstance().unrateComment(cu.getId(), Cache.getInstance().getUser().getId());
+                                recyclerView.setAdapter(null);
+                                mAdapter = new CommentAdapter(commentList);
+                                recyclerView.setAdapter(mAdapter);
+                                mAdapter.notifyDataSetChanged();
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
             }
 
             @Override
@@ -161,10 +201,14 @@ public class TopicCommentFragment extends Fragment {
             public void onResponse(String response) {
                 Log.d("Get username", "Success " + response);
                 CommentUser commentUser = new CommentUser();
+                commentUser.setId(Cache.getInstance().getTopic().getComments().get(ctr).getId());
                 commentUser.setBody(Cache.getInstance().getTopic().getComments().get(ctr).getBody());
                 commentUser.setUsername(response);
                 commentUser.setRate(Cache.getInstance().getTopic().getComments().get(ctr).getRate());
+                Log.d("COMMENT USER", commentUser.getRate()+"");
+                commentUser.setType(Cache.getInstance().getTopic().getComments().get(ctr).getType());
                 commentUser.setUid(Cache.getInstance().getTopic().getComments().get(ctr).getUid());
+                commentUser.setTid(Cache.getInstance().getTopic().getId());
 
 
                 commentList.add(commentUser);

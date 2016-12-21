@@ -12,22 +12,40 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/thumbsUp"
-        android:layout_width="@dimen/mid_icon"
-        android:layout_height="@dimen/mid_icon"
+
+    <LinearLayout
+        android:id="@+id/rateIcons"
+        android:orientation="vertical"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/rate_button_selector"
-        android:layout_marginRight="@dimen/small_margin"
-        android:layout_alignParentTop="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/thumbsUp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_tup"
+            android:layout_marginRight="@dimen/small_margin"
+            android:layout_alignParentTop="true" />
+
+        <ImageButton
+            android:id="@+id/thumbsDown"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_tdown"
+            android:layout_marginRight="@dimen/small_margin"
+            android:layout_alignParentBottom="true" />
+
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/comment_body"
         android:textColor="@color/jet"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/thumbsUp"
-        android:layout_toEndOf="@id/thumbsUp"
+        android:layout_toRightOf="@id/rateIcons"
+        android:layout_toEndOf="@id/rateIcons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -38,7 +56,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/thumbsUp"
+        android:layout_below="@id/rateIcons"
         android:paddingTop="6dp"
         android:layout_marginRight="@dimen/small_margin" />
 
@@ -53,6 +71,13 @@
         android:layout_toEndOf="@id/comment_rate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/comment_type_icon"
+        android:layout_alignParentRight="true"/>
 
 
 
