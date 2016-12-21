@@ -124,8 +124,8 @@ public class ProgressJDBC {
 			statement.setInt(1, tid);
 			statement.setInt(2, uid);
 			resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				result = resultSet.getInt(1);
+			while (resultSet.next()) {
+				result += resultSet.getInt(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
