@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -36,6 +39,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private RecyclerView recyclerView1;
 
     private Topic topic;
 
@@ -65,6 +69,13 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
 
                 tabLayout = (TabLayout) findViewById(R.id.tabs);
                 tabLayout.setupWithViewPager(viewPager);
+
+                recyclerView1 = (RecyclerView) findViewById(R.id.related_topics_ofa_topic_recycler_view);
+                recyclerView1.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                recyclerView1.setItemAnimator(new DefaultItemAnimator());
+
+                loadTopics(recyclerView1,CacheTopiclist.getInstance().getRelatedTopicsOfaTopic());
+
             }
         };
 
@@ -198,6 +209,48 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     public void solveQuiz(View view) {
         TopicQuizFragment topicQuizFragment = (TopicQuizFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(3);
         topicQuizFragment.solve();
+    }
+
+    public void loadTopics(RecyclerView currentRecyclerView,final ArrayList<Topic> currentTopicList){
+        RecyclerView.Adapter homeAdapter = new HomeAdapter(currentTopicList);
+        currentRecyclerView.setAdapter(homeAdapter);
+
+        ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
+            @Override
+            public void onItemClick(int pos, View v) {
+                Log.d("" + pos, v.toString());
+
+                final int clickedTopicId = currentTopicList.get(pos).getId();
+
+
+
+
+                Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                    @Override
+                    public void onResponse(Topic response) {
+                        Log.d("Success", response.toString());
+                        Cache.getInstance().setTopic(response);
+
+
+                        Response.Listener<String> getRelatedTopicsListener = new Response.Listener<String>() {
+
+                            @Override
+                            public void onResponse(String response) {
+
+                                final ArrayList<Topic> arrayList = ViewRegisteredHomeActivity.serializeTopicsFromJson(response);
+                                CacheTopiclist.getInstance().setRelatedTopicsOfaTopic(arrayList);
+
+                                Intent intent = new Intent(getApplicationContext(), ViewTopicActivity.class);
+                                startActivity(intent);
+                            }
+                        };
+
+                        APIHandler.getInstance().getRelatedTopicsOfaTopic(clickedTopicId,getRelatedTopicsListener);
+                    }
+                };
+                APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
+            }
+        });
     }
 
 

@@ -29,9 +29,10 @@ public class CacheTopiclist {
 
     ArrayList<Topic> channelTopics ;
     ArrayList<Channel> userChannels ;
-
-
     ArrayList<Channel> followedChannels;
+
+    ArrayList<Topic> relatedTopicsOfaTopic;
+
 
     String currentFragment;
 
@@ -88,7 +89,16 @@ public class CacheTopiclist {
     }
 
     public void setFollowedChannels(ArrayList<Channel> followedChannels) {
-        this.followedChannels = followedChannels;
+        this.followedChannels = new ArrayList<Channel>(followedChannels);
     }
+
+    public ArrayList<Topic> getRelatedTopicsOfaTopic() {
+        return relatedTopicsOfaTopic;
+    }
+
+    public void setRelatedTopicsOfaTopic(ArrayList<Topic> relatedTopicsOfaTopic) {
+        this.relatedTopicsOfaTopic = new ArrayList<Topic>(relatedTopicsOfaTopic);
+    }
+
 
 }

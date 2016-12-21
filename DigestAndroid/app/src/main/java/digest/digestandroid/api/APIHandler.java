@@ -283,6 +283,19 @@ public class APIHandler extends Application{
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
 
+    public void getRelatedTopicsOfaTopic(int topicId,Response.Listener<String> successListener){
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                // TODO waiting for backend api.
+                mainURL + "/?f=get_trending_topics",
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {Log.d("Failed", "Progress did not arrive");}
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
     // MAY NOT BE NEEDED AT ALL
     public void getProgressOfChannel(int channelId, User user, Response.Listener<String> successListener){
         StringRequest myReq = new StringRequest(Request.Method.GET,
