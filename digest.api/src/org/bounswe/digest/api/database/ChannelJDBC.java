@@ -62,7 +62,12 @@ public class ChannelJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
-	
+	/**
+	 * Adds topic to a channel
+	 * @param tid topic id
+	 * @param cid channel id
+	 * @return 0 in succes -1 in failure
+	 */
 	public static int addTopicToChannel(int tid,int cid){
 		Connection connection;
 		try {
@@ -111,7 +116,11 @@ public class ChannelJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
-	
+	/**
+	 * Returns Channel Object in JSON Format
+	 * @param cid channel id
+	 * @return Channel
+	 */
 	public static String getChannel(int cid){
 		return getChannelObject(cid).printable();
 	}
@@ -213,18 +222,17 @@ public class ChannelJDBC {
 		return result;
 	}
 	
-	public static String getChannelTid(int tid){
-		String query = "SELECT * FROM digest.channel WHERE "+
-					   " id=(SELECT cid FROM channel_topic WHERE tid=? )";
+	public static int getChannelTid(int tid){
+		String query =  " (SELECT cid FROM channel_topic WHERE tid=? )";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-			return null;
+			return -1;
 		}
+		int result=-1;
 		PreparedStatement statement = null;
-		Channel result=null;
 		ResultSet resultSet;
 		try {
 			connection.setAutoCommit(false);
@@ -232,8 +240,7 @@ public class ChannelJDBC {
 			statement.setInt(1, tid);
 			resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				result = (new Channel(resultSet.getInt(1), resultSet.getInt(2), 
-						resultSet.getString(3),resultSet.getInt(4)));
+				result = resultSet.getInt(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -257,8 +264,7 @@ public class ChannelJDBC {
 				e.printStackTrace();
 			}
 		}
-		Gson gson=new Gson();
-		return gson.toJson(gson);
+		return result;
 	
 	}
 	
