@@ -10,7 +10,7 @@ public class Tagit {
     String name = null;
     String entity = null;
     boolean selected = false;
-    ArrayList<String> myArrayList = new ArrayList<String>(); //for entities
+    ArrayList<String> myArrayList; //for entities
 
     public Tagit(String entity, String name, boolean selected) {
         super();

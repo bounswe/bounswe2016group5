@@ -86,19 +86,27 @@ public class CreateTopicFragmentsActivity extends AppCompatActivity {
 
         //Log.v("USERRRRRRRR", Cache.getInstance().getUser().toString());
 
-        Response.Listener<Tagit> successListener =  new Response.Listener<Tagit>() {
-            @Override
-            public void onResponse(Tagit response) {
-                Log.i("VOLLEY ENTITIIIESS", response.getMyArrayList().toString());
-                // TODO: 20.12.2016 addDescription dan gelen cid ve bu responsetan gelen tid ile channel i topic ile bagdastir. addTopicToChannel (int cid, int tid)
-            }
-        };
+    }
 
-        APIHandler.getInstance().getTagEntities("Python", successListener);
+    /**
+     * Dispatch onResume() to fragments.  Note that for better inter-operation
+     * with older versions of the platform, at the point of this call the
+     * fragments attached to the activity are <em>not</em> resumed.  This means
+     * that in some cases the previous state may still be saved, not allowing
+     * fragment transactions that modify the state.  To correctly interact
+     * with fragments in their proper state, you should instead override
+     * {@link #onResumeFragments()}.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        if(Cache.getInstance().newTag == 1){
+            Cache.getInstance().newTag = 0;
 
-
-
+            TopicAddDescriptionFragment topicAddDescriptionFragment = (TopicAddDescriptionFragment)((myViewPagerAdapter)viewPager.getAdapter()).getItem(0);
+            topicAddDescriptionFragment.addTag();
+        }
     }
 
     //Next Fragment in view pager

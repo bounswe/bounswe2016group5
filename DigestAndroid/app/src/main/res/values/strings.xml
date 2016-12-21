@@ -5,6 +5,7 @@
     <string name="home_label">Home</string>
 
     <string name="add_comment_label">Make Comment</string>
+    <string name="add_entity_label">Choose The Entity of Your Tag:</string>
     <string name="add_material_label">Add Material</string>
 
     <string name="hello_world">Hello world!</string>
@@ -18,7 +19,7 @@
 
     <string name="topic_Create_title">Title</string>
     <string name="topic_Create_body">Description</string>
-    <string name="topic_Create_tags">Tags</string>
+    <string name="topic_Create_tags">Enter a Tag</string>
     <string name="topic_Create_channel">Channel</string>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_add_entity"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context="digest.digestandroid.AddEntityActivity">
+
+    <RadioGroup
+        android:id="@+id/radioGroupEntities"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radioButtonEntity1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Entity 1" />
+
+        <RadioButton
+            android:id="@+id/radioButtonEntity2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Entity2 " />
+
+        <RadioButton
+            android:id="@+id/radioButtonEntity3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Entity 3" />
+
+        <RadioButton
+            android:id="@+id/radioButtonEntity4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Entity 4" />
+
+        <RadioButton
+            android:id="@+id/radioButtonEntity5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Entity 5" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClear"
+            android:text="Clear " />
+
+        <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSubmit"
+            android:text="Submit" />
+    </LinearLayout>
+</LinearLayout>
+

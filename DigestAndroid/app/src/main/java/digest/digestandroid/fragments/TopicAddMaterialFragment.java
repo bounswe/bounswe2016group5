@@ -18,8 +18,12 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import digest.digestandroid.Cache;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.R;
+import digest.digestandroid.ViewTopicActivity;
+
+import static digest.digestandroid.ViewRegisteredHomeActivity.viewPager;
 
 /**
  * A simple {@link Fragment} subclass.

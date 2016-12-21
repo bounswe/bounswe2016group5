@@ -64,6 +64,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".AddEntityActivity"
+            android:label="@string/add_entity_label"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
             android:name=".AddCommentActivity"
             android:label="@string/add_comment_label"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
@@ -86,11 +90,7 @@
         <activity
             android:name=".ViewChannelTopicsActivity"
             android:label="Channel"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"  />
-
-
-
-
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
     </application>
 
 </manifest>

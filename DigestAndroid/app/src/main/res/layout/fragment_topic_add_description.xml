@@ -87,7 +87,7 @@
 
                 <ListView
                     android:id="@+id/list_view_tagit"
-                    android:layout_height="wrap_content"
+                    android:layout_height="150dp"
                     android:layout_width="fill_parent"
                     android:dividerHeight="2dp"
                     android:divider="@drawable/item_box"
@@ -103,7 +103,19 @@
                     android:backgroundTint="@color/primary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="30dp"
                     />
+
+                <Button
+                    android:text="Get Entities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/button_get_entities"
+                    android:background="#00bfff"
+                    style="@style/Widget.AppCompat.Button.Colored" />
 
 
             </LinearLayout>

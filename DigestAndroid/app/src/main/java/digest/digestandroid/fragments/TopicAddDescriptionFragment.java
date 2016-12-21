@@ -3,6 +3,7 @@ package digest.digestandroid.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -21,12 +22,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
+import com.android.volley.Response;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -34,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import digest.digestandroid.AddCommentActivity;
+import digest.digestandroid.AddEntityActivity;
 import digest.digestandroid.CacheTopiclist;
 import digest.digestandroid.Models.Tagit;
 import digest.digestandroid.Models.Topic;
@@ -126,8 +131,13 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         // Inflate the layout for this fragment
         rootView= inflater.inflate(R.layout.fragment_topic_add_description, container, false);
 
-        Button button_upload = (Button) rootView.findViewById(R.id.button_image_upload);
-        button_upload.setOnClickListener(this);
+        Button button = (Button) rootView.findViewById(R.id.button_image_upload);
+        button.setOnClickListener(this);
+        button = (Button) rootView.findViewById(R.id.button_get_entities);
+        button.setOnClickListener(this);
+        button = (Button) rootView.findViewById(R.id.button_tagit);
+        button.setOnClickListener(this);
+
         mImageView = (NetworkImageView) rootView.findViewById(R.id.topic_create_image_view);
         mImageView.setDefaultImageResId(R.drawable.default_logo);
 
@@ -178,7 +188,10 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
 
         tagitAdapter = new TagitAdapter(getContext(), R.layout.tagit_checkbox, tagitArrayList);
         listViewTagit = (ListView) rootView.findViewById(R.id.list_view_tagit);
+        setListViewHeightBasedOnChildren(listViewTagit);
         listViewTagit.setAdapter(tagitAdapter);
+
+
 
         listViewTagit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -240,7 +253,27 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
                 break;
 
             case R.id.button_tagit:
+                break;
 
+            case R.id.button_get_entities:
+                EditText editText = (EditText) rootView.findViewById(R.id.topic_create_tags);
+                Log.i("VOLLEY ENTITIIIESS", editText.getText().toString());
+                if(!editText.getText().toString().equals("")){
+                    Response.Listener<Tagit> successListener =  new Response.Listener<Tagit>() {
+                        @Override
+                        public void onResponse(Tagit response) {
+                            Log.i("VOLLEY ENTITIIIESS", response.getMyArrayList().toString());
+                            digest.digestandroid.Cache.getInstance().setEntityList(response.getMyArrayList());
+                            Intent intent = new Intent(getContext(), AddEntityActivity.class);
+                            startActivity(intent);
+                        }
+                    };
+
+                    digest.digestandroid.Cache.getInstance().setTag(editText.getText().toString());
+                    APIHandler.getInstance().getTagEntities(editText.getText().toString(), successListener);
+                }
+                
+                break;
         }
     }
 
@@ -268,9 +301,36 @@ public class TopicAddDescriptionFragment extends Fragment implements View.OnClic
         mtopic.setTags(tags);
         mtopic.setImage(url);
 
+        // TODO: 21.12.2016 add tags to topic. add tags that are in listview which are created form description to the Cache.chosenTags 
+
         return cid;
     }
 
+    public void addTag(){
+        // TODO: 21.12.2016 add the last element of the chosenTags from cache to listview. I didnt create listview yet.
+        
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
 
 
     private class TagitAdapter extends ArrayAdapter<Tagit> {

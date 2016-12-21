@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import digest.digestandroid.Models.Channel;
 import digest.digestandroid.Models.Comment;
 import digest.digestandroid.Models.QuizQuestion;
+import digest.digestandroid.Models.Tagit;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.Models.User;
 
@@ -31,6 +32,11 @@ public class Cache {
     QuizQuestion question; //
 
     ArrayList<Channel> userChannels;
+
+    ArrayList<String> entityList;
+    ArrayList<Tagit> chosenTags = new ArrayList<Tagit>();
+    String tag;
+    int newTag = 0;
 
 
     public static Cache getInstance() {
@@ -98,4 +104,28 @@ public class Cache {
         this.userChannels = new ArrayList<Channel>(userChannels);
     }
 
+    public ArrayList<String> getEntityList() {
+        return entityList;
+    }
+
+    public void setEntityList(ArrayList<String> entityList) {
+        this.entityList = entityList;
+    }
+
+    public ArrayList<Tagit> getChosenTags() {
+        return chosenTags;
+    }
+
+    public void setChosenTags(ArrayList<Tagit> chosenTags) {
+        this.chosenTags = chosenTags;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+        newTag = 1;
+    }
 }

@@ -111,6 +111,8 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
             TopicMaterialFragment topicMaterialFragment = (TopicMaterialFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(2);
             topicMaterialFragment.addMaterial();
         }
+
+
     }
 
     @Override
