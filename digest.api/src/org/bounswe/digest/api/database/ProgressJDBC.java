@@ -67,7 +67,7 @@ public class ProgressJDBC {
 		}
 		PreparedStatement statement = null;
 		int result = 0;
-		String query = "UPDARE progress prog=? WHERE tid=? and uid=? ";
+		String query = "UPDATE progress prog=? WHERE tid=? and uid=? ";
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);

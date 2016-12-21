@@ -246,10 +246,9 @@ public class DigestAPIServlet extends HttpServlet {
 			String text = req.getParameter(DigestParameters.TEXT);
 			resp.getWriter().append(TopicJDBC.getTopicWithString(text));
 		} else if (f.equals("test")){
-			TopicJDBC.createTag("computer");
-			//ConceptNetAPI httpClientPost = new ConceptNetAPI();
-			//Gson gson = new Gson();
-			//resp.getWriter().append(gson.toJson(httpClientPost.extractEntities("computer").getString(0)));
+			ConceptNetAPI httpClientPost = new ConceptNetAPI();
+			Gson gson = new Gson();
+			resp.getWriter().append(gson.toJson(ConceptNetAPI.extractEntities("computer").get("entities")));
 		}
 		
 		else {
