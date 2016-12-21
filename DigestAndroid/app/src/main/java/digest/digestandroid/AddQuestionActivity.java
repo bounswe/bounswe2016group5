@@ -31,13 +31,13 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         ArrayList<Integer> answers = new ArrayList<Integer>();
         if ( ((CheckBox)findViewById(R.id.checkbox_choice_one)).isChecked() ) {
-            answers.add(1);
+            answers.add(0);
         }
         if ( ((CheckBox)findViewById(R.id.checkbox_choice_two)).isChecked() ) {
-            answers.add(2);
+            answers.add(1);
         }
         if ( ((CheckBox)findViewById(R.id.checkbox_choice_three)).isChecked() ) {
-            answers.add(3);
+            answers.add(2);
         }
         question.setAnswers(answers);
 

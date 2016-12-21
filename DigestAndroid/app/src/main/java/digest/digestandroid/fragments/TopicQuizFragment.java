@@ -18,6 +18,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,7 @@ import digest.digestandroid.Models.QuizQuestion;
 import digest.digestandroid.Models.Topic;
 import digest.digestandroid.QuestionAdapter;
 import digest.digestandroid.R;
+import digest.digestandroid.api.APIHandler;
 
 
 /**
@@ -131,24 +136,63 @@ public class TopicQuizFragment extends Fragment {
 
         //If there is a quiz to view
         if(Cache.getInstance().getTopic().getQuizzes().size()>0) {
-            Quiz quiz = Cache.getInstance().getTopic().getQuizzes().get(0); // Assumed there is only one quiz
-            for (QuizQuestion q : quiz.getQuestions()) {
-                questionList.add(q);
-                mAdapter.updateAnswerList();
+            for(Quiz eachQuiz : Cache.getInstance().getTopic().getQuizzes()){
+                for (QuizQuestion q : eachQuiz.getQuestions()) {
+                    questionList.add(q);
+                    mAdapter.updateAnswerList();
+                }
+                mAdapter.notifyDataSetChanged();
             }
-            mAdapter.notifyDataSetChanged();
+            //Quiz quiz = Cache.getInstance().getTopic().getQuizzes().get(0); // Assumed there is only one quiz
+
         }
     }
 
     //Adds the question in the cache to the topic
     public void addQuestion() {
-        QuizQuestion currentQuestion = Cache.getInstance().getQuestion();
+        QuizQuestion currentQuestion;
 
-        if(Cache.getInstance().getQuestion()!=null) {
-            Log.d("CURRENT QUESTION", Cache.getInstance().getQuestion().getText());
+        if((currentQuestion = Cache.getInstance().getQuestion()) != null) {
+            Log.d("CURRENT ANSWERS", Cache.getInstance().getQuestion().getAnswers().toString());
             questionList.add(currentQuestion);
-
+            mAdapter.updateAnswerList();
             mAdapter.notifyDataSetChanged();
+
+
+            Response.Listener<String> response = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("Get username", "Success " + response);
+
+                    // Writing data to SharedPreferences
+                    if(response.equals("200")){
+                        //Cache.getInstance().getTopic().getComments().add(Cache.getInstance().getComment());
+                        //prepareCommentData();
+                        //Cache.getInstance().setQuestion(null);
+
+                    }
+                    else {
+                        Log.d("Failed", "Question Failed ");
+                        Toast.makeText(getActivity(), "Question Add Failed", Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+
+            Response.ErrorListener errorListener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("Failed", "Question Failed");
+                }
+            };
+
+
+            ArrayList<QuizQuestion> requestQuestions = new ArrayList<QuizQuestion>();
+            requestQuestions.add(Cache.getInstance().getQuestion());
+            Quiz requestQuiz = new Quiz(requestQuestions);
+            requestQuiz.setName(""+Cache.getInstance().getTopic().getHeader()+" Quiz");
+            Log.d("--QUIZ",requestQuiz.getName());
+            APIHandler.getInstance().addQuiz("Add Quiz", requestQuiz, response, errorListener);
+
         }
 
     }
