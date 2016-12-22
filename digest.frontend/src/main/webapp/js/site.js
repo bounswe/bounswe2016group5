@@ -21,13 +21,12 @@
 					dataType: 'json',
 					success: function(data){
 
-					
 						
 					showData.empty();
 					var content = '';
 					$.each(data,function(key,val){	
 						//window.alert(val.);
-	       				content  += '<a class="list-group-item" href="ViewTopicServlet?topic_id='+val.id+'">' + val.name + '</a>';
+	       				content  += '<a class="list-group-item" href="ViewTopicServlet?topic_id='+val.id+'">' + val.header + '</a>';
 				
 					});
 					var list = $('<div class="list-group" />').html(content);
@@ -40,9 +39,15 @@
 		});
 		
 		$('#search-link').on('click',function(){
-			$('#search-link').attr({
+			
+			 $.post( "SearchServlet", { f: "search_page", tag: $('#search').val()},function( data ) {
+			 		
+				    });
+			/*$('#search-link').attr({
 				"href": "search.jsp?search_field=" + $('#search').val()
-			});			
+				
+				
+			});	*/		
 		});
 		
 
