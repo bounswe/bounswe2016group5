@@ -87,6 +87,7 @@
                 android:layout_width="@dimen/small_icon"
                 android:layout_height="@dimen/small_icon"
                 android:layout_alignParentLeft="true"
+                android:visibility="invisible"
                 android:src="@drawable/default_logo"
                 android:layout_marginRight="@dimen/big_margin"
                 android:layout_below="@id/tTopicOwner"/>
@@ -97,6 +98,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Rating"
                 android:id="@+id/tRating"
+                android:visibility="invisible"
                 android:layout_toRightOf="@id/ivEventHost"
                 android:layout_toEndOf="@id/ivEventHost"
                 android:layout_below="@id/tTopicOwner"/>

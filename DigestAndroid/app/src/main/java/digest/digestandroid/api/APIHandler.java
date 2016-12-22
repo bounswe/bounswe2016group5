@@ -281,7 +281,7 @@ public class APIHandler extends Application{
         StringRequest myReq = new StringRequest(Request.Method.GET,
 
                 // TODO API IS NEEDED
-                mainURL + "/?f=get_topics_with_tag&tag=" + searchText,
+                mainURL + "?f=search_topics&text=" + searchText,
                 successListener,
                 new Response.ErrorListener() {
                     @Override
@@ -473,7 +473,7 @@ public class APIHandler extends Application{
     //<API_PATH>?f=get_topics_with_tag&tag=<TAG>
     public void searchWithTag (String tag, Response.Listener<String> tagListener) {
         StringRequest myReq = new StringRequest(Request.Method.GET,
-                mainURL + "/?f=get_topics_with_tag&tag=" + tag,
+                mainURL + "?f=search_topics&text="+tag,
                 tagListener,
                 new Response.ErrorListener() {
                     @Override
