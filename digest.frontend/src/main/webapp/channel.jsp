@@ -47,15 +47,24 @@ $(document).ready(function(){
 	$.getJSON('ChannelServlet?f=get_topics&cid='+$.urlParam('cid'),function(data){
 			var topics = $('#topics');
 			var content = '';
-			
 			$.each(data,function(key,val){
-				
+					if(val.header==null){
+						var progress = val.channel_progress;
+						$('#progress').text(progress);
+						$('#progress').attr({
+							'style': 'width:'+progress+'%',
+							'areavaluenow': +progress
+						});
+						
+					}else{
+					
 					content = '<td>'+val.header+'</td>'
-				          + '<td>60%</td>'
+				          + '<td>'+val.progress+'</td>'
 				          + '<td>' 
 				          +	'<a class="btn btn-primary" href="ViewTopicServlet?topic_id='+val.id+'">View Topic</a></td>';
 				
 					topics.append($('<tr />').html(content));
+					}
 			});
 			
 			
@@ -210,12 +219,6 @@ $(document).ready(function(){
 								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
-							<div class="panel panel-default"
-								style="height: 200px; overflow-y: auto;">
-								<div class="panel-header">Recents</div>
-								<div class="panel-body">Some recent topics</div>
-
-							</div>
 						</div>
 					</div>
 				</div>
@@ -245,21 +248,6 @@ $(document).ready(function(){
 			    </table>
 			</div>
 			
-			<div id="topics2"></div>
-				<button class="btn btn-primary" id="show-add-topic-form">Add Topic</button>
-				<div id="add-topic-form" style="display: none;">
-					<form class="form" action="ChannelServlet?cid=2" method="post">
-						<div class="form-group">
-							<label for="channel-name">Name:</label>
-							<input type="text" id="channel-name" name="tid" class="form-control">
-						</div>
-						<div class="form-group">
-							<button type="submit" name="f" value="add_topic_to_channel" class="btn btn-primary">Add</button>
-						</div>
-						
-					</form>
-				</div>
-			</div>
 		</div>
 
 	<footer id="menu-outer">

@@ -100,18 +100,12 @@
 								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
-							<div class="panel panel-default"
-								style="height: 200px; overflow-y: auto;">
-								<div class="panel-header">Recents</div>
-								<div class="panel-body">Some recent topics</div>
-
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-sm-9">
-				<div class="user-profile col-sm-12">
+				<div class="fol-topics col-sm-12">
 						<form class="form-horizontal" id="view_topic_form"
 						action="ViewTopicServlet" method="POST">
 

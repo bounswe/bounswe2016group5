@@ -202,12 +202,6 @@
 								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
-							<div class="panel panel-default"
-								style="height: 200px; overflow-y: auto;">
-								<div class="panel-header">Recents</div>
-								<div class="panel-body">Some recent topics</div>
-
-							</div>
 						</div>
 					</div>
 				</div>
@@ -234,12 +228,31 @@
 						String image = (String) request.getAttribute("image");
 						String body = (String) request.getAttribute("body");
 						int subscribed = (Integer) request.getAttribute("subscribed");
+						JSONArray tags = (JSONArray) request.getAttribute("tags");
+						System.out.println("jso "+ tags.toString());
 					%>
 					<div class="col-sm-12">
 						<h1><%=header%></h1>
 						<p>
 							Owner:
 							<%=ownerName%></p>
+							<%
+							if(tags != null && tags.length() > 0){
+								for(Object ta : tags){
+									
+									//JSONObject tagObject = new JSONObject(ta);
+									System.out.println("json"+ta.toString());
+									String tag = ta.toString();
+									tag = tag.substring(tag.indexOf("{\"tag\":\"")+8,tag.indexOf("\"}"));
+									%>
+									
+									<p><%=tag %></p>
+									
+									<% 
+								}
+							}
+							%>
+						
 						<!-- <p>Followers:</p>  -->
 					</div>
 					<%
@@ -324,15 +337,21 @@
 							<div class="topic-tabs container col-sm-12"
 								style="margin: 25px 0 0 0;">
 								<ul class="nav nav-tabs">
-									<li class="active"><a data-toggle="tab" href="#comments">Comments</a></li>
-									<li><a data-toggle="tab" href="#materials">Materials</a></li>
-									<li><a data-toggle="tab" href="#quiz">Quiz</a></li>
-									<li><a data-toggle="tab" href="#related_topics">Related Topics</a></li>
+									<li class="active"><a data-toggle="tab" href="#comments" role="tab">Comments</a></li>
+									<li><a data-toggle="tab" href="#materials" role="tab">Materials</a></li>
+									<%
+									if (request.getAttribute("relatedTopics") != null ) {
+									%>
+									<li><a data-toggle="tab" href="#related_topics" role="tab">Related Topics</a></li>
+									<%
+									}
+									%>
+									<li><a data-toggle="tab" href="#quiz" role="tab">Quiz</a></li>
 								</ul>
 
 								<div class="tab-content">
 									<!-- comments begin -->
-									<div id="comments" class="tab-pane fade in active">
+									<div id="comments" class="tab-pane fade in active" role="tabpanel">
 										<div class="panel panel-default"
 											style="height: 500px; overflow-y: auto;">
 											<div class="row">
@@ -419,7 +438,7 @@
 																				<span class="label label-danger">Instructive</span>
 																			</h3>
 																			<%
-																			}else{
+																			}else if(type == 1){
 																			%><h3>
 																				<span class="label label-danger">Question</span>
 																			</h3>
@@ -496,7 +515,6 @@
 														%>
 														<div class="collapse row col-sm-9 pull-right"
 															id="addcomment<%=cid%>">
-															<div class="row">
 																<div class="widget-area no-padding blank">
 																	<div class="status-upload">
 																		<form class="form-horizontal" id="add_comment_form"
@@ -523,7 +541,6 @@
 																		</form>
 																	</div>
 																</div>
-															</div>
 														</div>
 
 														<%
@@ -576,7 +593,7 @@
 											%>
 										</div>
 									</div>
-									<div id="materials" class="tab-pane fade">
+									<div id="materials" class="tab-pane fade" role="tabpanel">
 										<div class="panel panel-default"
 											style="height: 500px; overflow-y: auto;">
 											<%
@@ -649,8 +666,49 @@
 											%>
 										</div>
 									</div>
+									
+									<%
+									if (request.getAttribute("relatedTopics") != null) {
+									%>
+													
+									<div id="related_topics" class="tab-pane fade" role="tabpanel">
+											<div class="panel panel-default"
+												style="height: 500px; overflow-y: auto;">
+												<%
+					
+														JSONArray topicArray = (JSONArray) request.getAttribute("relatedTopics");
+													
+												%><div class="panel-body" id="user-topics" class="list-group">
+					
+													<%
+														for (Object top : topicArray) {
+																JSONObject topic = (JSONObject) top;
+																if((Integer)topic.get("id") != tid){
+													%>
+														<div class="topic-view col-xs-4 col-lg-4"
+															style="padding: 9px 9px 0px 9px;">
+															<div class="thumbnail">
+																<input type="image" class="group list-group-image"
+																	style="display: block; margin: 0 auto;" height="100"
+																	width="100" name="topic_id" id="topic_id"
+																	value=<%=topic.get("id")%> src="<%=topic.get("id") %>" alt="" />
+																<div class="caption">
+																	<h4 class="group inner list-group-item-heading"
+																		align="center"><%=topic.get("header")%></h4>
+																</div>
+															</div>
+														</div>
+		
+												<%
+																}
+													}%>
+													</div>
+												
+											</div>
+									</div>
+									<%} %>
 
-									<div id="quiz" class="tab-pane fade">
+									<div id="quiz" class="tab-pane fade" role="tabpanel">
 										<form class="form-horizontal" id="submit_quiz_form"
 											action="SubmitQuizServlet" method="POST">
 											<div class="panel panel-default"
@@ -727,26 +785,7 @@
 										</form>
 									</div>
 									
-									<div id="related_topics" class="tab-pane fade">
-										<div class="panel panel-default"
-											style="height: 500px; overflow-y: auto;">
-											<%
-												if (session.getAttribute("session") != null) {
-													if (subscribed == 0 && owner != (Integer) session.getAttribute("id")) {
-											%>
-											<h4 style="margin: 20px 20px 20px 20px">You need to be
-												subscribed to see the materials.</h4>
-											<%
-												} else {
-											%>
-
-											
-											<%
-												}
-												}
-											%>
-										</div>
-									</div>
+									
 								</div>
 							</div>
 						</div>

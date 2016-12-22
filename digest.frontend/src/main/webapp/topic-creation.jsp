@@ -43,9 +43,6 @@
 				owner : {
 					required : true
 				},
-				channel : {
-					required : true
-				},
 				image : {
 					required : false
 				},
@@ -107,11 +104,13 @@
 					url: 'CreateTopicServlet?f=get_tags&tag='+tag,
 					dataType: 'json',
 					success: function(data){
+						
 						var content = '';
 						tagSelection.empty();
-						var items = data.myArrayList;
-						$.each(items,function(key,val){		
+						var items = data.map.entities.myArrayList;
+						$.each(items,function(key,val){	
 							content = '<a class="list-group-item" style="width:80%;">'+$('#tags').val()+'('+ val + ')' + '</a>';
+							
 							tagSelection.append(content);
 						});
 					}
@@ -176,7 +175,7 @@
 						var content = '';
 						$.each(data,function(key,val){	
 							if(val != null){
-								content = '<a class="list-group-item" id="user-channels">'+ val.name + '</a>';
+								content = '<a class="list-group-item" id="user-channel" value="2">'+ val.name +'<input type="hidden" value='+val.id+'>' + '</a>';
 								
 								userChannels.append(content);
 							};
@@ -193,7 +192,10 @@
 		});		
 		
 		$('#user-channels').on('click','a',function(event){
+			var htmlString = $(this).html();
+			var cid = htmlString.substring(htmlString.indexOf("value=\"")+7,htmlString.indexOf("\">"));
 			$('#channel').val($(this).text());
+			document.getElementById('channel-id').value = cid;
 			document.getElementById('user-channels').style.display = 'none';
 		});
 		
@@ -224,6 +226,7 @@
 
 			$(this).append('<textarea name="tags" style="display: none;">'+jsonArr+'</textarea>');
 		});
+		
 		
 	});
 	
@@ -300,12 +303,6 @@
 								style="height: 200px; overflow-y: auto;">
 								<div class="panel-header">Channels</div>
 								<div class="panel-body" id="sub_channels"></div>
-
-							</div>
-							<div class="panel panel-default"
-								style="height: 200px; overflow-y: auto;">
-								<div class="panel-header">Recents</div>
-								<div class="panel-body">Some recent topics</div>
 
 							</div>
 						</div>
@@ -403,12 +400,15 @@
 										<div class="col-sm-9">
 											<input type="text" class="form-control" name="channel"
 												id="channel" readonly>
+												<input type="hidden" class="form-control" name="channel-id"
+												id="channel-id" >
 										</div>
 									</div>
 									
 									<a class="btn btn-primary" id="show-my-channels" style=" margin:0 20px 20px 20px;">Show My Channels</a>
 									<div class="container">
 										<div class="list-group col-sm-5" id="user-channels" style="display: none;"></div>
+										
 									</div>
 									
 									<a class="btn btn-primary" id="show-add-channel-form"  style=" margin:0 20px 20px 20px;">Add Channel</a>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@page import="org.json.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,72 +23,15 @@
 	
 <link rel="stylesheet" href="css/site.css">
 <script src="js/site.js"></script>
-<script>
 
-$(document).ready(function(){
-	var searchField = '<%=request.getParameter("search_field")%>';
-	var showData = $('#show-data');
-	
-	$.ajax({url:'SearchServlet?f=search_with_tag&tag='+searchField,
-			dataType: 'json',
-			success: function(data){
-				
-			showData.empty();
-			var content = '';
-			$.each(data,function(key,val){					
-					content  += '<a class="list-group-item" href="ViewTopicServlet?topic_id='+val.id+'">' + val.header + '</a>';
-		
-			});
-			
-			var list = $('<div class="list-group" />').html(content);
-			showData.append(list);
-	
-		}
-	});
-	
-	$('#advanced-search-btn').on('click',function(){
-			$.ajax({url:'SearchServlet?f=advanced_search',
-					dataType: 'json',
-					data:{
-						header: $('#header').val(),
-						tag: $('#tag').val(),
-						from_date: $('#from_date').val(),
-						to_date: $('#to_date').val()
-					},
-					success: function(data){
-						
-						showData.empty();
-						var content = '';
-						$.each(data,function(key,val){					
-								content  += '<a class="list-group-item" href="ViewTopicServlet?topic_id='+val.id+'">' + val.header + '</a>';
-					
-						});
-					
-					var list = $('<div class="list-group" />').html(content);
-					showData.append(list);
-			
-				}
-			});
-	});
-    var from_date_input=$('input[name="from_date"]'); //our date input has the name "from_date"
-    var options={
-      format: 'dd/mm/yyyy',
-      todayHighlight: true,
-      autoclose: true,
-    };
-    from_date_input.datepicker(options);
-    
-    var to_date_input=$('input[name="to_date"]'); //our date input has the name "to_date"
-    var options={
-      format: 'dd/mm/yyyy',
-      todayHighlight: true,
-      autoclose: true,
-    };
-    to_date_input.datepicker(options);
-  
-});
-</script>
 </head>
+<script>
+$(document).ready(function() {
+	window.alert(1);
+});
+
+</script>
+
 <body>
 	<%
 		if (session.getAttribute("session") == null) {
@@ -207,12 +151,6 @@ $(document).ready(function(){
 								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
-							<div class="panel panel-default"
-								style="height: 200px; overflow-y: auto;">
-								<div class="panel-header">Recents</div>
-								<div class="panel-body">Some recent topics</div>
-
-							</div>
 						</div>
 					</div>
 				</div>
@@ -221,7 +159,7 @@ $(document).ready(function(){
 			<%
 				}
 			%>
-			<div class="col-sm-9">
+		<!--  <div class="col-sm-9">
 				<div class="container" id="advanced-search">
 					<form class="form-horizontal" id="advanced-search-form">
 						<div class="form-group">
@@ -249,12 +187,59 @@ $(document).ready(function(){
 						</div>
 					</form>
 				</div>
-				<div class="container" id="show-data"></div>
+			</div>-->
+			
+			<div class="col-sm-9">
+				<div class="search-topics col-sm-12">
+						<form class="form-horizontal" id="view_topic_form"
+						action="ViewTopicServlet" method="POST">
+
+							<%
+								if (request.getAttribute("search_topics") != null) {
+
+									JSONArray topicArray = (JSONArray) request.getAttribute("search_topics");
+							%>
+						<div class="container panel panel-default"
+							style="height: 500px; width: 95%; overflow-x: scroll;">
+							<div class="panel-body" id="following-topics" class="list-group">
+								<%
+									for (Object top : topicArray) {
+											JSONObject topic = (JSONObject) top;
+
+											String header = "";
+											try{
+												header = topic.get("header").toString(); 
+											}
+											catch(JSONException e){
+												
+											}
+								%>
+								
+								<div class="topic-view col-xs-4 col-lg-4"
+									style="padding: 9px 9px 0px 9px;">
+									<div class="thumbnail">
+										<input type="image" class="group list-group-image"
+											style="display: block; margin: 0 auto;" height="100"
+											width="100" name="topic_id" id="topic_id" value=<%=topic.get("id")%>
+											src="<%=topic.get("image")%>" alt="" />
+										<div class="caption">
+											<h4 class="group inner list-group-item-heading"
+												align="center"><%=header %>
+												</h4>
+										</div>
+									</div>
+								</div>
+								<%
+									}
+								}
+								%>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
+			
 		</div>	
-
-		
-
 		
 	<footer id="menu-outer">
 		<div class="col-sm-offset-4 col-sm-4">

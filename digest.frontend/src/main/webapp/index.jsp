@@ -77,7 +77,7 @@
 				<form class="form-horizontal" id="view_topic_form"
 					action="ViewTopicServlet" method="POST">
 					<div class="row form-group" style="height: 33%; padding: 15px;">
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Recent</h4>
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Topics</h4>
 						<div class="container panel panel-default" 
 							style="height: 200px; width: 95%; overflow-x: scroll;">
 							<%
@@ -89,6 +89,10 @@
 								<%
 									for (Object top : topicArray) {
 											JSONObject topic = (JSONObject) top;
+											String image = "";
+											if(topic.get("image") != null)
+												image = topic.get("image").toString();
+												
 								%>
 
 								<div class="topic-view col-xs-4 col-lg-4"
@@ -97,7 +101,7 @@
 										<input type="image" class="group list-group-image"
 											style="display: block; margin: 0 auto;" height="100"
 											width="100" name="topic_id" id="topic_id"
-											value=<%=topic.get("id")%> src="<%=topic.get("image")%>" alt="" />
+											value=<%=topic.get("id")%> src="<%=image %>" alt="" />
 										<div class="caption">
 											<h4 class="group inner list-group-item-heading"
 												align="center"><%=topic.get("header")%></h4>
@@ -113,80 +117,56 @@
 							</div>
 						</div>
 					</div>
-					<% 
-						@SuppressWarnings("unchecked")
-						ArrayList<Integer> interestTopicIds = (ArrayList<Integer>) request.getAttribute("interestTopicIds");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> interestTopicHeaders = (HashMap<Integer,String>) request.getAttribute("interestTopicHeaders");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> interestTopicImages = (HashMap<Integer,String>) request.getAttribute("interestTopicImages");
-						%>
+					
 					<div class="row form-group" style="height: 33%; padding: 15px;">
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Might
-							Interest</h4>
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Trending</h4>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
-							<div class="panel-body" id="user-topics" class="list-group">
-								<% 
-								if(interestTopicIds != null)
-									for(int topicId : interestTopicIds  ) {
-							%>
+							<%
+								if (request.getAttribute("trendingTopics") != null) {
+
+									JSONArray topicArray = (JSONArray) request.getAttribute("trendingTopics");
+							%><div class="panel-body" id="user-topics" class="list-group">
+
+								<%
+									for (Object top : topicArray) {
+											JSONObject topic = (JSONObject) top;
+											String image = "";
+											if(topic.get("image") != null)
+												image = topic.get("image").toString();
+												
+								%>
+
 								<div class="topic-view col-xs-4 col-lg-4"
 									style="padding: 9px 9px 0px 9px;">
 									<div class="thumbnail">
-										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
-											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
-											src=<%=interestTopicImages.get(topicId) %> alt="" />
+										<input type="image" class="group list-group-image"
+											style="display: block; margin: 0 auto;" height="100"
+											width="100" name="topic_id" id="topic_id"
+											value=<%=topic.get("id")%> src="<%=image%>" alt="" />
 										<div class="caption">
 											<h4 class="group inner list-group-item-heading"
-												align="center"><%=interestTopicHeaders.get(topicId) %></h4>
+												align="center"><%=topic.get("header")%></h4>
 										</div>
 									</div>
 								</div>
-								<% 		
-								} 
-							%>
+
+								<%
+									}
+									}
+								%>
+
 							</div>
 						</div>
 					</div>
-					<div class="row form-group" style="height: 33%; padding: 15px;">
-						<% 
-						@SuppressWarnings("unchecked")
-						ArrayList<Integer> recentTopicIds = (ArrayList<Integer>) request.getAttribute("recentTopicIds");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> recentTopicHeaders = (HashMap<Integer,String>) request.getAttribute("recentTopicHeaders");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> recentTopicImages = (HashMap<Integer,String>) request.getAttribute("recentTopicImages");
-						%>
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Popular</h4>
-						<div class="container panel panel-default"
-							style="height: 200px; width: 95%; overflow-x: scroll;">
-							<div class="panel-body" id="user-topics" class="list-group">
-							<% 
-								if(recentTopicIds != null)
-									for(int topicId : recentTopicIds  ) {
-							%>
-								<div class="topic-view col-xs-4 col-lg-4"
-									style="padding: 9px 9px 0px 9px;">
-									<div class="thumbnail">
-										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
-											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
-											src=<%=recentTopicImages.get(topicId) %> alt="" />
-										<div class="caption">
-											<h4 class="group inner list-group-item-heading"
-												align="center"><%=recentTopicHeaders.get(topicId) %></h4>
-										</div>
-									</div>
-								</div>
-								<% 		
-								} 
-							%>
-							</div>
-						</div>
-					</div>
+				
+					
 				</form>
 
 			</div>
+			
+			
+			
 	<%
 		} else {
 	%>
@@ -260,11 +240,6 @@
 								<div class="panel-body" id="sub_channels">
 							</div>
 							</div>
-							<div class="panel panel-default">
-								<div class="panel-header">Recents</div>
-								<div class="panel-body">Some recent topics</div>
-
-							</div>
 						</div>
 					</div>
 				</div>
@@ -274,7 +249,7 @@
 				<form class="form-horizontal" id="view_topic_form"
 					action="ViewTopicServlet" method="POST">
 					<div class="row form-group" style="height: 33%; padding: 15px;">
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Recent</h4>
+						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Topics</h4>
 						<div class="container panel panel-default"
 							style="height: 200px; width: 95%; overflow-x: scroll;">
 							<%
@@ -286,6 +261,10 @@
 								<%
 									for (Object top : topicArray) {
 											JSONObject topic = (JSONObject) top;
+											String image = "";
+											if(topic.get("image") != null)
+												image = topic.get("image").toString();
+												
 								%>
 
 								<div class="topic-view col-xs-4 col-lg-4"
@@ -294,7 +273,7 @@
 										<input type="image" class="group list-group-image"
 											style="display: block; margin: 0 auto;" height="100"
 											width="100" name="topic_id" id="topic_id"
-											value=<%=topic.get("id")%> src="<%=topic.get("image")%>" alt="" />
+											value=<%=topic.get("id")%> src="<%=image %>" alt="" />
 										<div class="caption">
 											<h4 class="group inner list-group-item-heading"
 												align="center"><%=topic.get("header")%></h4>
@@ -324,6 +303,10 @@
 								<%
 									for (Object top : topicArray) {
 											JSONObject topic = (JSONObject) top;
+											String image = "";
+											if(topic.get("image") != null)
+												image = topic.get("image").toString();
+												
 								%>
 
 								<div class="topic-view col-xs-4 col-lg-4"
@@ -332,7 +315,7 @@
 										<input type="image" class="group list-group-image"
 											style="display: block; margin: 0 auto;" height="100"
 											width="100" name="topic_id" id="topic_id"
-											value=<%=topic.get("id")%> src="<%=topic.get("image")%>" alt="" />
+											value=<%=topic.get("id")%> src="<%=image%>" alt="" />
 										<div class="caption">
 											<h4 class="group inner list-group-item-heading"
 												align="center"><%=topic.get("header")%></h4>
@@ -350,41 +333,7 @@
 					</div>
 					
 					
-					<div class="row form-group" style="height: 33%; padding: 15px;">
-						<% 
-						@SuppressWarnings("unchecked")
-						ArrayList<Integer> recentTopicIds = (ArrayList<Integer>) request.getAttribute("recentTopicIds");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> recentTopicHeaders = (HashMap<Integer,String>) request.getAttribute("recentTopicHeaders");
-						@SuppressWarnings("unchecked")
-						HashMap<Integer,String> recentTopicImages = (HashMap<Integer,String>) request.getAttribute("recentTopicImages");
-						%>
-						<h4 class="panel-header" style="margin: 10px 10px 10px 30px">Might Interest</h4>
-						<div class="container panel panel-default"
-							style="height: 200px; width: 95%; overflow-x: scroll;">
-							<div class="panel-body" id="user-topics" class="list-group">
-							<% 
-								if(recentTopicIds != null)
-									for(int topicId : recentTopicIds  ) {
-							%>
-								<div class="topic-view col-xs-4 col-lg-4"
-									style="padding: 9px 9px 0px 9px;">
-									<div class="thumbnail">
-										<input  type="image" class="group list-group-image" style=" display: block; margin: 0 auto;"  
-											height="100" width="100" name="topic_id" id="topic_id" value=<%=topicId %>
-											src=<%=recentTopicImages.get(topicId) %> alt="" />
-										<div class="caption">
-											<h4 class="group inner list-group-item-heading"
-												align="center"><%=recentTopicHeaders.get(topicId) %></h4>
-										</div>
-									</div>
-								</div>
-								<% 		
-								} 
-							%>
-							</div>
-						</div>
-					</div>
+					
 				</form>
 
 			</div>

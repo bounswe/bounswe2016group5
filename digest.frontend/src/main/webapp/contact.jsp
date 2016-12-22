@@ -182,11 +182,6 @@
 								<div class="panel-body" id="sub_channels"></div>
 
 							</div>
-							<div class="panel panel-default">
-								<div class="panel-header">Recents</div>
-								<div class="panel-body">Some recent topics</div>
-
-							</div>
 						</div>
 					</div>
 				</div>
