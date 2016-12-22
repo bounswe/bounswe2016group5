@@ -183,6 +183,41 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
         homeProfileFragment = (RegisteredHomeProfileFragment)((ViewRegisteredHomeActivity.HomePagerAdapter)ViewRegisteredHomeActivity.viewPager.getAdapter()).getItem(3);
     }
 
+    /**
+     * Dispatch onResume() to fragments.  Note that for better inter-operation
+     * with older versions of the platform, at the point of this call the
+     * fragments attached to the activity are <em>not</em> resumed.  This means
+     * that in some cases the previous state may still be saved, not allowing
+     * fragment transactions that modify the state.  To correctly interact
+     * with fragments in their proper state, you should instead override
+     * {@link #onResumeFragments()}.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(Cache.getInstance().isRefresh()){
+            Cache.getInstance().setRefresh(false);
+            String currentFragment = CacheTopiclist.getInstance().getCurrentFragment();
+            Log.d("Refresh is pressed","Current fragment is"+ currentFragment);
+
+            if(currentFragment.equals("Home")){
+                APIHandler.getInstance().getRecentTopics(15,topicListQueryListenerAndLoader(currentFragment,homeHomeFragment.homeRecyclerView));
+            }else if(currentFragment.equals("Trending")){
+                APIHandler.getInstance().getTrendingTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeTrendFragment.trendingRecyclerView));
+            }else if(currentFragment.equals("Followed")){
+                APIHandler.getInstance().getFollowedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeFollowedFragment.followedRecyclerView));
+                APIHandler.getInstance().getChannelsOfSubscribedTopics(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment+"2",homeFollowedFragment.followedChannelsRecyclerView));
+            }else if(currentFragment.equals("Profile")){
+                APIHandler.getInstance().getAllTopicsOfAUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment,homeProfileFragment.profileRecyclerView));
+                APIHandler.getInstance().getChannelsOfUser(Cache.getInstance().getUser(),topicListQueryListenerAndLoader(currentFragment+"2",homeProfileFragment.profileChannelsRecyclerView));
+            }else{
+                Log.d("HEEY","This fragment name is not expected !!! ");
+            }
+        }
+    }
+
+
     //--------------------------  ABOVE IS FRAGMENT FUNCTIONS  ------------------------------------------
     //--------------------------  BELOW IS OVERRIDE-OPTIONS FUNCTION  -----------------------------------
 

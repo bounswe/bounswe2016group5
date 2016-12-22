@@ -28,6 +28,7 @@ public class Cache {
     User user;
     Topic topic;
     String topicCreator; // username of topic creator
+    boolean refresh = false;
 
     QuizQuestion question; //
 
@@ -155,5 +156,13 @@ public class Cache {
 
     public void setCidd(int cidd) {
         this.cidd = cidd;
+    }
+
+    public boolean isRefresh() {
+        return refresh;
+    }
+
+    public void setRefresh(boolean refresh) {
+        this.refresh = refresh;
     }
 }

@@ -153,6 +153,7 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         Intent intent;
         switch (item.getItemId()) {
             case android.R.id.home:
+                Cache.getInstance().setRefresh(true);
                 this.finish();
                 return true;
 
@@ -217,6 +218,18 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     public void solveQuiz(View view) {
         TopicQuizFragment topicQuizFragment = (TopicQuizFragment) ((ViewPagerAdapter)viewPager.getAdapter()).getItem(3);
         topicQuizFragment.solve();
+    }
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Cache.getInstance().setRefresh(true);
+
     }
 
     public void doit(){
