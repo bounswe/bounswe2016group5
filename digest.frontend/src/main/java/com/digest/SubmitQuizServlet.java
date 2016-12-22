@@ -62,7 +62,6 @@ public class SubmitQuizServlet extends HttpServlet {
 		while (names.hasMoreElements()) {
 			String attr = names.nextElement();
 			String value = request.getParameter(attr);
-			System.out.println(attr +  " "+ value);
 			if(attr.equals("tid"))
 				tid = Integer.parseInt(value);
 			else{
@@ -78,7 +77,6 @@ public class SubmitQuizServlet extends HttpServlet {
 					
 			}
 		}
-		System.out.println(userAnswers.toString());
 
 		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_quiz&tid=" +tid;
 		URL jsonpage = new URL(url);
@@ -128,15 +126,43 @@ public class SubmitQuizServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		double progress = 0;
-		if(total != 0)
-			progress = (double)correct/total - wrong*0.2;
+		int progress = 0;
+		if(total != 0){
+			double p = (double)correct/total - wrong*0.2;
+			progress =(int)p*100;
+		}
 		System.out.println("progress " +  progress);
 		
 		String url2 = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_progress&tid="+tid+"&uid="+session.getAttribute("id");
-		System.out.print(url2);
-		URL jsonPage2 = new URL(url2);
-		//HttpURLConnection con2 = (HttpURLConnection) jsonPage2.openConnection();
+		URL jsonpage2 = new URL(url2);
+		HttpURLConnection urlcon2 = (HttpURLConnection) jsonpage2.openConnection();
+		
+
+		int responseCode2 = urlcon2.getResponseCode();
+
+		if (responseCode2 == 200 ) {
+			String progressURL = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=set_progress&tid="+tid+"&uid="+session.getAttribute("id")+"&val="+progress;
+			URL progressjsonpage = new URL(progressURL);
+			HttpURLConnection progressCon = (HttpURLConnection) progressjsonpage.openConnection();
+		
+			int responseCode3 = progressCon.getResponseCode();
+
+			if (responseCode3 == 200 ) {
+
+				session.setAttribute("topic_id", tid);
+				response.sendRedirect("ViewTopicServlet");
+			} else if (responseCode3 == 400) {
+				session = request.getSession(true);
+				String errMsg = "Unexpected Error occured!!";
+				session.setAttribute("error", errMsg);
+			}
+			
+		} else if (responseCode2 == 400) {
+			session = request.getSession(true);
+			String errMsg = "Unexpected Error occured!!";
+			session.setAttribute("error", errMsg);
+		}
+		
 	}
 
 }

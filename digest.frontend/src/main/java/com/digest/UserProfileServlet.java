@@ -60,7 +60,7 @@ public class UserProfileServlet extends HttpServlet {
 
 		StringBuffer bf = new StringBuffer();
 		bf.append("http://digest.us-east-1.elasticbeanstalk.com/digest.api/");
-		bf.append("?f=get_topics_of_user&ruid="+session.getAttribute("id"));		
+		bf.append("?f=get_topics_of_user&ruid="+session.getAttribute("id"));
 	
 		String url = bf.toString();
 		URL jsonpage = new URL(url);

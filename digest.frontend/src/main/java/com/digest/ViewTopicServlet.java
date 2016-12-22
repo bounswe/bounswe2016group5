@@ -63,6 +63,12 @@ public class ViewTopicServlet extends HttpServlet {
 		catch (NullPointerException e) {
 
 		}
+		
+		if(session.getAttribute("topic_id") != null){
+			topicId = (Integer) session.getAttribute("topic_id");
+			session.removeAttribute("topic_id");
+		}
+		
 
 		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topic&tid=" + topicId;
 		URL jsonpage = new URL(url);
@@ -107,6 +113,10 @@ public class ViewTopicServlet extends HttpServlet {
 				if (attribute.equalsIgnoreCase("image") || attribute.equalsIgnoreCase("header")
 						|| attribute.equalsIgnoreCase("body") || attribute.equalsIgnoreCase("id")) {
 					request.setAttribute(attribute, obj.get(attribute));
+				}if(attribute.equalsIgnoreCase("tags")){
+					System.out.println("view" + obj.get(attribute));
+					request.setAttribute(attribute, obj.get(attribute));
+					
 				}
 			}
 
@@ -148,14 +158,23 @@ public class ViewTopicServlet extends HttpServlet {
 			request.setAttribute("subscribed", subscribed);
 			
 			if(subscribed == 1){
-				String progressURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_&tid="
-						+ topicId
-						+"&uid" + session.getAttribute("id");
+				String progressURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_progress_topic&tid="
+						+ topicId +"&uid=" + session.getAttribute("id");
 				URL progressURL = new URL(progressURLString);
 				HttpURLConnection progressCon = (HttpURLConnection) progressURL.openConnection();
-				System.out.println("prog " + progressCon.getResponseCode());
-				int progress = 70;
+				BufferedReader in = new BufferedReader(new InputStreamReader(progressCon.getInputStream()));
+				String inputLine;
+				StringBuffer res = new StringBuffer();
+
+				while ((inputLine = in.readLine()) != null) {
+					res.append(inputLine);
+				}
+				in.close();
+				int progress = Integer.parseInt(res.toString());
+				
+				System.out.println("progress "+progress);
 				request.setAttribute("progress", progress);
+				
 			}
 			
 
@@ -177,6 +196,52 @@ public class ViewTopicServlet extends HttpServlet {
 
 			} catch (JSONException ex) {
 
+			}
+			
+			
+			
+			String cidURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channel&tid="
+					+ topicId;
+			URL cidURL = new URL(cidURLString);
+			HttpURLConnection cidCon = (HttpURLConnection) cidURL.openConnection();
+
+			buffread = new BufferedReader(new InputStreamReader(cidCon.getInputStream()));
+
+			recv = "";
+			recvbuff = "";
+			int cid = -1;
+			while ((recv = buffread.readLine()) != null)
+				recvbuff += recv;
+			buffread.close();
+			try {
+				cid = Integer.parseInt(recvbuff.toString());
+			} catch (JSONException ex) {
+
+			}
+			
+			if(cid != -1){
+				String relatedURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid="
+						+ cid;
+				URL relatedURL = new URL(relatedURLString);
+				HttpURLConnection relatedCon = (HttpURLConnection) relatedURL.openConnection();
+	
+				buffread = new BufferedReader(new InputStreamReader(relatedCon.getInputStream()));
+	
+				recv = "";
+				recvbuff = "";
+				while ((recv = buffread.readLine()) != null)
+					recvbuff += recv;
+				buffread.close();
+				try {
+					JSONArray topicArray = new JSONArray(recvbuff);
+					
+					if(topicArray != null){
+						request.setAttribute("relatedTopics", topicArray);
+					}
+	
+				} catch (JSONException ex) {
+	
+				}
 			}
 
 			String quizURLString = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_quiz&tid=" + topicId;

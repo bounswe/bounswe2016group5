@@ -165,7 +165,6 @@ public class QuizServlet extends HttpServlet {
 
 						if (responseCod == 200) {
 							System.out.println(quiz);
-							System.out.println(tid);
 							request.setAttribute("topic_id", tid);
 							request.setAttribute("success", "Quiz Addded Successfully!");
 							request.removeAttribute("questions");
