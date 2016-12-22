@@ -27,8 +27,8 @@ public class ConnectionPool {
 		dataSource.setUrl("jdbc:mysql://digest-db.c7pdwrhsbu6p.us-east-1.rds.amazonaws.com:3306/digest");
 		dataSource.setUsername("digest");
 		dataSource.setPassword("digEST352451.");
-		dataSource.setInitialSize(8);
-		dataSource.setMaxTotal(15);
+		dataSource.setInitialSize(15);
+		dataSource.setMaxTotal(100);
 	}
 
 	/**

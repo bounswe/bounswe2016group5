@@ -259,7 +259,7 @@ public class DigestAPIServlet extends HttpServlet {
 		} else if (f.equals("test")) {
 			ArrayList<TopicTag> tag = new ArrayList<TopicTag>();
 			tag.add(new TopicTag("test(exam)"));
-			tag.add(new TopicTag("apple(fruit)"));
+			//tag.add(new TopicTag("apple(fruit)"));
 			Topic topic = new Topic(0, "header", "image", "body", 1, 0, tag, null, null, null, null);
 
 			System.out.println(TopicJDBC.createTopic(topic));

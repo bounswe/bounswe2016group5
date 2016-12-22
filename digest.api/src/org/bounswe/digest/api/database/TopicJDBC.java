@@ -69,51 +69,8 @@ public class TopicJDBC {
 				tid = resultSet.getInt(1);
 				result = tid;
 			}
-
-			ArrayList<TopicTag> tags = topic.getTags();
-			for (TopicTag tag : tags) {
-				PreparedStatement tagStatement = null;
-				int tagID = getTagID(tag.getTag(), tag.getEntity());
-				if (tagID == -1) {
-					tagID = createTag(tag.getFullTag());
-				}
-				String tagQuery = "INSERT INTO topic_tag (tid,tag) VALUES (?,?)";
-				try {
-					connection.setAutoCommit(false);
-					tagStatement = connection.prepareStatement(tagQuery);
-					tagStatement.setInt(1, tid);
-					tagStatement.setInt(2, tagID);
-					tagStatement.executeUpdate();
-
-				} catch (SQLException e) {
-					result = -1;
-					e.printStackTrace();
-					try {
-						System.err.print("Transaction is being rolled back");
-						connection.rollback();
-					} catch (SQLException excep) {
-						excep.printStackTrace();
-
-					}
-
-				} finally {
-					if (statement != null) {
-						try {
-							statement.close();
-						} catch (SQLException e) {
-							result = -1;
-							e.printStackTrace();
-						}
-					}
-					try {
-						connection.setAutoCommit(true);
-					} catch (SQLException e) {
-						result = -1;
-						e.printStackTrace();
-					}
-				}
-
-			}
+			
+			
 		} catch (SQLException e) {
 			result = -1;
 			e.printStackTrace();
@@ -141,12 +98,67 @@ public class TopicJDBC {
 				e.printStackTrace();
 			}
 		}
+		ConnectionPool.close(connection);
+		
+		
+		//TAG
+		ArrayList<TopicTag> tags = topic.getTags();
+		for (TopicTag tag : tags) {
+			PreparedStatement tagStatement = null;
+			int tagID = getTagID(tag.getTag(), tag.getEntity());
+			if (tagID == -1) {
+				tagID = createTag(tag.getFullTag());
+			}
+			try {
+				connection = ConnectionPool.getConnection();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String tagQuery = "INSERT INTO topic_tag (tid,tag) VALUES (?,?)";
+			try {
+				connection.setAutoCommit(false);
+				tagStatement = connection.prepareStatement(tagQuery);
+				tagStatement.setInt(1, tid);
+				tagStatement.setInt(2, tagID);
+				tagStatement.executeUpdate();
+
+			} catch (SQLException e) {
+				result = -1;
+				e.printStackTrace();
+				try {
+					System.err.print("Transaction is being rolled back");
+					connection.rollback();
+				} catch (SQLException excep) {
+					excep.printStackTrace();
+
+				}
+
+			} finally {
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (SQLException e) {
+						result = -1;
+						e.printStackTrace();
+					}
+				}
+				try {
+					connection.setAutoCommit(true);
+				} catch (SQLException e) {
+					result = -1;
+					e.printStackTrace();
+				}
+			}
+
+		}
+		
 		ArrayList<String> media = topic.getMedia();
 		if (media != null)
 			for (String item : media) {
 				addMedia(tid, item);
 			}
-		ConnectionPool.close(connection);
+		
 		return result;
 	}
 
