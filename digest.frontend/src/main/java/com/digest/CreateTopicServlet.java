@@ -80,32 +80,9 @@ public class CreateTopicServlet extends HttpServlet {
 		String f = request.getParameter("f");
 
 		if (f != null && f.contentEquals("create_topic")) {
-			JSONObject topic = new JSONObject();
-			JSONArray tags = new JSONArray();
 			
-			Enumeration<String> names = request.getParameterNames();
-			while (names.hasMoreElements()) {
-				String attr = names.nextElement();
-				if (!(attr.contentEquals("f") || attr.contentEquals("tags"))) {
-					String value = request.getParameter(attr);
-					topic.put(attr, value);
-				} else if (attr.contentEquals("tags")) {
-					String tagsString = request.getParameter(attr);
-					System.out.println(tagsString);
-					JSONArray tagsArr = new JSONArray(tagsString);
-					
-					for (Object tagString : tagsArr) {
-						JSONObject tag = new JSONObject();
-						tag.put("tag", tagString.toString());
-						tags.put(tag);
-					}
-
-					topic.put("tags", tags);
-				}
-			}
-			System.out.println(topic.toString());
 			
-		/*	String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=create_topic";
+			String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=create_topic";
 			URL connpage = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) connpage.openConnection();
 
@@ -120,13 +97,21 @@ public class CreateTopicServlet extends HttpServlet {
 				owner = (int) session.getAttribute("id");
 
 			topic.put("owner", owner);
-
+			
+			String image = "";
+			if(session.getAttribute("image") != null)
+				image = (String) session.getAttribute("image");
+			
+			topic.put("image", image);
+			
+			int cid = -1;
 			Enumeration<String> names = request.getParameterNames();
 			while (names.hasMoreElements()) {
 				String attr = names.nextElement();
-				if (!(attr.contentEquals("f") || attr.contentEquals("tags"))) {
+				if (!(attr.contentEquals("f") || attr.contentEquals("tags") || attr.contentEquals("channel-id") || attr.contentEquals("channel"))) {
 					String value = request.getParameter(attr);
 					topic.put(attr, value);
+					
 				} else if (attr.contentEquals("tags")) {
 					String tagsString = request.getParameter(attr);
 					System.out.println(tagsString);
@@ -140,12 +125,15 @@ public class CreateTopicServlet extends HttpServlet {
 					}
 
 					topic.put("tags", tags);
+				}else if(attr.contentEquals("channel-id") ){
+					try{
+					cid =  Integer.parseInt(request.getParameter(attr));
+					}catch(NumberFormatException e){
+						cid = -1;
+					}
 				}
 			}
 			String tagsString = request.getParameter("tags");
-			System.out.println(tagsString);			
-			
-			System.out.println(topic.toString());
 			con.setDoOutput(true);
 			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 			wr.writeBytes(topic.toString());
@@ -153,7 +141,7 @@ public class CreateTopicServlet extends HttpServlet {
 			wr.close();
 
 			int responseCode = con.getResponseCode();
-			System.out.println(responseCode);
+			
 			System.out.println(con.getResponseMessage());
 			if (responseCode == 200 && request.getParameter("f") != null) {
 				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -173,8 +161,20 @@ public class CreateTopicServlet extends HttpServlet {
 				if(session.getAttribute("tags")!=null){
 					session.removeAttribute("tags");
 				}
-
-				session.setAttribute("topic_id", Integer.parseInt(res.toString()));
+				int topic_id = Integer.parseInt(res.toString());
+				
+				if(cid != -1){
+					String channelURL = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_topic_to_channel&cid="
+							+ cid +"&tid=" + topic_id;
+					URL channeljsonPage = new URL(channelURL);
+					HttpURLConnection channelcon = (HttpURLConnection) channeljsonPage.openConnection();
+					if(channelcon.getResponseCode() != 200){
+						String err = con.getResponseMessage();
+						request.setAttribute("error", err);
+					}
+				}
+				
+				session.setAttribute("topic_id", topic_id);
 				response.sendRedirect("ViewTopicServlet");
 
 			} else {
@@ -185,16 +185,18 @@ public class CreateTopicServlet extends HttpServlet {
 				String errMsg = "Unexpected Error occured!!";
 				request.setAttribute("error", errMsg);
 				request.getRequestDispatcher("topic-creation.jsp").forward(request, response);
-			}*/
+			}
 		} else if (f != null && f.contentEquals("upload_via_url")) {
 
 			if (request.getParameter("image-url") != null && !request.getParameter("image-url").contentEquals("")) {
+				
 				session.setAttribute("image", request.getParameter("image-url"));
 				response.sendRedirect("topic-creation.jsp");
 			}
 		} else if (f != null && f.contentEquals("get_tags")) {
 			if (request.getParameter("tag") != null && !request.getParameter("tag").contentEquals("")) {
 				String tag = request.getParameter("tag");
+				
 				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_tag_entities&tag="
 						+ tag;
 				
@@ -208,10 +210,11 @@ public class CreateTopicServlet extends HttpServlet {
 				while((line = reader.readLine()) != null){
 					content += line;
 				}
-				
 				reader.close();
 				
 				response.getWriter().write(content);
+				response.getWriter().flush();
+				response.getWriter().close();
 			}
 		} else if(f!=null && f.contentEquals("add_tag")){
 			if(session.getAttribute("tags") == null){

@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Servlet implementation class ChannelServlet
  */
@@ -51,7 +55,6 @@ public class ChannelServlet extends HttpServlet {
 				String add_channel_url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=add_channel&name="
 						+ name + "&uid="+session.getAttribute("id");
 				
-				System.out.println(add_channel_url);
 				URL jsonPage = new URL(add_channel_url);
 				HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
 				
@@ -67,10 +70,9 @@ public class ChannelServlet extends HttpServlet {
 			if(request.getParameter("cid")!=null){
 				String cid = request.getParameter("cid");
 				
-				System.out.println("Function: "+f+", Channel id: "+cid);
 				
 				if(cid!=null && !cid.contentEquals("")){
-					String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid="
+						String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid="
 							+ cid;
 					
 					URL jsonPage = new URL(url);
@@ -83,10 +85,49 @@ public class ChannelServlet extends HttpServlet {
 					while((line = reader.readLine()) != null){
 						content += line;
 					}
-					
+					JSONArray topicArray2 = new JSONArray();
+					int channel_progress = 0;
+					int topicNum = 0;
+					try {
+						JSONArray topicArray = new JSONArray(content);
+						
+						for (Object top : topicArray) {
+							JSONObject topic = (JSONObject) top;
+							String progressURL = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_progress_topic&tid="
+									+ topic.get("id")+"&uid="+session.getAttribute("id");
+							URL progressjsonPage = new URL(progressURL);
+							HttpURLConnection progressCon = (HttpURLConnection) progressjsonPage.openConnection();
+							BufferedReader in = new BufferedReader(new InputStreamReader(progressCon.getInputStream()));
+							String inputLine;
+							StringBuffer res = new StringBuffer();
+
+							while ((inputLine = in.readLine()) != null) {
+								res.append(inputLine);
+							}
+							in.close();
+							int progress = Integer.parseInt(res.toString());
+							topic.put("progress", progress);
+							channel_progress += progress;
+							topicNum ++;
+							topicArray2.put(topic);
+						}
+							
+							
+						
+
+					} catch (JSONException ex) {
+						request.setAttribute("err", "Unexpected error occured!!");
+					}
+					if(topicNum != 0){
+						channel_progress = channel_progress/topicNum;
+					}
+					JSONObject channelProgress = new JSONObject();
 					reader.close();
+					channelProgress.put("channel_progress", channel_progress);
+					JSONArray aaa = new JSONArray(topicArray2.toString());
+					aaa.put(channelProgress);
 					
-					response.getWriter().write(content);
+					response.getWriter().write(aaa.toString());
 					response.getWriter().flush();
 					response.getWriter().close();
 				}
@@ -104,7 +145,6 @@ public class ChannelServlet extends HttpServlet {
 					
 					URL jsonPage = new URL(url);
 					HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
-					System.out.println(con.getResponseMessage());
 					if(con.getResponseCode() != 200){
 						
 						String err = con.getResponseMessage();
@@ -135,7 +175,7 @@ public class ChannelServlet extends HttpServlet {
 			}
 			reader.close();
 			
-			//String example = "[null,null,{\"id\":1,\"uid\":4,\"name\":\"animal\",\"status\":0},{\"id\":2,\"uid\":24,\"name\":\"animal2\",\"status\":0}]";
+			String example = "[{\"id\":1,\"uid\":4,\"name\":\"animal\",\"status\":0},{\"id\":22,\"uid\":24,\"name\":\"animal2\",\"status\":0}]";
 			response.getWriter().write(content);
 			response.getWriter().flush();
 			response.getWriter().close();
@@ -144,7 +184,6 @@ public class ChannelServlet extends HttpServlet {
 			String cid = request.getParameter("cid");
 			if(cid!=null && !cid.contentEquals("")){
 				String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channel&cid=" + cid;
-				System.out.println(url);
 				
 				URL jsonPage = new URL(url);
 				HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();
@@ -168,13 +207,12 @@ public class ChannelServlet extends HttpServlet {
 			String cid = request.getParameter("cid");
 			String uid = request.getParameter("uid");
 			
-			System.out.println("User: "+uid+", Channel: "+cid);
 			
-			response.getWriter().write("75");
+			response.getWriter().write("0");
 			response.getWriter().flush();
 		} else if(f!=null && f.contentEquals("get_subscribed_channels")){
 			String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_subscribed_channels&uid=" +session.getAttribute("id");
-			System.out.println(url);
+
 			
 			URL jsonPage = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) jsonPage.openConnection();

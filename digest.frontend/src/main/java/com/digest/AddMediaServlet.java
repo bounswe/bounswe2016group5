@@ -70,7 +70,7 @@ public class AddMediaServlet extends HttpServlet {
 		HttpURLConnection urlcon = (HttpURLConnection) connpage.openConnection();
 
 		int responseCode = urlcon.getResponseCode();
-		System.out.println(responseCode);
+		//System.out.println(responseCode);
 		if (responseCode == 200) {
 			request.setAttribute("topic_id", tid);
 			request.getRequestDispatcher("/ViewTopicServlet").forward(request, response);

@@ -55,7 +55,6 @@ public class AddCommentServlet extends HttpServlet {
 		while (names.hasMoreElements()) {
 			String attr = names.nextElement();
 			String value = request.getParameter(attr);
-			System.out.println(attr + " " + value);
 			if(attr.contentEquals("body")){
 				value = value.replaceAll(" ", "%20");
 			}

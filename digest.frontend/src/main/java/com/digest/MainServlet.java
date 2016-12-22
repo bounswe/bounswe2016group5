@@ -48,7 +48,6 @@ public class MainServlet extends HttpServlet {
 		
 		//String url = bf.toString();
 		String url = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_recent_topics&count=15";
-		System.out.println(url);
 		URL jsonpage = new URL(url);
 		HttpURLConnection urlcon = (HttpURLConnection) jsonpage.openConnection();
 		BufferedReader buffread = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
@@ -56,7 +55,6 @@ public class MainServlet extends HttpServlet {
 		while ((recv = buffread.readLine()) != null)
 			recvbuff += recv;
 		buffread.close();
-		System.out.println(recvbuff);
 		try {
 			JSONArray topicArray = new JSONArray(recvbuff);
 			
@@ -74,7 +72,6 @@ public class MainServlet extends HttpServlet {
 		recvbuff = "";
 		
 		String url2 = "http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_trending_topics";
-		System.out.println(url2);
 		URL jsonpage2 = new URL(url2);
 		HttpURLConnection urlcon2 = (HttpURLConnection) jsonpage2.openConnection();
 		BufferedReader buffread2 = new BufferedReader(new InputStreamReader(urlcon2.getInputStream()));
@@ -82,7 +79,6 @@ public class MainServlet extends HttpServlet {
 		while ((recv = buffread2.readLine()) != null)
 			recvbuff += recv;
 		buffread2.close();
-		System.out.println(recvbuff);
 		try {
 			JSONArray topicArray = new JSONArray(recvbuff);
 			

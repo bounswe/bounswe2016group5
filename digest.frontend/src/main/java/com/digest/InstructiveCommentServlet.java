@@ -57,7 +57,6 @@ public class InstructiveCommentServlet extends HttpServlet {
 		while (names.hasMoreElements()) {
 			String attr = names.nextElement();
 			String value = request.getParameter(attr);
-			System.out.println(attr + "=" + value);
 			if(attr.equals("cid"))
 				cid = Integer.parseInt(value);
 			if(attr.equals("tid"))
