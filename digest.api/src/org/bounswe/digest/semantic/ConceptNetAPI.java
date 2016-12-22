@@ -30,10 +30,10 @@ public class ConceptNetAPI {
     	
     	JSONObject b = getRelatedEntities("computer_science");
     	System.out.println(b);
-    	b = extractEntities("python");
+    	b = extractEntities("human vision");
     	System.out.println(b);
     	CalaisAPI httpClientPost = new CalaisAPI();
-    	JSONObject a = httpClientPost.extractTags("ConceptNet is a semantic network based on the information in the OMCS database. ConceptNet is expressed as a directed graph whose nodes are concepts, and whose edges are assertions of common sense about these concepts. Concepts represent sets of closely related natural language phrases, which could be noun phrases, verb phrases, adjective phrases, or clauses. ConceptNet is created from the natural-language assertions in OMCS by matching them against patterns using a shallow parser. Assertions are expressed as relations between two concepts, selected from a limited set of possible relations. The various relations represent common sentence patterns found in the OMCS corpus, and in particular, every \"fill-in-the-blanks\" template used on the knowledge-collection Web site is associated with a particular relation.");
+    	JSONObject a = httpClientPost.extractTags("Java is an object oriented language used for complex systems");
     	System.out.println(a);
     }
     
@@ -101,6 +101,7 @@ public class ConceptNetAPI {
     				count++;
     				i++;
     			}
+    			if(entities.size()<2) break;
     			if(count<4){
     				size = finalList.size();
 	    			for(int a = 0; a<size; a++){
