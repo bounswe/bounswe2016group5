@@ -1,0 +1,3 @@
+Hello! My name is Kerim Gökarslan. I graduated from Ataturk High School of Science Istanbul and currently I'm a undergraduate student at Bogazici University. My majors are Computer Engineering and Mathematics. I'm interested in all computer science and mathematics related stuff especially system programming, networks, database systems and number theory. I hope you enjoy with our github page! 
+
+Contact address: kerim.gokarslan@boun.edu.tr or kerimgokarslan@gmail.com

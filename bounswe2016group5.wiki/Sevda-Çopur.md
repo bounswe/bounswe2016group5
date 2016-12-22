@@ -1,0 +1,1 @@
+I am a junior student majoring in the department of Computer Engineering in Boğaziçi University. I am familiar with Java, C++, JDBC and Android. I would like to involve cooperative projects related to my interests. I like science fiction, classic rock and collecting old stuff. 
