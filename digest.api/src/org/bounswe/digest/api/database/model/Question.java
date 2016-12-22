@@ -1,7 +1,13 @@
 package org.bounswe.digest.api.database.model;
 
 import java.util.ArrayList;
-
+/**
+ * Question Object.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class Question extends Model {
 
 	private String text;

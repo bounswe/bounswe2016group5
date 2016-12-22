@@ -9,7 +9,13 @@ import org.bounswe.digest.api.database.model.Model;
 import org.bounswe.digest.api.database.model.Role;
 import org.bounswe.digest.api.database.model.User;
 import org.bounswe.digest.api.database.model.Error;
-
+/**
+ * Handles database transactions about users.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class UserJDBC {
 	/**
 	 * Handles login job into database
@@ -274,7 +280,11 @@ public class UserJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
-	
+	/**
+	 * Returns the username of a user.
+	 * @param uid User ID.
+	 * @return Username as string.
+	 */
 	public static String getUserName(int uid){
 		Connection connection;
 		try {

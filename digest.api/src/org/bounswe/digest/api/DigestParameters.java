@@ -1,23 +1,80 @@
 package org.bounswe.digest.api;
-
+/**
+ * Holds GET parameters and JSON parameters.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class DigestParameters {
+	/**
+	 * Functionality parameter.
+	 */
 	public static final String FUNC = "f";
+	/* Tags for User */
+	/**
+	 * Username tag.
+	 */
 	public static final String USERNAME = "username";
+	/**
+	 * Password tag.
+	 */
 	public static final String PASSWORD = "password";
+	/**
+	 * Email tag.
+	 */
 	public static final String EMAIL = "email";
+	/**
+	 * Name tag.
+	 */
 	public static final String FIRST_NAME = "first_name";
+	/**
+	 * Name tag.
+	 */
 	public static final String LAST_NAME = "last_name";
+	/**
+	 * Status tag.
+	 */
 	public static final String STATUS = "status";
-
+	
+	/* Functionalities */
+	/**
+	 * 
+	 */
 	public static final String LOGIN = "login";
+	/**
+	 * 
+	 */
 	public static final String REGISTER = "register";
+	
 	public static final String CREATE_TOPIC = "create_topic";
+	/**
+	 * 
+	 */
 	public static final String GET_TOPICS_OF_USER = "get_topics_of_user";
+	/**
+	 * 
+	 */
 	public static final String ADD_QUIZ = "add_quiz";
+	/**
+	 * 
+	 */
 	public static final String ADD_COMMENT = "add_comment";
+	/**
+	 * 
+	 */
 	public static final String GET_COMMENTS_OF_TOPIC = "get_comments_of_topic";
+	/**
+	 * 
+	 */
 	public static final String GET_TOPIC = "get_topic";
+	/**
+	 * 
+	 */
 	public static final String GET_QUIZ = "get_quiz";
+	/**
+	 * 
+	 */
 	public static final String GET_USERNAME = "get_username";
 	public static final String GET_RECENT_TOPICS = "get_recent_topics";
 	public static final String ADD_MEDIA = "add_media";
@@ -40,6 +97,7 @@ public class DigestParameters {
 	public static final String GET_SUBSCRIBED_CHANNELS = "get_subscribed_channels";
 	
 	public static final String GET_PROGRESS_TOPIC = "get_progress_topic";
+	public static final String SET_PROGRESS = "set_progress";
 	public static final String GET_PROGRESS_CHANNEL = "get_progress_channel";
 	public static final String ADD_PROGRESS = "add_progress";
 	public static final String SEARCH_TOPICS = "search_topics";
@@ -56,6 +114,7 @@ public class DigestParameters {
 	public static final String TYPE = "type";
 	public static final String TEXT = "text";
 
+	public static final String VAL = "val";
 	public static final String UID = "uid";
 	public static final String RUID = "ruid";
 	public static final String SESSION = "session";

@@ -11,7 +11,10 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-
+/**
+ * ConceptNetAPI
+ *
+ */
 public class ConceptNetAPI {
 
 	private static final String CONCEPTNET_URI = "http://api.conceptnet.io/";
@@ -431,7 +434,7 @@ public class ConceptNetAPI {
         try {
             rel = Relation.valueOf(relationStr);
         } catch (IllegalArgumentException e) {
-            // The relation isn't in our Relation enum. No problem—we deal with this below.
+            // The relation isn't in our Relation enum. No problemï¿½we deal with this below.
         }
         if(rel == null) {
             rel = Relation.Other;
