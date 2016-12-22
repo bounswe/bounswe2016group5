@@ -322,6 +322,7 @@ public class APIHandler extends Application{
 
     //  http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_topics_from_channel&cid=8
     public void getTopicsFromChannel(int channelId, Response.Listener<String> successListener) {
+        Log.d("getTopicsFromChannel", ""+channelId);
 
         StringRequest myReq = new StringRequest(Request.Method.GET,
                 mainURL + "/?f=get_topics_from_channel&cid=" + channelId ,
@@ -622,4 +623,21 @@ public class APIHandler extends Application{
 
         VolleySingleton.getInstance().addToRequestQueue(myReq);
     }
+
+    //http://digest.us-east-1.elasticbeanstalk.com/digest.api/?f=get_channel&tid=8
+    public void getChannelWithTopic (int tid, Response.Listener<String> successListener) {
+        Log.d("getchannell", ""+tid);
+        StringRequest myReq = new StringRequest(Request.Method.GET,
+                mainURL + "/?f=get_channel&tid=" + tid,
+                successListener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Failed", "Rate Failed");
+                    }
+                });
+
+        VolleySingleton.getInstance().addToRequestQueue(myReq);
+    }
+
 }

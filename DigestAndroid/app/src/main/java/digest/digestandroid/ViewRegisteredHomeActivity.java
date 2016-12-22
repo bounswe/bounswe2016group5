@@ -268,22 +268,25 @@ public class ViewRegisteredHomeActivity extends AppCompatActivity {
                     final ArrayList<Topic> arrayList = new ArrayList<Topic>();
 
                     response = response.substring(1,response.length()-1);
-                    String[] topicIds = response.split(",");
 
-                    final int numberOfFollowedTopics = topicIds.length;
-                    Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
-                        @Override
-                        public void onResponse(Topic response) {
-                            arrayList.add(response);
-                            if(arrayList.size() == numberOfFollowedTopics ) {
-                                CacheTopiclist.getInstance().setFollowedTopics(arrayList);
-                                loadTopics(currentRecyclerView, arrayList);
+                    if(!response.equals("")) {
+                        String[] topicIds = response.split(",");
+
+                        final int numberOfFollowedTopics = topicIds.length;
+                        Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                            @Override
+                            public void onResponse(Topic response) {
+                                arrayList.add(response);
+                                if (arrayList.size() == numberOfFollowedTopics) {
+                                    CacheTopiclist.getInstance().setFollowedTopics(arrayList);
+                                    loadTopics(currentRecyclerView, arrayList);
+                                }
                             }
-                        }
-                    };
+                        };
 
-                    for(int i = 0; i < numberOfFollowedTopics; i++){
-                        APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
+                        for (int i = 0; i < numberOfFollowedTopics; i++) {
+                            APIHandler.getInstance().getTopic("", Integer.parseInt(topicIds[i]), getTopicListener);
+                        }
                     }
 
 

@@ -42,6 +42,8 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
     private ViewPager viewPager;
     private RecyclerView recyclerView1;
 
+    RecyclerView.Adapter homeAdapter;
+
 
     private Topic topic;
 
@@ -217,46 +219,65 @@ public class ViewTopicActivity extends AppCompatActivity implements TopicGeneral
         topicQuizFragment.solve();
     }
 
+    public void doit(){
+        homeAdapter = new HomeAdapter(CacheTopiclist.getInstance().getRelatedTopicsOfaTopic());
+        recyclerView1.setAdapter(homeAdapter);
+    }
+
     public void loadTopics(RecyclerView currentRecyclerView,final ArrayList<Topic> currentTopicList){
-        RecyclerView.Adapter homeAdapter = new HomeAdapter(currentTopicList);
-        currentRecyclerView.setAdapter(homeAdapter);
 
-        ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
+        Response.Listener<String> getCidResponse = new Response.Listener<String>() {
             @Override
-            public void onItemClick(int pos, View v) {
-                Log.d("" + pos, v.toString());
-
-                final int clickedTopicId = currentTopicList.get(pos).getId();
+            public void onResponse(String response) {
 
 
-
-
-                Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                Response.Listener<String> getRelatedTopicsListener = new Response.Listener<String>() {
                     @Override
-                    public void onResponse(Topic response) {
-                        Log.d("Success", response.toString());
-                        Cache.getInstance().setTopic(response);
+                    public void onResponse(String response) {
+
+                        final ArrayList<Topic> arrayList = ViewRegisteredHomeActivity.serializeTopicsFromJson(response);
+                        CacheTopiclist.getInstance().setRelatedTopicsOfaTopic(arrayList);
 
 
-                        Response.Listener<String> getRelatedTopicsListener = new Response.Listener<String>() {
+                        doit();
 
+                        ((HomeAdapter) homeAdapter).setOnItemClickListener(new HomeAdapter.HomeClickListener() {
                             @Override
-                            public void onResponse(String response) {
+                            public void onItemClick(int pos, View v) {
+                                Log.d("" + pos, v.toString());
 
-                                final ArrayList<Topic> arrayList = ViewRegisteredHomeActivity.serializeTopicsFromJson(response);
-                                CacheTopiclist.getInstance().setRelatedTopicsOfaTopic(arrayList);
+                                final int clickedTopicId = CacheTopiclist.getInstance().getRelatedTopicsOfaTopic().get(pos).getId();
+                                        //currentTopicList.get(pos).getId();
 
-                                Intent intent = new Intent(getApplicationContext(), ViewTopicActivity.class);
-                                startActivity(intent);
+
+
+
+                                Response.Listener<Topic> getTopicListener = new Response.Listener<Topic>() {
+                                    @Override
+                                    public void onResponse(Topic response) {
+                                        Log.d("Success", response.toString());
+                                        Cache.getInstance().setTopic(response);
+
+
+                                        Intent intent = new Intent(getApplicationContext(), ViewTopicActivity.class);
+                                        startActivity(intent);
+
+                                    }
+                                };
+                                APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
                             }
-                        };
-
-                        APIHandler.getInstance().getRelatedTopicsOfaTopic(clickedTopicId,getRelatedTopicsListener);
+                        });
                     }
                 };
-                APIHandler.getInstance().getTopic("", clickedTopicId, getTopicListener);
+
+                APIHandler.getInstance().getTopicsFromChannel(Integer.valueOf(response),getRelatedTopicsListener);
             }
-        });
+
+        };
+
+        Log.d("SAMTIIING", ""+Cache.getInstance().getTopic().getId());
+        APIHandler.getInstance().getChannelWithTopic(Cache.getInstance().getTopic().getId(), getCidResponse);
+
     }
 
 

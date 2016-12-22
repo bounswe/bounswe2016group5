@@ -33,6 +33,7 @@ public class Cache {
 
     ArrayList<Channel> userChannels;
     int cid;  // selected channel id
+    int cidd;
 
     ArrayList<String> entityList;
     ArrayList<Tagit> chosenTags = new ArrayList<Tagit>();
@@ -148,4 +149,11 @@ public class Cache {
         this.newTag = newTag;
     }
 
+    public int getCidd() {
+        return cidd;
+    }
+
+    public void setCidd(int cidd) {
+        this.cidd = cidd;
+    }
 }
