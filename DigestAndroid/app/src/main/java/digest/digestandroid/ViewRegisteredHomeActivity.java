@@ -43,6 +43,10 @@ import digest.digestandroid.fragments.RegisteredHomeTrendFragment;
  * Created by Sahin on 11/1/2016.
  */
 
+
+/**
+ * For main entrance activity
+ */
 public class ViewRegisteredHomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
