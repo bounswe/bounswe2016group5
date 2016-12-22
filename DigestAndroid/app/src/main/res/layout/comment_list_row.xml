@@ -39,12 +39,19 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/comment_type_icon"
+        android:layout_alignParentRight="true"/>
+
     <TextView
         android:id="@+id/comment_body"
         android:textColor="@color/jet"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/rateIcons"
+        android:layout_toLeftOf="@id/comment_type_icon"
         android:layout_toEndOf="@id/rateIcons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -73,11 +80,7 @@
         android:layout_height="wrap_content" />
 
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:id="@+id/comment_type_icon"
-        android:layout_alignParentRight="true"/>
+
 
 
 

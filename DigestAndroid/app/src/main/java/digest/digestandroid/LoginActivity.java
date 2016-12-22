@@ -98,7 +98,8 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         //User user = new User(username, password);
-        User user = new User("atakanguney", "1234");
+        //User user = new User("atakanguney", "1234");
+        User user = new User("AILover", "12345678");
         user.setId(-10);
 
         Response.Listener<User> response = new Response.Listener<User>() {
