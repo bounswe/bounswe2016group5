@@ -1,7 +1,13 @@
 package org.bounswe.digest.api.database.model;
 
 import java.util.ArrayList;
-
+/**
+ * Quiz Object.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class Quiz extends Model{
 	private String name;
 	private ArrayList<Question> questions;

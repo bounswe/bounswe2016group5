@@ -1,0 +1,2 @@
+My name is Atakan Güney. I'm an undergraduate student at Bogazici University. I have two majors,Computer Engineering and Mathematics. I went to Cagaloglu Anatolian Highschool. I can speak German and English. I have no working experience but I'm looking for that as a software engineer. I like to do sport, read books about history and hang out with my friends for my leisure time.
+Contact adress: atakanguney94@gmail.com

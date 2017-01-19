@@ -3,6 +3,13 @@ package org.bounswe.digest.api.database.model;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+/**
+ * Comment Object.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class Comment extends Model {
 	private int id;
 	private int uid;
@@ -12,7 +19,19 @@ public class Comment extends Model {
 	private int rate;
 	private int type;
 	private Timestamp timestamp;
-	// private String username; maybe we can use.
+
+	/**
+	 * Generates comment with given parameters.
+	 * 
+	 * @param id
+	 * @param body
+	 * @param uid
+	 * @param tid
+	 * @param ucid
+	 * @param rate
+	 * @param type
+	 * @param timestamp
+	 */
 	public Comment(int id, String body, int uid, int tid, int ucid, int rate, int type, Timestamp timestamp) {
 		this.id = id;
 		this.body = body;
@@ -22,7 +41,7 @@ public class Comment extends Model {
 		this.rate = rate;
 		this.type = type;
 		this.timestamp = timestamp;
-		
+
 	}
 
 	public int getUid() {
@@ -56,6 +75,5 @@ public class Comment extends Model {
 	public void setType(int type) {
 		this.type = type;
 	}
-	
 
 }

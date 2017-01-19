@@ -13,27 +13,47 @@ import org.bounswe.digest.api.database.model.Quiz;
 
 import com.google.gson.Gson;
 
+/**
+ * Handles database transactions about quizes.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class QuizJDBC {
 	/**
 	 * Get all Quizzes of topic
-	 * @param tid topic id
-	 * @return Array of quizzes in Json format
+	 * 
+	 * @param tid
+	 *            topic id
+	 * @return Array of quizzes in JSON format
 	 */
-	public static String getQuizzesOfTopic(int tid){
-		Gson gson=new Gson();
+	public static String getQuizzesOfTopic(int tid) {
+		Gson gson = new Gson();
 		return gson.toJson(QuizJDBC.getQuizArrayOfTopic(tid));
 	}
+
 	/**
 	 * Add quiz and related tables into database
-	 * @param tid topic id
-	 * @param quiz Quiz object
-	 * @return 0 if successful
+	 * 
+	 * @param tid
+	 *            topic id
+	 * @param quiz
+	 *            Quiz object
+	 * @return <code>0</code> succeed <code>-1</code> otherwise.
 	 */
 	public static int addQuizToTopic(int tid, Quiz quiz) {
 		int qid = addQuiz(quiz);
 		return addTopicQuiz(tid, qid);
 	}
-	
+
+	/**
+	 * Adds a quiz with given quiz object.
+	 * 
+	 * @param quiz
+	 *            Quiz Object.
+	 * @return <code>0</code> succeed <code>-1</code> otherwise.
+	 */
 	private static int addQuiz(Quiz quiz) {
 		Connection connection;
 		try {
@@ -99,13 +119,20 @@ public class QuizJDBC {
 
 		return qid;
 	}
-	
-	protected static ArrayList<Quiz> getQuizArrayOfTopic(int tid){
+
+	/**
+	 * Returns quizzes of a topic.
+	 * 
+	 * @param tid
+	 *            Topic ID.
+	 * @return The array of quizzes.
+	 */
+	protected static ArrayList<Quiz> getQuizArrayOfTopic(int tid) {
 		String query = "SELECT quiz.*, question.*, choice.text, choice.isAnswer "
-					 + "FROM quiz, question, choice, digest.quiz_question, question_choice, topic_quiz "
-					 + "WHERE quiz.id=quiz_question.quiz_id AND question.id=quiz_question.question_id AND "
-					 + "question.id=digest.question_choice.qid AND choice.id=question_choice.cid AND "
-					 + "topic_quiz.tid=? AND topic_quiz.qid=quiz.id;";
+				+ "FROM quiz, question, choice, digest.quiz_question, question_choice, topic_quiz "
+				+ "WHERE quiz.id=quiz_question.quiz_id AND question.id=quiz_question.question_id AND "
+				+ "question.id=digest.question_choice.qid AND choice.id=question_choice.cid AND "
+				+ "topic_quiz.tid=? AND topic_quiz.qid=quiz.id;";
 		Connection connection;
 		try {
 			connection = ConnectionPool.getConnection();
@@ -116,30 +143,32 @@ public class QuizJDBC {
 		}
 		PreparedStatement statement = null;
 		ResultSet resultSet;
-		ArrayList<Quiz> result=new ArrayList<Quiz>();
+		ArrayList<Quiz> result = new ArrayList<Quiz>();
 		try {
 			connection.setAutoCommit(false);
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, tid);
 			resultSet = statement.executeQuery();
-			
-			HashSet<Integer> quiz=new HashSet<Integer>();
-			HashSet<Integer> question=new HashSet<Integer>();
+
+			HashSet<Integer> quiz = new HashSet<Integer>();
+			HashSet<Integer> question = new HashSet<Integer>();
 			while (resultSet.next()) {
-				int quizId=resultSet.getInt(1);
-				if(!quiz.contains(quizId)){
+				int quizId = resultSet.getInt(1);
+				if (!quiz.contains(quizId)) {
 					quiz.add(quizId);
 					result.add(new Quiz(resultSet.getString(2), new ArrayList<Question>()));
 				}
-				int questionId=resultSet.getInt(3);
-				ArrayList<Question> questions=result.get(result.size()-1).getQuestions();
-				if(!question.contains(questionId)){
+				int questionId = resultSet.getInt(3);
+				ArrayList<Question> questions = result.get(result.size() - 1).getQuestions();
+				if (!question.contains(questionId)) {
 					question.add(questionId);
-					questions.add(new Question(resultSet.getString(4), new ArrayList<String>(), new ArrayList<Integer>()));
+					questions.add(
+							new Question(resultSet.getString(4), new ArrayList<String>(), new ArrayList<Integer>()));
 				}
-				questions.get(questions.size()-1).getChoices().add(resultSet.getString(5));
-				if(resultSet.getInt(6)==1){
-					questions.get(questions.size()-1).getAnswers().add(questions.get(questions.size()-1).getChoices().size()-1);
+				questions.get(questions.size() - 1).getChoices().add(resultSet.getString(5));
+				if (resultSet.getInt(6) == 1) {
+					questions.get(questions.size() - 1).getAnswers()
+							.add(questions.get(questions.size() - 1).getChoices().size() - 1);
 				}
 			}
 		} catch (SQLException e) {
@@ -168,6 +197,14 @@ public class QuizJDBC {
 
 		return result;
 	}
+
+	/**
+	 * Adds a question into quiz.
+	 * 
+	 * @param text
+	 *            Question text.
+	 * @return Question ID if succeed, <code>-1</code> otherwise.
+	 */
 	private static int addQuestion(String text) {
 		Connection connection;
 		try {
@@ -220,6 +257,15 @@ public class QuizJDBC {
 		return result;
 	}
 
+	/**
+	 * Adds a choice into question.
+	 * 
+	 * @param c
+	 *            Choice
+	 * @param isAnswer
+	 *            Flag indicating whether it is an answer or not
+	 * @return Choice ID succeed <code>-1</code> otherwise.
+	 */
 	private static int addChoice(String c, int isAnswer) {
 		Connection connection;
 		try {
@@ -272,6 +318,16 @@ public class QuizJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
+
+	/**
+	 * Adds quiz to a topic.
+	 * 
+	 * @param tid
+	 *            Topic ID.
+	 * @param qid
+	 *            Quiz Id.
+	 * @return <code>0</code> succeed <code>-1</code> otherwise.
+	 */
 	private static int addTopicQuiz(int tid, int qid) {
 		Connection connection;
 		try {
@@ -319,6 +375,16 @@ public class QuizJDBC {
 		ConnectionPool.close(connection);
 		return result;
 	}
+
+	/**
+	 * Adds question to a quiz.
+	 * 
+	 * @param quizId
+	 *            Quiz ID.
+	 * @param questionId
+	 *            Question ID.
+	 * @return <code>0</code> succeed <code>-1</code> otherwise.
+	 */
 	private static int addQuizQuestion(int quizId, int questionId) {
 		Connection connection;
 		try {
@@ -372,6 +438,15 @@ public class QuizJDBC {
 		return result;
 	}
 
+	/**
+	 * Adds choice to question.
+	 * 
+	 * @param qid
+	 *            Question ID.
+	 * @param cid
+	 *            Choice ID.
+	 * @return <code>0</code> succeed <code>-1</code> otherwise.
+	 */
 	private static int addQuestionChoice(int qid, int cid) {
 		Connection connection;
 		try {

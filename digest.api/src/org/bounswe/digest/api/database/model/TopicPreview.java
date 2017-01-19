@@ -2,9 +2,15 @@ package org.bounswe.digest.api.database.model;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-
+/**
+ * A lightweight version of topic.
+ * 
+ * @author Kerim Gokarslan 
+ * @author Ozan Bulut 
+ *
+ */
 public class TopicPreview extends Model {
-	private int id;
+	public int id;
 	private String header;
 	private String image;
 	private int owner;
